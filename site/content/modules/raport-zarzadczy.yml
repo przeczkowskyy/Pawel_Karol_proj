@@ -1,0 +1,37 @@
+# M2 — Raport zarządczy jednym kliknięciem
+# Wzorzec źródłowy: CLAUDE.md B10 (Weekly Raport Generator) + B2 (kanoniczne dane, inkrementalność).
+# Read-only na danych klienta; wyjście = jednoplikowy offline'owy raport HTML + XLSX.
+
+id: raport-zarzadczy
+status: available
+order: 20
+dzial: kpi
+problem_tags: [raportowanie, zamkniecie-miesiaca, praca-reczna]
+industries: [produkcja, budownictwo, dystrybucja]
+markets: [pl]
+delivery_days: { min: 5, max: 10 }
+complexity: niska          # niska/średnia — ryzykiem jest rozlanie discovery metryk, nie technika
+requires: []               # brak twardych; naturalna para z audyt-jakosci-danych
+addons: [panel-kpi-online] # hostowana wersja jako opcjonalny dodatek (fala 3)
+
+proof:
+  pl: "raport dla zarządu w kilkanaście sekund zamiast godzin"
+
+i18n:
+  pl:
+    name: "Raport zarządczy jednym kliknięciem"
+    tagline: "Raport, który dziś składasz godzinami, generuje się w kilkanaście sekund."
+    problem: >-
+      Raport tygodniowy lub miesięczny dla zarządu powstaje ręcznie z dziesiątek plików:
+      przeklejanie, sklejanie, formatowanie — godziny pracy kontrolera w każdym cyklu.
+    outcome: >-
+      Generator, który czyta Twoje pliki i jednym kliknięciem składa interaktywny raport
+      (otwierany w przeglądarce, działa bez internetu i bez serwera) oraz wersję Excel.
+      Liczby weryfikujemy o zgodność z Twoim dotychczasowym raportem.
+    for_who: "kontroler (składa), zarząd i właściciel (czytają)"
+    value_bullets:
+      - "Z godzin przeklejania do kilkunastu sekund generowania"
+      - "Jeden plik HTML: sortowanie, szczegóły projektów, eksport CSV/PDF — bez instalacji"
+      - "Aktualizacja o nowy tydzień danych w kilkanaście sekund"
+      - "Twoje pliki tylko czytamy — raport powstaje obok, nic nie nadpisujemy"
+  # en: uzupełnić przy publikacji /en/

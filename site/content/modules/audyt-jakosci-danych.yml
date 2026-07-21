@@ -1,0 +1,37 @@
+# M1 — Audyt i strażnik jakości danych (wedge / oferta wejściowa)
+# Wzorzec źródłowy: CLAUDE.md B7 (Globalna Formuła Sprawdzająca) + walidacje z B4/B8.
+# Read-only na danych klienta — zero ryzyka uszkodzenia plików.
+
+id: audyt-jakosci-danych
+status: available          # available | pilot | roadmap | hidden
+order: 10
+dzial: przekrojowy         # finanse|ksiegowosc|administracja|produkcja|kpi|przekrojowy
+problem_tags: [ciche-bledy, jakosc-danych, zamkniecie-miesiaca]
+industries: []             # pusta lista = wszystkie branże
+markets: [pl]              # en dojdzie z publikacją /en/
+delivery_days: { min: 5, max: 5 }
+complexity: niska          # wewnętrzne; na stronie mapowane na komunikat
+requires: []
+addons: []                 # odsłona "strażnik" (cykliczna) sprzedawana jako abonament tego modułu
+
+proof:
+  pl: "wszystkie pliki sprawdzone jednym przebiegiem — błędy złapane, zanim trafią do zarządu"
+
+i18n:
+  pl:
+    name: "Audyt i strażnik jakości danych"
+    tagline: "Znajdujemy ciche błędy w Twoich plikach, zanim zrobią szkodę."
+    problem: >-
+      Zły wiersz, data spoza okresu, niezerowe uzgodnienia — ciche pomyłki w Excelu
+      wychodzą na jaw dopiero u zarządu, w księgowości albo po podpisaniu wyceny.
+    outcome: >-
+      Narzędzie, które jednym przebiegiem sprawdza wszystkie Twoje pliki według reguł
+      dopasowanych do Twoich danych i zwraca raport błędów oraz macierz pewności
+      OK / UWAGA / BŁĄD dla każdego pliku. Niczego w Twoich plikach nie zapisuje.
+    for_who: "kontroler, główna księgowa, CFO"
+    value_bullets:
+      - "Sprint 5 dni, stała cena, praca wyłącznie na kopiach Twoich plików"
+      - "Namacalny efekt: raport błędów z Twoich prawdziwych danych już w dniu 3"
+      - "Tryb 'strażnik': automatyczna kontrola przed każdym raportem lub zamknięciem"
+      - "Zero ryzyka — narzędzie tylko czyta; jedyny zapis to własny raport"
+  # en: uzupełnić przy publikacji /en/ — moduł bez kompletnego i18n.en nie renderuje się w EN
