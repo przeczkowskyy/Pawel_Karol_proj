@@ -66,6 +66,25 @@ Dwa warianty — zaczynamy od A (0 zł), przechodzimy na B przed startem cold-ma
 3. Odbieranie działa od razu. **Ograniczenie:** wysyłka nadal z prywatnego Gmaila —
    wystarcza do odpowiadania na leady ze strony, **nie nadaje się do cold-mailingu**.
 
+**Wariant A+ — wysyłka Z ADRESU FIRMOWEGO za darmo (Gmail „Wyślij jako" + Resend):**
+*(wdrożony 2026-07: routing odbiera, a wychodzące maile widnieją jako kontakt@klarow.com)*
+1. **resend.com** → konto → **Domains → Add Domain** `klarow.com` → pokazane rekordy
+   (DKIM `resend._domainkey`, SPF/MX dla subdomeny `send.klarow.com`) wklej w Cloudflare
+   DNS. Nie kolidują z MX Email Routingu (odbiór zostaje w Cloudflare). Poczekaj na
+   status **Verified**, utwórz **API key** (Sending access).
+2. Gmail → **Ustawienia → Konta i importowanie → Wyślij pocztę jako → Dodaj inny adres**:
+   nazwa `Klarow`, adres `kontakt@klarow.com`, „Traktuj jako alias" ✓. SMTP:
+   `smtp.resend.com`, port **465 (SSL)**, login `resend`, hasło = **klucz API**.
+   Kod weryfikacyjny przyjdzie na kontakt@ (routing → ta sama skrzynka).
+3. Ustaw `kontakt@klarow.com` jako **domyślny** + zaznacz „Odpowiedz z adresu, na który
+   wysłano wiadomość".
+4. DMARC w Cloudflare DNS: TXT `_dmarc` → `v=DMARC1; p=none; rua=mailto:kontakt@klarow.com`
+   (po tygodniu bez problemów → `p=quarantine`).
+5. Test na mail-tester.com (cel ~10/10; u odbiorcy bez dopisku „przez gmail.com").
+6. Drugi founder: reguła routingu `karol@klarow.com` → jego Gmail + powtórka kroku 2.
+   Limity darmowego Resend: 3000/mies., 100/dzień — aż nadto do korespondencji;
+   masowy outreach = wariant B.
+
 **Wariant B — pełna skrzynka (przed outreachem; ~27–30 zł/użytkownik/mies.):**
 1. **Google Workspace Business Starter** (workspace.google.com) → domena `klarow.com` →
    2 konta (Paweł, Karol) + alias grupowy `kontakt@` (grupy są darmowe).
