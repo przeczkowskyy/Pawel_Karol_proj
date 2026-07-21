@@ -1,12 +1,15 @@
 import { useState, useEffect, useRef } from "react";
-import { ArrowRight, Link, Gauge } from "lucide-react";
+import { ArrowRight, Link, Gauge, MousePointerClick } from "lucide-react";
+import { Link as RouterLink } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 /* RadialOrbitalTimeline (port 21st.dev) — przemalowany na stal Klarow:
    węzły = moduły oferty, relatedIds = powiązania między modułami,
-   energy = gotowość wzorca (% pracy pokrytej biblioteką). Logika bez zmian. */
+   energy = gotowość wzorca (% pracy pokrytej biblioteką).
+   Hover na węźle = box z podglądem narzędzia (zrzut ekranu); klik = karta
+   szczegółów z linkiem do podstrony modułu. */
 
 export interface TimelineItem {
   id: number;
@@ -14,10 +17,12 @@ export interface TimelineItem {
   date: string;
   content: string;
   category: string;
-  icon: React.ElementType;
+  icon: React.ComponentType<{ size?: number | string; className?: string }>;
   relatedIds: number[];
   status: "completed" | "in-progress" | "pending";
   energy: number;
+  slug?: string;
+  image?: string;
 }
 
 interface RadialOrbitalTimelineProps {
@@ -41,6 +46,7 @@ export default function RadialOrbitalTimeline({
   const [pulseEffect, setPulseEffect] = useState<Record<number, boolean>>({});
   const [centerOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [activeNodeId, setActiveNodeId] = useState<number | null>(null);
+  const [hoveredId, setHoveredId] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const orbitRef = useRef<HTMLDivElement>(null);
   const nodeRefs = useRef<Record<number, HTMLDivElement | null>>({});
@@ -90,7 +96,7 @@ export default function RadialOrbitalTimeline({
   useEffect(() => {
     let rotationTimer: ReturnType<typeof setInterval> | undefined;
 
-    if (autoRotate) {
+    if (autoRotate && hoveredId === null) {
       rotationTimer = setInterval(() => {
         setRotationAngle((prev) => {
           const newAngle = (prev + 0.3) % 360;
@@ -104,7 +110,7 @@ export default function RadialOrbitalTimeline({
         clearInterval(rotationTimer);
       }
     };
-  }, [autoRotate]);
+  }, [autoRotate, hoveredId]);
 
   const centerViewOnNode = (nodeId: number) => {
     if (!nodeRefs.current[nodeId]) return;
@@ -182,7 +188,9 @@ export default function RadialOrbitalTimeline({
             <div className="w-8 h-8 rounded-full bg-[#f4f5f7]/85 backdrop-blur-md"></div>
           </div>
 
-          <div className="absolute w-96 h-96 rounded-full border border-[#a8b4c2]/12"></div>
+          {/* orbita — wyraźniejsza (średnica = 2×radius węzłów) */}
+          <div className="absolute w-[400px] h-[400px] rounded-full border border-[#a8b4c2]/30"></div>
+          <div className="absolute w-[440px] h-[440px] rounded-full border border-[#a8b4c2]/10 border-dashed"></div>
 
           {timelineData.map((item, index) => {
             const position = calculateNodePosition(index, timelineData.length);
@@ -209,6 +217,8 @@ export default function RadialOrbitalTimeline({
                   e.stopPropagation();
                   toggleItem(item.id);
                 }}
+                onMouseEnter={() => setHoveredId(item.id)}
+                onMouseLeave={() => setHoveredId((h) => (h === item.id ? null : h))}
               >
                 <div
                   className={`absolute rounded-full -inset-1 ${
@@ -239,7 +249,7 @@ export default function RadialOrbitalTimeline({
                       ? "border-[#d7dee7] shadow-lg shadow-[#a8b4c2]/30"
                       : isRelated
                       ? "border-[#a8b4c2] animate-pulse"
-                      : "border-[#a8b4c2]/40"
+                      : "border-[#a8b4c2]/60"
                   }
                   transition-all duration-300 transform
                   ${isExpanded ? "scale-150" : ""}
@@ -253,7 +263,7 @@ export default function RadialOrbitalTimeline({
                   absolute top-12 left-1/2 -translate-x-1/2 whitespace-nowrap
                   text-xs font-semibold tracking-wider
                   transition-all duration-300
-                  ${isExpanded ? "text-white scale-125" : "text-[#b4b4b9]"}
+                  ${isExpanded ? "text-white scale-125" : "text-[#d4d4d8]"}
                 `}
                 >
                   {item.title}
@@ -262,6 +272,13 @@ export default function RadialOrbitalTimeline({
                 {isExpanded && (
                   <Card className="absolute top-20 left-1/2 -translate-x-1/2 w-72 bg-[#171717]/95 backdrop-blur-lg border-[#a8b4c2]/30 shadow-xl shadow-black/40 overflow-visible">
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-px h-3 bg-[#a8b4c2]/50"></div>
+                    {item.image && (
+                      <img
+                        src={item.image}
+                        alt={`Podgląd narzędzia: ${item.title}`}
+                        className="w-full rounded-t-lg border-b border-[#a8b4c2]/20"
+                      />
+                    )}
                     <CardHeader className="pb-2">
                       <div className="flex justify-between items-center">
                         <Badge
@@ -336,6 +353,16 @@ export default function RadialOrbitalTimeline({
                           </div>
                         </div>
                       )}
+
+                      {item.slug && (
+                        <RouterLink
+                          to={`/moduly/${item.slug}`}
+                          className="mt-4 flex items-center justify-center gap-1 rounded-md border border-[#a8b4c2]/30 py-1.5 text-xs font-bold text-[#d9e0e8] hover:bg-[#a8b4c2]/10 hover:text-white transition-colors"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          Pełny opis modułu <ArrowRight size={11} />
+                        </RouterLink>
+                      )}
                     </CardContent>
                   </Card>
                 )}
@@ -343,6 +370,31 @@ export default function RadialOrbitalTimeline({
             );
           })}
         </div>
+
+        {/* hover-box: podgląd narzędzia dla najechanego węzła (dokowany w rogu) */}
+        {(() => {
+          const hovered = timelineData.find(
+            (i) => i.id === hoveredId && !expandedItems[i.id]
+          );
+          if (!hovered || !hovered.image) return null;
+          return (
+            <div className="hidden lg:block absolute top-6 right-2 w-64 z-[300] pointer-events-none">
+              <div className="rounded-xl border border-[#a8b4c2]/35 bg-[#171717]/95 backdrop-blur-md shadow-xl shadow-black/50 overflow-hidden">
+                <img
+                  src={hovered.image}
+                  alt={`Podgląd narzędzia: ${hovered.title}`}
+                  className="w-full block"
+                />
+                <div className="px-3 py-2.5 border-t border-[#a8b4c2]/20">
+                  <p className="text-xs font-bold text-white">{hovered.title}</p>
+                  <p className="mt-0.5 flex items-center gap-1 text-[10.5px] text-[#8895a6]">
+                    <MousePointerClick size={11} /> kliknij węzeł, aby zobaczyć szczegóły
+                  </p>
+                </div>
+              </div>
+            </div>
+          );
+        })()}
       </div>
     </div>
   );

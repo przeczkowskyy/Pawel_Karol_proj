@@ -1,43 +1,52 @@
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Menu, X, Phone } from "lucide-react";
+import { PHONE_DISPLAY, PHONE_HREF } from "@/components/BookingModal";
 
 /* Pływający navbar-pigułka (adaptacja MiniNavbar z 21st.dev) — brand KLAROW,
-   stal zamiast bieli, bez logowania (landing v0.1). */
+   stal zamiast bieli. CTA otwiera modal kalendarza; linki działają też
+   z podstron modułów (router + hash). */
 
 const LINKS = [
-  { label: "Moduły", href: "#moduly" },
-  { label: "Jak działamy", href: "#jak" },
-  { label: "Dowód", href: "#dowod" },
-  { label: "Kontakt", href: "#kontakt" },
+  { label: "Moduły", to: "/#moduly" },
+  { label: "Współpraca", to: "/#wspolpraca" },
+  { label: "Dowód", to: "/#dowod" },
+  { label: "FAQ", to: "/#faq" },
+  { label: "Kontakt", to: "/#kontakt" },
 ];
 
-function NavLink({ href, children }: { href: string; children: React.ReactNode }) {
+function NavLink({ to, children, onClick }: { to: string; children: React.ReactNode; onClick?: () => void }) {
   return (
-    <a
-      href={href}
+    <Link
+      to={to}
+      onClick={onClick}
       className="group relative inline-block overflow-hidden h-5 flex items-center text-sm"
     >
       <div className="flex flex-col transition-transform duration-400 ease-out transform group-hover:-translate-y-1/2">
         <span className="text-[#b4b4b9]">{children}</span>
         <span className="text-white">{children}</span>
       </div>
-    </a>
+    </Link>
   );
 }
 
-export default function Navbar() {
+export default function Navbar({ onBook }: { onBook: () => void }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const cta = (
-    <a
-      href="mailto:kontakt@klarow.com?subject=Diagnoza%20automatyzacji"
+    <button
+      type="button"
+      onClick={() => {
+        setIsOpen(false);
+        onBook();
+      }}
       className="px-4 py-2 text-xs sm:text-sm font-bold text-[#171717] rounded-full
                  bg-gradient-to-b from-[#b9c4d1] via-[#a8b4c2] to-[#96a3b3]
                  hover:from-[#c7d0dc] hover:via-[#bfc9d6] hover:to-[#aab6c4]
-                 transition-all duration-200 w-full sm:w-auto text-center whitespace-nowrap"
+                 transition-all duration-200 w-full sm:w-auto text-center whitespace-nowrap cursor-pointer"
     >
       Umów diagnozę
-    </a>
+    </button>
   );
 
   return (
@@ -49,20 +58,28 @@ export default function Navbar() {
                   border border-[#333] bg-[#17171799]
                   w-[calc(100%-2rem)] sm:w-auto`}
     >
-      <div className="flex items-center justify-between w-full gap-x-6 sm:gap-x-8">
-        <a href="#top" className="brand-word" style={{ fontSize: 13 }}>
+      <div className="flex items-center justify-between w-full gap-x-5 sm:gap-x-7">
+        <Link to="/" className="brand-word" style={{ fontSize: 13 }}>
           KLAROW
-        </a>
+        </Link>
 
-        <nav className="hidden sm:flex items-center space-x-4 sm:space-x-6 text-sm">
+        <nav className="hidden sm:flex items-center space-x-4 sm:space-x-5 text-sm">
           {LINKS.map((link) => (
-            <NavLink key={link.href} href={link.href}>
+            <NavLink key={link.to} to={link.to}>
               {link.label}
             </NavLink>
           ))}
         </nav>
 
-        <div className="hidden sm:flex items-center">{cta}</div>
+        <div className="hidden sm:flex items-center gap-3">
+          <a
+            href={PHONE_HREF}
+            className="hidden lg:inline-flex items-center gap-1.5 text-xs font-bold text-[#b4b4b9] hover:text-white transition-colors whitespace-nowrap"
+          >
+            <Phone size={12} className="text-[#a8b4c2]" /> {PHONE_DISPLAY}
+          </a>
+          {cta}
+        </div>
 
         <button
           className="sm:hidden flex items-center justify-center w-8 h-8 text-[#b4b4b9]"
@@ -76,19 +93,22 @@ export default function Navbar() {
 
       <div
         className={`sm:hidden flex flex-col items-center w-full transition-all ease-in-out duration-300 overflow-hidden
-                    ${isOpen ? "max-h-[400px] opacity-100 pt-4" : "max-h-0 opacity-0 pt-0 pointer-events-none"}`}
+                    ${isOpen ? "max-h-[420px] opacity-100 pt-4" : "max-h-0 opacity-0 pt-0 pointer-events-none"}`}
       >
         <nav className="flex flex-col items-center space-y-4 text-base w-full">
           {LINKS.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
+            <Link
+              key={link.to}
+              to={link.to}
               onClick={() => setIsOpen(false)}
               className="text-[#b4b4b9] hover:text-white transition-colors w-full text-center"
             >
               {link.label}
-            </a>
+            </Link>
           ))}
+          <a href={PHONE_HREF} className="inline-flex items-center gap-2 text-sm font-bold text-[#b4b4b9]">
+            <Phone size={14} className="text-[#a8b4c2]" /> {PHONE_DISPLAY}
+          </a>
         </nav>
         <div className="flex flex-col items-center mt-4 mb-2 w-full px-4">{cta}</div>
       </div>

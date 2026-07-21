@@ -1,3 +1,5 @@
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
 import {
   ShieldCheck,
   Copy,
@@ -11,101 +13,144 @@ import {
   Lock,
   FileCode2,
   ScrollText,
+  Check,
+  X as XIcon,
+  Phone,
 } from "lucide-react";
-import { lazy, Suspense } from "react";
 import Navbar from "@/components/Navbar";
+import BookingModal, { PHONE_DISPLAY, PHONE_HREF } from "@/components/BookingModal";
+import CollaborationFlow from "@/components/CollaborationFlow";
+import Faq from "@/components/Faq";
 import RadialOrbitalTimeline from "@/components/ui/radial-orbital-timeline";
+import ModulePage from "@/pages/ModulePage";
 import { MODULES } from "@/data/modules";
 
-/* three.js (~1 MB) ładuje się leniwie PO pierwszym paincie — hero renderuje
-   się natychmiast na tle --body-bg, kropki dołączają, gdy chunk dojedzie. */
+/* Landing Klarow v0.2 — dark-only. Komponenty i tokeny: kit company-ui,
+   Tailwind wyłącznie do layoutu. Motion: scroll-reveal (CSS + IO) i
+   auto-animate (FAQ, kalendarz) — oba szanują prefers-reduced-motion. */
+
+const STEEL_BRIGHT = [226, 232, 239] as number[];
+const STEEL = [168, 180, 194] as number[];
+
 const CanvasRevealEffect = lazy(() =>
   import("@/components/ui/canvas-reveal-effect").then((m) => ({
     default: m.CanvasRevealEffect,
   }))
 );
 
-/* Landing Klarow v0.1 — dark-only. Komponenty i tokeny: kit company-ui
-   (klasy .card/.btn/.st/.stat…), Tailwind wyłącznie do layoutu. */
-
-const STEEL = { a: [168, 180, 194] as number[], b: [191, 201, 214] as number[] };
+/* scroll-reveal: sekcja dostaje .in przy pierwszym wejściu w viewport */
+function useReveal<T extends HTMLElement>() {
+  const ref = useRef<T | null>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          el.classList.add("in");
+          io.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  return ref;
+}
 
 function Section({
   id,
   title,
   sub,
   children,
+  wide = false,
 }: {
   id?: string;
   title: string;
   sub?: string;
   children: React.ReactNode;
+  wide?: boolean;
 }) {
+  const ref = useReveal<HTMLElement>();
   return (
-    <section id={id} className="max-w-6xl mx-auto px-6 py-20">
-      <h2
-        className="text-[26px] md:text-[30px] font-extrabold tracking-tight"
-        style={{ color: "var(--heading)" }}
-      >
-        {title}
-      </h2>
-      {sub && (
-        <p className="mt-2 mb-8 text-[15px]" style={{ color: "var(--muted-foreground)" }}>
-          {sub}
-        </p>
-      )}
-      {!sub && <div className="mb-8" />}
-      {children}
+    <section
+      id={id}
+      ref={ref}
+      className={`reveal ${wide ? "" : "max-w-6xl mx-auto"} px-6 py-14`}
+    >
+      <div className={wide ? "max-w-6xl mx-auto" : ""}>
+        <h2
+          className="text-[26px] md:text-[30px] font-extrabold tracking-tight"
+          style={{ color: "var(--heading)" }}
+        >
+          {title}
+        </h2>
+        {sub ? (
+          <p className="mt-2 mb-8 max-w-3xl text-[15px]" style={{ color: "var(--muted-foreground)" }}>
+            {sub}
+          </p>
+        ) : (
+          <div className="mb-8" />
+        )}
+        {children}
+      </div>
     </section>
   );
 }
 
-function Hero() {
+function Hero({ onBook }: { onBook: () => void }) {
   return (
-    <section id="top" className="relative min-h-screen flex flex-col">
+    <section id="top" className="relative min-h-[92vh] flex flex-col">
       <div className="absolute inset-0 z-0">
         <Suspense fallback={null}>
           <CanvasRevealEffect
             animationSpeed={3}
             containerClassName="bg-[#121212]"
-            colors={[STEEL.a, STEEL.b]}
-            dotSize={4}
-            opacities={[0.04, 0.04, 0.06, 0.06, 0.08, 0.08, 0.1, 0.12, 0.14, 0.18]}
+            colors={[STEEL_BRIGHT, STEEL]}
+            dotSize={6}
             showGradient={true}
           />
         </Suspense>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(18,18,18,0.9)_0%,_transparent_100%)]" />
-        <div className="absolute top-0 left-0 right-0 h-1/3 bg-gradient-to-b from-[#121212] to-transparent" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(18,18,18,0.92)_0%,_transparent_100%)]" />
+        <div className="absolute top-0 left-0 right-0 h-1/4 bg-gradient-to-b from-[#121212] to-transparent" />
       </div>
 
-      <div className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-6 pt-28 pb-16">
+      <div className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-6 pt-24 pb-10">
         <span className="brand-word" style={{ fontSize: 15 }}>
           KLAROW
         </span>
         <h1
-          className="mt-6 max-w-3xl text-4xl md:text-6xl font-extrabold tracking-tight leading-[1.08]"
+          className="mt-5 max-w-3xl text-4xl md:text-6xl font-extrabold tracking-tight leading-[1.08]"
           style={{ color: "var(--heading)" }}
         >
           Porządek w danych dla firm,
           <br className="hidden md:block" /> które wyrosły na Excelu.
         </h1>
-        <p className="mt-6 max-w-2xl text-lg md:text-xl" style={{ color: "var(--foreground)" }}>
+        <p className="mt-5 max-w-2xl text-lg md:text-xl" style={{ color: "var(--foreground)" }}>
           Zamieniamy ręczne przeklejanie, kruche makra i mailowy obieg dokumentów
           w audytowalne narzędzia. <strong>Wdrożenie w dni, nie w miesiące</strong> —
           a Twoje dane nie opuszczają firmy.
         </p>
-        <p className="mt-4 text-sm font-semibold tracking-wide" style={{ color: "var(--accent-foreground)" }}>
+        <p className="mt-3 text-sm font-semibold tracking-wide" style={{ color: "var(--accent-foreground)" }}>
           Raport zarządczy w kilkanaście sekund zamiast godzin.
         </p>
-        <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
-          <a className="btn btn-primary" href="mailto:kontakt@klarow.com?subject=Diagnoza%20automatyzacji">
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <button className="btn btn-primary" type="button" onClick={onBook}>
             Umów bezpłatną diagnozę
-          </a>
+          </button>
           <a className="btn btn-secondary" href="#moduly">
             Zobacz moduły
           </a>
         </div>
-        <p className="mt-8 text-xs" style={{ color: "var(--muted-foreground)" }}>
+        <a
+          href={PHONE_HREF}
+          className="mt-4 inline-flex items-center gap-2 text-sm font-bold"
+          style={{ color: "var(--muted-foreground)" }}
+        >
+          <Phone size={14} style={{ color: "var(--primary)" }} /> {PHONE_DISPLAY}
+        </a>
+        <p className="mt-6 text-xs" style={{ color: "var(--muted-foreground)" }}>
           Dla firm 20–250 osób · środowisko Windows + Excel · narzędzia działają on-premise, u Ciebie
         </p>
       </div>
@@ -114,31 +159,11 @@ function Hero() {
 }
 
 const PAINS = [
-  {
-    icon: UserX,
-    title: "Makro po kimś, kto odszedł",
-    body: "Nikt nie wie, jak działa w środku — więc wszyscy boją się je ruszyć.",
-  },
-  {
-    icon: ClipboardPaste,
-    title: "Ręczne przeklejanie",
-    body: "Tysiące wierszy między ERP a arkuszami, co tydzień, na piechotę.",
-  },
-  {
-    icon: AlertTriangle,
-    title: "Ciche pomyłki",
-    body: "Zły wiersz, zła kolumna — wychodzi po fakcie, u zarządu albo w wycenie.",
-  },
-  {
-    icon: Hourglass,
-    title: "Raport składany godzinami",
-    body: "Zbieranie metryk z dziesiątek plików, formatowanie, wysyłka. Co cykl.",
-  },
-  {
-    icon: User,
-    title: "Wszystko na jednej osobie",
-    body: "Gdy „człowiek-Excel” jest na urlopie, firma nie zna swoich liczb.",
-  },
+  { icon: UserX, title: "Makro po kimś, kto odszedł", body: "Nikt nie wie, jak działa w środku — więc wszyscy boją się je ruszyć." },
+  { icon: ClipboardPaste, title: "Ręczne przeklejanie", body: "Tysiące wierszy między ERP a arkuszami, co tydzień, na piechotę." },
+  { icon: AlertTriangle, title: "Ciche pomyłki", body: "Zły wiersz, zła kolumna — wychodzi po fakcie, u zarządu albo w wycenie." },
+  { icon: Hourglass, title: "Raport składany godzinami", body: "Zbieranie metryk z dziesiątek plików, formatowanie, wysyłka. Co cykl." },
+  { icon: User, title: "Wszystko na jednej osobie", body: "Gdy „człowiek-Excel” jest na urlopie, firma nie zna swoich liczb." },
 ];
 
 function Pain() {
@@ -165,58 +190,55 @@ function Pain() {
 }
 
 function Modules() {
+  const ref = useReveal<HTMLElement>();
   return (
-    <section id="moduly" className="relative py-20">
+    <section
+      id="moduly"
+      ref={ref}
+      className="reveal relative py-14"
+      style={{
+        background:
+          "radial-gradient(circle at center, rgba(168,180,194,0.07) 0%, transparent 55%)",
+      }}
+    >
       <div className="max-w-6xl mx-auto px-6">
-        <h2
-          className="text-[26px] md:text-[30px] font-extrabold tracking-tight"
-          style={{ color: "var(--heading)" }}
-        >
+        <h2 className="text-[26px] md:text-[30px] font-extrabold tracking-tight" style={{ color: "var(--heading)" }}>
           Moduły — mapa tego, co automatyzujemy
         </h2>
-        <p className="mt-2 text-[15px]" style={{ color: "var(--muted-foreground)" }}>
+        <p className="mt-2 max-w-3xl text-[15px]" style={{ color: "var(--muted-foreground)" }}>
           Każdy moduł to sprawdzony wzorzec dopasowywany do Twoich plików.{" "}
-          <strong>Kliknij węzeł</strong>, żeby zobaczyć szczegóły, czas wdrożenia i powiązania
-          między modułami.
+          <strong>Najedź na węzeł</strong>, żeby zobaczyć podgląd narzędzia;{" "}
+          <strong>kliknij</strong>, żeby poznać szczegóły i powiązania. Każdy moduł ma też
+          własną podstronę z pełnym opisem.
         </p>
       </div>
       <RadialOrbitalTimeline timelineData={MODULES} />
-      <div className="max-w-6xl mx-auto px-6 -mt-6 flex flex-wrap gap-x-6 gap-y-2 text-xs" style={{ color: "var(--muted-foreground)" }}>
-        <span>
-          <span className="st st-accent" style={{ marginRight: 6 }}>DOSTĘPNY</span> sprzedajemy od dziś
-        </span>
-        <span>
-          <span className="st st-gray" style={{ marginRight: 6 }}>FALA 2</span> po pierwszych wdrożeniach
-        </span>
-        <span>
-          <span className="st st-gray st-open" style={{ marginRight: 6 }}>ROADMAPA</span> w przygotowaniu
-        </span>
+      <div className="max-w-6xl mx-auto px-6 -mt-8 flex flex-wrap gap-x-6 gap-y-2 text-xs" style={{ color: "var(--muted-foreground)" }}>
+        <span><span className="st st-accent" style={{ marginRight: 6 }}>DOSTĘPNY</span> sprzedajemy od dziś</span>
+        <span><span className="st st-gray" style={{ marginRight: 6 }}>FALA 2</span> po pierwszych wdrożeniach</span>
+        <span><span className="st st-gray st-open" style={{ marginRight: 6 }}>ROADMAPA</span> w przygotowaniu</span>
       </div>
     </section>
   );
 }
 
+function Collaboration() {
+  return (
+    <Section
+      id="wspolpraca"
+      title="Jak wygląda współpraca — krok po kroku"
+      sub="Sześć kroków z życia: od pierwszej wiadomości do działającego narzędzia i opieki. Zawsze widzisz, kto co robi i za co płacisz."
+    >
+      <CollaborationFlow />
+    </Section>
+  );
+}
+
 const STEPS = [
-  {
-    icon: Copy,
-    title: "1 · Diagnoza na kopiach",
-    body: "Pracujemy wyłącznie na kopiach Twoich plików. Zakres zamrażamy na piśmie w Dniu 0.",
-  },
-  {
-    icon: FileCode2,
-    title: "2 · Budowa na wzorcach",
-    body: "Silnik — bezpieczny zapis, walidacja, backup, log — jest gotowy. Dopasowujemy mapowania i reguły.",
-  },
-  {
-    icon: Eye,
-    title: "3 · TEST bez zapisu",
-    body: "Identyczna ścieżka kodu, pełna lista zmian do przejrzenia — a w Twoich plikach nic się nie dzieje.",
-  },
-  {
-    icon: Save,
-    title: "4 · PROD z backupem",
-    body: "Zapis dopiero po Twojej akceptacji: automatyczny backup przed każdą zmianą i log audytowy każdej operacji.",
-  },
+  { icon: Copy, title: "1 · Diagnoza na kopiach", body: "Pracujemy wyłącznie na kopiach Twoich plików. Zakres zamrażamy na piśmie w Dniu 0." },
+  { icon: FileCode2, title: "2 · Budowa na wzorcach", body: "Silnik — bezpieczny zapis, walidacja, backup, log — jest gotowy. Dopasowujemy mapowania i reguły." },
+  { icon: Eye, title: "3 · TEST bez zapisu", body: "Identyczna ścieżka kodu, pełna lista zmian do przejrzenia — a w Twoich plikach nic się nie dzieje." },
+  { icon: Save, title: "4 · PROD z backupem", body: "Zapis dopiero po Twojej akceptacji: automatyczny backup przed każdą zmianą i log audytowy każdej operacji." },
 ];
 
 function How() {
@@ -255,18 +277,60 @@ function Proof() {
     <Section
       id="dowod"
       title="Zrobiliśmy to już od środka"
-      sub="Ekosystem kilkunastu narzędzi zbudowany dla firmy produkcyjno-budowlanej (~30 równoległych projektów, klienci w USA). Kilka twardych liczb:"
+      sub="Ekosystem kilkunastu narzędzi zbudowany dla firmy produkcyjno-budowlanej (~30 równoległych projektów, klienci w USA). Kilka twardych liczb — realne zrzuty ekranu z wdrożeń pojawią się tu wkrótce:"
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {PROOF.map((p) => (
           <div key={p.lbl} className="card stat">
             <div className="lbl">{p.lbl}</div>
-            <div className="val" style={{ fontSize: "clamp(18px,1.1vw + 12px,26px)" }}>
-              {p.val}
-            </div>
+            <div className="val" style={{ fontSize: "clamp(18px,1.1vw + 12px,26px)" }}>{p.val}</div>
             <div className="foot">{p.foot}</div>
           </div>
         ))}
+      </div>
+    </Section>
+  );
+}
+
+const FIT = [
+  "Produkcja, budownictwo, dystrybucja, logistyka — dużo powtarzalnych danych operacyjnych",
+  "20–250 osób; jest ERP, ale raportowanie i tak żyje w Excelu",
+  "Środowisko Windows + Excel; 1–3 osoby „od liczb”",
+  "Chcesz efektu w dni, nie projektu wdrożeniowego na pół roku",
+];
+
+const NOFIT = [
+  "Szukasz migracji do chmury / zamiany ERP — tego nie robimy",
+  "Pracujecie na Google Sheets / Mac — moduły zapisujące wymagają Windows + Excel",
+  "Potrzebujesz zespołu do body-leasingu — sprzedajemy rezultat, nie godziny",
+];
+
+function ForWhom() {
+  return (
+    <Section id="dla-kogo" title="Dla kogo (i dla kogo nie)">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="card">
+          <div className="lbl-sm" style={{ marginBottom: 12 }}>Będzie nam po drodze, jeśli…</div>
+          <ul className="flex flex-col gap-2.5">
+            {FIT.map((t) => (
+              <li key={t} className="flex items-start gap-2 text-[13px]" style={{ color: "var(--foreground)" }}>
+                <Check size={14} style={{ color: "var(--funded)", flex: "0 0 auto", marginTop: 2 }} />
+                {t}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="card">
+          <div className="lbl-sm" style={{ marginBottom: 12 }}>Uczciwie: to nie dla Ciebie, jeśli…</div>
+          <ul className="flex flex-col gap-2.5">
+            {NOFIT.map((t) => (
+              <li key={t} className="flex items-start gap-2 text-[13px]" style={{ color: "var(--muted-foreground)" }}>
+                <XIcon size={14} style={{ color: "var(--rejected)", flex: "0 0 auto", marginTop: 2 }} />
+                {t}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </Section>
   );
@@ -280,20 +344,15 @@ const TRUST = [
   { icon: ShieldCheck, text: "Stała cena i zakres zamrożony na piśmie. Druga rata płatna po działającym odbiorze." },
 ];
 
-function TrustOffer() {
+function TrustOffer({ onBook }: { onBook: () => void }) {
   return (
-    <Section
-      id="oferta"
-      title="Zaufanie na mechanizmach, nie na przymiotnikach"
-    >
+    <Section id="oferta" title="Zaufanie na mechanizmach, nie na przymiotnikach">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
         <div className="flex flex-col gap-3">
           {TRUST.map((t, i) => (
             <div key={i} className="card flex flex-row items-start gap-3" style={{ padding: 16 }}>
               <t.icon size={18} style={{ color: "var(--primary)", flex: "0 0 auto", marginTop: 2 }} />
-              <p className="text-[13px] leading-relaxed" style={{ color: "var(--foreground)" }}>
-                {t.text}
-              </p>
+              <p className="text-[13px] leading-relaxed" style={{ color: "var(--foreground)" }}>{t.text}</p>
             </div>
           ))}
         </div>
@@ -314,8 +373,11 @@ function TrustOffer() {
             <li>· Płatność 50/50 — druga rata po działającym odbiorze</li>
           </ul>
           <div className="mt-6 flex flex-wrap gap-3">
-            <a className="btn btn-primary" href="mailto:kontakt@klarow.com?subject=Pilot%20na%20kopii">
-              Porozmawiajmy o Twoim procesie
+            <button className="btn btn-primary" type="button" onClick={onBook}>
+              Umów diagnozę — wybierz termin
+            </button>
+            <a className="btn btn-secondary" href={PHONE_HREF}>
+              <Phone size={15} /> {PHONE_DISPLAY}
             </a>
           </div>
           <p className="mt-4 text-[12px]" style={{ color: "var(--muted-foreground)" }}>
@@ -323,6 +385,20 @@ function TrustOffer() {
             pokażemy na próbce, co da się z nim zrobić.
           </p>
         </div>
+      </div>
+    </Section>
+  );
+}
+
+function FaqSection() {
+  return (
+    <Section
+      id="faq"
+      title="Najczęstsze obiekcje — odpowiadamy wprost"
+      sub="Te same pytania słyszymy w każdej rozmowie. Oto odpowiedzi, zanim zdążysz zapytać."
+    >
+      <div className="max-w-3xl">
+        <Faq />
       </div>
     </Section>
   );
@@ -339,15 +415,14 @@ function Footer() {
           </p>
         </div>
         <div className="flex flex-col items-center sm:items-end gap-2">
-          <a
-            className="text-sm font-bold"
-            style={{ color: "var(--accent-foreground)" }}
-            href="mailto:kontakt@klarow.com"
-          >
+          <a className="text-sm font-bold inline-flex items-center gap-2" style={{ color: "var(--accent-foreground)" }} href={PHONE_HREF}>
+            <Phone size={14} /> {PHONE_DISPLAY}
+          </a>
+          <a className="text-sm font-bold" style={{ color: "var(--accent-foreground)" }} href="mailto:kontakt@klarow.com">
             kontakt@klarow.com
           </a>
           <p className="text-xs" style={{ color: "var(--muted-foreground)" }}>
-            © 2026 Klarow · strona robocza v0.1
+            © 2026 Klarow · strona robocza v0.2
           </p>
         </div>
       </div>
@@ -355,17 +430,50 @@ function Footer() {
   );
 }
 
-export default function App() {
+function Landing({ onBook }: { onBook: () => void }) {
+  const { hash } = useLocation();
+  useEffect(() => {
+    if (!hash) return;
+    const el = document.querySelector(hash);
+    if (el) el.scrollIntoView({ behavior: "smooth" });
+  }, [hash]);
+
   return (
-    <div style={{ background: "var(--body-bg)" }}>
-      <Navbar />
-      <Hero />
+    <>
+      <Hero onBook={onBook} />
       <Pain />
       <Modules />
+      <Collaboration />
       <How />
       <Proof />
-      <TrustOffer />
+      <ForWhom />
+      <TrustOffer onBook={onBook} />
+      <FaqSection />
       <Footer />
+    </>
+  );
+}
+
+export default function App() {
+  const [bookingOpen, setBookingOpen] = useState(false);
+  const onBook = () => setBookingOpen(true);
+
+  return (
+    <div style={{ background: "var(--body-bg)" }}>
+      <Navbar onBook={onBook} />
+      <Routes>
+        <Route path="/" element={<Landing onBook={onBook} />} />
+        <Route
+          path="/moduly/:slug"
+          element={
+            <>
+              <ModulePage onBook={onBook} />
+              <Footer />
+            </>
+          }
+        />
+      </Routes>
+      <BookingModal open={bookingOpen} onClose={() => setBookingOpen(false)} />
     </div>
   );
 }
