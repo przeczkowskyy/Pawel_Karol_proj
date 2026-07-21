@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+/* Landing Klarow — Tailwind tylko do layoutu/utility; komponenty i tokeny
+   daje company-ui.css (kit). Landing jest dark-only w v0.1. */
+html {
+  scroll-behavior: smooth;
+}
