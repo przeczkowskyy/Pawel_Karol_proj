@@ -54,7 +54,7 @@ export function NcLauncher() {
     <div className={`nc-launcher${open ? " open" : ""}`} ref={rootRef}>
       <div className="nc-launcher-panel" role="menu" aria-hidden={!open}>
         <div className="nc-launcher-head">
-          <span className="nc-launcher-title">YOUR COMPANY NAME</span>
+          <span className="nc-launcher-title">KLAROW</span>
           <span className="nc-launcher-sub">Wybierz kategorię</span>
         </div>
         <div className="nc-cat-list">

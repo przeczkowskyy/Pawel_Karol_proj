@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Klarow · Raport zarządczy — demo</title>
+  <script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+  <link rel="stylesheet" href="/static/css/app.css">
+  <style>
+    /* bg beams — pozycjonowanie (z kitu: components/bg_beams.html) */
+    .bg-beams{position:fixed;inset:-30px;width:calc(100% + 60px);height:calc(100% + 60px);
+      z-index:0;pointer-events:none;filter:blur(15px)}
+    html[data-theme="light"] .bg-beams{display:none}
+    @media print{.bg-beams{display:none !important}}
+  </style>
+</head>
+<body>
+<canvas class="bg-beams" id="bgBeams" aria-hidden="true"></canvas>
+
+<div class="app" id="ncApp">
+  <div class="brand" title="KLAROW · Raport zarządczy">
+    <div>
+      <span class="brand-word" role="img" aria-label="KLAROW">KLAROW</span>
+      <span class="p">Raport zarządczy</span>
+    </div>
+  </div>
+
+  <header class="topbar">
+    <div><strong>Raport tygodniowy — portfel projektów</strong></div>
+    <div class="tb-right">
+      <div class="saldo-pill">
+        <span class="lbl">Tydzień</span>
+        <span class="val tnum">30 / 2026</span>
+      </div>
+      <button class="theme-btn" type="button" onclick="toggleTheme()" title="Przełącz motyw jasny / ciemny">
+        <span class="ico-sun"><svg class="navitem-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2m-7.07-15.07 1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg></span>
+        <span class="ico-moon"><svg class="navitem-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></span>
+      </button>
+      <span class="user-chip"><svg class="navitem-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="small">Gość (demo)</span></span>
+    </div>
+  </header>
+
+  <nav class="sidebar">
+    <div class="navwrap" id="navwrap">
+      <div class="nav-indicator" id="navIndicator"></div>
+      <a class="navitem active" href="#"><svg class="navitem-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>Przegląd</a>
+      <a class="navitem" href="#"><svg class="navitem-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>Projekty</a>
+      <a class="navitem" href="#"><svg class="navitem-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 7-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/></svg>Historia marży</a>
+      <a class="navitem" href="#"><svg class="navitem-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8m8 4H8m2-8H8"/></svg>Eksporty</a>
+    </div>
+    <div class="grow"></div>
+    <div class="nav-role">Zalogowano jako</div>
+    <div class="navitem nav-user">Gość (demo)</div>
+  </nav>
+
+  <main class="main">
+    <div class="page-head">
+      <div>
+        <h1>Przegląd portfela</h1>
+        <div class="sub">12 projektów · dane na 2026-07-19 · raport wygenerowany w <strong>14 s</strong></div>
+      </div>
+      <div class="page-actions">
+        <button class="btn btn-primary" type="button"><svg class="navitem-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>Pobierz XLSX</button>
+        <button class="btn btn-secondary" type="button">Eksport PDF</button>
+      </div>
+    </div>
+
+    <div class="bento">
+      <div class="card col-3 stat">
+        <div class="stat-ico accent"><svg class="navitem-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 7-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/></svg></div>
+        <div class="lbl">Marża portfela (real)</div>
+        <div class="val tnum">21,4%</div>
+        <div class="foot"><span class="delta up">▲ 0,6 p.p.</span> vs poprzedni tydzień</div>
+      </div>
+      <div class="card col-3 stat">
+        <div class="lbl">Budżet portfela</div>
+        <div class="val tnum">38,09 <span class="cur">mln zł</span></div>
+        <div class="foot">wykonanie 61% budżetu</div>
+      </div>
+      <div class="card col-3 stat">
+        <div class="lbl">Projekty w ryzyku</div>
+        <div class="val tnum">2 / 12</div>
+        <div class="foot">1 nowy w tym tygodniu</div>
+      </div>
+      <div class="card col-3 stat">
+        <div class="lbl">Czas wygenerowania</div>
+        <div class="val tnum">14 s</div>
+        <div class="foot">ręczne składanie: ~6 godz.</div>
+      </div>
+    </div>
+
+    <div class="bento" style="margin-top:16px">
+      <div class="card col-8 chart-card">
+        <div class="chart-head">
+          <div>
+            <h3>Marża: plan vs wykonanie</h3>
+            <div class="chart-sub">ostatnie 12 tygodni · cały portfel</div>
+          </div>
+          <div class="seg"><a class="active" href="#">Tydzień</a><a href="#">Miesiąc</a></div>
+        </div>
+        <div class="chart-kpi">
+          <span><span class="lbl-sm">Plan</span><span class="big tnum">22,0%</span></span>
+          <span><span class="lbl-sm">Real (T30)</span><span class="big tnum">21,4%</span></span>
+          <span><span class="lbl-sm">Odchylenie</span><span class="big tnum" style="color:var(--rejected)">−0,6 p.p.</span></span>
+        </div>
+        <div class="chart-reveal">
+          <svg class="chart-svg" viewBox="0 0 720 240" role="img" aria-label="Wykres marży: plan vs wykonanie, 12 tygodni">
+            <defs>
+              <linearGradient id="gradA" x1="0" y1="0" x2="0" y2="1">
+                <stop class="stop-accent" offset="0" stop-opacity="0.08"/>
+                <stop class="stop-accent" offset="1" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <!-- siatka pozioma (kropkowana) + etykiety osi Y -->
+            <g>
+              <line class="grid" x1="40" y1="191" x2="710" y2="191"/><text class="tick" x="8" y="194">19%</text>
+              <line class="grid" x1="40" y1="163" x2="710" y2="163"/><text class="tick" x="8" y="166">20%</text>
+              <line class="grid" x1="40" y1="135" x2="710" y2="135"/><text class="tick" x="8" y="138">21%</text>
+              <line class="grid" x1="40" y1="107" x2="710" y2="107"/><text class="tick" x="8" y="110">22%</text>
+              <line class="grid" x1="40" y1="79"  x2="710" y2="79"/> <text class="tick" x="8" y="82">23%</text>
+            </g>
+            <!-- referencja: plan 22% (szara przerywana) -->
+            <line class="ln-ref" x1="40" y1="107" x2="710" y2="107" stroke-dasharray="6 5"/>
+            <text class="tick" x="712" y="110" text-anchor="end" style="font-weight:700">plan</text>
+            <!-- area + linia danych (stal, 2px) -->
+            <path fill="url(#gradA)" d="M45,205 L45,113 L105,99 L165,110 L225,129 L285,152 L345,188 L405,157 L465,135 L525,118 L585,110 L645,115 L705,124 L705,205 Z"/>
+            <polyline class="ln-accent" fill="none" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"
+              points="45,113 105,99 165,110 225,129 285,152 345,188 405,157 465,135 525,118 585,110 645,115 705,124"/>
+            <!-- kropki tylko informacyjne: alert (T32) + ostatni punkt -->
+            <circle class="dot-alert" cx="345" cy="188" r="4"/>
+            <circle class="pt" cx="705" cy="124" r="3.5"/>
+            <!-- oś + etykiety tygodni -->
+            <line class="axis" x1="40" y1="205" x2="710" y2="205"/>
+            <g class="chart-late">
+              <text class="tick" x="45"  y="222" text-anchor="middle">T27</text>
+              <text class="tick" x="105" y="222" text-anchor="middle">T28</text>
+              <text class="tick" x="165" y="222" text-anchor="middle">T29</text>
+              <text class="tick" x="225" y="222" text-anchor="middle">T30</text>
+              <text class="tick" x="285" y="222" text-anchor="middle">T31</text>
+              <text class="tick" x="345" y="222" text-anchor="middle">T32</text>
+              <text class="tick" x="405" y="222" text-anchor="middle">T33</text>
+              <text class="tick" x="465" y="222" text-anchor="middle">T34</text>
+              <text class="tick" x="525" y="222" text-anchor="middle">T35</text>
+              <text class="tick" x="585" y="222" text-anchor="middle">T36</text>
+              <text class="tick" x="645" y="222" text-anchor="middle">T37</text>
+              <text class="tick" x="705" y="222" text-anchor="middle">T38</text>
+            </g>
+          </svg>
+        </div>
+        <div class="chart-sub" style="margin-top:8px">Czerwony punkt: T32 — kosztowna korekta materiałowa (wychwycona przez kontrolę jakości danych).</div>
+      </div>
+
+      <div class="card col-4">
+        <h3 style="font-size:14px;margin-bottom:2px">Wykonanie budżetu</h3>
+        <div class="chart-sub">udział wykonania w budżecie portfela</div>
+        <div class="nc-donut" style="--nc-donut-ring:132px;margin-top:10px">
+          <svg width="132" height="132" viewBox="0 0 132 132" role="img" aria-label="Wykonanie budżetu 61%">
+            <circle class="nc-donut-track" cx="66" cy="66" r="54" fill="none" stroke-width="12"/>
+            <circle class="nc-donut-arc nc-donut-accent" cx="66" cy="66" r="54" fill="none" stroke-width="12"
+              stroke-linecap="round" stroke-dasharray="339.29" stroke-dashoffset="132.32"
+              transform="rotate(-90 66 66)"/>
+          </svg>
+          <div class="nc-donut-center"><span class="nc-donut-val tnum">61<span class="nc-donut-suf">%</span></span></div>
+          <div class="nc-donut-lbl lbl-sm">Wykonanie budżetu</div>
+        </div>
+        <div style="margin-top:18px;display:flex;flex-direction:column;gap:12px">
+          <div><div class="lbl-sm" style="margin-bottom:5px">Hala A — <span class="tnum">78%</span></div><div class="bar ok"><i style="width:78%"></i></div></div>
+          <div><div class="lbl-sm" style="margin-bottom:5px">Hala B — <span class="tnum">54%</span></div><div class="bar"><i style="width:54%"></i></div></div>
+          <div><div class="lbl-sm" style="margin-bottom:5px">Wyjazdy — <span class="tnum">43%</span></div><div class="bar"><i style="width:43%"></i></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bento" style="margin-top:16px">
+      <div class="card col-12">
+        <h3 style="font-size:14px;margin-bottom:12px">Projekty — tydzień 30</h3>
+        <table class="data-table">
+          <thead>
+            <tr><th>Projekt</th><th>Etap krytyczny</th><th class="num">Budżet (zł)</th><th class="num">Wykonanie</th><th class="num">Marża</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr class="rowlink"><td><strong>P-10241</strong> · Hala Poznań</td><td>Montaż</td><td class="num">6 420 000</td><td class="num">72%</td><td class="num">23,1%</td><td><span class="st st-green"><svg class="st-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>OK</span></td></tr>
+            <tr class="rowlink"><td><strong>P-10238</strong> · Moduły Gdańsk</td><td>Spawalnia</td><td class="num">4 180 000</td><td class="num">58%</td><td class="num">21,8%</td><td><span class="st st-green"><svg class="st-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>OK</span></td></tr>
+            <tr class="rowlink"><td><strong>P-10229</strong> · Biurowiec Łódź</td><td>Wykończenia</td><td class="num">5 950 000</td><td class="num">66%</td><td class="num">20,2%</td><td><span class="st st-accent"><svg class="st-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Obserwuj</span></td></tr>
+            <tr class="rowlink"><td><strong>P-10233</strong> · Magazyn Wrocław</td><td>Fundamenty</td><td class="num">2 730 000</td><td class="num">31%</td><td class="num">19,0%</td><td><span class="st st-brick"><svg class="st-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4m0 4h.01"/></svg>Ryzyko</span></td></tr>
+            <tr class="rowlink"><td><strong>P-10245</strong> · Osiedle modułowe</td><td>Projektowanie</td><td class="num">8 410 000</td><td class="num">12%</td><td class="num">22,6%</td><td><span class="st st-accent"><svg class="st-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Obserwuj</span></td></tr>
+            <tr class="rowlink"><td><strong>P-10221</strong> · Przebudowa Katowice</td><td>Instalacje</td><td class="num">3 340 000</td><td class="num">84%</td><td class="num">17,4%</td><td><span class="st st-brick"><svg class="st-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4m0 4h.01"/></svg>Ryzyko</span></td></tr>
+            <tr class="rowlink"><td><strong>P-10236</strong> · Hale logistyczne</td><td>Montaż</td><td class="num">7 060 000</td><td class="num">49%</td><td class="num">22,9%</td><td><span class="st st-green"><svg class="st-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>OK</span></td></tr>
+          </tbody>
+          <tfoot>
+            <tr><td><strong>Razem (7 z 12)</strong></td><td></td><td class="num"><strong>38 090 000</strong></td><td class="num"><strong>61%</strong></td><td class="num"><strong>21,4%</strong></td><td></td></tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    <div class="legend">
+      <span>Dane w tym demo są <strong>fikcyjne</strong>.</span>
+      <span>Prezentacja modułu <strong>„Raport zarządczy jednym kliknięciem"</strong> — tak wygląda jednoplikowy raport HTML, który instalujemy u klienta (działa lokalnie, bez serwera).</span>
+    </div>
+  </main>
+</div>
+
+<div class="tag-demo">DEMO — dane przykładowe</div>
+
+<script>
+  /* theme toggle (persisted) — .theme-fade wygładza przejście kolorów */
+  function toggleTheme(){
+    var h=document.documentElement;
+    h.classList.add('theme-fade');
+    var next=(h.dataset.theme==='light')?'dark':'light';
+    h.dataset.theme=next;
+    try{localStorage.setItem('theme',next);}catch(e){}
+    clearTimeout(window.__tf);
+    window.__tf=setTimeout(function(){h.classList.remove('theme-fade');},380);
+  }
+
+  /* sliding nav indicator (z kitu, base.html) */
+  (function(){
+    var wrap=document.getElementById('navwrap'), ind=document.getElementById('navIndicator');
+    if(!wrap||!ind) return;
+    var items=wrap.querySelectorAll('a.navitem');
+    function moveTo(el){
+      ind.style.transform='translateY('+el.offsetTop+'px)';
+      ind.style.height=el.offsetHeight+'px';
+      ind.style.opacity='1';
+    }
+    items.forEach(function(it){ it.addEventListener('mouseenter',function(){ moveTo(it); }); });
+    wrap.addEventListener('mouseleave',function(){
+      var act=wrap.querySelector('a.navitem.active');
+      if(act){ moveTo(act); } else { ind.style.opacity='0'; }
+    });
+    var act=wrap.querySelector('a.navitem.active');
+    if(act){ moveTo(act); }
+  })();
+
+  /* ambient beams — z kitu (components/bg_beams.html), stal HUE 214 */
+  (function(){
+    var canvas=document.getElementById('bgBeams');
+    if(!canvas) return;
+    var ctx=canvas.getContext('2d',{alpha:true});
+    if(!ctx){ canvas.style.display='none'; return; }
+    var HUE_BASE=214, SCALE=0.45, BLEED=30, TOTAL=24;
+    var W=0,H=0,beams=[];
+    function makeBeam(){
+      return {x:Math.random()*W*1.5-W*0.25,y:Math.random()*H*1.5-H*0.25,
+        w:30+Math.random()*60,len:H*2.5,angle:-35+Math.random()*10,
+        speed:0.6+Math.random()*1.2,opacity:0.05+Math.random()*0.05,
+        hue:HUE_BASE-10+Math.random()*20,sat:16+Math.random()*12,light:60+Math.random()*8,
+        pulse:Math.random()*Math.PI*2,pulseSpeed:0.02+Math.random()*0.03};
+    }
+    function resetBeam(b,i){
+      var spacing=W/3;
+      b.y=H+100;b.x=(i%3)*spacing+spacing/2+(Math.random()-0.5)*spacing*0.5;
+      b.w=100+Math.random()*100;b.speed=0.5+Math.random()*0.4;
+      b.hue=HUE_BASE-10+(i*20/TOTAL);b.opacity=0.06+Math.random()*0.04;
+    }
+    function resize(){
+      W=window.innerWidth+2*BLEED;H=window.innerHeight+2*BLEED;
+      canvas.width=Math.max(1,Math.round(W*SCALE));canvas.height=Math.max(1,Math.round(H*SCALE));
+      ctx.setTransform(SCALE,0,0,SCALE,0,0);
+      beams=[];for(var i=0;i<TOTAL;i++)beams.push(makeBeam());
+    }
+    resize();window.addEventListener('resize',resize);
+    function drawBeam(b,fade){
+      var a=b.opacity*(0.8+Math.sin(b.pulse)*0.2)*fade;
+      ctx.save();ctx.translate(b.x,b.y);ctx.rotate(b.angle*Math.PI/180);
+      var g=ctx.createLinearGradient(0,0,0,b.len);
+      function c(al){return 'hsla('+b.hue+','+b.sat+'%,'+b.light+'%,'+al+')';}
+      g.addColorStop(0,c(0));g.addColorStop(0.1,c(a*0.5));g.addColorStop(0.4,c(a));
+      g.addColorStop(0.6,c(a));g.addColorStop(0.9,c(a*0.5));g.addColorStop(1,c(0));
+      ctx.fillStyle=g;ctx.fillRect(-b.w/2,0,b.w,b.len);ctx.restore();
+    }
+    var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var t0=0;
+    try{t0=parseFloat(sessionStorage.getItem('nc-bgBeamsT'))||0;}catch(e){}
+    window.addEventListener('pagehide',function(){
+      try{sessionStorage.setItem('nc-bgBeamsT',String(t0+performance.now()*1e-3));}catch(e){}
+    });
+    var raf=null,last=0,FRAME_MS=33;
+    function frame(now){
+      if(last && now-last<FRAME_MS){raf=requestAnimationFrame(frame);return;}
+      var f=last?Math.min((now-last)/16.7,4):1;last=now;
+      var fade=Math.min((t0+now*1e-3)*0.45,1);
+      ctx.clearRect(0,0,W,H);
+      ctx.globalCompositeOperation='lighter';
+      for(var i=0;i<TOTAL;i++){
+        var b=beams[i];
+        b.y-=b.speed*f;b.pulse+=b.pulseSpeed*f;
+        if(b.y+b.len<-100)resetBeam(b,i);
+        drawBeam(b,fade);
+      }
+      ctx.globalCompositeOperation='source-over';
+      if(!reduce)raf=requestAnimationFrame(frame);
+    }
+    if(reduce){frame(9000);return;}
+    raf=requestAnimationFrame(frame);
+    document.addEventListener('visibilitychange',function(){
+      if(document.hidden){if(raf){cancelAnimationFrame(raf);raf=null;}}
+      else if(!raf){last=0;raf=requestAnimationFrame(frame);}
+    });
+  })();
+</script>
+</body>
+</html>

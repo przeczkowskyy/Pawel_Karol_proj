@@ -1,19 +1,19 @@
-{#- Brand mark — wordmark-placeholder "YOUR COMPANY NAME" formed by steering
-    particles (21st.dev ParticleTextEffect port, brand steel). Podmień WORD
-    po wyborze nazwy firmy (i ew. rozmiar FONT do długości napisu).
+{#- Brand mark — wordmark "KLAROW" formed by steering particles
+    (21st.dev ParticleTextEffect port, brand steel). Zmiana marki = podmiana
+    WORD (i ew. rozmiar FONT do długości napisu).
     Transparent canvas: the motion-blur trail uses destination-out fading
     instead of the original's opaque black wash. Particles rasterize from
     Nunito Sans after document.fonts.ready. Small canvas (~960×190, ~2.5k
     particles) — cheap; used on the auth pages only.
     prefers-reduced-motion → static text, no loop. -#}
-<canvas class="brand-canvas" id="brandParticles" width="960" height="190" aria-label="YOUR COMPANY NAME"></canvas>
+<canvas class="brand-canvas" id="brandParticles" width="960" height="190" aria-label="KLAROW"></canvas>
 <script>
 (function(){
   var canvas=document.getElementById('brandParticles');
   if(!canvas) return;
   var ctx=canvas.getContext('2d');
-  var W=canvas.width,H=canvas.height,WORD='YOUR COMPANY NAME';
-  var FONT='800 72px "Nunito Sans",Arial,sans-serif';
+  var W=canvas.width,H=canvas.height,WORD='KLAROW';
+  var FONT='800 118px "Nunito Sans",Arial,sans-serif';
   var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   function staticText(){
     ctx.clearRect(0,0,W,H);

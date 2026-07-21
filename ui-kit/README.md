@@ -1,8 +1,7 @@
 # Company UI Kit
 
-**Jedno źródło prawdy dla UI wszystkich narzędzi firmy.** Marka = **placeholder
-„YOUR COMPANY NAME"** (tekstowy wordmark, bez logo graficznego) — po wyborze nazwy firmy
-podmieniamy napis w jednym miejscu (`BrandMark`).
+**Jedno źródło prawdy dla UI wszystkich narzędzi firmy.** Marka: **KLAROW**
+(tekstowy wordmark, bez logo graficznego; domena `klarow.com` — wybrana 2026-07-21).
 Stack (**v2.1**): **React + Vite + TypeScript + Tailwind** (utility/layout) + jeden design-system
 CSS (`app.css` — tokeny + klasy komponentów) + ikony **lucide-react**. **NO CDN** (fonty self-hosted).
 *(v1.x: FastAPI SSR + Jinja2 + vanilla JS — wycofane; pliki `.html` w `assets/` to legacy-referencja.)*
@@ -33,9 +32,9 @@ skills/
 
 ---
 
-## Księga znaku (v2.1 — do czasu wyboru nazwy)
+## Księga znaku (v2.1)
 
-- **Wordmark:** „YOUR COMPANY NAME" — Nunito Sans 800, uppercase, letter-spacing .14em,
+- **Wordmark:** „KLAROW" — Nunito Sans 800, uppercase, letter-spacing .14em,
   metaliczny gradient stali na tekście (klasa `.brand-word`). Zero logo graficznego.
 - **Paleta:** czerń/biel + **jeden akcent: polerowana stal `#A8B4C2`** (odcienie chromatyczne,
   chłodny szary; krawędzie `#8895A6`/`#69788C`). Zieleń = sukces/historia, ceglany = problem —
@@ -102,7 +101,8 @@ skills/
 ## Wersje
 
 - **v2.1 (2026-07-21) — REBRAND:** usunięte logo „n" i wszystkie nazwy poprzedniej marki;
-  wordmark-placeholder „YOUR COMPANY NAME" (`.brand-word`, metaliczny gradient na tekście);
+  tekstowy wordmark „KLAROW" (`.brand-word`, metaliczny gradient na tekście; początkowo
+  placeholder „YOUR COMPANY NAME", nazwa Klarow wybrana tego samego dnia);
   paleta złota → **polerowana stal `#A8B4C2`** (dark+light, wszystkie tinty); klasy `*-gold` →
   `*-accent`; wykresy statyczne (fade zamiast draw-in 1.6s, kropki oszczędnie, cieńsza linia,
   przyciszony gradient area); FAB launchera = ikona `LayoutGrid` zamiast logo; tła `bg_beams`

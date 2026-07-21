@@ -7,7 +7,7 @@ description: "Company UI — obowiązkowy standard i zestaw komponentów dla WSZ
 
 > **v2.1 (2026-07-21) — REBRAND:** kit odcięty od marki poprzedniej firmy. Zmiany:
 > (1) **brak logo graficznego** — znak marki to tekstowy wordmark-placeholder
-> **„YOUR COMPANY NAME"** (klasa `.brand-word`, komponent `BrandMark`); podmiana nazwy po jej
+> **„KLAROW"** (klasa `.brand-word`, komponent `BrandMark`); podmiana nazwy po jej
 > wyborze = jedno miejsce. (2) **Nowa paleta: polerowana stal** — akcent `#A8B4C2`
 > (chromatyczny chłodny szary) zamiast złota; klasy `*-gold` przemianowane na `*-accent`.
 > (3) **Wykresy bardziej statyczne** — bez teatralnego „rysowania"; krótki fade,
@@ -230,7 +230,7 @@ akcji strony) dostaje panel `background:var(--scrim); border:1px solid var(--bor
 Karty/tabele są nieprzezroczyste — scrima nie potrzebują.
 
 **Znak marki:** róg topbara = komponent **`BrandMark`** (`src/components/shell/BrandMark.tsx`) —
-**TEKSTOWY wordmark-placeholder „YOUR COMPANY NAME"** (klasa `.brand-word`: Nunito Sans 800,
+**TEKSTOWY wordmark-placeholder „KLAROW"** (klasa `.brand-word`: Nunito Sans 800,
 uppercase, letter-spacing .14em, metaliczny gradient stali na tekście przez `background-clip:text`),
 obok podpis produktu `.p` (9.5px uppercase, kolor akcentu). ŻADNEGO logo graficznego — po wyborze
 nazwy firmy podmieniamy sam napis (jedno miejsce w `BrandMark`).

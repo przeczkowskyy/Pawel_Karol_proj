@@ -10,7 +10,7 @@ i odsłania pod nią jej **narzędzia**. Wyjęte 1:1 z aplikacji referencyjnej �
 | Plik | Rola |
 |---|---|
 | `NcLauncher.tsx` | komponent launchera (FAB + panel kategorii + narzędzia, stan open/aktywna kategoria, Escape/klik-poza zamyka) |
-| `BrandMark.tsx` | tekstowy wordmark-placeholder „YOUR COMPANY NAME" (`.brand-word`) — róg topbara; podmiana nazwy = jedno miejsce |
+| `BrandMark.tsx` | tekstowy wordmark-placeholder „KLAROW" (`.brand-word`) — róg topbara; podmiana nazwy = jedno miejsce |
 | `nc-launcher.css` | style launchera — **część kitu** (wkleić do `company-ui.css` NAD markerem „APP-SPECIFIC") |
 
 ## Zachowanie (standard)
