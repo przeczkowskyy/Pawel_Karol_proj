@@ -580,7 +580,11 @@ function Footer() {
   const { lang } = useLang();
   const t = pick(lang, FOOT);
   return (
-    <footer id="kontakt" className="border-t" style={{ borderColor: "var(--border)" }}>
+    <footer
+      id="kontakt"
+      className="border-t"
+      style={{ borderColor: "var(--border)", background: "var(--background)" }}
+    >
       <div className="max-w-6xl mx-auto px-6 py-12 flex flex-col sm:flex-row items-center justify-between gap-6">
         <div className="flex flex-col items-center sm:items-start gap-2">
           <span className="brand-word" style={{ fontSize: 14 }}>KLAROW</span>
