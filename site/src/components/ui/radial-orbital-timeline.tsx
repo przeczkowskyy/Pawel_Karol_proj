@@ -25,18 +25,30 @@ export interface TimelineItem {
   image?: string;
 }
 
-interface RadialOrbitalTimelineProps {
-  timelineData: TimelineItem[];
+export interface OrbitalUi {
+  statusLabels: Record<TimelineItem["status"], string>;
+  readiness: string;
+  related: string;
+  fullDesc: string;
+  hoverHint: string;
 }
 
-const STATUS_LABEL: Record<TimelineItem["status"], string> = {
-  completed: "DOSTĘPNY",
-  "in-progress": "FALA 2",
-  pending: "ROADMAPA",
+const UI_PL: OrbitalUi = {
+  statusLabels: { completed: "DOSTĘPNY", "in-progress": "FALA 2", pending: "ROADMAPA" },
+  readiness: "Gotowość wzorca",
+  related: "Powiązane moduły",
+  fullDesc: "Pełny opis modułu",
+  hoverHint: "kliknij węzeł, aby zobaczyć szczegóły",
 };
+
+interface RadialOrbitalTimelineProps {
+  timelineData: TimelineItem[];
+  ui?: OrbitalUi;
+}
 
 export default function RadialOrbitalTimeline({
   timelineData,
+  ui = UI_PL,
 }: RadialOrbitalTimelineProps) {
   const [expandedItems, setExpandedItems] = useState<Record<number, boolean>>(
     {}
@@ -286,7 +298,7 @@ export default function RadialOrbitalTimeline({
                             item.status
                           )}`}
                         >
-                          {STATUS_LABEL[item.status]}
+                          {ui.statusLabels[item.status]}
                         </Badge>
                         <span className="text-xs font-mono text-white/50">
                           {item.date}
@@ -306,7 +318,7 @@ export default function RadialOrbitalTimeline({
                         <div className="flex justify-between items-center text-xs mb-1">
                           <span className="flex items-center">
                             <Gauge size={10} className="mr-1" />
-                            Gotowość wzorca
+                            {ui.readiness}
                           </span>
                           <span className="font-mono">{item.energy}%</span>
                         </div>
@@ -323,7 +335,7 @@ export default function RadialOrbitalTimeline({
                           <div className="flex items-center mb-2">
                             <Link size={10} className="text-white/70 mr-1" />
                             <h4 className="text-xs uppercase tracking-wider font-medium text-white/70">
-                              Powiązane moduły
+                              {ui.related}
                             </h4>
                           </div>
                           <div className="flex flex-wrap gap-1">
@@ -360,7 +372,7 @@ export default function RadialOrbitalTimeline({
                           className="mt-4 flex items-center justify-center gap-1 rounded-md border border-[#a8b4c2]/30 py-1.5 text-xs font-bold text-[#d9e0e8] hover:bg-[#a8b4c2]/10 hover:text-white transition-colors"
                           onClick={(e) => e.stopPropagation()}
                         >
-                          Pełny opis modułu <ArrowRight size={11} />
+                          {ui.fullDesc} <ArrowRight size={11} />
                         </RouterLink>
                       )}
                     </CardContent>
@@ -388,7 +400,7 @@ export default function RadialOrbitalTimeline({
                 <div className="px-3 py-2.5 border-t border-[#a8b4c2]/20">
                   <p className="text-xs font-bold text-white">{hovered.title}</p>
                   <p className="mt-0.5 flex items-center gap-1 text-[10.5px] text-[#8895a6]">
-                    <MousePointerClick size={11} /> kliknij węzeł, aby zobaczyć szczegóły
+                    <MousePointerClick size={11} /> {ui.hoverHint}
                   </p>
                 </div>
               </div>

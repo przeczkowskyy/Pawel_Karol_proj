@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { X, Phone, Mail, ChevronLeft, ChevronRight } from "lucide-react";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { useLang, pick } from "@/i18n";
 
-/* Modal „Umów diagnozę” — kalendarz kitu (.cal) + wybór godziny.
-   Bez backendu (v0.1): wybrany termin składa się w e-mail (mailto) albo
+/* Modal „Umów diagnozę” — kalendarz kitu (.cal) + wybór godziny, PL/EN.
+   Bez backendu (v0.3): wybrany termin składa się w e-mail (mailto) albo
    telefon. Po zakupie domeny podepniemy realną rezerwację (Cal.com). */
 
 export const PHONE_DISPLAY = "786 296 426";
@@ -11,11 +12,45 @@ export const PHONE_HREF = "tel:+48786296426";
 const MAIL = "kontakt@klarow.com";
 
 const SLOTS = ["09:00", "10:00", "11:00", "13:00", "15:00"];
-const DOW = ["Pn", "Wt", "Śr", "Cz", "Pt", "So", "Nd"];
-const MONTHS = [
-  "Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec",
-  "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień",
-];
+
+const T = {
+  pl: {
+    dow: ["Pn", "Wt", "Śr", "Cz", "Pt", "So", "Nd"],
+    months: [
+      "Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec",
+      "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień",
+    ],
+    title: "Umów bezpłatną diagnozę",
+    sub: "30 minut, online. Wybierz dogodny termin — potwierdzimy go mailowo tego samego dnia.",
+    hourFor: "Godzina",
+    confirmMail: "Potwierdź e-mailem",
+    prevMonth: "Poprzedni miesiąc",
+    nextMonth: "Następny miesiąc",
+    close: "Zamknij",
+    footer: `Wolisz od razu porozmawiać? Zadzwoń: ${PHONE_DISPLAY} (pn–pt, 9–16). Rezerwacja online pojawi się wraz z uruchomieniem domeny klarow.com.`,
+    mailSubject: (d: string, s: string) => `Diagnoza automatyzacji — ${d}, godz. ${s}`,
+    mailBody: (d: string, s: string) =>
+      `Dzień dobry,\n\nchcę umówić bezpłatną diagnozę automatyzacji.\nProponowany termin: ${d}, godz. ${s}.\n\nFirma: \nTelefon: \nKrótko o procesie, który boli: \n\nPozdrawiam`,
+  },
+  en: {
+    dow: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
+    months: [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December",
+    ],
+    title: "Book a free diagnosis",
+    sub: "30 minutes, online. Pick a slot that suits you — we'll confirm it by email the same day.",
+    hourFor: "Time",
+    confirmMail: "Confirm by email",
+    prevMonth: "Previous month",
+    nextMonth: "Next month",
+    close: "Close",
+    footer: `Prefer to talk right away? Call: +48 ${PHONE_DISPLAY} (Mon–Fri, 9–16 CET). Online booking arrives with the klarow.com domain.`,
+    mailSubject: (d: string, s: string) => `Automation diagnosis — ${d}, ${s}`,
+    mailBody: (d: string, s: string) =>
+      `Hello,\n\nI'd like to book a free automation diagnosis.\nProposed slot: ${d}, ${s} (CET).\n\nCompany: \nPhone: \nBriefly, the process that hurts: \n\nBest regards`,
+  },
+};
 
 interface DayCell {
   iso: string;
@@ -57,6 +92,8 @@ export default function BookingModal({
   open: boolean;
   onClose: () => void;
 }) {
+  const { lang } = useLang();
+  const t = pick(lang, T);
   const now = new Date();
   const [ym, setYm] = useState({ y: now.getFullYear(), m: now.getMonth() });
   const [selDay, setSelDay] = useState<string | null>(null);
@@ -87,10 +124,8 @@ export default function BookingModal({
   const mailHref =
     selDay && selSlot
       ? `mailto:${MAIL}?subject=${encodeURIComponent(
-          `Diagnoza automatyzacji — ${selDay}, godz. ${selSlot}`
-        )}&body=${encodeURIComponent(
-          `Dzień dobry,\n\nchcę umówić bezpłatną diagnozę automatyzacji.\nProponowany termin: ${selDay}, godz. ${selSlot}.\n\nFirma: \nTelefon: \nKrótko o procesie, który boli: \n\nPozdrawiam`
-        )}`
+          t.mailSubject(selDay, selSlot)
+        )}&body=${encodeURIComponent(t.mailBody(selDay, selSlot))}`
       : undefined;
 
   return (
@@ -100,15 +135,15 @@ export default function BookingModal({
         style={{ maxWidth: 560 }}
         onClick={(e) => e.stopPropagation()}
       >
-        <button className="modal-close" type="button" onClick={onClose} aria-label="Zamknij">
+        <button className="modal-close" type="button" onClick={onClose} aria-label={t.close}>
           <X size={15} />
         </button>
 
         <h3 className="text-[19px] font-extrabold" style={{ color: "var(--heading)" }}>
-          Umów bezpłatną diagnozę
+          {t.title}
         </h3>
         <p className="mt-1 text-[13px]" style={{ color: "var(--muted-foreground)" }}>
-          30 minut, online. Wybierz dogodny termin — potwierdzimy go mailowo tego samego dnia.
+          {t.sub}
         </p>
 
         <div ref={animParent} className="mt-5 flex flex-col gap-4">
@@ -119,24 +154,24 @@ export default function BookingModal({
                 type="button"
                 onClick={() => move(-1)}
                 disabled={!canPrev}
-                aria-label="Poprzedni miesiąc"
+                aria-label={t.prevMonth}
               >
                 <ChevronLeft size={15} />
               </button>
               <strong>
-                {MONTHS[ym.m]} {ym.y}
+                {t.months[ym.m]} {ym.y}
               </strong>
               <button
                 className="btn btn-ghost btn-sm btn-ico"
                 type="button"
                 onClick={() => move(1)}
-                aria-label="Następny miesiąc"
+                aria-label={t.nextMonth}
               >
                 <ChevronRight size={15} />
               </button>
             </div>
             <div className="cal-grid">
-              {DOW.map((d) => (
+              {t.dow.map((d) => (
                 <span key={d} className="cal-dow">
                   {d}
                 </span>
@@ -164,7 +199,7 @@ export default function BookingModal({
           {selDay && (
             <div key="slots">
               <div className="lbl-sm" style={{ marginBottom: 8 }}>
-                Godzina · {selDay}
+                {t.hourFor} · {selDay}
               </div>
               <div className="flex flex-wrap gap-2">
                 {SLOTS.map((s) => (
@@ -184,7 +219,7 @@ export default function BookingModal({
           {selDay && selSlot && (
             <div key="confirm" className="actions-bar" style={{ marginTop: 4 }}>
               <a className="btn btn-primary" href={mailHref}>
-                <Mail size={15} /> Potwierdź e-mailem
+                <Mail size={15} /> {t.confirmMail}
               </a>
               <a className="btn btn-secondary" href={PHONE_HREF}>
                 <Phone size={15} /> {PHONE_DISPLAY}
@@ -194,8 +229,7 @@ export default function BookingModal({
         </div>
 
         <p className="mt-4 text-[11.5px]" style={{ color: "var(--muted-foreground)" }}>
-          Wolisz od razu porozmawiać? Zadzwoń: <strong>{PHONE_DISPLAY}</strong> (pn–pt, 9–16).
-          Rezerwacja online pojawi się wraz z uruchomieniem domeny klarow.com.
+          {t.footer}
         </p>
       </div>
     </div>

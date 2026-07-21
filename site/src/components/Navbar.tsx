@@ -2,18 +2,30 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X, Phone } from "lucide-react";
 import { PHONE_DISPLAY, PHONE_HREF } from "@/components/BookingModal";
+import { useLang, pick } from "@/i18n";
 
 /* Pływający navbar-pigułka (adaptacja MiniNavbar z 21st.dev) — brand KLAROW,
    stal zamiast bieli. CTA otwiera modal kalendarza; linki działają też
-   z podstron modułów (router + hash). */
+   z podstron modułów (router + hash). Przełącznik PL/EN. */
 
-const LINKS = [
-  { label: "Moduły", to: "/#moduly" },
-  { label: "Współpraca", to: "/#wspolpraca" },
-  { label: "Dowód", to: "/#dowod" },
-  { label: "FAQ", to: "/#faq" },
-  { label: "Kontakt", to: "/#kontakt" },
-];
+const LINKS_I18N = {
+  pl: [
+    { label: "Moduły", to: "/#moduly" },
+    { label: "Współpraca", to: "/#wspolpraca" },
+    { label: "Dowód", to: "/#dowod" },
+    { label: "FAQ", to: "/#faq" },
+    { label: "Kontakt", to: "/#kontakt" },
+  ],
+  en: [
+    { label: "Modules", to: "/#moduly" },
+    { label: "How we work", to: "/#wspolpraca" },
+    { label: "Proof", to: "/#dowod" },
+    { label: "FAQ", to: "/#faq" },
+    { label: "Contact", to: "/#kontakt" },
+  ],
+};
+
+const CTA_I18N = { pl: "Umów diagnozę", en: "Book a diagnosis" };
 
 function NavLink({ to, children, onClick }: { to: string; children: React.ReactNode; onClick?: () => void }) {
   return (
@@ -31,7 +43,20 @@ function NavLink({ to, children, onClick }: { to: string; children: React.ReactN
 }
 
 export default function Navbar({ onBook }: { onBook: () => void }) {
+  const { lang, setLang } = useLang();
   const [isOpen, setIsOpen] = useState(false);
+  const LINKS = pick(lang, LINKS_I18N);
+
+  const langToggle = (
+    <button
+      type="button"
+      onClick={() => setLang(lang === "pl" ? "en" : "pl")}
+      className="px-2 py-1 text-[11px] font-extrabold tracking-widest rounded-full border border-[#3a3a3a] text-[#b4b4b9] hover:text-white hover:border-[#a8b4c2] transition-colors cursor-pointer"
+      aria-label={lang === "pl" ? "Switch to English" : "Przełącz na polski"}
+    >
+      {lang === "pl" ? "EN" : "PL"}
+    </button>
+  );
 
   const cta = (
     <button
@@ -45,7 +70,7 @@ export default function Navbar({ onBook }: { onBook: () => void }) {
                  hover:from-[#c7d0dc] hover:via-[#bfc9d6] hover:to-[#aab6c4]
                  transition-all duration-200 w-full sm:w-auto text-center whitespace-nowrap cursor-pointer"
     >
-      Umów diagnozę
+      {pick(lang, CTA_I18N)}
     </button>
   );
 
@@ -78,6 +103,7 @@ export default function Navbar({ onBook }: { onBook: () => void }) {
           >
             <Phone size={12} className="text-[#a8b4c2]" /> {PHONE_DISPLAY}
           </a>
+          {langToggle}
           {cta}
         </div>
 
@@ -109,6 +135,7 @@ export default function Navbar({ onBook }: { onBook: () => void }) {
           <a href={PHONE_HREF} className="inline-flex items-center gap-2 text-sm font-bold text-[#b4b4b9]">
             <Phone size={14} className="text-[#a8b4c2]" /> {PHONE_DISPLAY}
           </a>
+          {langToggle}
         </nav>
         <div className="flex flex-col items-center mt-4 mb-2 w-full px-4">{cta}</div>
       </div>
