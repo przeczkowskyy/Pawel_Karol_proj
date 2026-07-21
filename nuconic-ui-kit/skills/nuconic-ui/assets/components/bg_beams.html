@@ -1,0 +1,126 @@
+{#- Ambient background — "Beams" (port 21st.dev BeamsBackground React→vanilla), brand gold.
+    ~24 pochylonych belek (angle ~-35°) płynących ku górze, pulsująca alfa,
+    gradient wzdłuż belki, reset poza ekranem do jednej z 3 kolumn.
+    Wydajność (LAN, słabsze maszyny): belki rysowane na canvasie 2D o OBNIŻONEJ
+    rozdzielczości (SCALE), rozmycie JEDNYM pasmem GPU — CSS filter:blur na
+    elemencie canvas. ZERO ctx.filter='blur' na CPU co klatkę (tak robił oryginał).
+    Canvas większy niż viewport (ujemny inset = 2×blur), żeby blur nie prześwietlał
+    krawędzi. Pauza przy document.hidden. prefers-reduced-motion → jedna statyczna
+    klatka. Dark only — light ukrywa canvas przez CSS (jak .bg-smoke).
+    Fade-in tylko przy pierwszym wejściu w sesji (sessionStorage, jak bg_smoke). -#}
+<style>
+  /* pozycjonowanie jak .bg-smoke, ale canvas przezroczysty (tło strony daje body
+     --body-bg) + kompensacja blur: inset = -(2×blur 15px) = -30px */
+  .bg-beams{position:fixed;inset:-30px;width:calc(100% + 60px);height:calc(100% + 60px);
+    z-index:0;pointer-events:none;filter:blur(15px)}
+  html[data-theme="light"] .bg-beams{display:none}
+  @media print{.bg-beams{display:none !important}}
+</style>
+<canvas class="bg-beams" id="bgBeams" aria-hidden="true"></canvas>
+<script>
+(function(){
+  var canvas=document.getElementById('bgBeams');
+  if(!canvas) return;
+  var ctx=canvas.getContext('2d',{alpha:true});
+  if(!ctx){ canvas.style.display='none'; return; }
+
+  var HUE_BASE=40;  /* baza koloru belek (brand #FFA914 ≈ hsl(37,100%,54%)), rozrzut ±10.
+                       Oryginał komponentu używał 190–260 (blue-violet) — powrót jedną zmianą. */
+  var SCALE=0.45;   /* gałka wydajności — wewnętrzna rozdzielczość vs px CSS
+                       (celowo niska + blur GPU; devicePixelRatio ignorowany) */
+  var BLEED=30;     /* zapas poza viewport z każdej strony = 2×blur z CSS powyżej */
+  var TOTAL=24;     /* liczba belek */
+
+  var W=0,H=0,beams=[];
+
+  function makeBeam(){                       /* start: losowo w 1.5× obszaru ekranu */
+    return {
+      x:Math.random()*W*1.5-W*0.25,
+      y:Math.random()*H*1.5-H*0.25,
+      w:30+Math.random()*60,
+      len:H*2.5,
+      angle:-35+Math.random()*10,
+      speed:0.6+Math.random()*1.2,
+      opacity:0.05+Math.random()*0.05,       /* SUBTELNIE — tło pod aplikacją do pracy */
+      hue:HUE_BASE-10+Math.random()*20,
+      sat:70+Math.random()*20,
+      light:55+Math.random()*7,
+      pulse:Math.random()*Math.PI*2,
+      pulseSpeed:0.02+Math.random()*0.03
+    };
+  }
+  function resetBeam(b,i){                   /* powrót od dołu do jednej z 3 kolumn */
+    var spacing=W/3;
+    b.y=H+100;
+    b.x=(i%3)*spacing+spacing/2+(Math.random()-0.5)*spacing*0.5;
+    b.w=100+Math.random()*100;
+    b.speed=0.5+Math.random()*0.4;
+    b.hue=HUE_BASE-10+(i*20/TOTAL);          /* rozkład hue po indeksie, jak w oryginale */
+    b.opacity=0.06+Math.random()*0.04;
+  }
+
+  function resize(){
+    W=window.innerWidth+2*BLEED; H=window.innerHeight+2*BLEED;
+    canvas.width=Math.max(1,Math.round(W*SCALE));
+    canvas.height=Math.max(1,Math.round(H*SCALE));
+    ctx.setTransform(SCALE,0,0,SCALE,0,0);   /* logika w px CSS, rysunek w niskiej rozdzielczości */
+    beams=[]; for(var i=0;i<TOTAL;i++) beams.push(makeBeam());
+  }
+  resize();
+  window.addEventListener('resize',resize);
+
+  function drawBeam(b,fade){
+    var a=b.opacity*(0.8+Math.sin(b.pulse)*0.2)*fade;   /* pulsująca alfa (sin) */
+    ctx.save();
+    ctx.translate(b.x,b.y);
+    ctx.rotate(b.angle*Math.PI/180);
+    var g=ctx.createLinearGradient(0,0,0,b.len);        /* gradient wzdłuż belki */
+    function c(al){ return 'hsla('+b.hue+','+b.sat+'%,'+b.light+'%,'+al+')'; }
+    g.addColorStop(0,c(0));
+    g.addColorStop(0.1,c(a*0.5));
+    g.addColorStop(0.4,c(a));
+    g.addColorStop(0.6,c(a));
+    g.addColorStop(0.9,c(a*0.5));
+    g.addColorStop(1,c(0));
+    ctx.fillStyle=g;
+    ctx.fillRect(-b.w/2,0,b.w,b.len);
+    ctx.restore();
+  }
+
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* CIĄGŁOŚĆ jak w bg_smoke: czas wznawiany z sessionStorage → fade-in (~2s)
+     gra tylko przy pierwszym wejściu w sesji, nawigacja nie resetuje. */
+  var t0=0;
+  try{ t0=parseFloat(sessionStorage.getItem('nc-bgBeamsT'))||0; }catch(e){}
+  window.addEventListener('pagehide',function(){
+    try{ sessionStorage.setItem('nc-bgBeamsT',String(t0+performance.now()*1e-3)); }catch(e){}
+  });
+
+  var raf=null,last=0,acc=0;
+  var FRAME_MS=33;                            /* throttle ~30 fps — tło nie potrzebuje 60,
+                                                 połowa pracy GPU (kompozycja blur) mniej */
+  function frame(now){
+    if(last && now-last<FRAME_MS){ raf=requestAnimationFrame(frame); return; }
+    var f=last?Math.min((now-last)/16.7,4):1; last=now;  /* normalizacja prędkości do dt */
+    var fade=Math.min((t0+now*1e-3)*0.45,1);             /* ~2s fade-in przy pierwszym wejściu */
+    ctx.clearRect(0,0,W,H);
+    ctx.globalCompositeOperation='lighter';  /* addytywnie — przecięcia belek delikatnie
+                                                świecą; przy alfach .05–.10 nie przepala */
+    for(var i=0;i<TOTAL;i++){
+      var b=beams[i];
+      b.y-=b.speed*f;
+      b.pulse+=b.pulseSpeed*f;
+      if(b.y+b.len<-100) resetBeam(b,i);     /* cała belka nad górną krawędzią → reset */
+      drawBeam(b,fade);
+    }
+    ctx.globalCompositeOperation='source-over';
+    if(!reduce) raf=requestAnimationFrame(frame);
+  }
+  if(reduce){ frame(9000); return; }         /* jedna statyczna klatka, pełny fade */
+  raf=requestAnimationFrame(frame);
+  document.addEventListener('visibilitychange',function(){
+    if(document.hidden){ if(raf){ cancelAnimationFrame(raf); raf=null; } }
+    else if(!raf){ last=0; raf=requestAnimationFrame(frame); }
+  });
+})();
+</script>

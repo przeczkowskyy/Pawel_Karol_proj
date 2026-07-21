@@ -1,0 +1,219 @@
+<!doctype html>
+{% from 'components/icons.html' import ico %}
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Payment Plan{% endblock %} · Nuconic</title>
+  <script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+  <link rel="icon" type="image/gif" href="/static/img/logo.gif">
+  <link rel="stylesheet" href="/static/css/app.css?v={{ asset_v }}">
+</head>
+<body>
+{% include 'components/bg_beams.html' %}
+{% set parts = (user.name or '?').split() %}
+{% set initials = (parts[0][0] if parts|length > 0 else '?') ~ (parts[1][0] if parts|length > 1 else '') %}
+<div class="app" id="ncApp">
+  {# v1.2: strzałka zwijania panelu zakładek — środek prawej krawędzi sidebara #}
+  <button class="nav-toggle" type="button" id="navToggle" aria-label="Zwiń / rozwiń panel zakładek"
+          data-tip="Zwiń / rozwiń panel zakładek">{{ ico('chevron-l', 'nav-toggle-ico') }}</button>
+  <div class="brand" title="Nuconic · Payment Plan">
+    <div>
+      {% include 'components/brand_mark.html' %}
+      <span class="p">Payment Plan</span>
+    </div>
+  </div>
+  {# initials kept for potential future use; avatar chip removed per user request #}
+
+  <header class="topbar">
+    <div>{% block topbar_left %}{% endblock %}</div>
+    {% set pm_only = user.roles|length == 1 and 'PM' in user.roles %}
+    <div class="tb-right">
+      {% if not pm_only %}
+      <div class="saldo-pill">
+        <span class="lbl">Account balance</span>
+        <span class="val tnum">{{ saldo }} PLN</span>
+      </div>
+      {% endif %}
+      <button class="theme-btn" type="button" onclick="toggleTheme()" title="Switch light / dark theme">
+        <span class="ico-sun">{{ ico('sun') }}</span><span class="ico-moon">{{ ico('moon') }}</span>
+      </button>
+      <a class="user-chip" href="/account/password" title="Change password">
+        <span class="small">{{ user.name }}</span>
+      </a>
+      <a class="navitem" href="/logout" title="Sign out" style="padding:7px">{{ ico('logout') }}</a>
+    </div>
+  </header>
+
+  <nav class="sidebar">
+    {% set nav_r = user.roles %}
+    <div class="navwrap" id="navwrap">
+      <div class="nav-indicator" id="navIndicator"></div>
+      {% if not pm_only %}
+      <a class="navitem {{ 'active' if active=='dashboard' }}" href="/dashboard">{{ ico('layout') }}Dashboard</a>
+      {% endif %}
+      {% if 'REQUESTOR' in nav_r or 'CFO_PL' in nav_r or 'ADMIN' in nav_r %}
+        <a class="navitem {{ 'active' if active=='requests' }}" href="/requests">{{ ico('file') }}Requests</a>
+      {% endif %}
+      {% if nav_r and not pm_only %}
+        <a class="navitem {{ 'active' if active=='plan' }}" href="/plan">{{ ico('calendar') }}14-Day Plan</a>
+      {% endif %}
+      {% if 'CFO_PL' in nav_r or 'DIRECTOR_US' in nav_r or 'ADMIN' in nav_r %}
+        <a class="navitem {{ 'active' if active=='wnioski' }}" href="/wnioski">{{ ico('send') }}Funding Requests</a>
+      {% endif %}
+      {% if 'TREASURER' in nav_r or 'ADMIN' in nav_r %}
+        <a class="navitem {{ 'active' if active=='rozliczenia' }}" href="/rozliczenia">{{ ico('coins') }}Settlements</a>
+      {% endif %}
+      {% if 'PM' in nav_r or 'CFO_PL' in nav_r or 'DIRECTOR_US' in nav_r or 'ADMIN' in nav_r %}
+        <a class="navitem {{ 'active' if active=='billing' }}" href="/billing">{{ ico('receipt') }}Billing</a>
+      {% endif %}
+      {% if 'ADMIN' in nav_r %}
+        <div class="nav-sep"></div>
+        <div class="nav-role">Administration</div>
+        <a class="navitem {{ 'active' if active=='admin' }}" href="/admin">{{ ico('settings') }}Admin panel</a>
+      {% endif %}
+    </div>
+    <div class="grow"></div>
+    <div class="nav-role">Signed in as</div>
+    <div class="navitem nav-user">{{ user.name }}</div>
+  </nav>
+
+  <main class="main">
+    {% if flash %}<div class="flash">{{ flash }}</div>{% endif %}
+    {% block content %}{% endblock %}
+  </main>
+</div>
+{% if demo %}<div class="tag-demo">DEMO MODE — sample data</div>{% endif %}
+
+<div id="modalOverlay" class="modal-overlay-c" onclick="closeModal()">
+  <div class="modal-c" onclick="event.stopPropagation()">
+    <button class="modal-close" type="button" onclick="closeModal()" aria-label="Close">{{ ico('x') }}</button>
+    <div id="modalBody"></div>
+  </div>
+</div>
+<script>
+  /* theme toggle (persisted) — .theme-fade cross-fades colours for 350ms */
+  function toggleTheme(){
+    var h=document.documentElement;
+    h.classList.add('theme-fade');
+    var next=(h.dataset.theme==='light')?'dark':'light';
+    h.dataset.theme=next;
+    try{localStorage.setItem('theme',next);}catch(e){}
+    clearTimeout(window.__tf);
+    window.__tf=setTimeout(function(){h.classList.remove('theme-fade');},380);
+  }
+
+  /* v1.2: zwijanie panelu zakładek (persist w localStorage) */
+  (function(){
+    var app=document.getElementById('ncApp'), btn=document.getElementById('navToggle');
+    if(!app||!btn) return;
+    try{ if(localStorage.getItem('nc-nav-collapsed')==='1') app.classList.add('nav-collapsed'); }catch(e){}
+    btn.addEventListener('click',function(){
+      var on=app.classList.toggle('nav-collapsed');
+      try{ localStorage.setItem('nc-nav-collapsed', on?'1':'0'); }catch(e){}
+    });
+  })();
+
+  /* detail modal */
+  function openModal(url){
+    var o=document.getElementById('modalOverlay');
+    document.getElementById('modalBody').innerHTML='<p class="muted">Loading…</p>';
+    o.style.display='flex';
+    fetch(url,{credentials:'same-origin'}).then(function(r){return r.text();})
+      .then(function(h){document.getElementById('modalBody').innerHTML=h;})
+      .catch(function(){document.getElementById('modalBody').innerHTML='<p class="muted">Could not load details.</p>';});
+  }
+  function closeModal(){document.getElementById('modalOverlay').style.display='none';}
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal();});
+
+  /* sliding nav indicator (desktop) */
+  (function(){
+    var wrap=document.getElementById('navwrap'), ind=document.getElementById('navIndicator');
+    if(!wrap||!ind) return;
+    var items=wrap.querySelectorAll('a.navitem');
+    function moveTo(el){
+      ind.style.transform='translateY('+el.offsetTop+'px)';
+      ind.style.height=el.offsetHeight+'px';
+      ind.style.opacity='1';
+    }
+    items.forEach(function(it){ it.addEventListener('mouseenter',function(){ moveTo(it); }); });
+    wrap.addEventListener('mouseleave',function(){
+      var act=wrap.querySelector('a.navitem.active');
+      if(act){ moveTo(act); } else { ind.style.opacity='0'; }
+    });
+    var act=wrap.querySelector('a.navitem.active');
+    if(act){ moveTo(act); }
+  })();
+
+  /* live thousands grouping for amount fields (space separator: 1 000 000).
+     Applies to every <input inputmode="decimal">; decimal part (comma or dot,
+     max 2 digits) and negative sign are left intact; server parsers strip spaces. */
+  document.addEventListener('input', function(e){
+    var el = e.target;
+    if(!el.matches || !el.matches('input[inputmode="decimal"]')) return;
+    var old = el.value;
+    var m = old.replace(/[\s ]/g, '').match(/^(-?)(\d+)([.,]\d{0,2})?$/);
+    if(!m) return;                       // partial/unusual input — leave as typed
+    var next = m[1] + m[2].replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + (m[3] || '');
+    if(next === old) return;
+    var digitsBefore = (old.slice(0, el.selectionStart || 0).match(/[\d.,-]/g) || []).length;
+    el.value = next;
+    var pos = 0, seen = 0;
+    while(pos < next.length && seen < digitsBefore){
+      if(/[\d.,-]/.test(next[pos])) seen++;
+      pos++;
+    }
+    try{ el.setSelectionRange(pos, pos); }catch(err){}
+  });
+
+  /* drag-to-pan for the 14-day plan (and any .matrix-wrap) */
+  (function(){
+    document.querySelectorAll('.matrix-wrap, .table-wrapper').forEach(function(el){
+      if(el.dataset.ncPan) return; el.dataset.ncPan='1';   /* jedna inicjalizacja — strony nie dublują pan JS */
+      var down=false,moved=false,sx=0,sy=0,sl=0,st=0;
+      el.addEventListener('pointerdown',function(e){
+        if(e.target.closest('button,input,select,a,textarea,label,.lc-badge,.lc-icon,[data-hover-kind],.th-filter,.sortable')) return;
+        down=true;moved=false;sx=e.clientX;sy=e.clientY;sl=el.scrollLeft;st=el.scrollTop;
+        el.classList.add('dragging');
+      });
+      window.addEventListener('pointermove',function(e){
+        if(!down) return;
+        var dx=e.clientX-sx, dy=e.clientY-sy;
+        if(Math.abs(dx)>4||Math.abs(dy)>4) moved=true;
+        el.scrollLeft=sl-dx; el.scrollTop=st-dy;
+      });
+      window.addEventListener('pointerup',function(){
+        down=false; el.classList.remove('dragging');
+        setTimeout(function(){ moved=false; },0);  // suppress only the click of THIS drag
+      });
+      el.addEventListener('click',function(e){ if(moved){ e.stopPropagation(); e.preventDefault(); } },true);
+    });
+  })();
+
+  /* tooltip singleton (ported from Protocol Manager #lc-tip) —
+     any element with data-tip (plain text) or data-tip-html (trusted HTML) */
+  (function(){
+    var tip=document.createElement('div'); tip.id='nc-tip'; document.body.appendChild(tip);
+    var cur=null;
+    function place(e){
+      var pad=14, x=e.clientX+pad, y=e.clientY+pad, r=tip.getBoundingClientRect();
+      if(x+r.width>window.innerWidth-8) x=e.clientX-r.width-pad;
+      if(y+r.height>window.innerHeight-8) y=e.clientY-r.height-pad;
+      tip.style.left=Math.max(8,x)+'px'; tip.style.top=Math.max(8,y)+'px';
+    }
+    document.addEventListener('mouseover',function(e){
+      var el=e.target.closest ? e.target.closest('[data-tip],[data-tip-html]') : null;
+      if(!el||el===cur) return;
+      cur=el;
+      if(el.dataset.tipHtml){ tip.innerHTML=el.dataset.tipHtml; }
+      else { tip.textContent=el.dataset.tip; }
+      tip.classList.add('visible'); place(e);
+    });
+    document.addEventListener('mousemove',function(e){ if(cur) place(e); });
+    document.addEventListener('mouseout',function(e){
+      if(cur && !cur.contains(e.relatedTarget)){ cur=null; tip.classList.remove('visible'); }
+    });
+  })();
+</script>
+</body>
+</html>

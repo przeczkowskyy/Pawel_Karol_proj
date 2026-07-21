@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign in · Nuconic Payment Plan</title>
+  <script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+  <link rel="icon" type="image/gif" href="/static/img/logo.gif">
+  <link rel="stylesheet" href="/static/css/app.css?v={{ asset_v }}">
+</head>
+<body>
+<div class="login-wrap">
+  {% include 'components/bg_beams.html' %}
+  {# brand_particles.html — kept in components/, reserved for the future main menu #}
+  <div class="login-card">
+    <div class="login-top">
+      <img src="/static/img/logo.gif" alt="Nuconic">
+      <div><div class="n">NUCONIC</div>
+      <div class="p">Payment Plan</div></div>
+    </div>
+    <div class="login-body">
+      {% if error %}<div class="err">{{ error }}</div>{% endif %}
+      <form method="post" action="/login">
+        <input type="hidden" name="csrf" value="{{ csrf }}">
+        <div class="field">
+          <label for="email">Work email</label>
+          <input class="input" type="email" id="email" name="email" autocomplete="username" required autofocus
+                 value="{{ email or '' }}" placeholder="name@nuconic.com">
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input class="input" type="password" id="password" name="password" autocomplete="current-password" required>
+        </div>
+        <button class="btn btn-primary" type="submit" style="width:100%;justify-content:center">Sign in</button>
+      </form>
+      <div class="auth-links">
+        <a href="/register">Create an account</a>
+        <a href="/forgot">Forgot password?</a>
+      </div>
+      {% if demo %}
+      <div class="login-demo">
+        <strong>Demo mode</strong> — password for all accounts: <code>demo</code><br>
+        Accounts: <code>mateusz@nuconic.com</code> (CFO), <code>dan@nuconic.com</code> (Finance Director),
+        <code>kasia@nuconic.com</code> (Treasurer), <code>requestor@nuconic.com</code>, <code>admin@nuconic.com</code>.
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+</body>
+</html>

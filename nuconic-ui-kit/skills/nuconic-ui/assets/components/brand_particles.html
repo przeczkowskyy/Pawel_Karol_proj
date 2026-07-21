@@ -1,0 +1,79 @@
+{#- Brand mark — "NUCONIC" formed by steering particles
+    (21st.dev ParticleTextEffect port, single word, brand gold).
+    Transparent canvas: the motion-blur trail uses destination-out fading
+    instead of the original's opaque black wash. Particles rasterize from
+    Nunito Sans after document.fonts.ready. Small canvas (~960×190, ~2.5k
+    particles) — cheap; used on the auth pages only.
+    prefers-reduced-motion → static text, no loop. -#}
+<canvas class="brand-canvas" id="brandParticles" width="960" height="190" aria-label="NUCONIC"></canvas>
+<script>
+(function(){
+  var canvas=document.getElementById('brandParticles');
+  if(!canvas) return;
+  var ctx=canvas.getContext('2d');
+  var W=canvas.width,H=canvas.height,WORD='NUCONIC';
+  var FONT='800 118px "Nunito Sans",Arial,sans-serif';
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function staticText(){
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#ffa914';
+    ctx.font=FONT; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(WORD,W/2,H/2);
+  }
+  if(reduce){
+    if(document.fonts&&document.fonts.ready){ document.fonts.ready.then(staticText); } else { staticText(); }
+    return;
+  }
+  function init(){
+    var off=document.createElement('canvas'); off.width=W; off.height=H;
+    var octx=off.getContext('2d',{willReadFrequently:true});
+    octx.fillStyle='#fff'; octx.font=FONT;
+    octx.textAlign='center'; octx.textBaseline='middle';
+    octx.fillText(WORD,W/2,H/2);
+    var pixels=octx.getImageData(0,0,W,H).data;
+    var STEP=5, parts=[], coords=[], i, j, t;
+    for(i=0;i<pixels.length;i+=STEP*4) coords.push(i);
+    for(i=coords.length-1;i>0;i--){ j=Math.floor(Math.random()*(i+1)); t=coords[i]; coords[i]=coords[j]; coords[j]=t; }
+    var PALETTE=['255,169,20','255,190,77','224,142,0'];
+    function ringPos(){
+      var a=Math.random()*Math.PI*2, m=(W+H)/2;
+      return {x:W/2+Math.cos(a)*m, y:H/2+Math.sin(a)*m};
+    }
+    coords.forEach(function(ci){
+      if(pixels[ci+3]>0){
+        var x=(ci/4)%W, y=Math.floor(ci/4/W), p0=ringPos(), ms=Math.random()*6+4;
+        parts.push({x:p0.x,y:p0.y,vx:0,vy:0,tx:x,ty:y,ms:ms,mf:ms*.05,w:0,
+                    c:PALETTE[Math.floor(Math.random()*PALETTE.length)]});
+      }
+    });
+    var raf=null;
+    function tick(){
+      /* trail fade on a TRANSPARENT canvas */
+      ctx.globalCompositeOperation='destination-out';
+      ctx.fillStyle='rgba(0,0,0,.14)';
+      ctx.fillRect(0,0,W,H);
+      ctx.globalCompositeOperation='source-over';
+      for(var k=0;k<parts.length;k++){
+        var p=parts[k];
+        var dx=p.tx-p.x, dy=p.ty-p.y;
+        var d=Math.sqrt(dx*dx+dy*dy)||1;
+        var prox=d<100?d/100:1;
+        var sx=dx/d*p.ms*prox-p.vx, sy=dy/d*p.ms*prox-p.vy;
+        var sm=Math.sqrt(sx*sx+sy*sy)||1;
+        p.vx+=sx/sm*p.mf; p.vy+=sy/sm*p.mf;
+        p.x+=p.vx; p.y+=p.vy;
+        if(p.w<1) p.w=Math.min(p.w+.02,1);
+        ctx.fillStyle='rgba('+p.c+','+(0.3+0.7*p.w).toFixed(2)+')';
+        ctx.fillRect(p.x,p.y,2,2);
+      }
+      raf=requestAnimationFrame(tick);
+    }
+    raf=requestAnimationFrame(tick);
+    document.addEventListener('visibilitychange',function(){
+      if(document.hidden){ if(raf){ cancelAnimationFrame(raf); raf=null; } }
+      else if(!raf){ raf=requestAnimationFrame(tick); }
+    });
+  }
+  if(document.fonts&&document.fonts.ready){ document.fonts.ready.then(init); } else { init(); }
+})();
+</script>

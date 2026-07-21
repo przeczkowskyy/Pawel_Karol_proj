@@ -1,0 +1,131 @@
+{% from 'components/icons.html' import ico %}
+
+{#- ═══ STATUS CHIPS — the ONE canonical status system ═══
+    Shape: PM-style rectangle (radius 4px, uppercase, 10px) + Lucide icon.
+    Colours (semantic, never colour alone):
+      gray=draft/pending · gold=in progress/needs action · green=success/paid/history
+      brick=rejected/problem · blue=accepted/in circulation · violet=corrected.
+    Low-level: chip(color, icon, label). Domain maps below feed it. -#}
+{% macro chip(color, icon, label, extra='', tip='') -%}
+<span class="st {{ color }} {{ extra }}"{% if tip %} data-tip="{{ tip }}"{% endif %}>{{ ico(icon, 'st-ico') }}{{ label }}</span>
+{%- endmacro %}
+
+{#- request lifecycle -#}
+{% macro req_status(s) -%}
+{%- set m = {
+  'DRAFT':        ('st-gray',  'file',  'Draft'),
+  'SUBMITTED':    ('st-gold',  'clock', 'Awaiting validation'),
+  'IN_PLAN':      ('st-gold',  'calendar', 'In plan'),
+  'CFO_REJECTED': ('st-brick', 'x',     'Rejected'),
+  'IN_WNIOSEK':   ('st-blue',  'send',  'In funding request'),
+  'FUNDED':       ('st-green', 'check', 'Funded'),
+  'DIR_REJECTED': ('st-brick', 'x',     'Rejected (Director)'),
+  'CANCELLED':    ('st-gray',  'ban',   'Cancelled')
+} -%}
+{%- set c = m.get(s, ('st-gray', 'help', s)) -%}
+{{ chip(c[0], c[1], c[2]) }}
+{%- endmacro %}
+
+{#- funding request (wniosek) decision status -#}
+{% macro wn_status(s) -%}
+{%- set m = {
+  'DRAFT':             ('st-gray',  'file',  'Draft'),
+  'SENT':              ('st-blue',  'send',  'Awaiting decision'),
+  'PARTIALLY_DECIDED': ('st-gold',  'clock', 'Partially decided'),
+  'CLOSED':            ('st-green', 'check', 'Decision complete'),
+  'RECALLED':          ('st-gray',  'undo',  'Recalled')
+} -%}
+{%- set c = m.get(s, ('st-gray', 'help', s)) -%}
+{{ chip(c[0], c[1], c[2]) }}
+{%- endmacro %}
+
+{#- settlement payment progress -#}
+{% macro pay_status(s) -%}
+{%- set m = {
+  'not_started': ('st-gray',  'clock', 'Payment not started'),
+  'in_progress': ('st-gold',  'coins', 'Payment in progress'),
+  'paid':        ('st-green', 'check', 'Fully paid')
+} -%}
+{%- set c = m.get(s, ('st-gray', 'help', s)) -%}
+{{ chip(c[0], c[1], c[2]) }}
+{%- endmacro %}
+
+{#- budget transfer status -#}
+{% macro tr_status(s) -%}
+{%- set m = {
+  'PENDING':  ('st-gold',  'clock', 'Awaiting CFO'),
+  'APPROVED': ('st-green', 'check', 'Approved'),
+  'REJECTED': ('st-brick', 'x',     'Rejected')
+} -%}
+{%- set c = m.get(s, ('st-gray', 'help', s)) -%}
+{{ chip(c[0], c[1], c[2]) }}
+{%- endmacro %}
+
+{#- wniosek position decision -#}
+{% macro pos_status(s) -%}
+{%- set m = {
+  'PROPOSED': ('st-gold',  'clock', 'Pending'),
+  'ACCEPTED': ('st-green', 'check', 'Approved'),
+  'REJECTED': ('st-brick', 'x',     'Rejected')
+} -%}
+{%- set c = m.get(s, ('st-gray', 'help', s)) -%}
+{{ chip(c[0], c[1], c[2]) }}
+{%- endmacro %}
+
+{#- Block 4 billing application chip (accepts the sheet 'chip' label or pay-status label) -#}
+{% macro bill_chip(label, extra='') -%}
+{%- set m = {
+  'paid':       ('st-green', 'check',   'Paid'),
+  'invoiced':   ('st-blue',  'receipt', 'Invoiced'),
+  'pending':    ('st-gray',  'clock',   'Pending'),
+  'no invoice': ('st-gray st-strike', 'ban', 'No invoice'),
+  'paid?':      ('st-brick', 'help',    'Paid?'),
+  'open':       ('st-gold st-open', 'pencil', 'Open')
+} -%}
+{%- set c = m.get(label | lower, ('st-gray', 'help', label)) -%}
+{{ chip(c[0], c[1], c[2], extra) }}
+{%- endmacro %}
+
+{#- ═══ EMPTY STATE ═══ -#}
+{% macro empty_state(icon, title, hint='', cta_href=None, cta_label='') -%}
+<div class="empty">
+  {{ ico(icon, 'e-ico') }}
+  <div class="e-title">{{ title }}</div>
+  {% if hint %}<div class="small">{{ hint }}</div>{% endif %}
+  {% if cta_href %}<a class="btn btn-secondary btn-sm" href="{{ cta_href }}">{{ cta_label }}</a>{% endif %}
+</div>
+{%- endmacro %}
+
+{#- request bento card (21st.dev bento-grid adaptation) -#}
+{% macro req_card(it) -%}
+{%- set st = {'IN_PLAN':'st-inplan','IN_WNIOSEK':'st-inplan','FUNDED':'st-funded',
+              'CFO_REJECTED':'st-rejected','DIR_REJECTED':'st-rejected'}.get(it.status,'st-pending') -%}
+<div class="req-card {{ st }}" onclick="location.href='/requests/{{ it.id }}'" role="link" tabindex="0"
+     onkeydown="if(event.key==='Enter')location.href='/requests/{{ it.id }}'">
+  <div class="rc-top">
+    <span class="rc-code">{{ it.code }}</span>
+    {{ req_status(it.status) }}
+  </div>
+  <div class="rc-amount tnum">{{ it.amount_fmt }}<span class="cur">PLN</span></div>
+  <div class="rc-desc">{{ it.description or '—' }}</div>
+  <div class="rc-meta">
+    <span class="rc-cat chip" title="{{ it.category }}">{{ it.category }}</span>
+    <span class="rc-due">needed by <strong>{{ it.needed_by }}</strong> <span class="rc-arrow">→</span></span>
+  </div>
+</div>
+{%- endmacro %}
+
+{#- KPI stat card (bento tile ported from 21st.dev, neon removed).
+    href -> navigates on click; modal -> opens a detail modal on click. -#}
+{% macro stat_card(label, value, cur='PLN', foot='', icon='wallet', gold=false, span=3, href=None, modal=None) -%}
+<div class="card glowable col-{{ span }} stat {{ 'stat-click' if href or modal }}"
+  {%- if href %} onclick="location.href='{{ href }}'" role="link" tabindex="0"
+     onkeydown="if(event.key==='Enter')location.href='{{ href }}'"
+  {%- elif modal %} onclick="openModal('{{ modal }}')" role="button" tabindex="0"
+     onkeydown="if(event.key==='Enter')openModal('{{ modal }}')"{% endif %}>
+  <div class="stat-ico {{ 'gold' if gold else '' }}">{{ ico(icon, 'navitem-ico') }}</div>
+  <div class="lbl">{{ label }}</div>
+  <div class="val tnum">{{ value }}{% if cur %}<span class="cur">{{ cur }}</span>{% endif %}</div>
+  {% if foot %}<div class="foot">{{ foot }}</div>{% endif %}
+</div>
+{%- endmacro %}

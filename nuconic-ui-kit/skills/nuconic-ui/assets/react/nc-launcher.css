@@ -1,0 +1,69 @@
+/* ═══ Nc Launcher — nowy standard nawigacji Nuconic (kit v2.0) ═══════════════
+   Pływające kółko „N" w prawym dolnym rogu → rozwija GŁÓWNE KATEGORIE; klik
+   kategorii → border rośnie (jesteś „w" niej) + pod nią odsłaniają się narzędzia. */
+.nc-launcher{position:fixed;right:24px;bottom:24px;z-index:60;
+  display:flex;flex-direction:column;align-items:flex-end;gap:14px}
+
+/* FAB — kółko ze znakiem „N" */
+.nc-launcher-fab{width:60px;height:60px;border-radius:999px;padding:0;
+  display:grid;place-items:center;cursor:pointer;
+  background:radial-gradient(120% 120% at 50% 18%, #2a2a2a 0%, #1c1c1c 70%, #141414 100%);
+  border:1.5px solid var(--border);
+  box-shadow:0 10px 26px rgba(0,0,0,.5), 0 0 0 4px rgba(255,169,20,.06);
+  transition:transform var(--motion), box-shadow var(--motion), border-color var(--motion)}
+.nc-launcher-fab:hover{transform:translateY(-2px);border-color:rgba(255,169,20,.55);
+  box-shadow:0 14px 34px rgba(0,0,0,.55), 0 0 0 5px rgba(255,169,20,.12)}
+.nc-launcher.open .nc-launcher-fab{border-color:var(--primary);
+  box-shadow:0 14px 34px rgba(0,0,0,.55), 0 0 0 5px rgba(255,169,20,.18)}
+.nc-fab-mark{display:grid;place-items:center;transition:transform var(--motion)}
+.nc-launcher.open .nc-fab-mark{transform:rotate(8deg) scale(1.04)}
+.nc-fab-mark .brand-n{width:26px;height:32px;display:block}
+
+/* Panel kategorii — zsuwa się nad FAB */
+.nc-launcher-panel{width:300px;max-height:min(70vh,560px);overflow:auto;
+  background:var(--card);border:1px solid var(--border);border-radius:16px;
+  box-shadow:0 24px 60px rgba(0,0,0,.55);padding:14px;transform-origin:bottom right;
+  opacity:0;transform:translateY(12px) scale(.96);pointer-events:none;
+  transition:opacity var(--motion), transform var(--motion)}
+.nc-launcher.open .nc-launcher-panel{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
+.nc-launcher-head{padding:2px 4px 12px;border-bottom:1px solid var(--border);margin-bottom:10px;
+  display:flex;flex-direction:column;gap:2px}
+.nc-launcher-title{font-weight:800;letter-spacing:.14em;text-transform:uppercase;font-size:11px;color:var(--primary)}
+.nc-launcher-sub{font-size:12px;color:var(--muted-foreground)}
+.nc-cat-list{display:flex;flex-direction:column;gap:8px}
+
+/* Kategoria — border rośnie gdy aktywna */
+.nc-cat{border:1.5px solid var(--border);border-radius:12px;overflow:hidden;background:var(--muted);
+  transition:border-color var(--motion), box-shadow var(--motion), border-width var(--motion)}
+.nc-cat.active{border-width:2px;border-color:var(--primary);
+  box-shadow:0 0 0 3px rgba(255,169,20,.14), inset 0 0 0 1px rgba(255,169,20,.10)}
+.nc-cat-head{display:flex;align-items:center;gap:11px;width:100%;padding:12px 14px;
+  background:transparent;border:0;cursor:pointer;color:var(--foreground);font-weight:700;font-size:14px;
+  transition:background var(--motion)}
+.nc-cat-head:hover{background:rgba(255,169,20,.06)}
+.nc-cat-ico{width:18px;height:18px;color:var(--primary);flex:0 0 auto}
+.nc-cat-label{flex:1;text-align:left}
+.nc-cat-chevron{width:16px;height:16px;color:var(--muted-foreground);transition:transform var(--motion)}
+.nc-cat.active .nc-cat-chevron{transform:rotate(180deg);color:var(--primary)}
+
+/* Narzędzia — collapse; odsłaniają się gdy kategoria aktywna.
+   MAX 5 widocznych naraz → reszta na scrollu (max-height ≈ 5 wierszy; box-sizing
+   border-box, więc padding wlicza się w limit; cienki scrollbar = hint). */
+.nc-cat-tools{max-height:0;overflow:hidden;opacity:0;padding:0 8px;box-sizing:border-box;
+  display:flex;flex-direction:column;gap:4px;scrollbar-width:thin;scrollbar-color:var(--border) transparent;
+  transition:max-height var(--motion), opacity var(--motion), padding var(--motion)}
+.nc-cat.active .nc-cat-tools{max-height:200px;opacity:1;padding:6px 8px;overflow-y:auto}
+.nc-cat-tools::-webkit-scrollbar{width:9px}
+.nc-cat-tools::-webkit-scrollbar-thumb{background:var(--border);border-radius:8px;border:2px solid var(--card)}
+.nc-cat-tools::-webkit-scrollbar-thumb:hover{background:var(--primary)}
+.nc-tool{flex:0 0 auto;min-height:34px;display:flex;align-items:center;gap:8px;width:100%;
+  padding:9px 10px;border-radius:9px;box-sizing:border-box;
+  border:1px solid transparent;background:transparent;color:var(--muted-foreground);cursor:pointer;
+  font-size:13px;text-align:left;transition:background var(--motion), color var(--motion), border-color var(--motion)}
+.nc-tool:hover{background:var(--card);color:var(--foreground)}
+.nc-tool.active{background:rgba(255,169,20,.12);border-color:rgba(255,169,20,.4);color:var(--accent-foreground);font-weight:600}
+.nc-tool-ico{width:16px;height:16px;flex:0 0 auto;color:var(--primary)}
+@media (prefers-reduced-motion: reduce){
+  .nc-launcher-panel,.nc-launcher-fab,.nc-fab-mark,.nc-cat,.nc-cat-tools,.nc-cat-chevron{transition:none}
+}
+
