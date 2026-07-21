@@ -1,12 +1,20 @@
 ---
-name: nuconic-ui
-description: "Nuconic UI — obowiązkowy standard i zestaw komponentów dla WSZYSTKICH wewnętrznych narzędzi Nuconic (React + Vite + TypeScript + Tailwind + jeden design-system CSS z tokenami, ikony lucide-react). Używaj przy budowie nowej aplikacji, przebudowie istniejącej lub dodawaniu dowolnego elementu UI: tokeny, przyciski, chipy statusów, ikony, tło canvas, animacje, tabele/macierze, wykresy (NcChart/Recharts), formularze, listy rozwijane, tooltips, modale, kalendarz, toasty, responsywność. Kanoniczny arkusz + komponenty referencyjne w Budget Tracking."
+name: company-ui
+description: "Company UI — obowiązkowy standard i zestaw komponentów dla WSZYSTKICH narzędzi firmy (React + Vite + TypeScript + Tailwind + jeden design-system CSS z tokenami, ikony lucide-react). Używaj przy budowie nowej aplikacji, przebudowie istniejącej lub dodawaniu dowolnego elementu UI: tokeny, przyciski, chipy statusów, ikony, tło canvas, animacje, tabele/macierze, wykresy (NcChart/Recharts), formularze, listy rozwijane, tooltips, modale, kalendarz, toasty, responsywność."
 ---
 
-# Nuconic UI — standard i zestaw komponentów (v2.0, 2026-07-15)
+# Company UI — standard i zestaw komponentów (v2.1, 2026-07-21)
+
+> **v2.1 (2026-07-21) — REBRAND:** kit odcięty od marki poprzedniej firmy. Zmiany:
+> (1) **brak logo graficznego** — znak marki to tekstowy wordmark-placeholder
+> **„YOUR COMPANY NAME"** (klasa `.brand-word`, komponent `BrandMark`); podmiana nazwy po jej
+> wyborze = jedno miejsce. (2) **Nowa paleta: polerowana stal** — akcent `#A8B4C2`
+> (chromatyczny chłodny szary) zamiast złota; klasy `*-gold` przemianowane na `*-accent`.
+> (3) **Wykresy bardziej statyczne** — bez teatralnego „rysowania"; krótki fade,
+> kropki tylko tam, gdzie niosą informację. Logika komponentów bez zmian.
 
 > **v2.0 (2026-07-15) — ZMIANA STACKU (decyzja zespołu):** porzucamy FastAPI SSR + Jinja2 +
-> vanilla JS. Standardem dla WSZYSTKICH narzędzi Nuconic jest teraz **React + Vite + TypeScript**
+> vanilla JS. Standardem dla WSZYSTKICH narzędzi firmy jest teraz **React + Vite + TypeScript**
 > (+ Tailwind jako warstwa utility do layoutu, + kanoniczny design-system CSS z tokenami jako
 > źródło prawdy dla komponentów, + ikony **lucide-react**). Standardy WIZUALNE (tokeny, kolory,
 > anatomia przycisków/chipów, reguły wykresów, overflow, responsywność) są **niezmienione** —
@@ -17,9 +25,9 @@ description: "Nuconic UI — obowiązkowy standard i zestaw komponentów dla WSZ
 > `.nav-toggle`), **combobox** (§12.1, `NcSelect`), **wygładzanie przejść / budowanie wykresu**
 > (§8, `.nc-swap`/`.nc-tab-swap`/`.nc-reveal`).
 
-Aplikacja referencyjna: **Budget Tracking** (React/Vite/TS — `nuconic-budget-tracking/`).
+Aplikacja referencyjna (historyczna, z poprzedniego wdrożenia): **Budget Tracking** (React/Vite/TS).
 Wszystkie komponenty i klasy poniżej są z niej wyjęte i działają produkcyjnie. Nowe narzędzie
-Nuconic buduje się WYŁĄCZNIE z tego zestawu — bez wymyślania własnych wariantów.
+firmy buduje się WYŁĄCZNIE z tego zestawu — bez wymyślania własnych wariantów.
 
 ## 0. Model użycia i propagacji zmian
 
@@ -30,7 +38,7 @@ referencyjne w Budget Tracking.**
 |---|---|
 | `assets/app.css` | **JEDYNY arkusz styli**: tokeny (`:root` + `[data-theme=light]`) + wszystkie klasy komponentów (`.card .btn .st .nc-*` …) + biblioteka ekstra + `@font-face`. Kopiowany 1:1 do aplikacji (patrz niżej). |
 | `assets/fonts/` | Nunito Sans variable woff2 (latin + latin-ext) — self-hosted |
-| Budget Tracking `src/components/shell/{AppShell,BrandMark,BgBeams}.tsx` | shell (grid 250+1fr), znak marki „n", tło beams — komponenty React |
+| Budget Tracking `src/components/shell/{AppShell,BrandMark,BgBeams}.tsx` | shell (grid 250+1fr), wordmark tekstowy (kanon: `assets/react/BrandMark.tsx`), tło beams — komponenty React |
 | Budget Tracking `src/components/analytic/kit/{NcChart,NcDonut,NcSelect,StatCard,KitBar}.tsx` | prymitywy: wykres liniowy, donut, combobox, kafel KPI, progress bar |
 | Budget Tracking `src/lib/{useDragPan,theme,navConfig}.ts` | hooki/utility: drag-to-pan, motyw + `toggleTheme`, config nawigacji |
 | **lucide-react** | ikony (zastąpiło makro `ico()` / `icons.html`) |
@@ -38,13 +46,13 @@ referencyjne w Budget Tracking.**
 
 **Start nowej appki (React + Vite + TS):**
 1. `npm create vite@latest` (react-ts), dodaj Tailwind + `lucide-react` + `recharts`.
-2. Skopiuj `assets/app.css` → `src/styles/nuconic-ui.css`, fonty → `public/fonts/` (popraw
-   ścieżki `@font-face` na `/fonts/…`), zaimportuj `nuconic-ui.css` w `main.tsx`.
+2. Skopiuj `assets/app.css` → `src/styles/company-ui.css`, fonty → `public/fonts/` (popraw
+   ścieżki `@font-face` na `/fonts/…`), zaimportuj `company-ui.css` w `main.tsx`.
 3. Przenieś komponenty referencyjne (`AppShell/BrandMark/BgBeams/NcChart/NcDonut/NcSelect/
    StatCard/KitBar` + hooki) z Budget Tracking; dostosuj tylko `navConfig` (pozycje menu + role).
 **Niczego nie forkuj stylistycznie** — buduj ekrany z gotowych klas i komponentów.
 
-**Warstwa CSS (ważne):** klasy komponentów (`.card/.btn/.st/.nc-*`) z `nuconic-ui.css` to
+**Warstwa CSS (ważne):** klasy komponentów (`.card/.btn/.st/.nc-*`) z `company-ui.css` to
 **źródło prawdy dla komponentów**; Tailwind wolno używać do **layoutu/utility** (flex, grid,
 gap, spacing, breakpointy) i drobnych korekt. Nie odtwarzać przycisku/chipu/karty w samym
 Tailwindzie — użyj klasy kitu.
@@ -54,14 +62,14 @@ Tailwindzie — użyj klasy kitu.
 /* ═══ APP-SPECIFIC (poniżej tej linii — nie ruszać przy aktualizacji kitu) ═══ */
 ```
 **Aktualizacja globalna** (np. zmiana tła w całej firmie): edytuj `assets/app.css` w repo kitu →
-w każdej appce nadpisz część `nuconic-ui.css` PONAD markerem świeżą kopią (+ podmiana
+w każdej appce nadpisz część `company-ui.css` PONAD markerem świeżą kopią (+ podmiana
 zmienionych komponentów React). Sekcja app-specific przeżywa. **Bez restartu serwera** —
 Vite HMR podłącza CSS na żywo; `vite build` regeneruje bundle z nowym hashem.
 
 ## 1. Twarde zasady (złamanie = regresja, sprawdzone bólem)
 
 1. **Stack:** **React + Vite + TypeScript** + **Tailwind** (warstwa utility/layout) + jeden
-   design-system CSS (`nuconic-ui.css` — tokeny + klasy komponentów, źródło prawdy dla
+   design-system CSS (`company-ui.css` — tokeny + klasy komponentów, źródło prawdy dla
    komponentów) + ikony **lucide-react**. Wykresy: **NcChart** (SVG w React, linie) + **Recharts**
    (słupki). **NO CDN** — fonty self-hosted (`public/fonts/`, `@font-face`), narzędzia chodzą w LAN.
    *(v2.0: poprzedni stack FastAPI SSR + Jinja2 + vanilla JS jest wycofany — patrz nagłówek.)*
@@ -92,8 +100,8 @@ Dark jest motywem pierwszym; light pochodnym. Kluczowe wartości:
 
 | Token | Dark | Light | Rola |
 |---|---|---|---|
-| `--primary` | `#FFA914` | = | **JEDYNY akcent** (brand book). CTA, aktywny nav, focus, kluczowe liczby, linia danych wykresu |
-| `--primary-600 / -700` | `#E08E00` / `#B87400` | = | krawędź przycisku, stany pressed |
+| `--primary` | `#A8B4C2` | = | **JEDYNY akcent** (polerowana stal). CTA, aktywny nav, focus, kluczowe liczby, linia danych wykresu |
+| `--primary-600 / -700` | `#8895A6` / `#69788C` | = | krawędź przycisku, stany pressed |
 | `--body-bg` | `#121212` | `#F4F5F7` | tło strony (dark = podłoga shadera dymu) |
 | `--background` | `#171717` | `#FFFFFF` | topbar |
 | `--card` | `#262626` | `#FFFFFF` | karty, tabele, modale |
@@ -104,7 +112,7 @@ Dark jest motywem pierwszym; light pochodnym. Kluczowe wartości:
 | `--foreground` | `#E5E5E5` | `#262626` | tekst |
 | `--heading` | `#FAFAFA` | `#111827` | nagłówki, kwoty |
 | `--muted-foreground` | `#B4B4B9` | `#6B7280` | tekst wtórny |
-| `--accent-foreground` | `#FDE68A` | `#92400E` | tekst na złotych tintach |
+| `--accent-foreground` | `#D9E0E8` | `#42526E` | tekst na stalowych tintach |
 | `--funded(-bg/-border)` | `#34D399` +tinty | `#059669` +tinty | **zieleń = sukces/paid/historia** |
 | `--rejected(-bg/-border)` | `#F87171` +tinty | `#B91C1C` +tinty | **ceglany = odrzucone/problem** |
 | `--destructive` | `#EF4444` | = | akcje niszczące, alarmy |
@@ -118,9 +126,9 @@ Dark jest motywem pierwszym; light pochodnym. Kluczowe wartości:
 | `--fs-2xs…--fs-3xl` | `10/11/12.5/13.5/14.5/16/20/23/28px` | = | skala typograficzna |
 | `--chart-neutral` | `#8B93A3` | `#64748B` | linie referencyjne wykresów |
 
-**Dyscyplina złota (teoria):** złoto nigdy nie jest tekstem akapitowym na bieli (kontrast).
-Złoto = wypełnienie CTA (czarny tekst na złocie ≈ 11:1), pierścień focus, aktywny wskaźnik,
-duże pogrubione liczby, linia danych. Tinty złota (`rgba(255,169,20,.08–.16)` tło,
+**Dyscyplina akcentu (teoria):** stal nigdy nie jest tekstem akapitowym na bieli (kontrast).
+Stal = wypełnienie CTA (ciemny tekst na stali, kontrast ≥ 7:1), pierścień focus, aktywny wskaźnik,
+duże pogrubione liczby, linia danych. Tinty stali (`rgba(168,180,194,.08–.16)` tło,
 `.35–.45` border) budują stany "w toku". Zieleń i ceglany to WARSTWA SEMANTYCZNA statusów,
 nie akcenty dekoracyjne. Niebieski (`#93C5FD` na `rgba(59,130,246,.12)`) i fiolet — wyłącznie
 w chipach statusów (zaakceptowane-w-obiegu / skorygowane).
@@ -143,20 +151,23 @@ Ikona w przycisku: 15px, `gap:8px`. Focus: `outline:2.5px solid var(--ring); off
 
 **`.btn-primary` — teoria kolorystyki (dlaczego tak wygląda):**
 ```css
-.btn-primary{background:var(--primary);color:var(--primary-fg);border-color:var(--primary-600);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 1px 2px rgba(0,0,0,.35)}
-.btn-primary:hover{background:#ffbe4d;border-color:var(--primary);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.32),0 4px 16px -4px rgba(255,169,20,.5)}
+.btn-primary{background:linear-gradient(180deg,#b9c4d1 0%,#a8b4c2 55%,#96a3b3 100%);
+  color:var(--primary-fg);border-color:var(--primary-600);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 1px 2px rgba(0,0,0,.35)}
+.btn-primary:hover{background:linear-gradient(180deg,#c7d0dc 0%,#bfc9d6 55%,#aab6c4 100%);
+  border-color:var(--primary);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 3px 10px -3px rgba(0,0,0,.4)}
 ```
-- tło = czyste złoto, tekst czarny (kontrast ~11:1);
-- **border w ciemniejszym złocie** (`--primary-600`) = symulacja krawędzi bryły;
+- tło = pionowy gradient stali (`#B9C4D1→#A8B4C2→#96A3B3` — subtelny metal), tekst ciemny;
+- **border w ciemniejszej stali** (`--primary-600`) = symulacja krawędzi bryły;
 - **`inset 0 1px 0 white/28%`** = highlight górnej krawędzi — światło pada z góry;
 - **drop `0 1px 2px`** = minimalna elewacja nad kartą;
-- hover: tło jaśnieje o ~1 stopień (`#FFBE4D`), border przejmuje bazowe złoto, pojawia się
-  miękka złota poświata `16px/-4px` — przycisk "unosi się" bez transformu (zero layout shift).
+- hover: gradient jaśnieje o ~1 stopień (`#C7D0DC→#BFC9D6→#AAB6C4`), border przejmuje bazową
+  stal, cień neutralny minimalnie rośnie — przycisk "unosi się" bez transformu i bez kolorowej
+  poświaty (zero layout shift, zero efekciarstwa).
 - Jeden `.btn-primary` na ekran (jedno główne CTA).
 
-**`.btn-secondary`**: tło `--card`, border `--input`; hover: border+tekst w złoto, tło tint 8%.
+**`.btn-secondary`**: tło `--card`, border `--input`; hover: border+tekst w akcent, tło tint 8%.
 **`.btn-ghost`**: przezroczysty, tekst muted; hover tło `--secondary`. **Na tle strony (poza kartą)
 ghost dostaje tło karty** (patrz scrim rule) — reguła jest w css (`.page-actions .btn-ghost`).
 **`.btn-danger`**: outline w kolorach `--rejected*`; wypełnia się tintem na hover. Akcje niszczące
@@ -167,13 +178,13 @@ nigdy nie są primary. **`:disabled`**: `opacity:.5; cursor:not-allowed` (bez in
 Pigułka: `radius:999px; padding:3.5px 10px; font:700 11px; border:1px solid; tint + kolorowy tekst`
 + **ikona lucide-react 12px** (klasa `st-ico`). JSX:
 ```tsx
-<span className="st st-gold"><Clock className="st-ico" /> Awaiting validation</span>
+<span className="st st-accent"><Clock className="st-ico" /> Awaiting validation</span>
 ```
 
 | Klasa | Semantyka | Ikony typowe |
 |---|---|---|
 | `st-gray` | draft / pending / neutralne | file, clock, ban |
-| `st-gold` | w toku / wymaga działania | clock, calendar, pencil, inbox |
+| `st-accent` | w toku / wymaga działania | clock, calendar, pencil, inbox |
 | `st-green` | sukces / paid / historia | check |
 | `st-brick` | odrzucone / problem / niepewne | x, help, alert |
 | `st-blue` | zaakceptowane / w obiegu | send, receipt, user |
@@ -209,7 +220,7 @@ pochylone, płynące ku górze belki światła w złocie (canvas 2D o obniżonej
 + JEDNO pasmo GPU blur przez CSS `filter:blur()` na elemencie canvas — zakaz `ctx.filter` per
 klatka). Cała pętla `requestAnimationFrame` żyje w `useEffect` (cleanup przy unmount).
 Subtelność obowiązkowa: opacity belek ~0.05–0.10, tekst musi pozostać w pełni czytelny.
-`HUE_BASE=40` (złoto-bursztyn) — stała na górze pliku. Mechanizmy — nie psuć:
+`HUE_BASE=214` (chłodna stal, niska saturacja) — stała na górze pliku. Mechanizmy — nie psuć:
 - pauza przy `document.hidden`; `prefers-reduced-motion` → jedna statyczna klatka,
 - fade-in tylko przy pierwszym wejściu w sesji (`sessionStorage`),
 - **dark only** — light ukrywa canvas (klasa `.bg-beams`; light = czysty gradient body).
@@ -219,10 +230,10 @@ akcji strony) dostaje panel `background:var(--scrim); border:1px solid var(--bor
 Karty/tabele są nieprzezroczyste — scrima nie potrzebują.
 
 **Znak marki:** róg topbara = komponent **`BrandMark`** (`src/components/shell/BrandMark.tsx`) —
-**SAMO logo „n"** Nuconic jako inline SVG w JSX (trace z księgi znaku; gradient złota, wewnętrzny
-cień, highlight górnej krawędzi, subtelna tekstura feTurbulence, miękka złota poświata), obok
-podpis produktu `.p` (9.5px uppercase gold). Bez wordmarku NUCONIC. Id filtrów/gradientów z
-prefiksem `ncn-` (unikalne w dokumencie).
+**TEKSTOWY wordmark-placeholder „YOUR COMPANY NAME"** (klasa `.brand-word`: Nunito Sans 800,
+uppercase, letter-spacing .14em, metaliczny gradient stali na tekście przez `background-clip:text`),
+obok podpis produktu `.p` (9.5px uppercase, kolor akcentu). ŻADNEGO logo graficznego — po wyborze
+nazwy firmy podmieniamy sam napis (jedno miejsce w `BrandMark`).
 
 ## 8. Ruch — standard animacji
 
@@ -232,8 +243,9 @@ prefiksem `ncn-` (unikalne w dokumencie).
   z elementu containing block dla `position:fixed` i modale wewnątrz `.main` lądują poza viewportem.
 - **Zmiana motywu:** `toggleTheme()` dodaje `html.theme-fade` na 380ms → transition 300ms na
   background-color/color/border-color/fill/stroke/box-shadow. Zero twardego przeskoku.
-- **Wykresy:** reveal clipPath `1.6s var(--ease-soft)` z delayem `.45s` (po kaskadzie);
-  elementy wtórne `.chart-late` fade `.6s` po `1.75s`. Sekwencyjnie: bloki → siatka → linia → referencje.
+- **Wykresy (rebrand — statycznie):** wykres renderuje się od razu w całości; jedyny ruch to
+  krótki fade `.chart-reveal` `.4s` (delay `.15s`, po kaskadzie) + `.chart-late` `.35s` po `.5s`.
+  Żadnego sekwencyjnego „budowania" linia-po-linii.
 - **Hover:** wyłącznie kolory/bordery/cienie przez `var(--motion)`; transformy tylko tam, gdzie
   nie przesuwają layoutu (req-card translateY(-2px) jest OK, bo karta w gridzie).
 - **Zmiana zakładki / podglądu danych (v1.2):** NIE twardy przeskok/błysk. Zawartość zakładki
@@ -263,7 +275,7 @@ prefiksem `ncn-` (unikalne w dokumencie).
 
 Komponent **`AppShell`** (`src/components/shell/AppShell.tsx`): grid `250px + 1fr` × `60px + 1fr`;
 obszary `brand/top/side/main`. Sidebar: pozycje `.navitem` (ikona 17px + label 13.5px/600),
-aktywna = złoty tint + inset ring; **sliding indicator** podąża za hoverem (handler w komponencie,
+aktywna = stalowy tint + inset ring; **sliding indicator** podąża za hoverem (handler w komponencie,
 refy do pozycji nav). Separator `.nav-sep` + nagłówek roli `.nav-role`. Topbar: lewy slot (tytuł
 strony `<strong>`), prawy `.tb-right`: pill KPI (np. saldo), theme toggle, user, logout.
 **Nav filtrowany rolami** — jedna definicja w `src/lib/navConfig.ts` (`viewsForRole(role)`), użyta
@@ -274,7 +286,7 @@ nigdy w rogu ani na końcu paska). Semantyka: „uwaga — ta zakładka wymaga d
 logika aplikacji (warunkowy className w JSX); do kropki dołącz `data-tip` z treścią powiadomienia.
 **Dół sidebara (obowiązkowy slot):** nad stopką „Zalogowano jako" zawsze `.nav-sep` +
 `.navitem.nav-apps` z ikoną `<LayoutGrid className="navitem-ico" />` i etykietą „Menu aplikacji" —
-powrót do menu wyboru aplikacji Nuconic (dopóki menu nie istnieje: `href="#"` + `data-tip` „wkrótce").
+powrót do menu wyboru aplikacji firmy (dopóki menu nie istnieje: `href="#"` + `data-tip` „wkrótce").
 **Zwijanie panelu zakładek (v1.2):** przycisk `.nav-toggle` (strzałka `ChevronLeft`) na
 **środku prawej krawędzi** sidebara. Klik → klasa `.nav-collapsed` na `.app` płynnie
 (`grid-template-columns .2s cubic-bezier(.4,0,.2,1)` — krótka, bez overshootu, żeby
@@ -289,27 +301,28 @@ krótki czas trwania (≤.22s); dla płynnego przejścia DANYCH używaj `.nc-swa
 animacji layoutu.
 **≤900px:** brand znika, sidebar staje się poziomym paskiem pod topbarem (scroll-x).
 
-## 9a. Nc Launcher — nawigacja v2.0 (kółko „N" → kategorie → narzędzia)
+## 9a. Nc Launcher — nawigacja v2.0 (kółko → kategorie → narzędzia)
 
 **Nowy standard nawigacji** (kit v2.0, React): zamiast wyłącznie lewej listy zakładek —
-pływające **kółko ze znakiem „N"** w prawym dolnym rogu. Klik rozwija **główne kategorie**;
-klik kategorii podświetla ją (**rosnący złoty border** = „jesteś w tej kategorii") i odsłania
+pływające **kółko z neutralną ikoną menu (lucide `LayoutGrid` — bez logo)** w prawym dolnym
+rogu. Klik rozwija **główne kategorie**;
+klik kategorii podświetla ją (**rosnący akcentowy border** = „jesteś w tej kategorii") i odsłania
 pod nią jej **narzędzia**. Kanoniczny odpis w `assets/react/`: `NcLauncher.tsx`, `nc-launcher.css`,
-zależność `BrandMark.tsx` (+ `README.md`) — wyjęte 1:1 z Planu Płatności.
+(+ `README.md`) — wyjęte 1:1 z aplikacji referencyjnej.
 
 - **„Main Page" (landing/Dashboard) znika z lewej listy** — pozycję landingową usuwamy z
   `navConfig.ts`; nawigację przejmuje launcher. Widok może zostać w routingu (przestaje być zakładką).
-- **FAB** `.nc-launcher-fab` (60px, `BrandMark` „N" w środku) → toggluje panel `.nc-launcher-panel`
+- **FAB** `.nc-launcher-fab` (60px, ikona `LayoutGrid` w klasie `.nc-fab-ico`) → toggluje panel `.nc-launcher-panel`
   (zsuwa się nad FAB: fade + translateY + scale, `transform-origin:bottom right`).
-- **Kategoria** `.nc-cat` → aktywna `.nc-cat.active`: **border 1.5px→2px, złoty** + poświata;
+- **Kategoria** `.nc-cat` → aktywna `.nc-cat.active`: **border 1.5px→2px, akcentowy** + poświata;
   akordeon (jedna otwarta naraz), chevron obraca się 180°.
 - **Narzędzia** `.nc-cat-tools`: collapse (`max-height`); **MAX 5 widocznych naraz → reszta na
-  SCROLLU** (`overflow-y:auto`, cienki złoty scrollbar = hint). `.nc-tool` ma `flex:0 0 auto`
+  SCROLLU** (`overflow-y:auto`, cienki akcentowy scrollbar = hint). `.nc-tool` ma `flex:0 0 auto`
   (nie ściskać — realnie przewijać). Liczba widocznych = `max-height` aktywnej listy (~5×34px + padding).
 - **A11y/ruch:** `aria-expanded` (FAB + nagłówki), `role="menu"`, Escape i klik-poza zamyka,
   `prefers-reduced-motion` wygasza. Ikony `lucide-react`; tokeny `--primary/--card/--border/--muted/--motion`.
 - **Montaż:** `<NcLauncher />` na końcu `AppShell` (fixed, nad całym UI); `nc-launcher.css` wklej do
-  `nuconic-ui.css` **NAD** markerem `APP-SPECIFIC` (to standard kitu). Treść = tablica `NC_CATEGORIES`
+  `company-ui.css` **NAD** markerem `APP-SPECIFIC` (to standard kitu). Treść = tablica `NC_CATEGORIES`
   (placeholdery `Place Holder 1..n` do podmiany + routing na `.nc-tool`).
 
 > Launcher to **pierwszy komponent v2.0 (React)**. `nc-launcher.css` jest przenośny (czyste tokeny +
@@ -333,9 +346,9 @@ events + suppress-click po przeciągnięciu — strony NIE piszą własnego pan 
   Z-indexy: nagłówek 3-4, stopka 3 (narożniki 4), kolumny 2. **Wszystkie sticky tła opaque!**
 - `.matrix-wrap` — kontener scrollowalny z **drag-to-pan** (`useDragPan`: pointer events, suppress
   click po przeciągnięciu) i stylowanym scrollbarem; `cursor:grab/grabbing`.
-- komórki klikalne: `.cellbtn` absolute inset-0 (cały target), hover złoty inset ring;
+- komórki klikalne: `.cellbtn` absolute inset-0 (cały target), hover akcentowy inset ring;
 - stany komórek: `.cell.funded` (zieleń=historia), `.cell.carried` (ceglany=przesunięte),
-  `.slip-tag` (czerwona pigułka "+Nd late"), kolumna `today` (złote tło, tag TODAY),
+  `.slip-tag` (czerwona pigułka "+Nd late"), kolumna `today` (stalowe tło, tag TODAY),
   wiersze grupowe `.row-group` (uppercase, tło `--group-bg`), weekend (`--weekend`).
 - legenda pod tabelą w panelu `.legend` (scrim) — swatche + checkboxy filtrów.
 
@@ -365,15 +378,16 @@ events + suppress-click po przeciągnięciu — strony NIE piszą własnego pan 
   (mistiming z async renderem — zastąpione synchronicznym `NcResponsive` + `.nc-chart-build`).
 
 Styl finalny (obowiązuje oba):
-- **linia danych: złota** `className="ln-gold"` 2.4px + **kropka na każdym punkcie** `circle.pt`
-  (fill primary, stroke `--card` 1.4 — separacja od linii),
+- **linia danych: akcentowa** `className="ln-accent"` **2px** (rebrand: cieńsza, spokojniejsza);
+  **kropki `circle.pt` OSZCZĘDNIE** — tylko ostatni punkt i punkty niosące informację (markery,
+  hover-prowadnica), NIE na każdym punkcie danych (fill primary, stroke `--card` 1.4),
 - siatka **kropkowana** pozioma `.grid` i pionowa `.vgrid` (`stroke-dasharray:2 4`, `--grid-line`),
 - **referencja: szara przerywana** `.ln-ref` (`--chart-neutral`, `6 5`),
-- delikatny złoty gradient area (`.stop-gold` 0.16→0.01), markery: alarm `.dot-alert` (czerwony),
+- bardzo subtelny gradient area (`.stop-accent` 0.08→0; rebrand: przyciszony), markery: alarm `.dot-alert` (czerwony),
   zdarzenie/aneks `.dot-annex` (zielony),
 - osie: `.axis`, etykiety `.tick` 9.5px; chip adnotacji `.chipbg/.chiptext`,
 - KPI nad wykresem: `.chart-kpi` (zawija się całymi blokami), podpis `.chart-sub`.
-- **Kolory WYŁĄCZNIE tokenami/klasami CSS** (`stop-gold`, `ln-*`, `var(--funded/rejected/primary/
+- **Kolory WYŁĄCZNIE tokenami/klasami CSS** (`stop-accent`, `ln-*`, `var(--funded/rejected/primary/
   chart-neutral)`) — **zero literałów hex/rgb w JSX/atrybutach SVG** → wykres przełącza się z
   motywem. Gdy Recharts wymaga stringa koloru, podaj `"var(--funded)"` itd. (SVG wspiera `var()`).
 - **ZAKAZ pie/donutów wielobarwnych** — udziały procentowe robimy `NcDonut` (§16) albo `KitBar`.
@@ -382,7 +396,7 @@ Styl finalny (obowiązuje oba):
 
 `.field` (label 12.5/700 + kontrolka + `.help`); wymagane `<span className="req">*</span>`.
 Kontrolki `.input/.select/.textarea`: tło `--muted`, border `--input`, radius 10, focus =
-złoty border + ring `0 0 0 3.5px rgba(255,169,20,.16)`. Wszystkie **kontrolowane** (`value` +
+akcentowy border + ring `0 0 0 3.5px rgba(168,180,194,.16)`. Wszystkie **kontrolowane** (`value` +
 `onChange`). Checkboxy: `accent-color:var(--primary)` (globalnie). Błąd: `.err` (ceglany panel),
 sukces: `.flash` (zielony panel, animowany).
 **Grupowanie tysięcy na żywo**: pola kwotowe (`inputMode="decimal"`) formatują spacje tysięcy w
@@ -402,7 +416,7 @@ błąd sprzed v1.2. Kanoniczna lista to **searchable combobox**:
   (`left:0;right:0`). Na górze pole wyszukiwania (`.input`-mini z ikoną `search`) — **typeahead
   filtruje po fragmencie** etykiety / wartości / opisu. Pozycje to `<button>` (wiersz: etykieta
   13px + opcjonalny `.sub` 10.5px `--muted-foreground`); aktywna = tło `--hover` (nawigacja
-  `↑/↓`), zaznaczona = tekst złoty (`text-nc-gold`).
+  `↑/↓`), zaznaczona = tekst akcentowy (`text-nc-accent`).
 - **Klawiatura:** `↓`/`Enter`/`Space` otwiera; `↑/↓` przewija; `Enter` wybiera; `Esc` zamyka;
   klik poza zamyka. Zaznaczenie startowo scrolluje do widoku.
 - **Kiedy `<select>` natywny:** dopuszczalny wyłącznie dla list ≤~5 pozycji stałych bez potrzeby
@@ -442,7 +456,7 @@ akceptowany wzorzec dla data-dense. Docelowo PWA (manifest — TODO v2).
 
 **Tooltip `#nc-tip`** (singleton — hook `useNcTooltip` montowany raz w `AppShell`): `data-tip="tekst"`
 na dowolnym elemencie → dymek podąża za kursorem z clampem do viewportu; `data-tip-html` dla
-bogatej treści (tabelki, sekcje `.tip-section`, wiersze `.tip-note` ze złotym tintem i 1px ramką).
+bogatej treści (tabelki, sekcje `.tip-section`, wiersze `.tip-note` ze stalowym tintem i 1px ramką).
 Zakaz natywnego `title=` dla treści merytorycznych. `span[data-tip]` dostaje `cursor:help`.
 **Uwaga:** `disabled` element nie emituje `mouseover` — `data-tip` daj na `<span>` opakowujący
 disabled button.
@@ -455,7 +469,7 @@ zamyka (listener w `useEffect`), klik w overlay zamyka (`stopPropagation` na kar
 `cardIn`. Portal do `document.body` gdy overlay jest w kontenerze z `transform`/`.nc-tab-swap`
 (inaczej `position:fixed` zostaje uwięziony).
 
-## 16. Biblioteka bloków ekstra (klasy w `nuconic-ui.css`, sekcja EXTRA COMPONENTS)
+## 16. Biblioteka bloków ekstra (klasy w `company-ui.css`, sekcja EXTRA COMPONENTS)
 
 Gotowe klasy — buduj z nich w JSX (layout Tailwindem, wygląd klasami kitu). Prymitywy
 `StatCard`, `NcDonut`, `NcSelect`, `KitBar`, `NcChart` są komponentami (patrz §0). Reszta to
@@ -466,7 +480,7 @@ klasy CSS:
 <button className="btn btn-secondary attn">Inbox</button>
 
 {/* progress bar (KitBar) — udział/postęp */}
-<KitBar pct={62} />                 {/* złoto (domyślne) */}
+<KitBar pct={62} />                 {/* akcent stalowy (domyślne) */}
 <KitBar pct={100} variant="ok" />   {/* zieleń = sukces; 'bad' = ceglany; 'grad' = gradient */}
 
 {/* toast — hook/context ncToast(msg, kind?) montowany raz w AppShell (kontener .toast-wrap) */}
@@ -552,7 +566,7 @@ ncToast("Zapisano", "ok");   {/* kind: undefined | 'ok' | 'bad' */}
 </div>
 
 {/* donut / pierścień — NcDonut (§0). Udział % pojedynczej metryki: JEDEN łuk
-    (round linecap) na neutralnym torze; wariant 'gold'(domyśl.)/'ok'(zieleń)/
+    (round linecap) na neutralnym torze; wariant 'accent'(domyśl.)/'ok'(zieleń)/
     'bad'(ceglany). Środek = duża liczba (.tnum). ZAKAZ pie/donutów wielobarwnych. */}
 <NcDonut label="Tasks" value={47} variant="ok" size={132} />
 ```
@@ -575,4 +589,4 @@ ncToast("Zapisano", "ok");   {/* kind: undefined | 'ok' | 'bad' */}
 
 **TODO:** manifest PWA (jest w Budget Tracking — do wyniesienia jako wzorzec), potwierdzenia
 modalne zamiast `window.confirm()`, wyniesienie komponentów kitu do osobnego pakietu npm
-(`@nuconic/ui`) dla współdzielenia między aplikacjami.
+(`@company/ui`) dla współdzielenia między aplikacjami.

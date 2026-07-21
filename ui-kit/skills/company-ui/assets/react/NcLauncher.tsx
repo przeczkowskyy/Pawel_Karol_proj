@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown, Factory, Wallet, ShieldCheck, Dot } from "lucide-react";
+import { ChevronDown, Factory, Wallet, ShieldCheck, Dot, LayoutGrid } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { BrandMark } from "./BrandMark";
 
-/** Nowy standard nawigacji Nuconic (kit v2.0): pływający launcher „N" w prawym
- *  dolnym rogu. Klik → rozwija listę GŁÓWNYCH KATEGORII; klik kategorii → jej
- *  border rośnie (jesteś „w" tej kategorii) i pod nią pojawiają się narzędzia.
- *  Na razie kategorie i narzędzia to placeholdery — routing dojdzie później. */
+/** Standard nawigacji kitu (v2.0): pływający launcher w prawym dolnym rogu
+ *  (neutralna ikona LayoutGrid — bez logo). Klik → rozwija listę GŁÓWNYCH
+ *  KATEGORII; klik kategorii → jej border rośnie (jesteś „w" tej kategorii)
+ *  i pod nią pojawiają się narzędzia. Kategorie/narzędzia to placeholdery —
+ *  routing dojdzie później. */
 
 interface NcCategory {
   id: string;
@@ -54,7 +54,7 @@ export function NcLauncher() {
     <div className={`nc-launcher${open ? " open" : ""}`} ref={rootRef}>
       <div className="nc-launcher-panel" role="menu" aria-hidden={!open}>
         <div className="nc-launcher-head">
-          <span className="nc-launcher-title">Nuconic</span>
+          <span className="nc-launcher-title">YOUR COMPANY NAME</span>
           <span className="nc-launcher-sub">Wybierz kategorię</span>
         </div>
         <div className="nc-cat-list">
@@ -95,12 +95,12 @@ export function NcLauncher() {
       <button
         type="button"
         className="nc-launcher-fab"
-        aria-label={open ? "Zamknij menu Nuconic" : "Otwórz menu Nuconic"}
+        aria-label={open ? "Zamknij menu aplikacji" : "Otwórz menu aplikacji"}
         aria-expanded={open}
         onClick={() => setOpen((o) => !o)}
       >
         <span className="nc-fab-mark">
-          <BrandMark />
+          <LayoutGrid className="nc-fab-ico" />
         </span>
       </button>
     </div>

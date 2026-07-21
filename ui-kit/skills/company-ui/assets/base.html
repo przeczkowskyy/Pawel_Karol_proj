@@ -4,9 +4,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}Payment Plan{% endblock %} · Nuconic</title>
+  <title>{% block title %}Payment Plan{% endblock %} · YOUR COMPANY NAME</title>
   <script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
-  <link rel="icon" type="image/gif" href="/static/img/logo.gif">
+  <link rel="icon" href="/static/img/favicon.ico">
   <link rel="stylesheet" href="/static/css/app.css?v={{ asset_v }}">
 </head>
 <body>
@@ -17,7 +17,7 @@
   {# v1.2: strzałka zwijania panelu zakładek — środek prawej krawędzi sidebara #}
   <button class="nav-toggle" type="button" id="navToggle" aria-label="Zwiń / rozwiń panel zakładek"
           data-tip="Zwiń / rozwiń panel zakładek">{{ ico('chevron-l', 'nav-toggle-ico') }}</button>
-  <div class="brand" title="Nuconic · Payment Plan">
+  <div class="brand" title="YOUR COMPANY NAME · Payment Plan">
     <div>
       {% include 'components/brand_mark.html' %}
       <span class="p">Payment Plan</span>

@@ -14,8 +14,8 @@
 {% macro req_status(s) -%}
 {%- set m = {
   'DRAFT':        ('st-gray',  'file',  'Draft'),
-  'SUBMITTED':    ('st-gold',  'clock', 'Awaiting validation'),
-  'IN_PLAN':      ('st-gold',  'calendar', 'In plan'),
+  'SUBMITTED':    ('st-accent',  'clock', 'Awaiting validation'),
+  'IN_PLAN':      ('st-accent',  'calendar', 'In plan'),
   'CFO_REJECTED': ('st-brick', 'x',     'Rejected'),
   'IN_WNIOSEK':   ('st-blue',  'send',  'In funding request'),
   'FUNDED':       ('st-green', 'check', 'Funded'),
@@ -31,7 +31,7 @@
 {%- set m = {
   'DRAFT':             ('st-gray',  'file',  'Draft'),
   'SENT':              ('st-blue',  'send',  'Awaiting decision'),
-  'PARTIALLY_DECIDED': ('st-gold',  'clock', 'Partially decided'),
+  'PARTIALLY_DECIDED': ('st-accent',  'clock', 'Partially decided'),
   'CLOSED':            ('st-green', 'check', 'Decision complete'),
   'RECALLED':          ('st-gray',  'undo',  'Recalled')
 } -%}
@@ -43,7 +43,7 @@
 {% macro pay_status(s) -%}
 {%- set m = {
   'not_started': ('st-gray',  'clock', 'Payment not started'),
-  'in_progress': ('st-gold',  'coins', 'Payment in progress'),
+  'in_progress': ('st-accent',  'coins', 'Payment in progress'),
   'paid':        ('st-green', 'check', 'Fully paid')
 } -%}
 {%- set c = m.get(s, ('st-gray', 'help', s)) -%}
@@ -53,7 +53,7 @@
 {#- budget transfer status -#}
 {% macro tr_status(s) -%}
 {%- set m = {
-  'PENDING':  ('st-gold',  'clock', 'Awaiting CFO'),
+  'PENDING':  ('st-accent',  'clock', 'Awaiting CFO'),
   'APPROVED': ('st-green', 'check', 'Approved'),
   'REJECTED': ('st-brick', 'x',     'Rejected')
 } -%}
@@ -64,7 +64,7 @@
 {#- wniosek position decision -#}
 {% macro pos_status(s) -%}
 {%- set m = {
-  'PROPOSED': ('st-gold',  'clock', 'Pending'),
+  'PROPOSED': ('st-accent',  'clock', 'Pending'),
   'ACCEPTED': ('st-green', 'check', 'Approved'),
   'REJECTED': ('st-brick', 'x',     'Rejected')
 } -%}
@@ -80,7 +80,7 @@
   'pending':    ('st-gray',  'clock',   'Pending'),
   'no invoice': ('st-gray st-strike', 'ban', 'No invoice'),
   'paid?':      ('st-brick', 'help',    'Paid?'),
-  'open':       ('st-gold st-open', 'pencil', 'Open')
+  'open':       ('st-accent st-open', 'pencil', 'Open')
 } -%}
 {%- set c = m.get(label | lower, ('st-gray', 'help', label)) -%}
 {{ chip(c[0], c[1], c[2], extra) }}

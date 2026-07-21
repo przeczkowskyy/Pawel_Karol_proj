@@ -1,6 +1,7 @@
-/* Nuconic Payment Plan — v3 visual language: DARK by default (user token set),
-   gold #FFA914 primary (brand book), smooth motion. No mask/backdrop-filter
-   tricks (they caused hover flicker on some GPUs) — hovers use borders/shadows only. */
+/* Company UI kit — visual language: DARK by default, polished-steel accent
+   #A8B4C2 (chromatic cool gray, prestige metal), calm/static motion.
+   No mask/backdrop-filter tricks (they caused hover flicker on some GPUs) —
+   hovers use borders/shadows only. Placeholder brand: YOUR COMPANY NAME. */
 
 /* ─── brand font: Nunito Sans (variable 200–1000), self-hosted — never hotlink on-prem ─── */
 @font-face{
@@ -20,22 +21,22 @@
   --heading:#fafafa;
   --body-bg:#121212;
   --auth-bg:#121212;
-  --tbl-line:#303032;--weekend:#202022;--rowhover:#2a2620;--group-bg:#1a1a1c;--group-fg:#9c9ca0;--group-cat:#c9c9cd;
+  --tbl-line:#303032;--weekend:#202022;--rowhover:#252a31;--group-bg:#1a1a1c;--group-fg:#9c9ca0;--group-cat:#c9c9cd;
   --foot-bg:#1c1c1e;--cell-amt:#f4f4f5;--cat-fg:#d4d4d4;--td-fg:#b6b6ba;--nav-fg:#9c9c9f;--nav-hover:#fafafa;
-  --grid-line:#2e2e30;--grid-axis:#3a3a3c;--chip-bg:#2a2113;--chip-border:#92400e;--chip-fg:#fde68a;
+  --grid-line:#2e2e30;--grid-axis:#3a3a3c;--chip-bg:#20252d;--chip-border:#5a6a7e;--chip-fg:#d9e0e8;
   --background:#171717; --foreground:#e5e5e5;
   --card:#262626; --card-foreground:#e5e5e5;
   --muted:#1f1f1f; --muted-foreground:#b4b4b9;
   --secondary:#2e2e2e; --secondary-foreground:#d4d4d4;
-  --accent:#92400e; --accent-foreground:#fde68a;
-  --border:#3a3a3a; --input:#404040; --ring:#ffa914;
-  --primary:#ffa914; --primary-600:#e08e00; --primary-700:#b87400; --primary-fg:#171717;
+  --accent:#3a4656; --accent-foreground:#d9e0e8;
+  --border:#3a3a3a; --input:#404040; --ring:#a8b4c2;
+  --primary:#a8b4c2; --primary-600:#8895a6; --primary-700:#69788c; --primary-fg:#171717;
   --destructive:#ef4444;
   --sidebar:#0f0f0f; --sidebar-border:#2a2a2a;
   --funded:#34d399; --funded-bg:rgba(16,185,129,.13); --funded-border:rgba(16,185,129,.4);
   --rejected:#f87171; --rejected-bg:rgba(239,68,68,.12); --rejected-border:rgba(239,68,68,.4);
   --warning:#fbbf24;
-  --chart-1:#ffbe4d; --chart-2:#e08e00; --chart-3:#92400e; --chart-neutral:#8b93a3;
+  --chart-1:#bfc9d6; --chart-2:#8895a6; --chart-3:#42526e; --chart-neutral:#8b93a3;
   --radius:12px; --radius-sm:8px;
   /* type scale (standard) — every font-size migrates to these tokens */
   --fs-2xs:10px; --fs-xs:11px; --fs-sm:12.5px; --fs-base:13.5px; --fs-md:14.5px;
@@ -72,7 +73,7 @@ a{color:inherit;text-decoration:none}
 .tnum{font-variant-numeric:tabular-nums}
 .muted{color:var(--muted-foreground)}
 .small{font-size:13px}
-::selection{background:rgba(255,169,20,.35)}
+::selection{background:rgba(168,180,194,.35)}
 
 /* ─── ambient background — WebGL smoke, ONE GPU layer ───
    (Background Paths retired 2026-07-08 — SVG compositor layers caused
@@ -95,14 +96,21 @@ html[data-theme="light"] .bg-smoke{display:none}
   /* height (nie min-height): shell zamrożony — scrolluje .main i .sidebar, nigdy body */
 .brand{grid-area:brand;background:var(--sidebar);display:flex;align-items:center;gap:10px;
   padding:0 18px;border-right:1px solid var(--sidebar-border);border-bottom:1px solid var(--sidebar-border)}
-.brand img{height:32px;width:auto;display:block}
-.brand .n{font-weight:800;color:#fff;font-size:15px;letter-spacing:.4px}
 .brand .p{font-weight:800;color:var(--primary);font-size:9.5px;text-transform:uppercase;letter-spacing:.14em;
   display:block;margin-top:1px}
-/* v1.1: znak marki = SAMO logo „n" (inline SVG) + podpis produktu .p obok */
+/* znak marki = TEKSTOWY wordmark-placeholder (podmień treść po wyborze nazwy firmy);
+   metaliczny gradient stali na tekście, bez żadnego logo graficznego */
 .brand > div{display:flex;align-items:center;gap:10px;min-width:0}
 .brand .p{margin-top:0}
-.brand-n{width:29px;height:36px;flex:0 0 auto;display:block}
+.brand-word{font-weight:800;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;
+  white-space:nowrap;color:#c6cfda}
+html[data-theme="light"] .brand-word{color:#42526e}
+@supports ((-webkit-background-clip:text) or (background-clip:text)){
+  .brand-word{background:linear-gradient(180deg,#e2e8ef 0%,#a8b4c2 55%,#8895a6 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  html[data-theme="light"] .brand-word{background:linear-gradient(180deg,#55677c 0%,#3e4c5e 55%,#2c3947 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+}
 .topbar{grid-area:top;background:var(--background);
   display:flex;align-items:center;justify-content:space-between;padding:0 22px;
   border-bottom:1px solid var(--border);color:var(--foreground)}
@@ -114,14 +122,14 @@ html[data-theme="light"] .bg-smoke{display:none}
 /* nav — sliding indicator */
 .navwrap{position:relative;display:flex;flex-direction:column;gap:2px}
 .nav-indicator{position:absolute;left:0;right:0;height:40px;border-radius:10px;
-  background:rgba(255,169,20,.10);border:1px solid rgba(255,169,20,.25);opacity:0;
+  background:rgba(168,180,194,.10);border:1px solid rgba(168,180,194,.25);opacity:0;
   transition:transform var(--motion),opacity var(--motion);pointer-events:none;z-index:0}
 .navitem{display:flex;align-items:center;gap:11px;padding:9px 13px;border-radius:10px;
   color:var(--nav-fg);font-weight:600;font-size:13.5px;cursor:pointer;
   transition:color var(--motion),background var(--motion);position:relative;z-index:1}
 .navitem:hover{color:var(--nav-hover)}
-.navitem.active{color:var(--accent-foreground);background:rgba(255,169,20,.12);
-  box-shadow:inset 0 0 0 1px rgba(255,169,20,.3)}
+.navitem.active{color:var(--accent-foreground);background:rgba(168,180,194,.12);
+  box-shadow:inset 0 0 0 1px rgba(168,180,194,.3)}
 .navitem-ico{width:17px;height:17px;color:currentColor;flex:0 0 auto}
 .nav-sep{height:1px;background:var(--sidebar-border);margin:12px 8px}
 .nav-role{font-size:10.5px;text-transform:uppercase;letter-spacing:.09em;color:#6f6f73;padding:8px 13px 3px}
@@ -129,8 +137,8 @@ html[data-theme="light"] .bg-smoke{display:none}
 
 /* topbar right */
 .tb-right{display:flex;align-items:center;gap:14px}
-.saldo-pill{display:flex;align-items:baseline;gap:8px;background:rgba(255,169,20,.1);
-  border:1px solid rgba(255,169,20,.3);border-radius:999px;padding:6px 15px}
+.saldo-pill{display:flex;align-items:baseline;gap:8px;background:rgba(168,180,194,.1);
+  border:1px solid rgba(168,180,194,.3);border-radius:999px;padding:6px 15px}
 .saldo-pill .lbl{font-size:10.5px;color:var(--accent-foreground);text-transform:uppercase;letter-spacing:.07em;font-weight:700}
 .saldo-pill .val{color:var(--primary);font-weight:800;font-size:14.5px}
 .user-chip{display:flex;align-items:center;gap:9px;color:var(--foreground)}
@@ -183,8 +191,8 @@ html.theme-fade body, html.theme-fade body *{
 .col-3{grid-column:span 3}.col-4{grid-column:span 4}.col-6{grid-column:span 6}.col-8{grid-column:span 8}.col-12{grid-column:span 12}
 
 /* hover accent (simple + GPU-cheap; replaces the old mask-based glow) */
-.glowable:hover{border-color:rgba(255,169,20,.55);
-  box-shadow:0 0 0 1px rgba(255,169,20,.25),0 10px 34px -14px rgba(255,169,20,.28)}
+.glowable:hover{border-color:rgba(168,180,194,.55);
+  box-shadow:0 0 0 1px rgba(168,180,194,.25),0 10px 34px -14px rgba(168,180,194,.28)}
 
 .stat .lbl{font-size:11.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-foreground);font-weight:700}
 /* OVERFLOW RULE: KPI amounts never break mid-number — the font scales down
@@ -195,8 +203,8 @@ html.theme-fade body, html.theme-fade body *{
 .stat .foot{font-size:12.5px;color:var(--muted-foreground);margin-top:6px}
 .stat-ico{width:36px;height:36px;border-radius:10px;background:var(--secondary);display:grid;place-items:center;
   color:var(--secondary-foreground);float:right;transition:background var(--motion),color var(--motion)}
-.stat-ico.gold{background:rgba(255,169,20,.14);color:var(--primary)}
-.card:hover .stat-ico{background:rgba(255,169,20,.14);color:var(--primary)}
+.stat-ico.accent{background:rgba(168,180,194,.14);color:var(--primary)}
+.card:hover .stat-ico{background:rgba(168,180,194,.14);color:var(--primary)}
 
 /* ─── buttons ─── */
 .btn{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:13.5px;
@@ -204,12 +212,14 @@ html.theme-fade body, html.theme-fade body *{
   transition:background var(--motion),box-shadow var(--motion),border-color var(--motion),color var(--motion);
   font-family:inherit;line-height:1.3}
 .btn:focus-visible{outline:2.5px solid var(--ring);outline-offset:2px}
-.btn-primary{background:var(--primary);color:var(--primary-fg);border-color:var(--primary-600);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 1px 2px rgba(0,0,0,.35)}
-.btn-primary:hover{background:#ffbe4d;border-color:var(--primary);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.32),0 4px 16px -4px rgba(255,169,20,.5)}
+.btn-primary{background:linear-gradient(180deg,#b9c4d1 0%,#a8b4c2 55%,#96a3b3 100%);
+  color:var(--primary-fg);border-color:var(--primary-600);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 1px 2px rgba(0,0,0,.35)}
+.btn-primary:hover{background:linear-gradient(180deg,#c7d0dc 0%,#bfc9d6 55%,#aab6c4 100%);
+  border-color:var(--primary);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 3px 10px -3px rgba(0,0,0,.4)}
 .btn-secondary{background:var(--card);color:var(--foreground);border-color:var(--input)}
-.btn-secondary:hover{border-color:var(--primary);color:var(--accent-foreground);background:rgba(255,169,20,.08)}
+.btn-secondary:hover{border-color:var(--primary);color:var(--accent-foreground);background:rgba(168,180,194,.08)}
 .btn-ghost{background:transparent;color:var(--muted-foreground)}
 .btn-ghost:hover{background:var(--secondary);color:var(--foreground)}
 .btn-sm{padding:6px 12px;font-size:12.5px;border-radius:8px}
@@ -225,21 +235,21 @@ html.theme-fade body, html.theme-fade body *{
    earlier badge frame, kept by decision 2026-07-08; Protocol Manager will be
    adapted to THIS style later, not the other way round.
    Always colour + icon + label, never colour alone. 6 semantic colours:
-   gray=draft/pending · gold=in progress/needs action · green=success/paid/history ·
+   gray=draft/pending · accent(steel)=in progress/needs action · green=success/paid/history ·
    brick=rejected/problem · blue=accepted/in circulation · violet=corrected. */
 .st{display:inline-flex;align-items:center;gap:6px;padding:3.5px 10px;border-radius:999px;
   border:1px solid;font-size:11px;font-weight:700;line-height:1.4;
   white-space:nowrap;vertical-align:middle;user-select:none}
 .st .st-ico{width:12px;height:12px;flex:0 0 auto;stroke-width:2.5}
 .st-gray  {background:var(--secondary);color:var(--secondary-foreground);border-color:var(--border)}
-.st-gold  {background:rgba(255,169,20,.13);color:var(--accent-foreground);border-color:rgba(255,169,20,.35)}
+.st-accent  {background:rgba(168,180,194,.13);color:var(--accent-foreground);border-color:rgba(168,180,194,.35)}
 .st-green {background:var(--funded-bg);color:var(--funded);border-color:var(--funded-border)}
 .st-brick {background:var(--rejected-bg);color:var(--rejected);border-color:var(--rejected-border)}
 .st-blue  {background:rgba(59,130,246,.12);color:#93c5fd;border-color:rgba(59,130,246,.4)}
 .st-violet{background:rgba(139,92,246,.12);color:#c4b5fd;border-color:rgba(139,92,246,.45)}
 .st-open{border-style:dashed}
 .st-strike{text-decoration:line-through;opacity:.6}
-html[data-theme="light"] .st-gold  {color:#92400e;background:#fff7e0;border-color:#fde68a}
+html[data-theme="light"] .st-accent  {color:#42526e;background:#eff3f7;border-color:#c8d2dd}
 html[data-theme="light"] .st-blue  {color:#1d4ed8;background:#eff6ff;border-color:#bfdbfe}
 html[data-theme="light"] .st-violet{color:#6d28d9;background:#f5f3ff;border-color:#ddd6fe}
 /* neutral mini-chip (category tags, counters — NOT a status) */
@@ -301,18 +311,18 @@ table.matrix tr.row-group:hover td{background:var(--group-bg)}
 table.matrix td.cat-indent{padding-left:28px;font-weight:500;white-space:nowrap;color:var(--td-fg)}
 .group-sub{color:#9c9ca0;font-weight:800}
 /* today marker */
-table.matrix thead th.today{background:#1c1508;color:var(--accent-foreground);box-shadow:inset 0 -3px 0 var(--primary)}
-table.matrix td.today{background:rgba(255,169,20,.07)}
-table.matrix tbody tr:hover td.today{background:rgba(255,169,20,.14)}
+table.matrix thead th.today{background:#161b22;color:var(--accent-foreground);box-shadow:inset 0 -3px 0 var(--primary)}
+table.matrix td.today{background:rgba(168,180,194,.07)}
+table.matrix tbody tr:hover td.today{background:rgba(168,180,194,.14)}
 /* STICKY RULE: sticky cells (header/footer/frozen columns) need OPAQUE backgrounds —
    translucent rgba lets scrolling content bleed through the layer */
-table.matrix tfoot td.today{background:#2b2415}
+table.matrix tfoot td.today{background:#232b36}
 .today-tag{display:block;font-size:9px;font-weight:800;color:var(--primary);letter-spacing:.08em;text-transform:uppercase}
 /* clickable matrix cell — the WHOLE cell is the target and highlights on hover */
 .cellbtn{position:absolute;inset:0;background:none;border:none;cursor:pointer;font:inherit;
   display:flex;align-items:center;justify-content:flex-end;padding:0 12px;border-radius:0;
   transition:background var(--motion),box-shadow var(--motion)}
-.cellbtn:hover,.cellbtn:focus-visible{background:rgba(255,169,20,.14);
+.cellbtn:hover,.cellbtn:focus-visible{background:rgba(168,180,194,.14);
   box-shadow:inset 0 0 0 1.5px var(--primary);outline:none}
 .cellbtn .cell{width:100%}
 .cellbtn .cell.funded,.cellbtn .cell.carried{width:100%;margin:0}
@@ -352,7 +362,7 @@ table.matrix tfoot td.today{background:#2b2415}
 .table-wrapper table{overflow:visible}
 .table-wrapper table thead th{position:sticky;top:0;z-index:3}
 tr.rowlink{cursor:pointer;transition:background var(--motion)}
-tr.rowlink:hover td{background:rgba(255,169,20,.08)}
+tr.rowlink:hover td{background:rgba(168,180,194,.08)}
 
 /* ─── request bento cards ─── */
 .req-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
@@ -360,8 +370,8 @@ tr.rowlink:hover td{background:rgba(255,169,20,.08)}
   padding:16px 17px 14px;cursor:pointer;position:relative;overflow:hidden;
   transition:border-color var(--motion),box-shadow var(--motion),transform var(--motion);
   display:flex;flex-direction:column;gap:10px}
-.req-card:hover{transform:translateY(-2px);border-color:rgba(255,169,20,.5);
-  box-shadow:0 12px 34px -14px rgba(255,169,20,.3)}
+.req-card:hover{transform:translateY(-2px);border-color:rgba(168,180,194,.5);
+  box-shadow:0 12px 34px -14px rgba(168,180,194,.3)}
 .req-card.st-inplan{--rc-accent:var(--primary)}
 .req-card.st-funded{--rc-accent:var(--funded)}
 .req-card.st-rejected{--rc-accent:var(--rejected)}
@@ -392,14 +402,14 @@ tr.rowlink:hover td{background:rgba(255,169,20,.08)}
   transition:border-color var(--motion),box-shadow var(--motion)}
 .input::placeholder,.textarea::placeholder{color:#6f6f73}
 .input:focus,.select:focus,.textarea:focus{outline:none;border-color:var(--primary);
-  box-shadow:0 0 0 3.5px rgba(255,169,20,.16)}
+  box-shadow:0 0 0 3.5px rgba(168,180,194,.16)}
 .select option{background:var(--card)}
 .help{font-size:12.5px;color:var(--muted-foreground);margin-top:5px}
 .inbox-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .inbox-actions input.reason{padding:7px 11px;border:1px solid var(--input);border-radius:8px;font-size:12.5px;
   min-width:170px;font-family:inherit;background:var(--muted);color:var(--foreground)}
 .inbox-actions input.reason::placeholder{color:#6f6f73}
-.inbox-actions input.reason:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(255,169,20,.15)}
+.inbox-actions input.reason:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(168,180,194,.15)}
 
 /* ─── tooltip (ported from Protocol Manager #lc-tip) ───
    One fixed singleton; content from data-tip (text) or data-tip-html (rich HTML).
@@ -413,7 +423,7 @@ tr.rowlink:hover td{background:rgba(255,169,20,.08)}
 #nc-tip .tip-num{font-variant-numeric:tabular-nums;font-weight:700;color:var(--accent-foreground)}
 #nc-tip .tip-row-ok{color:var(--funded)}
 #nc-tip .tip-row-bad{color:var(--rejected)}
-#nc-tip .tip-note{background:rgba(255,169,20,.12);border:1px solid rgba(255,169,20,.35);
+#nc-tip .tip-note{background:rgba(168,180,194,.12);border:1px solid rgba(168,180,194,.35);
   border-radius:4px;padding:6px 9px;margin:5px 0}
 span[data-tip],span[data-tip-html]{cursor:help}
 
@@ -443,8 +453,7 @@ span[data-tip],span[data-tip-html]{cursor:help}
   animation:cardIn .5s cubic-bezier(.22,1,.36,1)}
 @keyframes cardIn{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
 .login-top{background:#0f0f0f;padding:22px 28px;display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--border)}
-.login-top img{height:44px;width:auto}
-.login-top .n{font-weight:800;color:#fff;font-size:19px;letter-spacing:.5px}
+.login-top .brand-word{font-size:15px}
 .login-top .p{font-weight:800;color:var(--primary);font-size:12px;margin-top:2px;text-transform:uppercase;letter-spacing:.08em}
 .login-body{padding:26px 28px}
 .login-demo{margin-top:18px;padding-top:16px;border-top:1px solid var(--border);font-size:12px;color:var(--muted-foreground)}
@@ -486,20 +495,18 @@ span[data-tip],span[data-tip-html]{cursor:help}
 .chart-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
 /* theme-aware chart colours (SVG presentation via CSS classes, no hardcoded hex) */
 .chart-svg .ln-neutral{stroke:var(--chart-neutral)}
-.chart-svg .ln-gold{stroke:var(--primary)}
-.chart-svg .dot-gold{fill:var(--primary)}
+.chart-svg .ln-accent{stroke:var(--primary)}
+.chart-svg .dot-accent{fill:var(--primary)}
 .chart-svg .dot-alert{fill:var(--destructive)}
 .chart-svg .dot-annex{fill:var(--funded)}  /* zielony marker zdarzenia (np. aneks) */
 .chart-svg .stop-neutral{stop-color:var(--chart-neutral)}
-.chart-svg .stop-gold{stop-color:var(--primary)}
-/* draw-in animation (ported from Budget Tracking / Recharts default):
-   a clipPath rect grows left→right revealing line+area, then the reference
-   line / markers / end-dot fade in. Starts AFTER the page-enter cascade
-   settles and uses the same easing family — calm, sequential, never chaotic. */
-@keyframes chartReveal{from{width:0}}
-.chart-reveal{animation:chartReveal 1.6s var(--ease-soft) .45s both}
+.chart-svg .stop-accent{stop-color:var(--primary)}
+/* chart entrance — STATIC by default (rebrand): charts render instantly and get
+   only a short fade after the page cascade. No draw-in theatrics, no per-point
+   choreography — data first, motion minimal. */
 @keyframes chartFadeIn{from{opacity:0}}
-.chart-late{animation:chartFadeIn .6s ease-out 1.75s both}
+.chart-reveal{animation:chartFadeIn .4s ease-out .15s both}
+.chart-late{animation:chartFadeIn .35s ease-out .5s both}
 /* period step (segmented control — port of controlling's Weekly/Bi-weekly/Monthly) */
 .seg{display:inline-flex;background:var(--muted);border:1px solid var(--border);border-radius:8px;padding:2px;gap:2px}
 .seg a{padding:3px 10px;border-radius:6px;font-size:11.5px;font-weight:700;color:var(--muted-foreground);
@@ -526,7 +533,7 @@ span[data-tip],span[data-tip-html]{cursor:help}
   color:var(--heading);white-space:nowrap}
 .coverage-bar{height:8px;border-radius:999px;background:var(--secondary);overflow:hidden;margin-top:10px}
 .coverage-bar i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--chart-1),var(--chart-2));
-  transition:width .8s cubic-bezier(.22,1,.36,1)}
+  transition:width .4s cubic-bezier(.22,1,.36,1)}
 
 .stat-click{cursor:pointer}
 .stat-click:active{transform:translateY(1px)}
@@ -554,7 +561,7 @@ html[data-theme="light"]{
   --card:#ffffff; --card-foreground:#262626;
   --muted:#f9fafb; --muted-foreground:#6b7280;
   --secondary:#f3f4f6; --secondary-foreground:#4b5563;
-  --accent:#fffbeb; --accent-foreground:#92400e;
+  --accent:#eff3f7; --accent-foreground:#42526e;
   --border:#e6e8ec; --input:#dfe2e7;
   --sidebar:#fbfbfc; --sidebar-border:#e9ebee;
   --funded:#059669; --funded-bg:#ecfdf5; --funded-border:#a7f3d0;
@@ -563,12 +570,12 @@ html[data-theme="light"]{
   --shadow-sm:0 1px 2px rgba(0,0,0,.05);
   --shadow-md:0 6px 16px -6px rgba(0,0,0,.12);
   --shadow-lg:0 24px 50px -16px rgba(0,0,0,.22);
-  --tbl-line:#ececee; --weekend:#f6f6f7; --rowhover:#fdf6e6;
+  --tbl-line:#ececee; --weekend:#f6f6f7; --rowhover:#eef2f6;
   --group-bg:#f3f4f6; --group-fg:#6b7280; --group-cat:#374151;
   --foot-bg:#f3f4f6; --cell-amt:#1f2937; --cat-fg:#374151; --td-fg:#4b5563;
   --nav-fg:#6b7280; --nav-hover:#171717;
   --grid-line:#ececee; --grid-axis:#d1d5db; --chart-neutral:#64748b;
-  --chip-bg:#fffbeb; --chip-border:#fde68a; --chip-fg:#92400e;
+  --chip-bg:#eff3f7; --chip-border:#c8d2dd; --chip-fg:#42526e;
   --scrim:rgba(255,255,255,.8);
 }
 html[data-theme="light"] body{background:linear-gradient(180deg,#f7f8fa 0%,#f2f3f6 100%) fixed}
@@ -576,21 +583,21 @@ html[data-theme="light"] .card{box-shadow:0 1px 3px rgba(16,24,40,.07),0 1px 2px
 html[data-theme="light"] .topbar{background:#ffffff}
 html[data-theme="light"] .sidebar,html[data-theme="light"] .brand{background:#fbfbfc}
 html[data-theme="light"] .data-table th{background:#f6f7f9}
-html[data-theme="light"] .navitem.active{color:#92400e;background:#fffbeb;box-shadow:inset 0 0 0 1px #fde68a}
-html[data-theme="light"] .nav-indicator{background:#fffbeb;border-color:#fde68a}
-html[data-theme="light"] .saldo-pill{background:#fffbeb;border-color:#fde68a}
-html[data-theme="light"] .saldo-pill .lbl{color:#92400e}
-html[data-theme="light"] .saldo-pill .val{color:#b45309}
-html[data-theme="light"] .badge-inplan{background:#fff7e0;color:#92400e;border-color:#fde68a}
+html[data-theme="light"] .navitem.active{color:#42526e;background:#eff3f7;box-shadow:inset 0 0 0 1px #c8d2dd}
+html[data-theme="light"] .nav-indicator{background:#eff3f7;border-color:#c8d2dd}
+html[data-theme="light"] .saldo-pill{background:#eff3f7;border-color:#c8d2dd}
+html[data-theme="light"] .saldo-pill .lbl{color:#42526e}
+html[data-theme="light"] .saldo-pill .val{color:#55677c}
+html[data-theme="light"] .badge-inplan{background:#eff3f7;color:#42526e;border-color:#c8d2dd}
 html[data-theme="light"] .modal-overlay-c{background:rgba(23,23,23,.4)}
 html[data-theme="light"] .tag-demo{color:#fff}
-html[data-theme="light"] table.matrix td.today{background:rgba(255,169,20,.10)}
-html[data-theme="light"] table.matrix tbody tr:hover td.today{background:rgba(255,169,20,.18)}
-html[data-theme="light"] table.matrix tfoot td.today{background:#f2e9cf}
+html[data-theme="light"] table.matrix td.today{background:rgba(168,180,194,.10)}
+html[data-theme="light"] table.matrix tbody tr:hover td.today{background:rgba(168,180,194,.18)}
+html[data-theme="light"] table.matrix tfoot td.today{background:#e2e8ef}
 html[data-theme="light"] .matrix-wrap::-webkit-scrollbar-thumb{background:#c7cbd1;border-color:var(--muted)}
 html[data-theme="light"] .matrix-wrap{scrollbar-color:#c7cbd1 var(--muted)}
-html[data-theme="light"] tr.rowlink:hover td{background:#fdf6e6}
-html[data-theme="light"] .btn-primary:hover{box-shadow:0 6px 18px -6px rgba(224,142,0,.45)}
+html[data-theme="light"] tr.rowlink:hover td{background:#eef2f6}
+html[data-theme="light"] .btn-primary:hover{box-shadow:0 6px 18px -6px rgba(107,120,140,.35)}
 
 /* ─── responsive ───
    Breakpoints: 1500 (laptop — KPI tiles 2×2), 1250 (charts stack full-width),
@@ -670,24 +677,24 @@ input.pct-input:focus-visible,select.bsel:focus-visible{outline:2px solid var(--
 .pct-form .btn-save{display:none;padding:3px 8px}
 .pct-form.dirty .btn-save{display:inline-flex}
 table.matrix thead th.bill-app{cursor:pointer}
-table.matrix thead th.bill-app:hover{background:#1c1508}
+table.matrix thead th.bill-app:hover{background:#161b22}
 table.matrix thead th .app-total{display:block;font-size:10px;color:#8b8b90;font-weight:700;margin-top:2px}
 /* 'To bill now' — frozen at the right edge while payment columns scroll under it
    (mirror of the sticky category column on the left; backgrounds must be OPAQUE) */
 table.matrix th.bill-proposal,table.matrix td.bill-proposal{position:sticky;right:0}
-table.matrix td.bill-proposal{background:#211b0e;z-index:2;
+table.matrix td.bill-proposal{background:#191f28;z-index:2;
   border-left:1px solid var(--border);box-shadow:-6px 0 12px -8px rgba(0,0,0,.6)}
-table.matrix thead th.bill-proposal{background:#1c1508;z-index:4;
+table.matrix thead th.bill-proposal{background:#161b22;z-index:4;
   box-shadow:inset 0 -3px 0 var(--primary)}
-table.matrix tbody tr:hover td.bill-proposal{background:#2b2412}
-table.matrix tfoot td.bill-proposal{background:#262013;z-index:4}
-html[data-theme="light"] table.matrix td.bill-proposal{background:#fdf6e3}
-html[data-theme="light"] table.matrix tbody tr:hover td.bill-proposal{background:#f8eecf}
-html[data-theme="light"] table.matrix tfoot td.bill-proposal{background:#f5ecd2}
+table.matrix tbody tr:hover td.bill-proposal{background:#232b36}
+table.matrix tfoot td.bill-proposal{background:#202834;z-index:4}
+html[data-theme="light"] table.matrix td.bill-proposal{background:#f0f3f7}
+html[data-theme="light"] table.matrix tbody tr:hover td.bill-proposal{background:#e2e8ef}
+html[data-theme="light"] table.matrix tfoot td.bill-proposal{background:#e6ebf1}
 /* the PM's main input column — visibly highlighted */
-table.matrix th.pm-col{background:#241a06;box-shadow:inset 0 -3px 0 var(--primary)}
-table.matrix td.pm-col{background:rgba(255,169,20,.10)}
-table.matrix tbody tr:hover td.pm-col{background:rgba(255,169,20,.18)}
+table.matrix th.pm-col{background:#1a212b;box-shadow:inset 0 -3px 0 var(--primary)}
+table.matrix td.pm-col{background:rgba(168,180,194,.10)}
+table.matrix tbody tr:hover td.pm-col{background:rgba(168,180,194,.18)}
 .delta-badge{display:block;text-align:right;font-size:9.5px;font-weight:800;line-height:1.2;
   color:var(--accent-foreground);letter-spacing:.02em}
 .delta-badge.neg{color:var(--rejected)}
@@ -720,7 +727,7 @@ table.matrix tbody tr:hover td.pm-col{background:rgba(255,169,20,.18)}
   .st .st-ico{display:none}
 }
 /* ═══ EXTRA COMPONENTS — standard library ═══
-   Part of the canonical Nuconic UI kit (.claude/skills/nuconic-ui). Not every
+   Part of the canonical Company UI kit (.claude/skills/company-ui). Not every
    app uses every block, but they ship in EVERY app.css so all tools stay
    identical and a single edit here propagates everywhere. */
 
@@ -738,13 +745,13 @@ table.matrix tbody tr:hover td.pm-col{background:rgba(255,169,20,.18)}
 
 /* progress bar — one standard (replaces ad-hoc coverage/proj bars in new apps) */
 .bar{height:8px;border-radius:999px;background:var(--secondary);overflow:hidden}
-.bar > i{display:block;height:100%;border-radius:999px;background:var(--primary);transition:width .8s var(--ease-out)}
+.bar > i{display:block;height:100%;border-radius:999px;background:var(--primary);transition:width .4s var(--ease-out)}
 .bar.grad > i{background:linear-gradient(90deg,var(--chart-1),var(--chart-2))}
 .bar.ok > i{background:var(--funded)} .bar.bad > i{background:var(--rejected)}
 
 /* toast notifications — bottom-right stack; add .ok/.bad for semantic edge */
 .toast-wrap{position:fixed;bottom:18px;right:18px;display:flex;flex-direction:column;gap:8px;z-index:1100}
-.toast{background:var(--card);border:1px solid rgba(255,169,20,.45);border-radius:10px;
+.toast{background:var(--card);border:1px solid rgba(168,180,194,.45);border-radius:10px;
   padding:11px 14px;box-shadow:var(--shadow-md);font-size:13px;max-width:360px;
   display:flex;gap:9px;align-items:flex-start;animation:riseIn .35s var(--ease-out)}
 .toast.ok{border-color:var(--funded-border)} .toast.bad{border-color:var(--rejected-border)}
@@ -771,7 +778,7 @@ table.matrix tbody tr:hover td.pm-col{background:rgba(255,169,20,.18)}
 .step-dot{width:30px;height:30px;border-radius:999px;border:2px solid var(--border);background:var(--card);
   display:grid;place-items:center;font-size:12.5px;font-weight:700;color:var(--muted-foreground);
   transition:border-color var(--motion),color var(--motion),background var(--motion)}
-.step.active .step-dot{border-color:var(--primary);color:var(--accent-foreground);background:rgba(255,169,20,.12)}
+.step.active .step-dot{border-color:var(--primary);color:var(--accent-foreground);background:rgba(168,180,194,.12)}
 .step.done .step-dot{border-color:var(--funded);color:var(--funded);background:var(--funded-bg)}
 .step-lbl{font-size:12.5px;font-weight:600;color:var(--muted-foreground)}
 .step.active .step-lbl{color:var(--heading)}
@@ -807,7 +814,7 @@ table.matrix tbody tr:hover td.pm-col{background:rgba(255,169,20,.18)}
 .pager a,.pager span{min-width:30px;height:30px;display:grid;place-items:center;border-radius:8px;font-size:12.5px;
   font-weight:700;color:var(--muted-foreground);border:1px solid transparent;padding:0 6px}
 .pager a:hover{background:var(--secondary);color:var(--foreground)}
-.pager .cur{background:rgba(255,169,20,.13);color:var(--accent-foreground);border-color:rgba(255,169,20,.35)}
+.pager .cur{background:rgba(168,180,194,.13);color:var(--accent-foreground);border-color:rgba(168,180,194,.35)}
 
 /* calendar — month grid; .is-today (gold ring), .is-sel (gold fill), .has-dot (event), .is-out (other month) */
 .cal{max-width:320px;padding:14px}
@@ -849,8 +856,8 @@ html[data-theme="light"] .cal-day.is-out{color:#b6b9bf}
 .nc-donut{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px}
 .nc-donut svg{display:block}
 .nc-donut-track{stroke:var(--secondary)}
-.nc-donut-arc{transition:stroke-dashoffset .9s var(--ease-out)}
-.nc-donut-gold{stroke:var(--primary)}
+.nc-donut-arc{transition:stroke-dashoffset .45s var(--ease-out)}
+.nc-donut-accent{stroke:var(--primary)}
 .nc-donut-ok{stroke:var(--funded)}
 .nc-donut-bad{stroke:var(--rejected)}
 .nc-donut-center{position:absolute;top:0;left:0;right:0;height:var(--nc-donut-ring,132px);
@@ -922,7 +929,7 @@ html[data-theme="light"] .cal-day.is-out{color:#b6b9bf}
    (toggle + zakres tygodni) powtarza reveal przy KAŻDEJ zmianie danych. */
 .nc-reveal{position:relative;overflow:hidden}
 .nc-reveal::after{content:"";position:absolute;inset:0;background:var(--card);
-  animation:ncRevealSlide .7s var(--ease-soft) forwards;z-index:4;pointer-events:none}
+  animation:ncRevealSlide .4s var(--ease-soft) forwards;z-index:4;pointer-events:none}
 @keyframes ncRevealSlide{from{transform:translateX(0)}to{transform:translateX(101%)}}
 @media (prefers-reduced-motion: reduce){.nc-reveal::after{animation:none;opacity:0}}
 
@@ -934,7 +941,7 @@ html[data-theme="light"] .cal-day.is-out{color:#b6b9bf}
    brak trwałego przycięcia dymków przy krawędzi. Gra raz przy montażu (wejście w
    zakładkę); zmiana danych nie remontuje wykresu = brak powtórki i migania. */
 @keyframes ncChartBuild{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
-.nc-chart-build{animation:ncChartBuild 1.15s var(--ease-soft) .05s backwards;will-change:clip-path}
+.nc-chart-build{animation:ncChartBuild .45s var(--ease-soft) .05s backwards;will-change:clip-path}
 @media (prefers-reduced-motion: reduce){.nc-chart-build{animation:none}}
 
-/* ═══ APP-SPECIFIC (poniżej tej linii — nie ruszać przy aktualizacji kitu nuconic-ui) ═══ */
+/* ═══ APP-SPECIFIC (poniżej tej linii — nie ruszać przy aktualizacji kitu company-ui) ═══ */

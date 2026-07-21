@@ -1,22 +1,23 @@
-{#- Brand mark — "NUCONIC" formed by steering particles
-    (21st.dev ParticleTextEffect port, single word, brand gold).
+{#- Brand mark — wordmark-placeholder "YOUR COMPANY NAME" formed by steering
+    particles (21st.dev ParticleTextEffect port, brand steel). Podmień WORD
+    po wyborze nazwy firmy (i ew. rozmiar FONT do długości napisu).
     Transparent canvas: the motion-blur trail uses destination-out fading
     instead of the original's opaque black wash. Particles rasterize from
     Nunito Sans after document.fonts.ready. Small canvas (~960×190, ~2.5k
     particles) — cheap; used on the auth pages only.
     prefers-reduced-motion → static text, no loop. -#}
-<canvas class="brand-canvas" id="brandParticles" width="960" height="190" aria-label="NUCONIC"></canvas>
+<canvas class="brand-canvas" id="brandParticles" width="960" height="190" aria-label="YOUR COMPANY NAME"></canvas>
 <script>
 (function(){
   var canvas=document.getElementById('brandParticles');
   if(!canvas) return;
   var ctx=canvas.getContext('2d');
-  var W=canvas.width,H=canvas.height,WORD='NUCONIC';
-  var FONT='800 118px "Nunito Sans",Arial,sans-serif';
+  var W=canvas.width,H=canvas.height,WORD='YOUR COMPANY NAME';
+  var FONT='800 72px "Nunito Sans",Arial,sans-serif';
   var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   function staticText(){
     ctx.clearRect(0,0,W,H);
-    ctx.fillStyle='#ffa914';
+    ctx.fillStyle='#a8b4c2';
     ctx.font=FONT; ctx.textAlign='center'; ctx.textBaseline='middle';
     ctx.fillText(WORD,W/2,H/2);
   }
@@ -34,7 +35,7 @@
     var STEP=5, parts=[], coords=[], i, j, t;
     for(i=0;i<pixels.length;i+=STEP*4) coords.push(i);
     for(i=coords.length-1;i>0;i--){ j=Math.floor(Math.random()*(i+1)); t=coords[i]; coords[i]=coords[j]; coords[j]=t; }
-    var PALETTE=['255,169,20','255,190,77','224,142,0'];
+    var PALETTE=['168,180,194','191,201,214','136,149,166'];
     function ringPos(){
       var a=Math.random()*Math.PI*2, m=(W+H)/2;
       return {x:W/2+Math.cos(a)*m, y:H/2+Math.sin(a)*m};
