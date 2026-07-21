@@ -9,7 +9,7 @@ Dwuosobowy zespół (Paweł + Karol) + Claude Code zakłada firmę: **usługi au
 upraszczania i czyszczenia danych dla MŚP** — zamiana ręcznego Excela, makr VBA i obiegu
 mailowego na powtarzalne, audytowalne narzędzia. Hook nadrzędny: **wdrożenie w DNI, nie
 w miesiące**. Dowód kompetencji: ekosystem ~15 narzędzi zbudowanych wewnętrznie dla Nuconic
-(opisany w `CLAUDE.md` w repo `github.com/bibaczebe/Pawel_Karol_proj` — materiał referencyjny,
+(opisany w `docs/nuconic-ekosystem-referencja.md` — materiał referencyjny,
 NIE produkt). Sesja obejmuje wyłącznie strategię i strukturę; **świadomie odłożone: UI
 (powstanie z rebrandowanego `nuconic-ui-kit`) oraz serwer/hosting**.
 
@@ -178,7 +178,7 @@ bo zdalne delivery on-prem przy 2 osobach zje polski pipeline.
 
 ## 3. Katalog modułów (mapa Nuconic → produkt)
 
-### 3.1 Korekty mapy z briefu (wobec pełnego CLAUDE.md)
+### 3.1 Korekty mapy z briefu (wobec pełnej referencji Nuconic — `docs/nuconic-ekosystem-referencja.md`)
 
 1. CVS generator (B2) to plumbing "pod maską" raportowania — nie osobny moduł sprzedażowy.
 2. Brief pomijał **B8+B9+B1** — a to spójny, sprzedawalny moduł "zamknięcie cyklu jednym przyciskiem" (realny log: 29 projektów opublikowanych w kilkanaście sekund).
@@ -208,7 +208,7 @@ M1/M2 są read-only na danych klienta — zero ryzyka uszkodzenia = idealne pier
 
 ### 3.3 Warstwa wspólna (właściwy "produktowy rdzeń" hybrydy)
 
-Szkielet narzędzia lokalnego z sekcji 3 CLAUDE.md: launcher dwuklik + venv per user, Flask na
+Szkielet narzędzia lokalnego z sekcji 3 referencji Nuconic: launcher dwuklik + venv per user, Flask na
 127.0.0.1, TEST→PROD, backup, log audytowy, sandbox. Każdy moduł M1–M5 = szkielet + logika
 klienta. **To on jest źródłem "dni nie miesiące" i tak go opisujemy na stronie.** Hub (wzorzec B1)
 dokładany od drugiego modułu u klienta — argument retencyjny.
@@ -274,7 +274,7 @@ build-time z YAML, i18n `/pl/` `/en/`, domyślnie zero JS + wyspa na demo, zero 
 
 ```
 /  (repo Pawel_Karol_proj)
-├─ CLAUDE.md              # portfolio/wzorce (bez zmian)
+├─ CLAUDE.md              # przewodnik po projekcie dla sesji Claude (referencja Nuconic → docs/)
 ├─ nuconic-ui-kit/        # baza przyszłego rebrandu (odłożone)
 ├─ docs/plan/             # dokumenty planistyczne (ten plan)
 └─ site/                  # samowystarczalna strona

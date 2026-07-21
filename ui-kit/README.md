@@ -7,7 +7,7 @@ CSS (`app.css` — tokeny + klasy komponentów) + ikony **lucide-react**. **NO C
 *(v1.x: FastAPI SSR + Jinja2 + vanilla JS — wycofane; pliki `.html` w `assets/` to legacy-referencja.)*
 
 > **Pochodzenie:** kit wywodzi się z wewnętrznego design-systemu zbudowanego dla poprzedniego
-> wdrożenia (opis: `CLAUDE.md` w korzeniu repo, sekcja C2). **v2.1 = pełny rebrand**: usunięte
+> wdrożenia (opis: `docs/nuconic-ekosystem-referencja.md`, sekcja C2). **v2.1 = pełny rebrand**: usunięte
 > logo i nazwy, nowa paleta „polerowana stal", stonowane wykresy. Logika komponentów bez zmian.
 
 ---
