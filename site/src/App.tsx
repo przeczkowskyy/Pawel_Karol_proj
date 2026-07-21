@@ -26,17 +26,12 @@ import ModulePage from "@/pages/ModulePage";
 import { getModules } from "@/data/modules";
 import { useLang, pick } from "@/i18n";
 
-/* Landing Klarow v0.3 — dark-only, PL/EN. Tło dot-matrix (shader, lazy chunk)
-   pokrywa CAŁĄ stronę jako warstwa fixed; treść na z-10. Komponenty i tokeny:
-   kit company-ui, Tailwind wyłącznie do layoutu. */
+/* Landing Klarow v0.4 — dark-only, PL/EN. Tło: GLSL Hills (wzgórza z szumu
+   Perlina w stali, lazy chunk z three.js) jako warstwa fixed pod CAŁĄ stroną;
+   treść na z-10. Komponenty i tokeny: kit company-ui, Tailwind do layoutu. */
 
-const STEEL_BRIGHT = [226, 232, 239] as number[];
-const STEEL = [168, 180, 194] as number[];
-
-const CanvasRevealEffect = lazy(() =>
-  import("@/components/ui/canvas-reveal-effect").then((m) => ({
-    default: m.CanvasRevealEffect,
-  }))
+const GLSLHills = lazy(() =>
+  import("@/components/ui/glsl-hills").then((m) => ({ default: m.GLSLHills }))
 );
 
 function useReveal<T extends HTMLElement>() {
@@ -634,18 +629,11 @@ export default function App() {
 
   return (
     <div style={{ background: "var(--body-bg)" }}>
-      {/* tło CAŁEJ strony: matryca kropek (shader, lazy) + przygaszenie pod treść */}
-      <div className="fixed inset-0 z-0 pointer-events-none" aria-hidden="true">
+      {/* tło CAŁEJ strony: GLSL Hills (lazy chunk z three.js) */}
+      <div className="fixed inset-0 z-0 pointer-events-none bg-[#121212]" aria-hidden="true">
         <Suspense fallback={null}>
-          <CanvasRevealEffect
-            animationSpeed={3}
-            containerClassName="bg-[#121212]"
-            colors={[STEEL_BRIGHT, STEEL]}
-            dotSize={6}
-            showGradient={false}
-          />
+          <GLSLHills width="100%" height="100%" />
         </Suspense>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(18,18,18,0.9)_0%,_rgba(18,18,18,0.55)_60%,_transparent_100%)]" />
       </div>
 
       <div className="relative z-10">
