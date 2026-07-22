@@ -26,10 +26,13 @@
    (canvas/WebGL), z pauzą przy `document.hidden` i sprzątaniem rAF.
 3. **Marka Nuconic nie może pojawić się publicznie** (strona, case, zrzuty) **przed umową IP**
    — patrz `plan-strategiczny.md` §5.2. Case opisujemy jako „firma produkcyjno-budowlana".
-4. **Każdą skończoną zmianę commituj i pushuj na `main`** (`origin` = github.com/bibaczebe/Pawel_Karol_proj).
+4. **Każdą skończoną zmianę commituj i pushuj na `main`** (`origin` = github.com/przeczkowskyy/Pawel_Karol_proj — wspólne repo Pawła i Karola).
    Komunikaty po polsku, stopka `Co-Authored-By: Claude ...`. Tożsamość gita ustawiona per-repo.
 5. Teksty strony dwujęzycznie **PL + EN** (wzorzec: obiekt `{ pl, en }` + `pick()` z `src/i18n.tsx`).
 6. Środowisko: Windows 11, PowerShell; Node 24, npm 11, Python 3.
+7. **Wzbogacaj wiedzę projektu (każde okno/sesja):** na koniec pracy zaktualizuj sekcję
+   „Stan operacyjny" (nowe decyzje, co zrobione, co dalej) i dopisz trwałe nauczki/zasady
+   tutaj. Wiedza ma się kumulować między oknami — następne okno startuje z tego pliku, nie z zera.
 
 ## Jak uruchomić
 
@@ -64,6 +67,21 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
 
 ## Stan operacyjny (aktualizuj przy zmianach!)
 
+- **2026-07-22 — decyzje founderów:**
+  - **Forma prawna:** start jako **JDG Pawła** (waliduj taniej, tani exit), konwersja do
+    **2-osobowej sp. z o.o. 50/50** przy pierwszym płatnym kliencie. Powód JDG→Paweł: potencjalny
+    zbieg z etatem (magazyn) = tylko składka zdrowotna; Karol (zlecenie + student w Nuconic) zostaje
+    poza publicznym CEIDG. Do zrobienia: **porozumienie wspólników 50/50** + 1h u radcy (wzór umowy sprintu).
+  - **Dowód bez Nuconic (WIĄŻĄCE):** nie publikujemy marki ani liczb Nuconic. Dowód budujemy z
+    **własnych DEMO na danych fikcyjnych** + 2 mini-case „rozbiórka najgorszego Excela". Żywe DEMO =
+    narzędzia **odtworzone od zera na wzór** wzorców (nie kopiowany kod).
+  - **Drugi wyróżnik (obok on-prem):** „**prawdziwie zero chmury**" (zero API do LLM, zero serwera,
+    działa w Excelu) + **determinizm** („kalkulator, nie wróżka"). Powód: on-prem już nie jest unikatem.
+  - **Konkurent-bliźniak: MALINSKI.AI** — mocny (32 narzędzia, głęboki SEO), ale AI-hype, dane i tak
+    lecą do API LLM + hosting, brak tożsamości założyciela, inna nisza (marketing/e-commerce).
+    Gramy: wąsko-głęboko w produkcji/budownictwie, determinizm, prawdziwe zero-chmury, founder-led.
+  - **Nowe pliki:** `docs/plan/plan-dzialania-karol.md`, `docs/plan/plan-dzialania-pawel.md`
+    (checklisty na dziś); `prompt-wprowadzajacy-strona.md` (brief dla okna implementacyjnego strony).
 - **2026-07-21:** domena `klarow.com` kupiona (Cloudflare). Mail: Cloudflare Email Routing
   (`kontakt@klarow.com` → prywatny Gmail) + wysyłka jako `kontakt@` przez Gmail „Wyślij jako"
   + Resend SMTP; SPF ✓, DKIM (Resend) ✓, DMARC `p=none` dodany (po ~tygodniu → `p=quarantine`).
