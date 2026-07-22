@@ -84,7 +84,6 @@ const HERO = {
       { id: "wyrozniki", label: "Wyróżniki" },
       { id: "wspolpraca", label: "Współpraca" },
       { id: "jak", label: "Dlaczego dni" },
-      { id: "dowod", label: "Dowód" },
       { id: "oferta", label: "Oferta" },
       { id: "faq", label: "FAQ" },
     ],
@@ -104,7 +103,6 @@ const HERO = {
       { id: "wyrozniki", label: "Differentiators" },
       { id: "wspolpraca", label: "How we work" },
       { id: "jak", label: "Why days" },
-      { id: "dowod", label: "Proof" },
       { id: "oferta", label: "Offer" },
       { id: "faq", label: "FAQ" },
     ],
@@ -210,11 +208,15 @@ function Pain() {
 const TOOLS_TXT = {
   pl: {
     title: "Narzędzia — wybierz dział i korzystaj",
-    sub: "Wszystkie nasze narzędzia działają na tej stronie na żywo, na danych przykładowych: klikasz, liczysz, drukujesz dokumenty — dokładnie tak, jak u klienta (lokalnie, bez chmury, bez logowania). Wybierz dział, żeby zobaczyć narzędzia.",
+    sub: "Wszystkie nasze narzędzia działają na tej stronie na żywo, na danych przykładowych: klikasz, liczysz, pobierasz dokumenty — dokładnie tak, jak u klienta (lokalnie, bez chmury, bez logowania). Wybierz dział, żeby zobaczyć narzędzia.",
+    proof:
+      "Zrobiliśmy to już od środka: ekosystem kilkunastu takich narzędzi zbudowaliśmy dla firmy produkcyjno-budowlanej (~30 równoległych projektów, klienci w USA) — ~10 000 wierszy kosztów z ERP miesięcznie, raport zarządczy w kilkanaście sekund zamiast godzin, zamknięcie ~30 projektów jednym przyciskiem i kontrola sum co do grosza.",
   },
   en: {
     title: "Tools — pick a department and use them",
-    sub: "All our tools run live on this page, on sample data: click, compute, print documents — exactly like at the client (locally, no cloud, no sign-up). Pick a department to see the tools.",
+    sub: "All our tools run live on this page, on sample data: click, compute, download documents — exactly like at the client (locally, no cloud, no sign-up). Pick a department to see the tools.",
+    proof:
+      "We've already done this from the inside: we built an ecosystem of a dozen-plus such tools for a manufacturing-and-construction company (~30 parallel projects, US clients) — ~10,000 ERP cost rows a month, a board report in seconds instead of hours, ~30 projects closed with one click and totals controlled to the cent.",
   },
 };
 
@@ -223,6 +225,12 @@ function Tools() {
   const t = pick(lang, TOOLS_TXT);
   return (
     <Section title={t.title} sub={t.sub}>
+      <p
+        className="mb-6 max-w-3xl text-[13px] leading-relaxed -mt-3"
+        style={{ color: "var(--accent-foreground)" }}
+      >
+        {t.proof}
+      </p>
       <ToolsGrid />
     </Section>
   );
@@ -285,48 +293,6 @@ function How() {
             <s.icon size={20} style={{ color: "var(--primary)" }} />
             <h3 className="mt-3 text-[14px] font-bold" style={{ color: "var(--heading)" }}>{s.title}</h3>
             <p className="mt-2 text-[12.5px] leading-relaxed" style={{ color: "var(--muted-foreground)" }}>{s.body}</p>
-          </div>
-        ))}
-      </div>
-    </Section>
-  );
-}
-
-/* ── DOWÓD ── */
-const PROOF = {
-  pl: {
-    title: "Zrobiliśmy to już od środka",
-    sub: "Ekosystem kilkunastu narzędzi zbudowany dla firmy produkcyjno-budowlanej (~30 równoległych projektów, klienci w USA). Kilka twardych liczb — realne zrzuty ekranu z wdrożeń pojawią się tu wkrótce:",
-    items: [
-      { val: "~10 000", lbl: "wierszy kosztów z ERP", foot: "importowanych i klasyfikowanych automatycznie co miesiąc" },
-      { val: "kilkanaście s", lbl: "raport dla zarządu", foot: "zamiast godzin ręcznego składania" },
-      { val: "~30 projektów", lbl: "zamknięcie wersji", foot: "opublikowanych w kilkanaście sekund" },
-      { val: "co do grosza", lbl: "kontrola sum", foot: "przy tygodniowych zmianach rzędu 1 mln zł" },
-    ],
-  },
-  en: {
-    title: "We've already done this from the inside",
-    sub: "An ecosystem of a dozen-plus tools built for a manufacturing-and-construction company (~30 parallel projects, US clients). A few hard numbers — real deployment screenshots coming soon:",
-    items: [
-      { val: "~10,000", lbl: "cost rows from the ERP", foot: "imported and classified automatically every month" },
-      { val: "seconds", lbl: "board report", foot: "instead of hours of manual assembly" },
-      { val: "~30 projects", lbl: "version close", foot: "published in seconds" },
-      { val: "to the cent", lbl: "totals control", foot: "with weekly deltas around PLN 1M" },
-    ],
-  },
-};
-
-function Proof() {
-  const { lang } = useLang();
-  const t = pick(lang, PROOF);
-  return (
-    <Section title={t.title} sub={t.sub}>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {t.items.map((p) => (
-          <div key={p.lbl} className="card stat">
-            <div className="lbl">{p.lbl}</div>
-            <div className="val" style={{ fontSize: "clamp(18px,1.1vw + 12px,26px)" }}>{p.val}</div>
-            <div className="foot">{p.foot}</div>
           </div>
         ))}
       </div>
@@ -610,14 +576,18 @@ const SLIDES: { id: string; label: { pl: string; en: string } }[] = [
   { id: "wyrozniki", label: { pl: "Wyróżniki", en: "Differentiators" } },
   { id: "wspolpraca", label: { pl: "Współpraca", en: "How we work" } },
   { id: "jak", label: { pl: "Dlaczego dni", en: "Why days" } },
-  { id: "dowod", label: { pl: "Dowód", en: "Proof" } },
   { id: "dla-kogo", label: { pl: "Dla kogo", en: "Who it's for" } },
   { id: "oferta", label: { pl: "Oferta", en: "Offer" } },
   { id: "faq", label: { pl: "FAQ", en: "FAQ" } },
 ];
 
 /* aliasy starych/pomocniczych hashy → indeks slajdu */
-const HASH_ALIAS: Record<string, string> = { moduly: "narzedzia", kontakt: "oferta", demo: "narzedzia" };
+const HASH_ALIAS: Record<string, string> = {
+  moduly: "narzedzia",
+  kontakt: "oferta",
+  demo: "narzedzia",
+  dowod: "narzedzia", // sekcja Dowód złożona do nagłówka Narzędzi (2026-07-22)
+};
 
 const slideIndexFromHash = (hash: string): number => {
   const raw = hash.replace(/^#/, "");
@@ -681,7 +651,6 @@ function Landing({
     <DiffSection />,
     <Collaboration />,
     <How />,
-    <Proof />,
     <ForWhom />,
     <TrustOffer onBook={onBook} />,
     <FaqSection />,

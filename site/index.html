@@ -18,6 +18,26 @@
     <meta property="og:url" content="https://klarow.com/" />
     <link rel="canonical" href="https://klarow.com/" />
     <title>Klarow — automatyzacja danych. Wdrożenie w dni, nie w miesiące.</title>
+    <script>
+      /* Samonaprawa po nieaktualnym cache (objaw: "strona tylko z tłem" /
+         pusta na telefonie): stary index.html z cache woła zahashowane
+         assety, których po nowym deployu już nie ma. Gdy skrypt lub arkusz
+         się nie załaduje — JEDNORAZOWO przeładuj stronę, omijając cache
+         (nagłówki wymuszą pobranie świeżego HTML). */
+      window.addEventListener(
+        "error",
+        function (e) {
+          var t = e.target;
+          if (!t || (t.tagName !== "SCRIPT" && t.tagName !== "LINK")) return;
+          try {
+            if (sessionStorage.getItem("kl-cache-heal")) return;
+            sessionStorage.setItem("kl-cache-heal", "1");
+          } catch (_) {}
+          location.reload();
+        },
+        true
+      );
+    </script>
   </head>
   <body>
     <div id="root"></div>

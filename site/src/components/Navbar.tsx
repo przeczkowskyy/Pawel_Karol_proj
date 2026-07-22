@@ -13,14 +13,12 @@ const LINKS_I18N = {
     { label: "Narzędzia", to: "/#narzedzia" },
     { label: "Wyróżniki", to: "/#wyrozniki" },
     { label: "Współpraca", to: "/#wspolpraca" },
-    { label: "Dowód", to: "/#dowod" },
     { label: "FAQ", to: "/#faq" },
   ],
   en: [
     { label: "Tools", to: "/#narzedzia" },
     { label: "Differentiators", to: "/#wyrozniki" },
     { label: "How we work", to: "/#wspolpraca" },
-    { label: "Proof", to: "/#dowod" },
     { label: "FAQ", to: "/#faq" },
   ],
 };
