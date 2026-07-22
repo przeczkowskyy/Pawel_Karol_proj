@@ -16,13 +16,14 @@ import {
   Check,
   X as XIcon,
   Phone,
+  Mail,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import BookingModal, { PHONE_DISPLAY, PHONE_HREF } from "@/components/BookingModal";
 import CollaborationFlow from "@/components/CollaborationFlow";
 import Differentiators from "@/components/Differentiators";
 import Faq from "@/components/Faq";
-import ModulesGrid from "@/components/ModulesGrid";
+import ToolsGrid from "@/components/ToolsGrid";
 import SlideDeck, { type SlideDef } from "@/components/SlideDeck";
 import ModulePage from "@/pages/ModulePage";
 import { useLang, pick } from "@/i18n";
@@ -78,14 +79,13 @@ const HERO = {
     ctaModules: "Zobacz moduły",
     qualifier: "Dla firm 20–250 osób · środowisko Windows + Excel · narzędzia działają on-premise, u Ciebie",
     quickNav: [
-      { id: "moduly", label: "Moduły" },
+      { id: "narzedzia", label: "Narzędzia" },
       { id: "wyrozniki", label: "Wyróżniki" },
       { id: "wspolpraca", label: "Współpraca" },
       { id: "jak", label: "Dlaczego dni" },
       { id: "dowod", label: "Dowód" },
       { id: "oferta", label: "Oferta" },
       { id: "faq", label: "FAQ" },
-      { id: "kontakt", label: "Kontakt" },
     ],
   },
   en: {
@@ -99,14 +99,13 @@ const HERO = {
     ctaModules: "See the modules",
     qualifier: "For companies of 20–250 people · Windows + Excel environment · tools run on-premise, at your site",
     quickNav: [
-      { id: "moduly", label: "Modules" },
+      { id: "narzedzia", label: "Tools" },
       { id: "wyrozniki", label: "Differentiators" },
       { id: "wspolpraca", label: "How we work" },
       { id: "jak", label: "Why days" },
       { id: "dowod", label: "Proof" },
       { id: "oferta", label: "Offer" },
       { id: "faq", label: "FAQ" },
-      { id: "kontakt", label: "Contact" },
     ],
   },
 };
@@ -206,24 +205,24 @@ function Pain() {
   );
 }
 
-/* ── MODUŁY (oś problemowa, dział jako filtr) ── */
-const MODULES_TXT = {
+/* ── NARZĘDZIA (interaktywne dashboardy — w budowie) ── */
+const TOOLS_TXT = {
   pl: {
-    title: "Moduły — zacznij od swojego problemu",
-    sub: "Każda karta to jeden problem i sprawdzony wzorzec, który go zdejmuje: co dostajesz, ile zyskujesz i w ile dni. Dział to tylko filtr — kliknij kartę, żeby zobaczyć szczegóły wdrożenia.",
+    title: "Narzędzia — zobacz je w akcji, nie na slajdzie",
+    sub: "Przenosimy nasze dashboardy kontrolingu, importów i produkcji wprost na tę stronę — z pełną funkcjonalnością, na danych przykładowych. Klikasz, filtrujesz, eksportujesz — dokładnie tak, jak działają u klienta (lokalnie, bez chmury). Pierwsze interaktywne narzędzia pojawiają się tu w tej chwili.",
   },
   en: {
-    title: "Modules — start from your problem",
-    sub: "Each card is one problem and a proven pattern that removes it: what you get, what you gain and in how many days. Department is just a filter — click a card for deployment details.",
+    title: "Tools — see them in action, not on a slide",
+    sub: "We bring our controlling, import and production dashboards straight onto this page — fully functional, on sample data. Click, filter, export — exactly how they run at the client (locally, no cloud). The first interactive tools are landing here right now.",
   },
 };
 
-function Modules() {
+function Tools() {
   const { lang } = useLang();
-  const t = pick(lang, MODULES_TXT);
+  const t = pick(lang, TOOLS_TXT);
   return (
     <Section title={t.title} sub={t.sub}>
-      <ModulesGrid />
+      <ToolsGrid />
     </Section>
   );
 }
@@ -543,10 +542,13 @@ function FaqSection() {
 
 /* ── STOPKA ── */
 const FOOT = {
-  pl: { tagline: "Automatyzacja i porządek w danych dla MŚP · Polska / USA", note: "© 2026 Klarow · strona robocza v0.5" },
-  en: { tagline: "Automation and order in SME data · Poland / USA", note: "© 2026 Klarow · working draft v0.5" },
+  pl: { tagline: "Automatyzacja i porządek w danych dla MŚP · Polska / USA", note: "© 2026 Klarow · strona robocza v0.7" },
+  en: { tagline: "Automation and order in SME data · Poland / USA", note: "© 2026 Klarow · working draft v0.7" },
 };
 
+const EMAIL = "kontakt@klarow.com";
+
+/* pełna stopka — dla podstron narzędzi/modułów (normalny scroll dokumentu) */
 function Footer() {
   const { lang } = useLang();
   const t = pick(lang, FOOT);
@@ -565,10 +567,34 @@ function Footer() {
           <a className="text-sm font-bold inline-flex items-center gap-2" style={{ color: "var(--accent-foreground)" }} href={PHONE_HREF}>
             <Phone size={14} /> {PHONE_DISPLAY}
           </a>
-          <a className="text-sm font-bold" style={{ color: "var(--accent-foreground)" }} href="mailto:kontakt@klarow.com">
-            kontakt@klarow.com
+          <a className="text-sm font-bold" style={{ color: "var(--accent-foreground)" }} href={`mailto:${EMAIL}`}>
+            {EMAIL}
           </a>
           <p className="text-xs" style={{ color: "var(--muted-foreground)" }}>{t.note}</p>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+/* stała, slim stopka landingu (deck) — kontakt ZAWSZE widoczny na dole ekranu */
+function FooterBar() {
+  const { lang } = useLang();
+  const t = pick(lang, FOOT);
+  return (
+    <footer className="deck-footer" aria-label={lang === "pl" ? "Stopka i kontakt" : "Footer and contact"}>
+      <div className="deck-footer-inner">
+        <div className="deck-footer-brand">
+          <span className="brand-word" style={{ fontSize: 12 }}>KLAROW</span>
+          <span className="deck-footer-tag">{t.tagline}</span>
+        </div>
+        <div className="deck-footer-contact">
+          <a href={PHONE_HREF}>
+            <Phone size={13} style={{ color: "var(--primary)" }} /> {PHONE_DISPLAY}
+          </a>
+          <a href={`mailto:${EMAIL}`} className="deck-footer-email">
+            <Mail size={13} style={{ color: "var(--primary)" }} /> {EMAIL}
+          </a>
         </div>
       </div>
     </footer>
@@ -579,7 +605,7 @@ function Footer() {
 const SLIDES: { id: string; label: { pl: string; en: string } }[] = [
   { id: "start", label: { pl: "Start", en: "Start" } },
   { id: "bol", label: { pl: "Znasz to?", en: "Sound familiar?" } },
-  { id: "moduly", label: { pl: "Moduły", en: "Modules" } },
+  { id: "narzedzia", label: { pl: "Narzędzia", en: "Tools" } },
   { id: "wyrozniki", label: { pl: "Wyróżniki", en: "Differentiators" } },
   { id: "wspolpraca", label: { pl: "Współpraca", en: "How we work" } },
   { id: "jak", label: { pl: "Dlaczego dni", en: "Why days" } },
@@ -587,11 +613,15 @@ const SLIDES: { id: string; label: { pl: string; en: string } }[] = [
   { id: "dla-kogo", label: { pl: "Dla kogo", en: "Who it's for" } },
   { id: "oferta", label: { pl: "Oferta", en: "Offer" } },
   { id: "faq", label: { pl: "FAQ", en: "FAQ" } },
-  { id: "kontakt", label: { pl: "Kontakt", en: "Contact" } },
 ];
 
+/* aliasy starych/pomocniczych hashy → indeks slajdu */
+const HASH_ALIAS: Record<string, string> = { moduly: "narzedzia", kontakt: "oferta", demo: "narzedzia" };
+
 const slideIndexFromHash = (hash: string): number => {
-  const i = SLIDES.findIndex((s) => `#${s.id}` === hash);
+  const raw = hash.replace(/^#/, "");
+  const id = HASH_ALIAS[raw] ?? raw;
+  const i = SLIDES.findIndex((s) => s.id === id);
   return i >= 0 ? i : 0;
 };
 
@@ -613,6 +643,13 @@ function Landing({
   useEffect(() => {
     if (hash) setActive(slideIndexFromHash(hash));
   }, [hash]);
+
+  /* KLAROW w navbarze → powrót na pierwszy slajd (gdy już jesteśmy na landingu) */
+  useEffect(() => {
+    const home = () => setActive(0);
+    window.addEventListener("klarow:home", home);
+    return () => window.removeEventListener("klarow:home", home);
+  }, []);
 
   /* slajd → zoom tła + hash w pasku adresu (replaceState — bez śmiecenia historią) */
   useEffect(() => {
@@ -639,7 +676,7 @@ function Landing({
   const nodes: React.ReactNode[] = [
     <Hero onBook={onBook} onGoTo={goTo} />,
     <Pain />,
-    <Modules />,
+    <Tools />,
     <DiffSection />,
     <Collaboration />,
     <How />,
@@ -647,7 +684,6 @@ function Landing({
     <ForWhom />,
     <TrustOffer onBook={onBook} />,
     <FaqSection />,
-    <Footer />,
   ];
 
   const slides: SlideDef[] = SLIDES.map((s, i) => ({
@@ -657,12 +693,15 @@ function Landing({
   }));
 
   return (
-    <SlideDeck
-      slides={slides}
-      active={active}
-      onNavigate={setActive}
-      dotsLabel={lang === "pl" ? "Nawigacja sekcji" : "Section navigation"}
-    />
+    <>
+      <SlideDeck
+        slides={slides}
+        active={active}
+        onNavigate={setActive}
+        dotsLabel={lang === "pl" ? "Nawigacja sekcji" : "Section navigation"}
+      />
+      <FooterBar />
+    </>
   );
 }
 

@@ -51,6 +51,7 @@
 .slide-scroll {
   height: 100%;
   overflow-y: auto;
+  overflow-x: hidden;
   overscroll-behavior: contain;
   scrollbar-width: none; /* pasek scrolla psułby iluzję statycznej sceny */
 }
@@ -63,11 +64,89 @@
   flex-direction: column;
 }
 /* margin:auto centruje treść, gdy się mieści, i NIE obcina góry, gdy jest
-   wyższa niż viewport (grid/flex place-center obcinałby) */
+   wyższa niż viewport (grid/flex place-center obcinałby).
+   Padding skaluje się z wysokością ekranu: góra = pływający navbar,
+   dół = stała stopka (.deck-footer). */
 .slide-content {
   margin: auto 0;
   width: 100%;
-  padding: 96px 0 44px; /* góra: pływający navbar */
+  padding: clamp(84px, 12vh, 120px) 0 clamp(72px, 10vh, 104px);
+}
+@media (max-width: 640px) {
+  .slide-content {
+    padding: 78px 0 68px;
+  }
+}
+
+/* ── stała stopka landingu (kontakt zawsze na dole) ── */
+.deck-footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 35;
+  border-top: 1px solid var(--border);
+  background: var(--background); /* opaque — sticky/fixed nie przepuszcza sceny */
+}
+.deck-footer-inner {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 9px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.deck-footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.deck-footer-tag {
+  font-size: 11px;
+  color: var(--muted-foreground);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.deck-footer-contact {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 0 0 auto;
+}
+.deck-footer-contact a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--accent-foreground);
+  white-space: nowrap;
+  transition: color var(--motion);
+}
+.deck-footer-contact a:hover {
+  color: var(--heading);
+}
+@media (max-width: 640px) {
+  .deck-footer-inner {
+    padding: 7px 14px;
+    gap: 10px;
+  }
+  .deck-footer-tag {
+    display: none;
+  }
+  .deck-footer-contact {
+    gap: 14px;
+  }
+  .deck-footer-contact a {
+    font-size: 12px;
+  }
+  /* na wąskim ekranie zostaw sam telefon (klik = połączenie), e-mail chowamy */
+  .deck-footer-contact a.deck-footer-email {
+    display: none;
+  }
 }
 
 /* kropki nawigacyjne — jedyny stały wskaźnik pozycji (nie ma paska scrolla) */
