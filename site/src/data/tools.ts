@@ -50,7 +50,7 @@ export interface ToolBase {
   category: ToolCategory;
   status: ToolStatus;
   /* klucz osadzonego dashboardu (tylko dla status:"live") */
-  dashboard?: "report" | "production" | "quality" | "timeline" | "payments";
+  dashboard?: "report" | "production" | "quality" | "timeline" | "payments" | "reconciliation" | "g703";
   i18n: { pl: ToolText; en: ToolText };
 }
 
@@ -193,7 +193,8 @@ const BASE: ToolBase[] = [
     slug: "import-z-rekoncyliacja",
     icon: Database,
     category: "import-danych",
-    status: "preview",
+    status: "live",
+    dashboard: "reconciliation",
     i18n: {
       pl: {
         name: "Import z rekoncyliacją",
@@ -343,7 +344,8 @@ const BASE: ToolBase[] = [
     slug: "billing-us-g703",
     icon: Landmark,
     category: "platnosci",
-    status: "soon",
+    status: "live",
+    dashboard: "g703",
     i18n: {
       pl: {
         name: "Fakturowanie US (AIA G703)",

@@ -8,6 +8,8 @@ import ProductionDashboard from "@/components/dashboards/ProductionDashboard";
 import QualityGate from "@/components/dashboards/QualityGate";
 import TaskTimeline from "@/components/dashboards/TaskTimeline";
 import PaymentCalculator from "@/components/dashboards/PaymentCalculator";
+import ImportReconciliation from "@/components/dashboards/ImportReconciliation";
+import G703Billing from "@/components/dashboards/G703Billing";
 
 /* Podstrona narzędzia /narzedzia/:slug — opis + OSADZONY interaktywny dashboard
    (dla status:"live"). Normalny scroll dokumentu (poza deckiem landingu).
@@ -146,6 +148,8 @@ export default function ToolPage({ onBook }: { onBook: () => void }) {
           {tool.dashboard === "quality" && <QualityGate />}
           {tool.dashboard === "timeline" && <TaskTimeline />}
           {tool.dashboard === "payments" && <PaymentCalculator />}
+          {tool.dashboard === "reconciliation" && <ImportReconciliation />}
+          {tool.dashboard === "g703" && <G703Billing />}
         </div>
       )}
 
