@@ -78,14 +78,17 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
   - `src/data/tools.ts` — katalog 12 narzędzi (PL/EN): **`dept` (5 działów: kontroling,
     finanse, produkcja, dane, administracja)**, `category`, `dashboard` (klucz komponentu),
     tagline/replaces/io/bullets. **Odbrandowane** odtworzenie z bazy blueprintów.
-  - `src/components/ToolsGrid.tsx` — **drill-down**: poziom 1 = boxy działów, poziom 2 =
-    narzędzia wybranego działu.
+  - `src/components/ToolsGrid.tsx` — **drill-down**: poziom 1 = boxy działów (ikony
+    domenowe: BarChart3/Banknote/HardHat/FileSpreadsheet/Stamp), poziom 2 = **karuzela
+    orbitalna** narzędzi działu (`radial-orbital-timeline` — wrócił z zapasu; klik węzła →
+    karta → podstrona); na mobile (≤768px) fallback do gridu.
   - `src/pages/ToolPage.tsx` — podstrona narzędzia: OSADZONY dashboard (mapa `DASHBOARDS`)
     + opis + crosslinki + Seo per podstrona.
-  - **Wydruk dokumentów:** `dashboards/PrintButton.tsx` + print-CSS w `globals.css`
-    (`.print-area` = jedyny widoczny przy druku, zawsze czarno na białym; `.print-only` =
-    nagłówek dokumentu). Drukują: plan płatności, podsumowanie tygodnia PM, raport
-    importu, protokół robocizny, rejestr umów.
+  - **Dokumenty PDF (pobieranie, nie okno druku):** `lib/pdf.ts` (pdfmake lazy-chunk,
+    wbudowane polskie znaki; dokument A4 jednostronicowy: nagłówek KLAROW, meta, tabela,
+    stopka DEMO, opcjonalne podpisy) + `dashboards/PdfButton.tsx`. Pobierają: protokół
+    robocizny, plan płatności, raport importu, podsumowanie tygodnia PM, rejestr umów.
+  - **Skalowanie:** root `zoom` 1.08 od 1500px / 1.18 od 1900px (globals.css).
   - **SEO:** `src/components/Seo.tsx` (title/description/canonical/OG/JSON-LD per strona;
     `ORG_JSONLD` na landingu, `toolJsonLd` per narzędzie), `public/robots.txt`,
     `public/sitemap.xml` (**aktualizuj przy dodaniu narzędzia!**), meta w `index.html`.
@@ -121,6 +124,13 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
 
 ## Stan operacyjny (aktualizuj przy zmianach!)
 
+- **2026-07-22 (sesja strony, cz. 6) — PDF, karuzela orbitalna, skalowanie, mobile:**
+  - **Dokumenty → pobieranie PDF** (pdfmake, lazy ~830 KB gz ładowane przy kliknięciu;
+    polskie znaki wbudowane; dokument projektowany na 1 stronę A4). Print-CSS usunięty.
+  - **Zakładka Narzędzia dynamiczniej:** poziom 2 = karuzela orbitalna narzędzi działu
+    (powrót komponentu z v0.4, link → /narzedzia/, energy=0 ukrywa pasek gotowości);
+    mobile = grid. Czytelniejsze ikony działów.
+  - Lekki zoom całej strony na dużych ekranach; KPI w dashboardach responsywne na mobile.
 - **2026-07-22 (sesja strony, cz. 5) — komplet 12/12 narzędzi + działy + wydruk + SEO:**
   - **Decyzje Karola:** zero statusów („każde narzędzie musi działać na żywo, zawsze DEMO
     dane"); zakładka Narzędzia = najpierw **boxy działów** (drill-down); **wydruk
