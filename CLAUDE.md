@@ -61,22 +61,30 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
 
 ## Architektura strony (`site/`)
 
-- `src/App.tsx` — wszystkie sekcje landingu (hero → ból → moduły → **żywe DEMO M2** →
-  **wyróżniki** → współpraca → jak → dowód → dla kogo → oferta → FAQ → stopka) + routing
-  (`/`, `/moduly/:slug`) + modal rezerwacji.
+- **Landing = motion-graphic DECK (v0.6):** strona jest **statyczna — dokument się nie
+  scrolluje**. Gest scrolla / swipe / klawiatura przełącza 11 sekcji-slajdów
+  (`src/components/SlideDeck.tsx`) z przejściem zoom+fade (archetyp Premium ze skilla
+  `motion-design`: wyjście 420 ms accelerate, wejście 600 ms decelerate z opóźnieniem
+  120 ms; CSS w `src/styles/globals.css`). Slajd wyższy niż viewport scrolluje się
+  **wewnętrznie** (`.slide-scroll`) — deck przełącza dopiero od krawędzi treści. Hash ↔
+  slajd zsynchronizowane (navbar i podstrony działają); hero ma rząd przycisków szybkiej
+  nawigacji. Kolejność: start → ból → moduły → wyróżniki → współpraca → jak → dowód →
+  dla-kogo → oferta → faq → kontakt (lista `SLIDES` w `App.tsx`).
+- `src/App.tsx` — definicje sekcji + deck + routing (`/`, `/moduly/:slug`) + modal rezerwacji.
 - `src/data/modules.ts` — **jedno źródło danych modułów M1–M8** (PL+EN: `problem` w głosie
   klienta, opisy, korzyści, statusy, `dept` jako filtr, powiązania). Zrzuty ekranu:
   `public/screens/` (na razie `placeholder.svg`).
-- **DEMO M2 (sekcja `#demo`)** — `src/lib/report.ts` (deterministyczny silnik: parseCsv +
-  agregacje, czyste funkcje, spec: `docs/plan/demo-m2-spec.md`), `src/data/demo-sample.ts`
-  (fikcyjne 7×5 pozycji, identyczne liczby PL/EN), `src/components/DemoReport.tsx`
-  (wklej/wgraj/przykład → 3 KPI + wykres per-etap SVG + tabela + „ścieżka wyliczenia").
 - `src/components/` — `ModulesGrid` (oś problemowa modułów + filtr działów, auto-animate),
   `Differentiators` (zero chmury + determinizm + blok ✕/✓ + galeria before/after),
   `Navbar` (przełącznik PL/EN), `BookingModal` (kalendarz → mailto/tel; **do podmiany na
   embed Cal.com**, gdy founderzy podadzą link), `CollaborationFlow` (schemat blokowy SVG), `Faq`.
-- `src/components/ui/` — porty 21st.dev przemalowane na stal: `glsl-hills` (tło całej strony),
-  `radial-orbital-timeline` i `canvas-reveal-effect` (**nieużywane, zapas** — poza bundlem).
+- `src/components/ui/glsl-hills.tsx` — tło całej strony (three.js, spowolnione `speed=0.2`);
+  prop `zoomRef` = docelowy zoom kamery mutowany przez deck (płynne dojście w pętli renderu,
+  bez remontu sceny WebGL) — tło „wjeżdża w głąb" z każdym slajdem.
+- **Zapas (nieużywane, poza bundlem):** `DemoReport.tsx` + `lib/report.ts` +
+  `data/demo-sample.ts` (żywe DEMO M2 zdjęte ze strony 2026-07-22 — dowodem będą realne
+  narzędzia; silnik CSV→raport gotowy do reużycia, spec: `docs/plan/demo-m2-spec.md`),
+  `radial-orbital-timeline`, `canvas-reveal-effect`.
 - `src/styles/company-ui.css` — **kopia kitu** (aktualizacja = nadpisanie NAD markerem
   APP-SPECIFIC świeżą kopią z `ui-kit/.../app.css` + zamiana ścieżek fontów na `/fonts/`).
 - `public/_redirects` — SPA-fallback dla podstron na Cloudflare Pages/Netlify.
@@ -84,6 +92,18 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
 
 ## Stan operacyjny (aktualizuj przy zmianach!)
 
+- **2026-07-22 (sesja strony, cz. 2) — landing v0.6: motion-graphic deck (decyzja Karola):**
+  - Strona przerobiona na **statyczny deck** (zero scrolla dokumentu): scroll/swipe/klawiatura
+    przełącza sekcje-slajdy z przejściem zoom+fade; tło GLSL Hills spowolnione i robi zoom
+    w głąb per slajd; hero dostał przyciski szybkiej nawigacji; kropki sekcji po prawej.
+  - **Żywe DEMO M2 zdjęte ze strony** — dowodem będą realne narzędzia, które Karol dostarczy
+    (komponenty i silnik zostają w repo jako zapas do reużycia).
+  - Zainstalowany skill **`motion-design`** (LottieFiles, wendorowany w `.claude/skills/`) —
+    używać przy KAŻDEJ pracy nad animacjami/przejściami na stronie i w narzędziach.
+  - **Plugin z mcpmarket NIE zainstalowany** — link instalacyjny wygasł (skrypt zwraca
+    „invalid or expired"); Karol ma wygenerować świeży link albo podać nazwę serwera MCP.
+  - Do zweryfikowania wizualnie na dev: przejścia na telefonie (swipe), zachowanie długich
+    slajdów (FAQ/Moduły) na małych ekranach.
 - **2026-07-22 (sesja strony) — landing v0.5 wdrożony na `main`:**
   - **Sekcja „Moduły" przerobiona na oś problemową** (karta = problem w głosie klienta →
     co dostajesz → co zyskujesz → dni → status; dział tylko jako filtr) — `ModulesGrid`.
