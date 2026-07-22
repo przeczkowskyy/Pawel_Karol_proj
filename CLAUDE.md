@@ -78,10 +78,12 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
   - `src/data/tools.ts` — katalog 12 narzędzi (PL/EN): **`dept` (5 działów: kontroling,
     finanse, produkcja, dane, administracja)**, `category`, `dashboard` (klucz komponentu),
     tagline/replaces/io/bullets. **Odbrandowane** odtworzenie z bazy blueprintów.
-  - `src/components/ToolsGrid.tsx` — **drill-down**: poziom 1 = boxy działów (ikony
-    domenowe: BarChart3/Banknote/HardHat/FileSpreadsheet/Stamp), poziom 2 = **karuzela
-    orbitalna** narzędzi działu (`radial-orbital-timeline` — wrócił z zapasu; klik węzła →
-    karta → podstrona); na mobile (≤768px) fallback do gridu.
+  - `src/components/ToolsGrid.tsx` — **drill-down**: poziom 1 = **pas kolumn działów**
+    (JEDEN panel na scrimie, działy jako kolumny rozdzielone strukturalnymi liniami 1px —
+    celowo nie boxy; ikony domenowe BarChart3/Banknote/HardHat/FileSpreadsheet/Stamp;
+    separatory `.tools-strip` w globals.css), poziom 2 = siatka kart narzędzi działu.
+    **Karuzela orbitalna testowana i USUNIĘTA decyzją Karola** (2026-07-22 wieczór) —
+    `radial-orbital-timeline` znowu tylko zapas.
   - `src/pages/ToolPage.tsx` — podstrona narzędzia: OSADZONY dashboard (mapa `DASHBOARDS`)
     + opis + crosslinki + Seo per podstrona.
   - **Dokumenty PDF (pobieranie, nie okno druku):** `lib/pdf.ts` (pdfmake lazy-chunk,
@@ -124,13 +126,18 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
 
 ## Stan operacyjny (aktualizuj przy zmianach!)
 
-- **2026-07-22 (sesja strony, cz. 6) — PDF, karuzela orbitalna, skalowanie, mobile:**
+- **2026-07-22 (sesja strony, cz. 6) — PDF, iteracje UI Narzędzi, skalowanie, mobile:**
   - **Dokumenty → pobieranie PDF** (pdfmake, lazy ~830 KB gz ładowane przy kliknięciu;
     polskie znaki wbudowane; dokument projektowany na 1 stronę A4). Print-CSS usunięty.
-  - **Zakładka Narzędzia dynamiczniej:** poziom 2 = karuzela orbitalna narzędzi działu
-    (powrót komponentu z v0.4, link → /narzedzia/, energy=0 ukrywa pasek gotowości);
-    mobile = grid. Czytelniejsze ikony działów.
+  - **Iteracja UI Narzędzi:** karuzela orbitalna na poziomie 2 wdrożona → **cofnięta tego
+    samego dnia decyzją Karola** („usuń te koła") — finalnie: poziom 1 = pas KOLUMN
+    działów (nie boxy), poziom 2 = siatka kart. Czytelniejsze ikony działów.
   - Lekki zoom całej strony na dużych ekranach; KPI w dashboardach responsywne na mobile.
+  - **Bug „klarow.com na telefonie = samo tło":** zdiagnozowane jako stary `index.html`
+    z cache przeglądarki wołający purge'owane assety (SPA-fallback oddaje im HTML).
+    Fix: `public/_headers` — HTML `no-cache`, `/assets/*` + `/fonts/*` `immutable`.
+    Telefon Karola naprawi się po następnym wejściu z odświeżeniem (stary wpis cache
+    wygaśnie); jeśli nie — otworzyć w oknie prywatnym dla potwierdzenia diagnozy.
 - **2026-07-22 (sesja strony, cz. 5) — komplet 12/12 narzędzi + działy + wydruk + SEO:**
   - **Decyzje Karola:** zero statusów („każde narzędzie musi działać na żywo, zawsze DEMO
     dane"); zakładka Narzędzia = najpierw **boxy działów** (drill-down); **wydruk
