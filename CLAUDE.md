@@ -155,6 +155,14 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
     fixed/inset-0/z-*) — treść stoi nawet gdy @layer/@property wypadną. Tryb
     diagnostyczny `klarow.com/?debug=1` (błędy + stan .deck/.slide + sondy
     inset/@layer/@property na ekranie). **Jeśli telefon dalej czarny → zrzut ?debug=1.**
+  - **Śledztwo Cloudflare (na prośbę Karola, curl produkcji): CF CZYSTY** — serwuje
+    najnowszy build (jest `.bg-layer`, longhandy `.deck`, oklch=0), nagłówki no-cache
+    działają. Problem siedzi po stronie telefonu. Podejrzany nr 1: **zawieszona stara
+    karta w Chrome iOS** (dziesiątki otwartych kart — telefon wznawia zamrożony stary
+    widok zamiast świeżego ładowania). Instrukcja: zamknąć wszystkie karty klarow.com,
+    otworzyć NOWĄ; spróbować też w Safari; ostatecznie zrzut z `?debug=1`.
+  - **Favicon:** logo „K" (stal) od Karola — favicon.ico + apple-touch-icon +
+    og:image (Logo.zip → site/public/).
 - **2026-07-22 (sesja strony, cz. 5) — komplet 12/12 narzędzi + działy + wydruk + SEO:**
   - **Decyzje Karola:** zero statusów („każde narzędzie musi działać na żywo, zawsze DEMO
     dane"); zakładka Narzędzia = najpierw **boxy działów** (drill-down); **wydruk
