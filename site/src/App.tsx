@@ -21,14 +21,18 @@ import Navbar from "@/components/Navbar";
 import BookingModal, { PHONE_DISPLAY, PHONE_HREF } from "@/components/BookingModal";
 import CollaborationFlow from "@/components/CollaborationFlow";
 import DemoReport from "@/components/DemoReport";
+import Differentiators from "@/components/Differentiators";
 import Faq from "@/components/Faq";
 import ModulesGrid from "@/components/ModulesGrid";
 import ModulePage from "@/pages/ModulePage";
 import { useLang, pick } from "@/i18n";
 
-/* Landing Klarow v0.4 — dark-only, PL/EN. Tło: GLSL Hills (wzgórza z szumu
+/* Landing Klarow v0.5 — dark-only, PL/EN. Tło: GLSL Hills (wzgórza z szumu
    Perlina w stali, lazy chunk z three.js) jako warstwa fixed pod CAŁĄ stroną;
-   treść na z-10. Komponenty i tokeny: kit company-ui, Tailwind do layoutu. */
+   treść na z-10. Komponenty i tokeny: kit company-ui, Tailwind do layoutu.
+   Sekcje: hero → ból → moduły (oś problemowa) → żywe DEMO M2 → wyróżniki
+   (zero chmury + determinizm) → współpraca → jak → dowód → dla kogo →
+   oferta → FAQ → stopka. */
 
 const GLSLHills = lazy(() =>
   import("@/components/ui/glsl-hills").then((m) => ({ default: m.GLSLHills }))
@@ -348,6 +352,28 @@ function Demo() {
   );
 }
 
+/* ── WYRÓŻNIKI (zero chmury + determinizm) ── */
+const DIFF_TXT = {
+  pl: {
+    title: "Dwa twarde wyróżniki: zero chmury i zero wróżenia",
+    sub: "„On-premise” deklaruje dziś każdy. My idziemy krok dalej — narzędzie nie ma nawet którędy wysłać Twoich danych, a każdą liczbę możesz policzyć ręcznie.",
+  },
+  en: {
+    title: "Two hard differentiators: zero cloud, zero fortune-telling",
+    sub: "Everyone claims “on-premise” these days. We go one step further — the tool has no way to send your data anywhere, and you can verify every number by hand.",
+  },
+};
+
+function DiffSection() {
+  const { lang } = useLang();
+  const t = pick(lang, DIFF_TXT);
+  return (
+    <Section id="wyrozniki" title={t.title} sub={t.sub}>
+      <Differentiators />
+    </Section>
+  );
+}
+
 /* ── DLA KOGO ── */
 const FIT = {
   pl: {
@@ -535,8 +561,8 @@ function FaqSection() {
 
 /* ── STOPKA ── */
 const FOOT = {
-  pl: { tagline: "Automatyzacja i porządek w danych dla MŚP · Polska / USA", note: "© 2026 Klarow · strona robocza v0.3" },
-  en: { tagline: "Automation and order in SME data · Poland / USA", note: "© 2026 Klarow · working draft v0.3" },
+  pl: { tagline: "Automatyzacja i porządek w danych dla MŚP · Polska / USA", note: "© 2026 Klarow · strona robocza v0.5" },
+  en: { tagline: "Automation and order in SME data · Poland / USA", note: "© 2026 Klarow · working draft v0.5" },
 };
 
 function Footer() {
@@ -581,6 +607,7 @@ function Landing({ onBook }: { onBook: () => void }) {
       <Pain />
       <Modules />
       <Demo />
+      <DiffSection />
       <Collaboration />
       <How />
       <Proof />
