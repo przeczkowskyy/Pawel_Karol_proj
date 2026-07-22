@@ -21,9 +21,8 @@ import Navbar from "@/components/Navbar";
 import BookingModal, { PHONE_DISPLAY, PHONE_HREF } from "@/components/BookingModal";
 import CollaborationFlow from "@/components/CollaborationFlow";
 import Faq from "@/components/Faq";
-import RadialOrbitalTimeline, { type OrbitalUi } from "@/components/ui/radial-orbital-timeline";
+import ModulesGrid from "@/components/ModulesGrid";
 import ModulePage from "@/pages/ModulePage";
-import { getModules } from "@/data/modules";
 import { useLang, pick } from "@/i18n";
 
 /* Landing Klarow v0.4 — dark-only, PL/EN. Tło: GLSL Hills (wzgórza z szumu
@@ -198,79 +197,25 @@ function Pain() {
   );
 }
 
-/* ── MODUŁY ── */
+/* ── MODUŁY (oś problemowa, dział jako filtr) ── */
 const MODULES_TXT = {
   pl: {
-    title: "Moduły — mapa tego, co automatyzujemy",
-    sub1: "Każdy moduł to sprawdzony wzorzec dopasowywany do Twoich plików. ",
-    hover: "Najedź na węzeł",
-    sub2: ", żeby zobaczyć podgląd narzędzia; ",
-    click: "kliknij",
-    sub3: ", żeby poznać szczegóły i powiązania. Każdy moduł ma też własną podstronę z pełnym opisem.",
-    l1: "sprzedajemy od dziś",
-    l2: "po pierwszych wdrożeniach",
-    l3: "w przygotowaniu",
-    s1: "DOSTĘPNY",
-    s2: "FALA 2",
-    s3: "ROADMAPA",
+    title: "Moduły — zacznij od swojego problemu",
+    sub: "Każda karta to jeden problem i sprawdzony wzorzec, który go zdejmuje: co dostajesz, ile zyskujesz i w ile dni. Dział to tylko filtr — kliknij kartę, żeby zobaczyć szczegóły wdrożenia.",
   },
   en: {
-    title: "Modules — a map of what we automate",
-    sub1: "Every module is a proven pattern adapted to your files. ",
-    hover: "Hover over a node",
-    sub2: " to preview the tool; ",
-    click: "click",
-    sub3: " to see details and connections. Each module also has its own page with a full description.",
-    l1: "selling today",
-    l2: "after first deployments",
-    l3: "in preparation",
-    s1: "AVAILABLE",
-    s2: "WAVE 2",
-    s3: "ROADMAP",
+    title: "Modules — start from your problem",
+    sub: "Each card is one problem and a proven pattern that removes it: what you get, what you gain and in how many days. Department is just a filter — click a card for deployment details.",
   },
-};
-
-const ORBITAL_UI_EN: OrbitalUi = {
-  statusLabels: { completed: "AVAILABLE", "in-progress": "WAVE 2", pending: "ROADMAP" },
-  readiness: "Pattern readiness",
-  related: "Related modules",
-  fullDesc: "Full module description",
-  hoverHint: "click the node to see details",
 };
 
 function Modules() {
   const { lang } = useLang();
   const t = pick(lang, MODULES_TXT);
-  const ref = useReveal<HTMLElement>();
   return (
-    <section
-      id="moduly"
-      ref={ref}
-      className="reveal relative py-14"
-      style={{ background: "radial-gradient(circle at center, rgba(168,180,194,0.07) 0%, transparent 55%)" }}
-    >
-      <div className="max-w-6xl mx-auto px-6">
-        <h2 className="text-[26px] md:text-[30px] font-extrabold tracking-tight" style={{ color: "var(--heading)" }}>
-          {t.title}
-        </h2>
-        <p className="mt-2 max-w-3xl text-[15px]" style={{ color: "var(--muted-foreground)" }}>
-          {t.sub1}
-          <strong>{t.hover}</strong>
-          {t.sub2}
-          <strong>{t.click}</strong>
-          {t.sub3}
-        </p>
-      </div>
-      <RadialOrbitalTimeline
-        timelineData={getModules(lang)}
-        ui={lang === "en" ? ORBITAL_UI_EN : undefined}
-      />
-      <div className="max-w-6xl mx-auto px-6 -mt-8 flex flex-wrap gap-x-6 gap-y-2 text-xs" style={{ color: "var(--muted-foreground)" }}>
-        <span><span className="st st-accent" style={{ marginRight: 6 }}>{t.s1}</span> {t.l1}</span>
-        <span><span className="st st-gray" style={{ marginRight: 6 }}>{t.s2}</span> {t.l2}</span>
-        <span><span className="st st-gray st-open" style={{ marginRight: 6 }}>{t.s3}</span> {t.l3}</span>
-      </div>
-    </section>
+    <Section id="moduly" title={t.title} sub={t.sub}>
+      <ModulesGrid />
+    </Section>
   );
 }
 

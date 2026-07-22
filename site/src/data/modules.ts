@@ -8,17 +8,33 @@ import {
   FileSignature,
   Wallet,
 } from "lucide-react";
-import type { TimelineItem } from "@/components/ui/radial-orbital-timeline";
+import type { ComponentType } from "react";
 import type { Lang } from "@/i18n";
 
 /* Katalog modułów Klarow (M1–M8 z planu strategicznego), dwujęzyczny.
-   date = czas wdrożenia · category = dział · energy = gotowość wzorca ·
+   Oś prezentacji jest PROBLEMOWA: problem (głos klienta) → content (co
+   dostajesz) → saves (wartość liczbą) → date (dni wdrożenia) → status;
+   dept = dział wyłącznie jako filtr/tag. energy = gotowość wzorca ·
    relatedIds = powiązania · image = zrzut narzędzia (placeholder do czasu
    dostarczenia realnych zrzutów). Docelowo YAML w site/content/modules/. */
 
-export interface ModuleItem extends TimelineItem {
+export type ModuleStatus = "completed" | "in-progress" | "pending";
+export type Dept = "finanse" | "kpi" | "produkcja" | "administracja" | "przekrojowy";
+
+export interface ModuleItem {
+  id: number;
   slug: string;
+  icon: ComponentType<{ size?: number | string; className?: string }>;
+  relatedIds: number[];
+  status: ModuleStatus;
+  energy: number;
   image: string;
+  dept: Dept;
+  title: string;
+  date: string;
+  category: string;
+  problem: string;
+  content: string;
   saves: string;
   benefits: string[];
 }
@@ -27,6 +43,7 @@ interface ModuleText {
   title: string;
   date: string;
   category: string;
+  problem: string;
   content: string;
   saves: string;
   benefits: string[];
@@ -37,9 +54,10 @@ interface ModuleBase {
   slug: string;
   icon: ModuleItem["icon"];
   relatedIds: number[];
-  status: TimelineItem["status"];
+  status: ModuleStatus;
   energy: number;
   image: string;
+  dept: Dept;
   i18n: { pl: ModuleText; en: ModuleText };
 }
 
@@ -54,11 +72,13 @@ const BASE: ModuleBase[] = [
     status: "completed",
     energy: 90,
     image: PLACEHOLDER,
+    dept: "przekrojowy",
     i18n: {
       pl: {
         title: "Audyt jakości danych",
         date: "5 dni",
         category: "Przekrojowy · wedge",
+        problem: "Nie wiemy, którym liczbom w naszych plikach można ufać — błędy wychodzą po fakcie.",
         content:
           "Walidator, który jednym przebiegiem sprawdza wszystkie Twoje pliki według reguł dopasowanych do Twoich danych: raport błędów + macierz pewności OK/UWAGA/BŁĄD. Tylko czyta — zero ryzyka dla plików. Nasza oferta wejściowa.",
         saves: "błędy wychwycone PRZED raportem, nie po fakcie",
@@ -73,6 +93,7 @@ const BASE: ModuleBase[] = [
         title: "Data quality audit",
         date: "5 days",
         category: "Cross-cutting · wedge",
+        problem: "We don't know which numbers in our files we can trust — errors surface after the fact.",
         content:
           "A validator that checks all your files in a single pass against rules tailored to your data: an error report plus an OK/WATCH/ERROR confidence matrix. Read-only — zero risk to your files. Our entry offer.",
         saves: "errors caught BEFORE the report, not after the fact",
@@ -93,11 +114,13 @@ const BASE: ModuleBase[] = [
     status: "completed",
     energy: 85,
     image: PLACEHOLDER,
+    dept: "kpi",
     i18n: {
       pl: {
         title: "Raport zarządczy",
         date: "5–10 dni",
         category: "KPI / Zarząd",
+        problem: "Raport dla zarządu składamy godzinami z dziesiątek plików — co tydzień od nowa.",
         content:
           "Raport dla zarządu składany jednym kliknięciem z dziesiątek plików: jednoplikowy interaktywny HTML + XLSX, w kilkanaście sekund zamiast godzin. Liczby weryfikowane o zgodność z Twoim dotychczasowym raportem.",
         saves: "z godzin składania do kilkunastu sekund generowania",
@@ -112,6 +135,7 @@ const BASE: ModuleBase[] = [
         title: "Board report",
         date: "5–10 days",
         category: "KPI / Management",
+        problem: "The board report takes hours to assemble from dozens of files — every week, from scratch.",
         content:
           "The management report assembled with one click from dozens of files: a single-file interactive HTML + XLSX, in seconds instead of hours. Numbers verified against your current report.",
         saves: "from hours of assembling to seconds of generating",
@@ -132,11 +156,13 @@ const BASE: ModuleBase[] = [
     status: "in-progress",
     energy: 70,
     image: PLACEHOLDER,
+    dept: "finanse",
     i18n: {
       pl: {
         title: "Importy ERP → Excel",
         date: "5–15 dni / import",
         category: "Księgowość / Finanse",
+        problem: "Co tydzień ktoś ręcznie przekleja tysiące wierszy z ERP do arkuszy.",
         content:
           "Koniec przeklejania tysięcy wierszy: import z ERP/magazynu do Twoich plików z klasyfikacją słownikiem, deduplikacją, trybem TEST z pełnym podglądem zmian, backupem przed zapisem i logiem audytowym.",
         saves: "praca „z godzin do minut” przy każdym cyklu importu",
@@ -151,6 +177,7 @@ const BASE: ModuleBase[] = [
         title: "ERP → Excel imports",
         date: "5–15 days / import",
         category: "Accounting / Finance",
+        problem: "Every week someone hand-pastes thousands of rows from the ERP into spreadsheets.",
         content:
           "No more pasting thousands of rows: imports from your ERP/warehouse system into your files with dictionary-based classification, deduplication, a TEST mode with a full change preview, backup before every write and an audit log.",
         saves: "work goes “from hours to minutes” every import cycle",
@@ -171,11 +198,13 @@ const BASE: ModuleBase[] = [
     status: "in-progress",
     energy: 65,
     image: PLACEHOLDER,
+    dept: "finanse",
     i18n: {
       pl: {
         title: "Zamknięcie cyklu",
         date: "3–7 dni",
         category: "Finanse / Kontroling",
+        problem: "Zamknięcie cyklu to klikanie folder po folderze — i nigdy nie wiadomo, która wersja jest oficjalna.",
         content:
           "Cotygodniowa konsolidacja wielu plików do raportu zbiorczego i hurtowa publikacja oficjalnych wersji jednym przyciskiem — z walidacją, archiwum i zawsze jednoznaczną „wersją prawdy”.",
         saves: "zamknięcie ~30 projektów w kilkanaście sekund zamiast ręcznie folder po folderze",
@@ -190,6 +219,7 @@ const BASE: ModuleBase[] = [
         title: "Cycle close",
         date: "3–7 days",
         category: "Finance / Controlling",
+        problem: "Closing the cycle means clicking folder by folder — and nobody knows which version is official.",
         content:
           "Weekly consolidation of many files into a summary report and bulk publishing of official versions with one click — with validation, an archive and an always unambiguous “version of truth”.",
         saves: "closing ~30 projects in seconds instead of manually, folder by folder",
@@ -210,11 +240,13 @@ const BASE: ModuleBase[] = [
     status: "in-progress",
     energy: 60,
     image: PLACEHOLDER,
+    dept: "produkcja",
     i18n: {
       pl: {
         title: "Wykonanie produkcji",
         date: "5–10 dni",
         category: "Produkcja",
+        problem: "Produkcja raportuje jedno, finanse widzą drugie — liczby się nie spinają.",
         content:
           "Procent wykonania produkcji trafia do plików finansowych automatycznie, z bezpiecznikami układu i kontrolkami spójności. Produkcja i finanse widzą wreszcie te same liczby.",
         saves: "jedna wersja prawdy produkcja ↔ finanse",
@@ -228,6 +260,7 @@ const BASE: ModuleBase[] = [
         title: "Production output",
         date: "5–10 days",
         category: "Production",
+        problem: "Production reports one thing, finance sees another — the numbers never line up.",
         content:
           "Production completion percentages flow into your finance files automatically, with layout guards and consistency checks. Production and finance finally see the same numbers.",
         saves: "one version of truth between production and finance",
@@ -247,11 +280,13 @@ const BASE: ModuleBase[] = [
     status: "pending",
     energy: 40,
     image: PLACEHOLDER,
+    dept: "kpi",
     i18n: {
       pl: {
         title: "Panel KPI online",
         date: "dodatek",
         category: "KPI / Zarząd",
+        problem: "Zarząd chce widzieć wskaźniki na bieżąco, nie w mailu z załącznikiem.",
         content:
           "Hostowany panel w przeglądarce dla wielu odbiorców i ról — rozszerzenie raportu zarządczego dla firm, które go przerosły. Zasilany wyłącznie zagregowanymi danymi, które sami zatwierdzicie.",
         saves: "live panel zamiast rozsyłanego pliku",
@@ -265,6 +300,7 @@ const BASE: ModuleBase[] = [
         title: "Online KPI panel",
         date: "add-on",
         category: "KPI / Management",
+        problem: "Management wants to see the KPIs live, not in an email attachment.",
         content:
           "A hosted, in-browser panel for multiple audiences and roles — an extension of the Board report for companies that have outgrown it. Fed exclusively with aggregated data that you approve yourselves.",
         saves: "a live panel instead of an emailed file",
@@ -284,11 +320,13 @@ const BASE: ModuleBase[] = [
     status: "pending",
     energy: 30,
     image: PLACEHOLDER,
+    dept: "administracja",
     i18n: {
       pl: {
         title: "Obieg dokumentów",
         date: "roadmapa",
         category: "Administracja",
+        problem: "Umowy i dokumenty krążą mailami — nikt nie wie, co jest aktualne i kto ma akceptować.",
         content:
           "Kreatory dokumentów, akceptacje wielostopniowe, auto-uzupełnianie danych kontrahenta po NIP, DOCX→PDF i e-podpisy — obieg, który dziś żyje w mailach i załącznikach.",
         saves: "cały obieg w jednej aplikacji zamiast skrzynki mailowej",
@@ -302,6 +340,7 @@ const BASE: ModuleBase[] = [
         title: "Document workflow",
         date: "roadmap",
         category: "Administration",
+        problem: "Contracts and documents float around in email — nobody knows what's current or who approves.",
         content:
           "Document wizards, multi-step approvals, auto-filled counterparty data, DOCX→PDF and e-signatures — the workflow that today lives in emails and attachments.",
         saves: "the whole workflow in one app instead of an inbox",
@@ -321,11 +360,13 @@ const BASE: ModuleBase[] = [
     status: "pending",
     energy: 30,
     image: PLACEHOLDER,
+    dept: "finanse",
     i18n: {
       pl: {
         title: "Płatności i cash-flow",
         date: "roadmapa",
         category: "Finanse",
+        problem: "Wydatki akceptowane „na gębę”, a cash-flow składany ręcznie z maili.",
         content:
           "Wnioski o wydatek, plan płatności, akceptacje „na cztery oczy”, tracking i harmonogramy fakturowania (w tym AIA G703 dla rynku USA) — z audytem każdej decyzji.",
         saves: "ślad audytowy każdej decyzji zamiast maili i „ustaleń”",
@@ -339,6 +380,7 @@ const BASE: ModuleBase[] = [
         title: "Payments & cash-flow",
         date: "roadmap",
         category: "Finance",
+        problem: "Spending approved by word of mouth, cash-flow assembled by hand from emails.",
         content:
           "Spending requests, a payment plan, four-eyes approvals, tracking and billing schedules (including AIA G703 for the US market) — with an audit trail for every decision.",
         saves: "an audit trail for every decision instead of emails and “arrangements”",
@@ -361,6 +403,7 @@ export function getModules(lang: Lang): ModuleItem[] {
     status: b.status,
     energy: b.energy,
     image: b.image,
+    dept: b.dept,
     ...b.i18n[lang],
   }));
 }
