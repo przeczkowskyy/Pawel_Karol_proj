@@ -80,10 +80,15 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
   - `src/components/ToolsGrid.tsx` — katalog na landingu (filtr kategorii, auto-animate),
     karty → `/narzedzia/:slug`; `live` wyróżnione i na początku.
   - `src/pages/ToolPage.tsx` — opis narzędzia + **OSADZONY interaktywny dashboard** (live).
-  - `src/components/DemoReport.tsx` + `lib/report.ts` + `data/demo-sample.ts` — **LIVE**
-    dashboard „Raport zarządczy" (silnik CSV→raport, spec: `docs/plan/demo-m2-spec.md`).
-  - `src/components/dashboards/ProductionDashboard.tsx` — **LIVE** „Dashboard produkcji"
-    (kafle hal, suwak tygodnia, rozbicie na etapy; deterministyczny, read-only, dane fikcyjne).
+  - **5 dashboardów LIVE** (100% client-side, deterministyczne, dane fikcyjne):
+    `DemoReport.tsx`+`lib/report.ts` („Raport zarządczy", spec `docs/plan/demo-m2-spec.md`) ·
+    `dashboards/ProductionDashboard.tsx` (kafle hal + suwak tygodnia) ·
+    `dashboards/QualityGate.tsx`+`lib/qualityGate.ts` („Audyt jakości" — reguły 1:1
+    z blueprintu: PM<0, tydzień<0, saldo E≠0, data poza tygodniem ISO; macierz
+    OK/UWAGA/BŁĄD) · `dashboards/TaskTimeline.tsx` (Gantt compare-mode 2 snapshotów,
+    dryf +Nd/−Nd, stała gęstość px/dobę; „Dziś"=stała 2026-07-22 dla determinizmu) ·
+    `dashboards/PaymentCalculator.tsx` (transze: alokacja proporcjonalna w groszach,
+    reszta na ostatniej pozycji → Σ co do grosza; FX na kursach fikcyjnych).
 - `src/components/` — `Differentiators` (zero chmury + determinizm + blok ✕/✓ + galeria
   before/after linkująca do live-dashboardów), `Navbar` (PL/EN, KLAROW→home), `BookingModal`
   (kalendarz → mailto/tel; **do podmiany na embed Cal.com**), `CollaborationFlow` (SVG), `Faq`.
@@ -98,6 +103,17 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
 
 ## Stan operacyjny (aktualizuj przy zmianach!)
 
+- **2026-07-22 (sesja strony, cz. 4) — „przenieś 1:1 narzędzia z gita": 5 dashboardów LIVE:**
+  - Do istniejących 2 (Raport zarządczy, Dashboard produkcji) doszły 3 kolejne, odtworzone
+    **1:1 co do logiki** ze wzbogaconych blueprintów (repo dostało fragmenty realnego kodu):
+    **Audyt jakości danych** (reguły PM_MINUS/NEG_WEEK/E_NONZERO/BAD_DATE, tydzień ISO,
+    macierz pewności — silnik przetestowany node'em), **Oś czasu/Gantt** (compare-mode Old/New,
+    czerwony ogon obsuwy, dryf +Nd/−Nd), **Kalkulator transz** (alokacja proporcjonalna
+    w groszach, reszta na ostatniej pozycji — dokładnie algorytm `_allocate` z blueprintu).
+  - Wszystko odbrandowane (zasada #3), dane fikcyjne, deterministyczne, client-side.
+  - **Następne w kolejce:** Import z rekoncyliacją (PASS/FAIL co do grosza) i Billing US G703
+    (silnik propozycji) — wykonalne client-side; importy piszące przez Excel COM tylko jako
+    podgląd/TEST.
 - **2026-07-22 (sesja strony, cz. 3) — landing v0.7 + sekcja Narzędzia (decyzje Karola):**
   - **Poprawki UX decka:** kontakt = **stała stopka** (`FooterBar`, nie slajd); **KLAROW →
     slajd 0**; lepsze skalowanie slajdów (padding `clamp()` wg wysokości ekranu) i mobile
