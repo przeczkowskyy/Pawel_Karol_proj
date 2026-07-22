@@ -1,0 +1,14 @@
+# Cloudflare Pages — polityka cache:
+# - dokument HTML NIGDY nie może być trzymany w cache przeglądarki
+#   (stary index.html woła już nieistniejące zahashowane assety, a SPA-fallback
+#   oddaje wtedy HTML zamiast JS/CSS → "strona tylko z tłem" na telefonach),
+# - zahashowane assety (/assets/*) są immutable — mogą żyć w cache rok.
+
+/*
+  Cache-Control: no-cache
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
