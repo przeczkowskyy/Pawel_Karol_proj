@@ -15,16 +15,36 @@
    - warstwa ambient: tło GLSL Hills robi zoom w głąb per slajd (zoomRef).
    Slajd wyższy niż viewport scrolluje się WEWNĘTRZNIE (.slide-scroll). */
 
-.deck {
+/* ── Szkielet strony BEZ zależności od Tailwinda ────────────────────────
+   Warstwa tła i warstwa treści na czystym CSS: na starych WebKitach
+   (iPhone bez świeżego iOS) nowoczesne konstrukcje Tailwinda v4 potrafią
+   wypaść w całości — szkielet musi stać niezależnie. */
+.bg-layer {
   position: fixed;
-  /* longhandy PRZED inset — fallback dla starszych mobilnych przeglądarek
-     (brak wsparcia `inset` zostawiał deck o zerowym rozmiarze = „strona
-     tylko z tłem"; canvas tła ma pozycjonowanie inline, więc działał) */
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
-  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: #121212;
+  isolation: isolate;
+}
+.content-layer {
+  position: relative;
+  z-index: 10;
+}
+
+.deck {
+  position: fixed;
+  /* longhandy PRZED inset — fallback dla starszych mobilnych przeglądarek
+     (brak wsparcia `inset` zostawiał deck o zerowym rozmiarze = „strona
+     tylko z tłem"; canvas tła ma pozycjonowanie inline, więc działał).
+     cssTarget=safari13 w vite.config pilnuje, by minifier ich nie sklejał. */
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   z-index: 10;
   overflow: hidden;
   overscroll-behavior: none;
@@ -36,7 +56,6 @@
   right: 0;
   bottom: 0;
   left: 0;
-  inset: 0;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;

@@ -663,19 +663,15 @@ export default function App() {
   return (
     <div style={{ background: "var(--body-bg)" }}>
       {/* tło CAŁEJ strony: GLSL Hills (lazy chunk z three.js), spowolnione.
-          isolation + z-index: warstwa canvasa (GPU) nie może wyskoczyć ponad
-          treść nawet na kapryśnych mobilnych kompozytorach */}
-      <div
-        className="fixed inset-0 z-0 pointer-events-none bg-[#121212]"
-        style={{ top: 0, right: 0, bottom: 0, left: 0, isolation: "isolate" }}
-        aria-hidden="true"
-      >
+          .bg-layer/.content-layer = czysty CSS (globals) — szkielet strony
+          nie może zależeć od Tailwinda (stare WebKity) ani od kompozytora GPU */}
+      <div className="bg-layer" aria-hidden="true">
         <Suspense fallback={null}>
           <GLSLHills width="100%" height="100%" speed={0.2} zoomRef={zoomRef} />
         </Suspense>
       </div>
 
-      <div className="relative z-10">
+      <div className="content-layer">
         <Navbar onBook={onBook} />
         <Routes>
           <Route path="/" element={<Landing onBook={onBook} zoomRef={zoomRef} />} />

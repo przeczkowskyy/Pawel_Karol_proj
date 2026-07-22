@@ -101,7 +101,12 @@
               var nav = document.querySelector("header");
               log("navbar: " + (nav ? nav.offsetWidth + "x" + nav.offsetHeight : "BRAK"));
               if (window.CSS && CSS.supports) {
-                log("CSS inset: " + CSS.supports("inset", "0") + " · @layer: " + CSS.supports("selector(:where(a))") + " · dvh: " + CSS.supports("height", "100dvh"));
+                log(
+                  "CSS inset: " + CSS.supports("inset", "0") +
+                  " · @layer: " + (typeof window.CSSLayerBlockRule !== "undefined") +
+                  " · @property: " + (typeof window.CSSPropertyRule !== "undefined") +
+                  " · dvh: " + CSS.supports("height", "100dvh")
+                );
               }
             } catch (err) {
               log("snapshot err: " + err.message);
