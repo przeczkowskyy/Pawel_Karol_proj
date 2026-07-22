@@ -151,7 +151,7 @@ export default function PaymentCalculator() {
         </div>
       </div>
 
-      <div className="mt-4 grid grid-cols-3 gap-4">
+      <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="card stat">
           <div className="lbl">{t.paid}</div>
           <div className="val tnum" style={{ fontSize: "clamp(16px,1vw+11px,22px)" }}>{fmtZl(paidGr, lang)}</div>

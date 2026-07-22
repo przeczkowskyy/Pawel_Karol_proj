@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Check, X as XIcon, Clock, ArrowRight, Users } from "lucide-react";
-import PrintButton from "./PrintButton";
+import PdfButton from "./PdfButton";
 import { useLang } from "@/i18n";
 
 /* Dashboard „Obieg akceptacji przelewów" — LIVE, dane DEMO, deterministyczny.
@@ -65,8 +65,11 @@ const T = {
     thDay: "Termin",
     thDecision: "Decyzja",
     fourEyes: "Cztery oczy: akceptuje inna osoba niż wnioskodawca — tu demonstracyjnie Ty (KONTROLER), wnioski złożyli PM-owie.",
-    printTitle: "PLAN PŁATNOŚCI — 14 DNI (DEMO)",
-    printBtn: "Drukuj plan płatności",
+    printTitle: "PLAN PŁATNOŚCI — 14 DNI",
+    printBtn: "Pobierz plan (PDF)",
+    pdfDay: "Data",
+    pdfSum: "Kwota planowana",
+    pdfCarried: "w tym przeniesione",
     foot: "Dane fikcyjne · kwoty w groszach · decyzje przeliczają plan natychmiast i deterministycznie.",
     carried: "przeniesione",
   },
@@ -91,8 +94,11 @@ const T = {
     thDay: "Due",
     thDecision: "Decision",
     fourEyes: "Four-eyes: a different person approves than requested — here you (CONTROLLER), the requests came from PMs.",
-    printTitle: "PAYMENT PLAN — 14 DAYS (DEMO)",
-    printBtn: "Print the payment plan",
+    printTitle: "PAYMENT PLAN — 14 DAYS",
+    printBtn: "Download plan (PDF)",
+    pdfDay: "Date",
+    pdfSum: "Planned amount",
+    pdfCarried: "of which carried",
     foot: "Fictional data · amounts in cents · decisions recompute the plan instantly and deterministically.",
     carried: "carried",
   },
@@ -145,7 +151,7 @@ export default function PaymentFlow() {
     <div>
       <p className="text-[13px] leading-relaxed max-w-3xl" style={{ color: "var(--foreground)" }}>{t.intro}</p>
 
-      <div className="mt-4 grid grid-cols-3 gap-4">
+      <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="card stat">
           <div className="lbl">{t.kSum}</div>
           <div className="val tnum" style={{ fontSize: "clamp(15px,1vw+10px,21px)" }}>{fmt(sumAll, lang)}</div>
@@ -213,14 +219,34 @@ export default function PaymentFlow() {
         </p>
       </div>
 
-      {/* macierz planu 14-dniowego + wydruk */}
-      <div className="card mt-4 print-area">
-        <div className="print-only" style={{ marginBottom: 12 }}>
-          <strong>KLAROW · {t.printTitle}</strong>
-        </div>
+      {/* macierz planu 14-dniowego + PDF */}
+      <div className="card mt-4">
         <div className="flex items-center justify-between flex-wrap gap-2" style={{ marginBottom: 12 }}>
           <h3 style={{ fontSize: 14 }}>{t.matrix}</h3>
-          <PrintButton label={t.printBtn} />
+          <PdfButton
+            label={t.printBtn}
+            build={() => ({
+              filename: "klarow-plan-platnosci-demo.pdf",
+              title: t.printTitle,
+              metaLines: [`${t.kSum}: ${fmt(sumAll, lang)}`, `${t.kApproved}: ${fmt(approvedGr, lang)}`],
+              table: {
+                head: [t.pdfDay, t.pdfSum, t.pdfCarried],
+                widths: ["*", "auto", "auto"],
+                alignRight: [1, 2],
+                body: plan.map((p, i) => [
+                  dayLabel(i),
+                  p.sumGr > 0 ? fmt(p.sumGr, lang) : "—",
+                  p.carriedGr > 0 ? fmt(p.carriedGr, lang) : "—",
+                ]),
+                foot: [
+                  "Σ",
+                  fmt(plan.reduce((s, p) => s + p.sumGr, 0), lang),
+                  fmt(plan.reduce((s, p) => s + p.carriedGr, 0), lang),
+                ],
+              },
+              note: t.fourEyes,
+            })}
+          />
         </div>
         <div style={{ overflowX: "auto" }}>
           <table className="data-table" style={{ minWidth: 720 }}>

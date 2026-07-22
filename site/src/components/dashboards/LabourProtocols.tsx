@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Check, Clock, FileText, Send } from "lucide-react";
-import PrintButton from "./PrintButton";
+import PdfButton from "./PdfButton";
 import { useLang, type Lang } from "@/i18n";
 
 /* Dashboard „Protokoły robocizny" — LIVE, dane DEMO.
@@ -66,7 +66,7 @@ const T = {
     total: "RAZEM NETTO",
     sig1: "Sporządził (Kontroling)",
     sig2: "Zatwierdził (Kierownik Budowy)",
-    printBtn: "Drukuj protokół",
+    printBtn: "Pobierz protokół (PDF)",
     lifecycle: "Cykl życia dokumentu",
     foot: "Dane fikcyjne · dokument liczony z rejestru godzin deterministycznie · u klienta protokół idzie mailem z PDF-em i czeka na akceptację.",
   },
@@ -92,7 +92,7 @@ const T = {
     total: "TOTAL NET",
     sig1: "Prepared by (Controlling)",
     sig2: "Approved by (Site Manager)",
-    printBtn: "Print the protocol",
+    printBtn: "Download protocol (PDF)",
     lifecycle: "Document lifecycle",
     foot: "Fictional data · the document is computed from the hour register deterministically · at the client the protocol goes out by e-mail with a PDF and awaits approval.",
   },
@@ -177,16 +177,38 @@ export default function LabourProtocols() {
         )}
       </div>
 
-      {/* dokument protokołu (drukowalny) */}
+      {/* dokument protokołu (PDF do pobrania) */}
       {status !== null && (
-        <div className="card mt-4 print-area nc-tab-swap" key={sub.nip}>
+        <div className="card mt-4 nc-tab-swap" key={sub.nip}>
           <div className="flex items-center justify-between flex-wrap gap-2" style={{ marginBottom: 14 }}>
             <div>
               <div className="brand-word" style={{ fontSize: 12 }}>KLAROW</div>
               <h3 style={{ fontSize: 15, marginTop: 6, color: "var(--heading)" }}>{t.doc}</h3>
               <div className="text-[12px] tnum" style={{ color: "var(--muted-foreground)" }}>{t.docPeriod}</div>
             </div>
-            <PrintButton label={t.printBtn} />
+            <PdfButton
+              label={t.printBtn}
+              build={() => ({
+                filename: "klarow-protokol-robocizny-demo.pdf",
+                title: t.doc,
+                subtitle: t.docPeriod,
+                metaLines: [`${t.docSub}: ${sub.name}`, `${t.docNip}: ${sub.nip}`],
+                table: {
+                  head: [t.thInv, t.thScope, t.thHours, t.thRate, t.thAmount],
+                  widths: ["auto", "*", "auto", "auto", "auto"],
+                  alignRight: [2, 3, 4],
+                  body: rows.map((r) => [
+                    r.investment,
+                    r.scope[lang],
+                    r.hours,
+                    fmt(r.rateGr, lang),
+                    fmt(r.hours * r.rateGr, lang),
+                  ]),
+                  foot: [t.total, "", rows.reduce((s, r) => s + r.hours, 0), "", fmt(totalGr, lang)],
+                },
+                signatures: [t.sig1, t.sig2],
+              })}
+            />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[13px]" style={{ marginBottom: 12 }}>

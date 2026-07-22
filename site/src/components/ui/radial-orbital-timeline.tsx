@@ -6,10 +6,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 /* RadialOrbitalTimeline (port 21st.dev) — przemalowany na stal Klarow:
-   węzły = moduły oferty, relatedIds = powiązania między modułami,
-   energy = gotowość wzorca (% pracy pokrytej biblioteką).
-   Hover na węźle = box z podglądem narzędzia (zrzut ekranu); klik = karta
-   szczegółów z linkiem do podstrony modułu. */
+   węzły = NARZĘDZIA działu (drill-down sekcji Narzędzia), relatedIds =
+   pozostałe narzędzia tego działu. energy=0 ukrywa pasek gotowości
+   (wszystkie narzędzia działają na żywo — nie ma czego mierzyć).
+   Klik węzła = karta szczegółów z linkiem do podstrony narzędzia. */
 
 export interface TimelineItem {
   id: number;
@@ -314,21 +314,23 @@ export default function RadialOrbitalTimeline({
                     <CardContent className="text-xs text-[#d4d4d8]">
                       <p>{item.content}</p>
 
-                      <div className="mt-4 pt-3 border-t border-white/10">
-                        <div className="flex justify-between items-center text-xs mb-1">
-                          <span className="flex items-center">
-                            <Gauge size={10} className="mr-1" />
-                            {ui.readiness}
-                          </span>
-                          <span className="font-mono">{item.energy}%</span>
+                      {item.energy > 0 && (
+                        <div className="mt-4 pt-3 border-t border-white/10">
+                          <div className="flex justify-between items-center text-xs mb-1">
+                            <span className="flex items-center">
+                              <Gauge size={10} className="mr-1" />
+                              {ui.readiness}
+                            </span>
+                            <span className="font-mono">{item.energy}%</span>
+                          </div>
+                          <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+                            <div
+                              className="h-full bg-gradient-to-r from-[#69788c] to-[#d7dee7]"
+                              style={{ width: `${item.energy}%` }}
+                            ></div>
+                          </div>
                         </div>
-                        <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
-                          <div
-                            className="h-full bg-gradient-to-r from-[#69788c] to-[#d7dee7]"
-                            style={{ width: `${item.energy}%` }}
-                          ></div>
-                        </div>
-                      </div>
+                      )}
 
                       {item.relatedIds.length > 0 && (
                         <div className="mt-4 pt-3 border-t border-white/10">
@@ -368,7 +370,7 @@ export default function RadialOrbitalTimeline({
 
                       {item.slug && (
                         <RouterLink
-                          to={`/moduly/${item.slug}`}
+                          to={`/narzedzia/${item.slug}`}
                           className="mt-4 flex items-center justify-center gap-1 rounded-md border border-[#a8b4c2]/30 py-1.5 text-xs font-bold text-[#d9e0e8] hover:bg-[#a8b4c2]/10 hover:text-white transition-colors"
                           onClick={(e) => e.stopPropagation()}
                         >

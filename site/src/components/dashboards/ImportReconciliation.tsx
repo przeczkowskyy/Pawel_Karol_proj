@@ -208,7 +208,7 @@ export default function ImportReconciliation() {
       </div>
 
       {/* KPI */}
-      <div className="mt-4 grid grid-cols-3 gap-4">
+      <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="card stat">
           <div className="lbl">{t.kPrev}</div>
           <div className="val tnum" style={{ fontSize: "clamp(15px,1vw+10px,21px)" }}>{fmt(sumPrev, lang)}</div>

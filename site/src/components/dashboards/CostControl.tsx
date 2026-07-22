@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Check, TriangleAlert, Lock } from "lucide-react";
-import PrintButton from "./PrintButton";
+import PdfButton from "./PdfButton";
 import { useLang } from "@/i18n";
 
 /* Dashboard „Kontroling kosztów projektu" (widok PM) — LIVE, dane DEMO.
@@ -46,8 +46,8 @@ const T = {
     approved: "Tydzień 30 zatwierdzony",
     blocked: "Ujemne ETC blokują zatwierdzenie (walidacja jak w Audycie: PM nie może estymować na minusie).",
     over: "przekroczenie",
-    printTitle: "PODSUMOWANIE TYGODNIA 30 — KONTROLING PROJEKTU (DEMO)",
-    printBtn: "Drukuj podsumowanie",
+    printTitle: "PODSUMOWANIE TYGODNIA 30 — KONTROLING PROJEKTU",
+    printBtn: "Pobierz podsumowanie (PDF)",
     foot: "Dane fikcyjne · zmiany trzymane lokalnie (bez chmury) · te same dane zawsze dają tę samą prognozę.",
   },
   en: {
@@ -65,8 +65,8 @@ const T = {
     approved: "Week 30 approved",
     blocked: "Negative ETC blocks approval (the same validation as the Audit: a PM can't estimate negative).",
     over: "overrun",
-    printTitle: "WEEK 30 SUMMARY — PROJECT CONTROLLING (DEMO)",
-    printBtn: "Print the summary",
+    printTitle: "WEEK 30 SUMMARY — PROJECT CONTROLLING",
+    printBtn: "Download summary (PDF)",
     foot: "Fictional data · changes kept locally (no cloud) · the same data always yields the same forecast.",
   },
 };
@@ -102,7 +102,7 @@ export default function CostControl() {
     <div>
       <p className="text-[13px] leading-relaxed max-w-3xl" style={{ color: "var(--foreground)" }}>{t.intro}</p>
 
-      <div className="mt-4 grid grid-cols-3 gap-4">
+      <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="card stat">
           <div className="lbl">{t.kMargin}</div>
           <div className="val tnum" style={{ color: margin < 15 ? "var(--rejected)" : "var(--funded)" }}>
@@ -120,12 +120,41 @@ export default function CostControl() {
       </div>
 
       {/* tabela etapów + paski */}
-      <div className="card mt-4 print-area">
-        <div className="print-only" style={{ marginBottom: 12 }}>
-          <strong>KLAROW · {t.printTitle}</strong>
-        </div>
+      <div className="card mt-4">
         <div className="flex items-center justify-end" style={{ marginBottom: 10 }}>
-          <PrintButton label={t.printBtn} />
+          <PdfButton
+            label={t.printBtn}
+            build={() => ({
+              filename: "klarow-kontroling-tydzien-demo.pdf",
+              title: t.printTitle,
+              metaLines: [
+                `${t.kContract}: ${fmtK(CONTRACT, lang)}`,
+                `${t.kEac}: ${fmtK(totalEac, lang)}`,
+                `${t.kMargin}: ${margin.toLocaleString(lang === "pl" ? "pl-PL" : "en-US", { maximumFractionDigits: 1 })}%`,
+              ],
+              table: {
+                head: [t.thStage, t.thBudget, t.thSpent, t.thEtc, t.thEac, t.thVar],
+                widths: ["*", "auto", "auto", "auto", "auto", "auto"],
+                alignRight: [1, 2, 3, 4, 5],
+                body: rows.map((r) => [
+                  r.name[lang],
+                  fmtK(r.budget, lang),
+                  fmtK(r.spent, lang),
+                  fmtK(r.etc, lang),
+                  fmtK(r.eac, lang),
+                  `${r.variance > 0 ? "+" : ""}${fmtK(r.variance, lang)}`,
+                ]),
+                foot: [
+                  "Σ",
+                  fmtK(totalBudget, lang),
+                  fmtK(totalSpent, lang),
+                  fmtK(etc.reduce((s, v) => s + v, 0), lang),
+                  fmtK(totalEac, lang),
+                  `${totalEac - totalBudget > 0 ? "+" : ""}${fmtK(totalEac - totalBudget, lang)}`,
+                ],
+              },
+            })}
+          />
         </div>
         <div style={{ overflowX: "auto" }}>
           <table className="data-table">

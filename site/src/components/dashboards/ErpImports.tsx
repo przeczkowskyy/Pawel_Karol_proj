@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Check, Copy, Eye, ShieldCheck, TriangleAlert, Play } from "lucide-react";
-import PrintButton from "./PrintButton";
+import PdfButton from "./PdfButton";
 import { useLang } from "@/i18n";
 
 /* Dashboard „Importy ERP → Excel" — LIVE, dane DEMO, tryb TEST.
@@ -73,8 +73,8 @@ const T = {
     dict: "Słownik klasyfikacji (fragment)",
     dictNote: "U klienta Słownik jest plikiem konfiguracyjnym — zmiana klasyfikacji nie wymaga programisty.",
     prodNote: "Zapis PROD odbywa się u klienta, w Excelu — z automatycznym backupiem przed zapisem i logiem każdej operacji. Tu oglądasz dokładnie ten podgląd, który poprzedza zapis.",
-    printTitle: "RAPORT IMPORTU — TRYB TEST (DEMO)",
-    printBtn: "Drukuj raport importu",
+    printTitle: "RAPORT IMPORTU — TRYB TEST",
+    printBtn: "Pobierz raport (PDF)",
     foot: "Dane fikcyjne · klasyfikacja i dedup w pełni deterministyczne.",
   },
   en: {
@@ -95,8 +95,8 @@ const T = {
     dict: "Classification dictionary (excerpt)",
     dictNote: "At the client the Dictionary is a config file — changing classification needs no programmer.",
     prodNote: "The PROD write happens at the client, in Excel — with an automatic backup before every write and a log of every operation. What you see here is exactly the preview that precedes the write.",
-    printTitle: "IMPORT REPORT — TEST MODE (DEMO)",
-    printBtn: "Print the import report",
+    printTitle: "IMPORT REPORT — TEST MODE",
+    printBtn: "Download report (PDF)",
     foot: "Fictional data · classification and dedup fully deterministic.",
   },
 };
@@ -141,7 +141,7 @@ export default function ErpImports() {
         <strong style={{ color: "var(--funded)", fontSize: 14.5 }}>{sanityOk && t.sanityPass}</strong>
       </div>
 
-      <div className="mt-4 grid grid-cols-3 gap-4">
+      <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="card stat">
           <div className="lbl">{t.kNew}</div>
           <div className="val tnum" style={{ color: "var(--funded)" }}>{newRows.length}</div>
@@ -156,14 +156,33 @@ export default function ErpImports() {
         </div>
       </div>
 
-      {/* podgląd TEST + wydruk */}
-      <div className="card mt-4 print-area">
-        <div className="print-only" style={{ marginBottom: 12 }}>
-          <strong>KLAROW · {t.printTitle}</strong>
-        </div>
+      {/* podgląd TEST + PDF */}
+      <div className="card mt-4">
         <div className="flex items-center justify-between flex-wrap gap-2" style={{ marginBottom: 10 }}>
           <span className="st st-accent"><Eye className="st-ico" /> TEST</span>
-          <PrintButton label={t.printBtn} />
+          <PdfButton
+            label={t.printBtn}
+            build={() => ({
+              filename: "klarow-raport-importu-demo.pdf",
+              title: t.printTitle,
+              metaLines: [`${t.kNew}: ${newRows.length}`, `${t.kDup}: ${dupRows.length}`, `${t.kSum}: ${fmt(sumNew, lang)}`],
+              table: {
+                head: [t.thDoc, t.thVendor, t.thDesc, t.thAmount, t.thClass, t.thState],
+                widths: ["auto", "auto", "*", "auto", "auto", "auto"],
+                alignRight: [3],
+                body: rows.map((r) => [
+                  r.doc,
+                  r.vendor,
+                  r.desc[lang],
+                  fmt(r.amountGr, lang),
+                  r.cls,
+                  r.isNew ? t.stNew : t.stDup,
+                ]),
+                foot: [`Σ (${t.kNew})`, "", "", fmt(sumNew, lang), "", ""],
+              },
+              note: t.prodNote,
+            })}
+          />
         </div>
         <div style={{ overflowX: "auto" }}>
           <table className="data-table">

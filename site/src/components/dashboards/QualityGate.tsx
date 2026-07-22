@@ -277,7 +277,7 @@ export default function QualityGate() {
           </div>
 
           {/* KPI */}
-          <div className="mt-4 grid grid-cols-3 gap-4">
+          <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="card stat">
               <div className="lbl">{t.kInv}</div>
               <div className="val tnum">{result.totals.investments}</div>

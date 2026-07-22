@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Check, Clock, Download, FileSignature, Plus, Search, Trash2 } from "lucide-react";
-import PrintButton from "./PrintButton";
+import PdfButton from "./PdfButton";
 import { useLang, type Lang } from "@/i18n";
 
 /* Dashboard „Rejestr umów" — LIVE, dane DEMO (CRUD lokalny w pamięci).
@@ -50,8 +50,8 @@ const T = {
     stActive: "obowiązuje",
     stEnded: "zakończona",
     exportCsv: "Eksport CSV",
-    printBtn: "Drukuj rejestr",
-    printTitle: "REJESTR UMÓW (DEMO)",
+    printBtn: "Pobierz rejestr (PDF)",
+    printTitle: "REJESTR UMÓW",
     kAll: "Umowy w rejestrze",
     kActive: "Obowiązujące",
     kValue: "Σ wartość obowiązujących",
@@ -75,8 +75,8 @@ const T = {
     stActive: "active",
     stEnded: "ended",
     exportCsv: "Export CSV",
-    printBtn: "Print the register",
-    printTitle: "CONTRACT REGISTER (DEMO)",
+    printBtn: "Download register (PDF)",
+    printTitle: "CONTRACT REGISTER",
     kAll: "Contracts in register",
     kActive: "Active",
     kValue: "Σ active value",
@@ -151,7 +151,7 @@ export default function ContractRegister() {
     <div>
       <p className="text-[13px] leading-relaxed max-w-3xl" style={{ color: "var(--foreground)" }}>{t.intro}</p>
 
-      <div className="mt-4 grid grid-cols-3 gap-4">
+      <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="card stat">
           <div className="lbl">{t.kAll}</div>
           <div className="val tnum">{items.length}</div>
@@ -199,14 +199,32 @@ export default function ContractRegister() {
         )}
       </div>
 
-      {/* rejestr (drukowalny) */}
-      <div className="card mt-4 print-area">
-        <div className="print-only" style={{ marginBottom: 12 }}>
-          <strong>KLAROW · {t.printTitle}</strong>
-        </div>
+      {/* rejestr + PDF */}
+      <div className="card mt-4">
         <div className="flex items-center justify-between flex-wrap gap-2" style={{ marginBottom: 10 }}>
           <span className="st st-gray"><FileSignature className="st-ico" /> {filtered.length} / {items.length}</span>
-          <PrintButton label={t.printBtn} />
+          <PdfButton
+            label={t.printBtn}
+            build={() => ({
+              filename: "klarow-rejestr-umow-demo.pdf",
+              title: t.printTitle,
+              metaLines: [`${t.kAll}: ${items.length}`, `${t.kActive}: ${activeItems.length}`, `${t.kValue}: ${fmt(activeValueGr, lang)}`],
+              table: {
+                head: [t.number, t.vendor, t.subject, t.from, t.value, t.status],
+                widths: ["auto", "auto", "*", "auto", "auto", "auto"],
+                alignRight: [3, 4],
+                body: filtered.map((c) => [
+                  c.number,
+                  c.vendor,
+                  subjectText(c, lang),
+                  c.dateFrom,
+                  fmt(c.valueGr, lang),
+                  c.status === "active" ? t.stActive : t.stEnded,
+                ]),
+              },
+              note: t.note,
+            })}
+          />
         </div>
         <div style={{ overflowX: "auto" }}>
           <table className="data-table">

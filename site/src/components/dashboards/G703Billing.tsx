@@ -105,7 +105,7 @@ export default function G703Billing() {
       <p className="text-[13px] leading-relaxed max-w-3xl" style={{ color: "var(--foreground)" }}>{t.intro}</p>
 
       {/* KPI */}
-      <div className="mt-4 grid grid-cols-3 gap-4">
+      <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="card stat">
           <div className="lbl">{t.kProposal}</div>
           <div className="val tnum" style={{ fontSize: "clamp(15px,1vw+10px,22px)", color: totProposal < 0 ? "var(--rejected)" : undefined }}>
