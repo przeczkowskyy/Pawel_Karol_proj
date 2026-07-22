@@ -50,7 +50,7 @@ export interface ToolBase {
   category: ToolCategory;
   status: ToolStatus;
   /* klucz osadzonego dashboardu (tylko dla status:"live") */
-  dashboard?: "report" | "production" | "quality" | "timeline";
+  dashboard?: "report" | "production" | "quality" | "timeline" | "payments";
   i18n: { pl: ToolText; en: ToolText };
 }
 
@@ -268,7 +268,8 @@ const BASE: ToolBase[] = [
     slug: "kalkulator-transz",
     icon: Calculator,
     category: "platnosci",
-    status: "preview",
+    status: "live",
+    dashboard: "payments",
     i18n: {
       pl: {
         name: "Kalkulator transz i walut",

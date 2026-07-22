@@ -7,6 +7,7 @@ import DemoReport from "@/components/DemoReport";
 import ProductionDashboard from "@/components/dashboards/ProductionDashboard";
 import QualityGate from "@/components/dashboards/QualityGate";
 import TaskTimeline from "@/components/dashboards/TaskTimeline";
+import PaymentCalculator from "@/components/dashboards/PaymentCalculator";
 
 /* Podstrona narzędzia /narzedzia/:slug — opis + OSADZONY interaktywny dashboard
    (dla status:"live"). Normalny scroll dokumentu (poza deckiem landingu).
@@ -144,6 +145,7 @@ export default function ToolPage({ onBook }: { onBook: () => void }) {
           {tool.dashboard === "production" && <ProductionDashboard />}
           {tool.dashboard === "quality" && <QualityGate />}
           {tool.dashboard === "timeline" && <TaskTimeline />}
+          {tool.dashboard === "payments" && <PaymentCalculator />}
         </div>
       )}
 
