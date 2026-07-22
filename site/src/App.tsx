@@ -25,7 +25,7 @@ import Differentiators from "@/components/Differentiators";
 import Faq from "@/components/Faq";
 import ToolsGrid from "@/components/ToolsGrid";
 import SlideDeck, { type SlideDef } from "@/components/SlideDeck";
-import ModulePage from "@/pages/ModulePage";
+import ToolPage from "@/pages/ToolPage";
 import { useLang, pick } from "@/i18n";
 
 /* Landing Klarow v0.6 — motion-graphic deck, dark-only, PL/EN. Strona jest
@@ -76,7 +76,7 @@ const HERO = {
     lead2: " — a Twoje dane nie opuszczają firmy.",
     proof: "Raport zarządczy w kilkanaście sekund zamiast godzin.",
     ctaMain: "Umów bezpłatną diagnozę",
-    ctaModules: "Zobacz moduły",
+    ctaModules: "Zobacz narzędzia",
     qualifier: "Dla firm 20–250 osób · środowisko Windows + Excel · narzędzia działają on-premise, u Ciebie",
     quickNav: [
       { id: "narzedzia", label: "Narzędzia" },
@@ -96,7 +96,7 @@ const HERO = {
     lead2: " — and your data never leaves your company.",
     proof: "A board report in seconds instead of hours.",
     ctaMain: "Book a free diagnosis",
-    ctaModules: "See the modules",
+    ctaModules: "See the tools",
     qualifier: "For companies of 20–250 people · Windows + Excel environment · tools run on-premise, at your site",
     quickNav: [
       { id: "narzedzia", label: "Tools" },
@@ -135,7 +135,7 @@ function Hero({ onBook, onGoTo }: { onBook: () => void; onGoTo: (id: string) => 
         <button className="btn btn-primary" type="button" onClick={onBook}>
           {t.ctaMain}
         </button>
-        <button className="btn btn-secondary" type="button" onClick={() => onGoTo("moduly")}>
+        <button className="btn btn-secondary" type="button" onClick={() => onGoTo("narzedzia")}>
           {t.ctaModules}
         </button>
       </div>
@@ -725,10 +725,10 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Landing onBook={onBook} zoomRef={zoomRef} />} />
           <Route
-            path="/moduly/:slug"
+            path="/narzedzia/:slug"
             element={
               <>
-                <ModulePage onBook={onBook} />
+                <ToolPage onBook={onBook} />
                 <Footer />
               </>
             }
