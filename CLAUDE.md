@@ -146,11 +146,15 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
   - **Sekcja „Dowód" usunięta jako slajd** — liczby wplecione w nagłówek Narzędzi.
   - **Kondensacja slajdów (decyzja Karola):** „Dlaczego dni" + „Dla kogo" + „Zaufanie/
     Oferta" → JEDEN slajd `OfferSection` (deck: 9→7 slajdów). Za dużo podstron rozprasza.
-  - **Mobile „tylko tło" NIE ustąpiło po fixie cache** — dołożony **tryb diagnostyczny
-    `klarow.com/?debug=1`** (inline ES5 w index.html: błędy JS/assetów + stan
-    .deck/.slide + wsparcie CSS na ekranie telefonu) i hardening: longhandy zamiast
-    samego `inset` (deck 0×0 na starych przeglądarkach), z-index decka, `isolation`
-    na warstwie canvasa. **Następny krok diagnozy: zrzut ?debug=1 z telefonu Karola.**
+  - **Mobile „tylko tło" — pełna diagnoza na żywej produkcji (curl):** HTML świeży, ale
+    (a) minifier CSS sklejał fallbackowe longhandy z powrotem w `inset`, (b) arkusz pełen
+    składni nowego WebKita (oklch/color-mix/@layer/@property z Tailwinda v4 — wymaga
+    ~Safari 16.4). Fix: **`build.target ["es2019","safari13"]` + `cssTarget ["safari13"]`
+    w vite.config** (longhandy zostają, oklch→rgb — zweryfikowane w dist) + **szkielet
+    strony na czystym CSS** (`.bg-layer`/`.content-layer` w globals zamiast tailwindowych
+    fixed/inset-0/z-*) — treść stoi nawet gdy @layer/@property wypadną. Tryb
+    diagnostyczny `klarow.com/?debug=1` (błędy + stan .deck/.slide + sondy
+    inset/@layer/@property na ekranie). **Jeśli telefon dalej czarny → zrzut ?debug=1.**
 - **2026-07-22 (sesja strony, cz. 5) — komplet 12/12 narzędzi + działy + wydruk + SEO:**
   - **Decyzje Karola:** zero statusów („każde narzędzie musi działać na żywo, zawsze DEMO
     dane"); zakładka Narzędzia = najpierw **boxy działów** (drill-down); **wydruk
