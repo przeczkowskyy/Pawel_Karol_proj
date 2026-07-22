@@ -5,6 +5,8 @@ import { findTool, getTools, CATEGORY_LABEL, type ToolStatus } from "@/data/tool
 import { useLang, pick } from "@/i18n";
 import DemoReport from "@/components/DemoReport";
 import ProductionDashboard from "@/components/dashboards/ProductionDashboard";
+import QualityGate from "@/components/dashboards/QualityGate";
+import TaskTimeline from "@/components/dashboards/TaskTimeline";
 
 /* Podstrona narzędzia /narzedzia/:slug — opis + OSADZONY interaktywny dashboard
    (dla status:"live"). Normalny scroll dokumentu (poza deckiem landingu).
@@ -138,7 +140,10 @@ export default function ToolPage({ onBook }: { onBook: () => void }) {
               {t.liveHint}
             </span>
           </div>
-          {tool.dashboard === "report" ? <DemoReport /> : <ProductionDashboard />}
+          {tool.dashboard === "report" && <DemoReport />}
+          {tool.dashboard === "production" && <ProductionDashboard />}
+          {tool.dashboard === "quality" && <QualityGate />}
+          {tool.dashboard === "timeline" && <TaskTimeline />}
         </div>
       )}
 

@@ -50,7 +50,7 @@ export interface ToolBase {
   category: ToolCategory;
   status: ToolStatus;
   /* klucz osadzonego dashboardu (tylko dla status:"live") */
-  dashboard?: "report" | "production";
+  dashboard?: "report" | "production" | "quality" | "timeline";
   i18n: { pl: ToolText; en: ToolText };
 }
 
@@ -155,7 +155,8 @@ const BASE: ToolBase[] = [
     slug: "audyt-jakosci-danych",
     icon: ShieldCheck,
     category: "jakosc-danych",
-    status: "preview",
+    status: "live",
+    dashboard: "quality",
     i18n: {
       pl: {
         name: "Audyt jakości danych",
@@ -229,7 +230,8 @@ const BASE: ToolBase[] = [
     slug: "os-czasu-zadan",
     icon: GanttChartSquare,
     category: "produkcja",
-    status: "preview",
+    status: "live",
+    dashboard: "timeline",
     i18n: {
       pl: {
         name: "Oś czasu zadań (Gantt)",
