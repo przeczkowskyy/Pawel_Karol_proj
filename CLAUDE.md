@@ -67,24 +67,30 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
   `motion-design`: wyjście 420 ms accelerate, wejście 600 ms decelerate z opóźnieniem
   120 ms; CSS w `src/styles/globals.css`). Slajd wyższy niż viewport scrolluje się
   **wewnętrznie** (`.slide-scroll`) — deck przełącza dopiero od krawędzi treści. Hash ↔
-  slajd zsynchronizowane (navbar i podstrony działają); hero ma rząd przycisków szybkiej
-  nawigacji. Kolejność: start → ból → moduły → wyróżniki → współpraca → jak → dowód →
-  dla-kogo → oferta → faq → kontakt (lista `SLIDES` w `App.tsx`).
-- `src/App.tsx` — definicje sekcji + deck + routing (`/`, `/moduly/:slug`) + modal rezerwacji.
-- `src/data/modules.ts` — **jedno źródło danych modułów M1–M8** (PL+EN: `problem` w głosie
-  klienta, opisy, korzyści, statusy, `dept` jako filtr, powiązania). Zrzuty ekranu:
-  `public/screens/` (na razie `placeholder.svg`).
-- `src/components/` — `ModulesGrid` (oś problemowa modułów + filtr działów, auto-animate),
-  `Differentiators` (zero chmury + determinizm + blok ✕/✓ + galeria before/after),
-  `Navbar` (przełącznik PL/EN), `BookingModal` (kalendarz → mailto/tel; **do podmiany na
-  embed Cal.com**, gdy founderzy podadzą link), `CollaborationFlow` (schemat blokowy SVG), `Faq`.
+  slajd zsynchronizowane (navbar i podstrony działają; `HASH_ALIAS` mapuje stare hashe);
+  hero ma rząd przycisków szybkiej nawigacji; **KLAROW w navbarze → slajd 0** (CustomEvent
+  `klarow:home`). Kolejność: start → ból → **narzędzia** → wyróżniki → współpraca → jak →
+  dowód → dla-kogo → oferta → faq (lista `SLIDES` w `App.tsx`). **Kontakt = stała stopka
+  `FooterBar`** (fixed dół, opaque) — telefon+e-mail zawsze widoczne (nie slajd).
+- `src/App.tsx` — definicje sekcji + deck + routing (`/`, `/narzedzia/:slug`) + modal rezerwacji.
+- **Sekcja „Narzędzia" (rdzeń dowodu — zamiast fikcyjnych modułów):**
+  - `src/data/tools.ts` — **katalog ~12 narzędzi** (PL/EN): `category`, `status`
+    (`live`|`preview`|`soon`), tagline/replaces/io/bullets. **Odbrandowane** odtworzenie
+    narzędzi z bazy blueprintów (patrz niżej) — nazwy generyczne, dane fikcyjne.
+  - `src/components/ToolsGrid.tsx` — katalog na landingu (filtr kategorii, auto-animate),
+    karty → `/narzedzia/:slug`; `live` wyróżnione i na początku.
+  - `src/pages/ToolPage.tsx` — opis narzędzia + **OSADZONY interaktywny dashboard** (live).
+  - `src/components/DemoReport.tsx` + `lib/report.ts` + `data/demo-sample.ts` — **LIVE**
+    dashboard „Raport zarządczy" (silnik CSV→raport, spec: `docs/plan/demo-m2-spec.md`).
+  - `src/components/dashboards/ProductionDashboard.tsx` — **LIVE** „Dashboard produkcji"
+    (kafle hal, suwak tygodnia, rozbicie na etapy; deterministyczny, read-only, dane fikcyjne).
+- `src/components/` — `Differentiators` (zero chmury + determinizm + blok ✕/✓ + galeria
+  before/after linkująca do live-dashboardów), `Navbar` (PL/EN, KLAROW→home), `BookingModal`
+  (kalendarz → mailto/tel; **do podmiany na embed Cal.com**), `CollaborationFlow` (SVG), `Faq`.
 - `src/components/ui/glsl-hills.tsx` — tło całej strony (three.js, spowolnione `speed=0.2`);
   prop `zoomRef` = docelowy zoom kamery mutowany przez deck (płynne dojście w pętli renderu,
   bez remontu sceny WebGL) — tło „wjeżdża w głąb" z każdym slajdem.
-- **Zapas (nieużywane, poza bundlem):** `DemoReport.tsx` + `lib/report.ts` +
-  `data/demo-sample.ts` (żywe DEMO M2 zdjęte ze strony 2026-07-22 — dowodem będą realne
-  narzędzia; silnik CSV→raport gotowy do reużycia, spec: `docs/plan/demo-m2-spec.md`),
-  `radial-orbital-timeline`, `canvas-reveal-effect`.
+- **Zapas (nieużywane, poza bundlem):** `radial-orbital-timeline`, `canvas-reveal-effect`.
 - `src/styles/company-ui.css` — **kopia kitu** (aktualizacja = nadpisanie NAD markerem
   APP-SPECIFIC świeżą kopią z `ui-kit/.../app.css` + zamiana ścieżek fontów na `/fonts/`).
 - `public/_redirects` — SPA-fallback dla podstron na Cloudflare Pages/Netlify.
@@ -92,6 +98,25 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
 
 ## Stan operacyjny (aktualizuj przy zmianach!)
 
+- **2026-07-22 (sesja strony, cz. 3) — landing v0.7 + sekcja Narzędzia (decyzje Karola):**
+  - **Poprawki UX decka:** kontakt = **stała stopka** (`FooterBar`, nie slajd); **KLAROW →
+    slajd 0**; lepsze skalowanie slajdów (padding `clamp()` wg wysokości ekranu) i mobile
+    (osobne wartości ≤640px, e-mail chowany, telefon zostaje).
+  - **Fikcyjne moduły M1–M8 USUNIĘTE** (`modules.ts`, `ModulesGrid`, `ModulePage`). Slajd
+    „Moduły" → **„Narzędzia"**.
+  - **Nowa sekcja Narzędzia = rdzeń dowodu.** Katalog 12 narzędzi (`tools.ts`) +
+    `ToolsGrid` + `ToolPage` (`/narzedzia/:slug`). **2 dashboardy DZIAŁAJĄCE NA ŻYWO**
+    (100% client-side, dane fikcyjne): „Raport zarządczy" (reuse silnika CSV→raport) i
+    nowy „Dashboard produkcji". Reszta: `preview`/`soon` (opis gotowy, dashboard w budowie).
+  - **Źródło narzędzi:** prywatne repo blueprintów `github.com/bibaczebe/Kompleksowa-analiza-narz-dzi`
+    — to **dokumentacja „jak odtworzyć od zera" ~30 narzędzi Nuconic**, NIE kod do kopiowania.
+    Budujemy **odbrandowane** (zasada #3: zero marki/liczb Nuconic; nazwy generyczne, dane
+    fikcyjne, opis „firma produkcyjno-budowlana"). TOP5 wykonalne client-side: Panel
+    analityczny (=Raport), Oś czasu/Gantt, Dashboard produkcji, Audyt jakości (=M1),
+    Import z rekoncyliacją. Cztery importy BT piszą do Excela przez COM → w przeglądarce
+    tylko podgląd/TEST, nie zapis PROD.
+  - **Do zrobienia dalej:** kolejne dashboardy live (Audyt jakości = wedge M1; Oś czasu/Gantt;
+    Import z rekoncyliacją) — mapowanie w `tools.ts` (`status`, `dashboard`).
 - **2026-07-22 (sesja strony, cz. 2) — landing v0.6: motion-graphic deck (decyzja Karola):**
   - Strona przerobiona na **statyczny deck** (zero scrolla dokumentu): scroll/swipe/klawiatura
     przełącza sekcje-slajdy z przejściem zoom+fade; tło GLSL Hills spowolnione i robi zoom
