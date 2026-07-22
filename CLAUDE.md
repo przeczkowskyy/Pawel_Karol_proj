@@ -74,13 +74,22 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
   `FooterBar`** (fixed dół, opaque) — telefon+e-mail zawsze widoczne (nie slajd).
 - `src/App.tsx` — definicje sekcji + deck + routing (`/`, `/narzedzia/:slug`) + modal rezerwacji.
 - **Sekcja „Narzędzia" (rdzeń dowodu — zamiast fikcyjnych modułów):**
-  - `src/data/tools.ts` — **katalog ~12 narzędzi** (PL/EN): `category`, `status`
-    (`live`|`preview`|`soon`), tagline/replaces/io/bullets. **Odbrandowane** odtworzenie
-    narzędzi z bazy blueprintów (patrz niżej) — nazwy generyczne, dane fikcyjne.
-  - `src/components/ToolsGrid.tsx` — katalog na landingu (filtr kategorii, auto-animate),
-    karty → `/narzedzia/:slug`; `live` wyróżnione i na początku.
-  - `src/pages/ToolPage.tsx` — opis narzędzia + **OSADZONY interaktywny dashboard** (live).
-  - **7 dashboardów LIVE** (100% client-side, deterministyczne, dane fikcyjne):
+  - **BEZ statusów — KAŻDE z 12 narzędzi DZIAŁA NA ŻYWO na danych DEMO** (decyzja Karola).
+  - `src/data/tools.ts` — katalog 12 narzędzi (PL/EN): **`dept` (5 działów: kontroling,
+    finanse, produkcja, dane, administracja)**, `category`, `dashboard` (klucz komponentu),
+    tagline/replaces/io/bullets. **Odbrandowane** odtworzenie z bazy blueprintów.
+  - `src/components/ToolsGrid.tsx` — **drill-down**: poziom 1 = boxy działów, poziom 2 =
+    narzędzia wybranego działu.
+  - `src/pages/ToolPage.tsx` — podstrona narzędzia: OSADZONY dashboard (mapa `DASHBOARDS`)
+    + opis + crosslinki + Seo per podstrona.
+  - **Wydruk dokumentów:** `dashboards/PrintButton.tsx` + print-CSS w `globals.css`
+    (`.print-area` = jedyny widoczny przy druku, zawsze czarno na białym; `.print-only` =
+    nagłówek dokumentu). Drukują: plan płatności, podsumowanie tygodnia PM, raport
+    importu, protokół robocizny, rejestr umów.
+  - **SEO:** `src/components/Seo.tsx` (title/description/canonical/OG/JSON-LD per strona;
+    `ORG_JSONLD` na landingu, `toolJsonLd` per narzędzie), `public/robots.txt`,
+    `public/sitemap.xml` (**aktualizuj przy dodaniu narzędzia!**), meta w `index.html`.
+  - **12 dashboardów (komplet)** — 100% client-side, deterministyczne, dane fikcyjne:
     `DemoReport.tsx`+`lib/report.ts` („Raport zarządczy", spec `docs/plan/demo-m2-spec.md`) ·
     `dashboards/ProductionDashboard.tsx` (kafle hal + suwak tygodnia) ·
     `dashboards/QualityGate.tsx`+`lib/qualityGate.ts` („Audyt jakości" — reguły 1:1
@@ -92,7 +101,12 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
     `dashboards/ImportReconciliation.tsx` (diff 2 wersji + REKONCYLIACJA PASS/FAIL
     z jawnym dowodem co do grosza, tryb TEST) · `dashboards/G703Billing.tsx`
     (silnik G703: earned=D×M, proposal=earned−billed gdy M>40%, clawback
-    nieprzycinany, USD/centy — wątek rynku USA).
+    nieprzycinany, USD/centy — wątek rynku USA) · `dashboards/PaymentFlow.tsx`
+    (obieg przelewów: decyzje per pozycja → plan 14-dniowy, cztery oczy, wydruk) ·
+    `dashboards/CostControl.tsx` (widok PM: ETC→EAC→marża na żywo, bramka tygodnia) ·
+    `dashboards/ErpImports.tsx` (TEST: słownik, dedup, sanity, wydruk raportu) ·
+    `dashboards/LabourProtocols.tsx` (kreator DRAFT→FINAL, drukowalny protokół) ·
+    `dashboards/ContractRegister.tsx` (CRUD, szukajka, CSV, wydruk rejestru).
 - `src/components/` — `Differentiators` (zero chmury + determinizm + blok ✕/✓ + galeria
   before/after linkująca do live-dashboardów), `Navbar` (PL/EN, KLAROW→home), `BookingModal`
   (kalendarz → mailto/tel; **do podmiany na embed Cal.com**), `CollaborationFlow` (SVG), `Faq`.
@@ -107,6 +121,18 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
 
 ## Stan operacyjny (aktualizuj przy zmianach!)
 
+- **2026-07-22 (sesja strony, cz. 5) — komplet 12/12 narzędzi + działy + wydruk + SEO:**
+  - **Decyzje Karola:** zero statusów („każde narzędzie musi działać na żywo, zawsze DEMO
+    dane"); zakładka Narzędzia = najpierw **boxy działów** (drill-down); **wydruk
+    dokumentów** z narzędzi; strona **pod SEO** z podzakładkami budującymi trust.
+  - Dobudowane ostatnie 5 dashboardów: Obieg przelewów (plan 14-dniowy), Kontroling
+    kosztów (ETC→EAC), Importy ERP (TEST: słownik+dedup+sanity), Protokoły robocizny
+    (kreator + drukowalny dokument), Rejestr umów (CRUD+CSV+wydruk).
+  - Wydruk: `.print-area`/`.print-only` + `PrintButton` — 5 dokumentów drukowalnych.
+  - SEO: per-podstrona title/meta/canonical/OG/JSON-LD, robots.txt, sitemap.xml
+    (13 URL-i — pamiętaj o aktualizacji przy nowych narzędziach), meta w index.html.
+  - Uwaga architektoniczna: SPA — meta ustawiane w JS; jeśli SEO ma być mocniejsze,
+    następny krok to prerender/SSG podstron narzędzi (np. vite-ssg) przy deployu.
 - **2026-07-22 (sesja strony, cz. 4) — „przenieś 1:1 narzędzia z gita": 7 dashboardów LIVE:**
   - Do istniejących 2 (Raport zarządczy, Dashboard produkcji) doszło 5 kolejnych, odtworzonych
     **1:1 co do logiki** ze wzbogaconych blueprintów (repo dostało fragmenty realnego kodu):
