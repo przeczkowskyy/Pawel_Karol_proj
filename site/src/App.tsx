@@ -20,67 +20,45 @@ import {
 import Navbar from "@/components/Navbar";
 import BookingModal, { PHONE_DISPLAY, PHONE_HREF } from "@/components/BookingModal";
 import CollaborationFlow from "@/components/CollaborationFlow";
-import DemoReport from "@/components/DemoReport";
 import Differentiators from "@/components/Differentiators";
 import Faq from "@/components/Faq";
 import ModulesGrid from "@/components/ModulesGrid";
+import SlideDeck, { type SlideDef } from "@/components/SlideDeck";
 import ModulePage from "@/pages/ModulePage";
 import { useLang, pick } from "@/i18n";
 
-/* Landing Klarow v0.5 — dark-only, PL/EN. Tło: GLSL Hills (wzgórza z szumu
-   Perlina w stali, lazy chunk z three.js) jako warstwa fixed pod CAŁĄ stroną;
-   treść na z-10. Komponenty i tokeny: kit company-ui, Tailwind do layoutu.
-   Sekcje: hero → ból → moduły (oś problemowa) → żywe DEMO M2 → wyróżniki
-   (zero chmury + determinizm) → współpraca → jak → dowód → dla kogo →
-   oferta → FAQ → stopka. */
+/* Landing Klarow v0.6 — motion-graphic deck, dark-only, PL/EN. Strona jest
+   STATYCZNA (zero scrolla dokumentu): gest scrolla / swipe / klawiatura
+   przełącza sekcje-slajdy (SlideDeck) z przejściem zoom+fade; tło GLSL Hills
+   (warstwa fixed pod całością, lazy chunk z three.js) robi zoom w głąb wraz
+   z kolejnymi slajdami. Kolejność: hero (+szybka nawigacja) → ból → moduły
+   (oś problemowa) → wyróżniki → współpraca → jak → dowód → dla kogo →
+   oferta → FAQ → kontakt/stopka. Komponenty i tokeny: kit company-ui. */
 
 const GLSLHills = lazy(() =>
   import("@/components/ui/glsl-hills").then((m) => ({ default: m.GLSLHills }))
 );
 
-function useReveal<T extends HTMLElement>() {
-  const ref = useRef<T | null>(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          el.classList.add("in");
-          io.disconnect();
-        }
-      },
-      { threshold: 0.1 }
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-  return ref;
-}
-
 function Section({
-  id,
   title,
   sub,
   children,
 }: {
-  id?: string;
   title: string;
   sub?: string;
   children: React.ReactNode;
 }) {
-  const ref = useReveal<HTMLElement>();
   return (
-    <section id={id} ref={ref} className="reveal max-w-6xl mx-auto px-6 py-14">
+    <section className="max-w-6xl mx-auto px-6 py-8 w-full">
       <h2 className="text-[26px] md:text-[30px] font-extrabold tracking-tight" style={{ color: "var(--heading)" }}>
         {title}
       </h2>
       {sub ? (
-        <p className="mt-2 mb-8 max-w-3xl text-[15px]" style={{ color: "var(--muted-foreground)" }}>
+        <p className="mt-2 mb-7 max-w-3xl text-[15px]" style={{ color: "var(--muted-foreground)" }}>
           {sub}
         </p>
       ) : (
-        <div className="mb-8" />
+        <div className="mb-7" />
       )}
       {children}
     </section>
@@ -97,8 +75,18 @@ const HERO = {
     lead2: " — a Twoje dane nie opuszczają firmy.",
     proof: "Raport zarządczy w kilkanaście sekund zamiast godzin.",
     ctaMain: "Umów bezpłatną diagnozę",
-    ctaModules: "Zobacz żywe demo",
+    ctaModules: "Zobacz moduły",
     qualifier: "Dla firm 20–250 osób · środowisko Windows + Excel · narzędzia działają on-premise, u Ciebie",
+    quickNav: [
+      { id: "moduly", label: "Moduły" },
+      { id: "wyrozniki", label: "Wyróżniki" },
+      { id: "wspolpraca", label: "Współpraca" },
+      { id: "jak", label: "Dlaczego dni" },
+      { id: "dowod", label: "Dowód" },
+      { id: "oferta", label: "Oferta" },
+      { id: "faq", label: "FAQ" },
+      { id: "kontakt", label: "Kontakt" },
+    ],
   },
   en: {
     h1a: "Order in the data of companies",
@@ -108,53 +96,69 @@ const HERO = {
     lead2: " — and your data never leaves your company.",
     proof: "A board report in seconds instead of hours.",
     ctaMain: "Book a free diagnosis",
-    ctaModules: "See the live demo",
+    ctaModules: "See the modules",
     qualifier: "For companies of 20–250 people · Windows + Excel environment · tools run on-premise, at your site",
+    quickNav: [
+      { id: "moduly", label: "Modules" },
+      { id: "wyrozniki", label: "Differentiators" },
+      { id: "wspolpraca", label: "How we work" },
+      { id: "jak", label: "Why days" },
+      { id: "dowod", label: "Proof" },
+      { id: "oferta", label: "Offer" },
+      { id: "faq", label: "FAQ" },
+      { id: "kontakt", label: "Contact" },
+    ],
   },
 };
 
-function Hero({ onBook }: { onBook: () => void }) {
+function Hero({ onBook, onGoTo }: { onBook: () => void; onGoTo: (id: string) => void }) {
   const { lang } = useLang();
   const t = pick(lang, HERO);
   return (
-    <section id="top" className="relative min-h-[92vh] flex flex-col">
-      <div className="flex-1 flex flex-col items-center justify-center text-center px-6 pt-24 pb-10">
-        <span className="brand-word" style={{ fontSize: 15 }}>KLAROW</span>
-        <h1
-          className="mt-5 max-w-3xl text-4xl md:text-6xl font-extrabold tracking-tight leading-[1.08]"
-          style={{ color: "var(--heading)" }}
-        >
-          {t.h1a}
-          <br className="hidden md:block" /> {t.h1b}
-        </h1>
-        <p className="mt-5 max-w-2xl text-lg md:text-xl" style={{ color: "var(--foreground)" }}>
-          {t.lead1}
-          <strong>{t.leadStrong}</strong>
-          {t.lead2}
-        </p>
-        <p className="mt-3 text-sm font-semibold tracking-wide" style={{ color: "var(--accent-foreground)" }}>
-          {t.proof}
-        </p>
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-          <button className="btn btn-primary" type="button" onClick={onBook}>
-            {t.ctaMain}
-          </button>
-          <a className="btn btn-secondary" href="#demo">
-            {t.ctaModules}
-          </a>
-        </div>
-        <a
-          href={PHONE_HREF}
-          className="mt-4 inline-flex items-center gap-2 text-sm font-bold"
-          style={{ color: "var(--muted-foreground)" }}
-        >
-          <Phone size={14} style={{ color: "var(--primary)" }} /> {PHONE_DISPLAY}
-        </a>
-        <p className="mt-6 text-xs" style={{ color: "var(--muted-foreground)" }}>
-          {t.qualifier}
-        </p>
+    <div className="flex flex-col items-center text-center px-6">
+      <span className="brand-word" style={{ fontSize: 15 }}>KLAROW</span>
+      <h1
+        className="mt-5 max-w-3xl text-4xl md:text-6xl font-extrabold tracking-tight leading-[1.08]"
+        style={{ color: "var(--heading)" }}
+      >
+        {t.h1a}
+        <br className="hidden md:block" /> {t.h1b}
+      </h1>
+      <p className="mt-5 max-w-2xl text-lg md:text-xl" style={{ color: "var(--foreground)" }}>
+        {t.lead1}
+        <strong>{t.leadStrong}</strong>
+        {t.lead2}
+      </p>
+      <p className="mt-3 text-sm font-semibold tracking-wide" style={{ color: "var(--accent-foreground)" }}>
+        {t.proof}
+      </p>
+      <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+        <button className="btn btn-primary" type="button" onClick={onBook}>
+          {t.ctaMain}
+        </button>
+        <button className="btn btn-secondary" type="button" onClick={() => onGoTo("moduly")}>
+          {t.ctaModules}
+        </button>
       </div>
-    </section>
+      <a
+        href={PHONE_HREF}
+        className="mt-4 inline-flex items-center gap-2 text-sm font-bold"
+        style={{ color: "var(--muted-foreground)" }}
+      >
+        <Phone size={14} style={{ color: "var(--primary)" }} /> {PHONE_DISPLAY}
+      </a>
+      <p className="mt-6 text-xs" style={{ color: "var(--muted-foreground)" }}>
+        {t.qualifier}
+      </p>
+      {/* szybka nawigacja — deck „przezoomowuje" wprost do sekcji */}
+      <div className="mt-7 flex flex-wrap items-center justify-center gap-2 max-w-2xl">
+        {t.quickNav.map((q) => (
+          <button key={q.id} className="btn btn-secondary btn-sm" type="button" onClick={() => onGoTo(q.id)}>
+            {q.label}
+          </button>
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -218,7 +222,7 @@ function Modules() {
   const { lang } = useLang();
   const t = pick(lang, MODULES_TXT);
   return (
-    <Section id="moduly" title={t.title} sub={t.sub}>
+    <Section title={t.title} sub={t.sub}>
       <ModulesGrid />
     </Section>
   );
@@ -240,7 +244,7 @@ function Collaboration() {
   const { lang } = useLang();
   const t = pick(lang, COLLAB);
   return (
-    <Section id="wspolpraca" title={t.title} sub={t.sub}>
+    <Section title={t.title} sub={t.sub}>
       <CollaborationFlow />
     </Section>
   );
@@ -274,7 +278,7 @@ function How() {
   const { lang } = useLang();
   const t = pick(lang, HOW);
   return (
-    <Section id="jak" title={t.title} sub={t.sub}>
+    <Section title={t.title} sub={t.sub}>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {t.steps.map((s) => (
           <div key={s.title} className="card">
@@ -316,7 +320,7 @@ function Proof() {
   const { lang } = useLang();
   const t = pick(lang, PROOF);
   return (
-    <Section id="dowod" title={t.title} sub={t.sub}>
+    <Section title={t.title} sub={t.sub}>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {t.items.map((p) => (
           <div key={p.lbl} className="card stat">
@@ -326,28 +330,6 @@ function Proof() {
           </div>
         ))}
       </div>
-    </Section>
-  );
-}
-
-/* ── DEMO M2 (żywy dowód) ── */
-const DEMO_TXT = {
-  pl: {
-    title: "Zobacz, jak to działa — żywe demo raportu",
-    sub: "Odtworzone od zera narzędzie modułu „Raport zarządczy”, na fikcyjnych danych. Wklej własną tabelę z Excela albo załaduj przykład — całość liczy się w Twojej przeglądarce, nic nie wychodzi do sieci. Dokładnie tak działają narzędzia, które instalujemy u klientów.",
-  },
-  en: {
-    title: "See it work — a live report demo",
-    sub: "The “Board report” module tool rebuilt from scratch, on fictional data. Paste your own table from Excel or load the example — everything computes in your browser, nothing leaves for the network. This is exactly how the tools we install at clients work.",
-  },
-};
-
-function Demo() {
-  const { lang } = useLang();
-  const t = pick(lang, DEMO_TXT);
-  return (
-    <Section id="demo" title={t.title} sub={t.sub}>
-      <DemoReport />
     </Section>
   );
 }
@@ -368,7 +350,7 @@ function DiffSection() {
   const { lang } = useLang();
   const t = pick(lang, DIFF_TXT);
   return (
-    <Section id="wyrozniki" title={t.title} sub={t.sub}>
+    <Section title={t.title} sub={t.sub}>
       <Differentiators />
     </Section>
   );
@@ -414,7 +396,7 @@ function ForWhom() {
   const { lang } = useLang();
   const t = pick(lang, FIT);
   return (
-    <Section id="dla-kogo" title={t.title}>
+    <Section title={t.title}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="card">
           <div className="lbl-sm" style={{ marginBottom: 12 }}>{t.yesHead}</div>
@@ -501,7 +483,7 @@ function TrustOffer({ onBook }: { onBook: () => void }) {
   const { lang } = useLang();
   const t = pick(lang, TRUST);
   return (
-    <Section id="oferta" title={t.title}>
+    <Section title={t.title}>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
         <div className="flex flex-col gap-3">
           {t.items.map((x, i) => (
@@ -551,7 +533,7 @@ function FaqSection() {
   const { lang } = useLang();
   const t = pick(lang, FAQ_TXT);
   return (
-    <Section id="faq" title={t.title} sub={t.sub}>
+    <Section title={t.title} sub={t.sub}>
       <div className="max-w-3xl">
         <Faq />
       </div>
@@ -593,49 +575,116 @@ function Footer() {
   );
 }
 
-function Landing({ onBook }: { onBook: () => void }) {
+/* ── DECK: kolejność slajdów + mapowanie hash ↔ slajd ── */
+const SLIDES: { id: string; label: { pl: string; en: string } }[] = [
+  { id: "start", label: { pl: "Start", en: "Start" } },
+  { id: "bol", label: { pl: "Znasz to?", en: "Sound familiar?" } },
+  { id: "moduly", label: { pl: "Moduły", en: "Modules" } },
+  { id: "wyrozniki", label: { pl: "Wyróżniki", en: "Differentiators" } },
+  { id: "wspolpraca", label: { pl: "Współpraca", en: "How we work" } },
+  { id: "jak", label: { pl: "Dlaczego dni", en: "Why days" } },
+  { id: "dowod", label: { pl: "Dowód", en: "Proof" } },
+  { id: "dla-kogo", label: { pl: "Dla kogo", en: "Who it's for" } },
+  { id: "oferta", label: { pl: "Oferta", en: "Offer" } },
+  { id: "faq", label: { pl: "FAQ", en: "FAQ" } },
+  { id: "kontakt", label: { pl: "Kontakt", en: "Contact" } },
+];
+
+const slideIndexFromHash = (hash: string): number => {
+  const i = SLIDES.findIndex((s) => `#${s.id}` === hash);
+  return i >= 0 ? i : 0;
+};
+
+/* zoom tła per slajd — każdy krok w głąb strony przybliża wzgórza */
+const ZOOM_STEP = 0.09;
+
+function Landing({
+  onBook,
+  zoomRef,
+}: {
+  onBook: () => void;
+  zoomRef: React.MutableRefObject<number>;
+}) {
+  const { lang } = useLang();
   const { hash } = useLocation();
+  const [active, setActive] = useState(() => slideIndexFromHash(window.location.hash));
+
+  /* nawigacja hashem (navbar, powrót z podstrony modułu) */
   useEffect(() => {
-    if (!hash) return;
-    const el = document.querySelector(hash);
-    if (el) el.scrollIntoView({ behavior: "smooth" });
+    if (hash) setActive(slideIndexFromHash(hash));
   }, [hash]);
 
+  /* slajd → zoom tła + hash w pasku adresu (replaceState — bez śmiecenia historią) */
+  useEffect(() => {
+    zoomRef.current = 1 + active * ZOOM_STEP;
+    const id = SLIDES[active].id;
+    const want = id === "start" ? "" : `#${id}`;
+    if (window.location.hash !== want) {
+      history.replaceState(null, "", want === "" ? window.location.pathname : want);
+    }
+  }, [active, zoomRef]);
+
+  /* przy wyjściu z landingu (podstrony modułów scrollują się normalnie) */
+  useEffect(() => {
+    return () => {
+      zoomRef.current = 1;
+    };
+  }, [zoomRef]);
+
+  const goTo = (id: string) => {
+    const i = SLIDES.findIndex((s) => s.id === id);
+    if (i >= 0) setActive(i);
+  };
+
+  const nodes: React.ReactNode[] = [
+    <Hero onBook={onBook} onGoTo={goTo} />,
+    <Pain />,
+    <Modules />,
+    <DiffSection />,
+    <Collaboration />,
+    <How />,
+    <Proof />,
+    <ForWhom />,
+    <TrustOffer onBook={onBook} />,
+    <FaqSection />,
+    <Footer />,
+  ];
+
+  const slides: SlideDef[] = SLIDES.map((s, i) => ({
+    id: s.id,
+    label: pick(lang, s.label),
+    node: nodes[i],
+  }));
+
   return (
-    <>
-      <Hero onBook={onBook} />
-      <Pain />
-      <Modules />
-      <Demo />
-      <DiffSection />
-      <Collaboration />
-      <How />
-      <Proof />
-      <ForWhom />
-      <TrustOffer onBook={onBook} />
-      <FaqSection />
-      <Footer />
-    </>
+    <SlideDeck
+      slides={slides}
+      active={active}
+      onNavigate={setActive}
+      dotsLabel={lang === "pl" ? "Nawigacja sekcji" : "Section navigation"}
+    />
   );
 }
 
 export default function App() {
   const [bookingOpen, setBookingOpen] = useState(false);
   const onBook = () => setBookingOpen(true);
+  /* docelowy zoom tła — mutowany przez Landing, czytany przez pętlę GLSL Hills */
+  const zoomRef = useRef(1);
 
   return (
     <div style={{ background: "var(--body-bg)" }}>
-      {/* tło CAŁEJ strony: GLSL Hills (lazy chunk z three.js) */}
+      {/* tło CAŁEJ strony: GLSL Hills (lazy chunk z three.js), spowolnione */}
       <div className="fixed inset-0 z-0 pointer-events-none bg-[#121212]" aria-hidden="true">
         <Suspense fallback={null}>
-          <GLSLHills width="100%" height="100%" />
+          <GLSLHills width="100%" height="100%" speed={0.2} zoomRef={zoomRef} />
         </Suspense>
       </div>
 
       <div className="relative z-10">
         <Navbar onBook={onBook} />
         <Routes>
-          <Route path="/" element={<Landing onBook={onBook} />} />
+          <Route path="/" element={<Landing onBook={onBook} zoomRef={zoomRef} />} />
           <Route
             path="/moduly/:slug"
             element={

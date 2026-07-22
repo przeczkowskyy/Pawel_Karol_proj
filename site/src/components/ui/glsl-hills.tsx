@@ -136,6 +136,10 @@ export interface GLSLHillsProps {
   cameraZ?: number;
   planeSize?: number;
   speed?: number;
+  /* Docelowy zoom tła (1 = baza). Parent mutuje ref (bez re-renderu),
+     pętla renderująca płynnie dochodzi do celu (kamera zbliża się do
+     wzgórz) — deck ustawia głębszy zoom z każdym kolejnym slajdem. */
+  zoomRef?: React.MutableRefObject<number>;
 }
 
 export const GLSLHills = ({
@@ -143,7 +147,8 @@ export const GLSLHills = ({
   height = "100%",
   cameraZ = 125,
   planeSize = 256,
-  speed = 0.5,
+  speed = 0.2,
+  zoomRef,
 }: GLSLHillsProps) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -177,14 +182,23 @@ export const GLSLHills = ({
       renderer.setSize(window.innerWidth, window.innerHeight);
     };
 
-    const renderFrame = () => {
+    const lookTarget = new THREE.Vector3(0, 28, 0);
+    /* zoom: wygładzanie wykładnicze do celu z zoomRef (materiał „fluid" —
+       tło dopływa na miejsce ~1 s po przełączeniu slajdu, zero overshootu) */
+    let zoom = Math.max(1, zoomRef?.current ?? 1);
+
+    const renderFrame = (dt: number) => {
       uniforms.time.value += clock.getDelta() * speed;
+      const target = Math.max(1, zoomRef?.current ?? 1);
+      zoom += (target - zoom) * (1 - Math.exp(-dt * 2.4));
+      camera.position.z = cameraZ / zoom;
+      camera.lookAt(lookTarget);
       renderer.render(scene, camera);
     };
 
     renderer.setClearColor(0x000000, 0);
-    camera.position.set(0, 16, cameraZ);
-    camera.lookAt(new THREE.Vector3(0, 28, 0));
+    camera.position.set(0, 16, cameraZ / zoom);
+    camera.lookAt(lookTarget);
     scene.add(mesh);
     window.addEventListener("resize", resize);
     resize();
@@ -200,8 +214,9 @@ export const GLSLHills = ({
     const loop = (now: number) => {
       raf = requestAnimationFrame(loop);
       if (now - last < FRAME_MS) return;
+      const dt = last > 0 ? Math.min((now - last) / 1000, 0.1) : 0.033;
       last = now;
-      renderFrame();
+      renderFrame(dt);
     };
 
     const onVisibility = () => {
@@ -232,7 +247,7 @@ export const GLSLHills = ({
       material.dispose();
       renderer.dispose();
     };
-  }, [cameraZ, planeSize, speed]);
+  }, [cameraZ, planeSize, speed, zoomRef]);
 
   return (
     <div style={{ position: "relative", width, height }}>

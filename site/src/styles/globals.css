@@ -1,27 +1,117 @@
 @import "tailwindcss";
 
 /* Landing Klarow — Tailwind tylko do layoutu/utility; komponenty i tokeny
-   daje company-ui.css (kit). Landing jest dark-only w v0.1. */
-html {
-  scroll-behavior: smooth;
+   daje company-ui.css (kit). Landing jest dark-only. */
+
+/* ── Deck (motion-graphic landing) ──────────────────────────────────────
+   Strona jest STATYCZNA: dokument nie scrolluje się; sekcje to slajdy
+   przełączane gestem scrolla / swipe / klawiaturą (SlideDeck.tsx).
+   Język ruchu (skill motion-design, archetyp Premium — zero overshootu):
+   - wyjście: akceleracja (0.3,0,1,1), 420 ms — slajd „przelatuje obok"
+     kamery (scale 1→1.06 przy ruchu naprzód) i gaśnie;
+   - wejście: emphasized decelerate (0.05,0.7,0.1,1), 600 ms, opóźnione
+     o 120 ms (reguła 1/3 — mniej elementów w ruchu naraz), slajd dopływa
+     ze scale .94→1 („z głębi") lub 1.06→1 (przy cofaniu);
+   - warstwa ambient: tło GLSL Hills robi zoom w głąb per slajd (zoomRef).
+   Slajd wyższy niż viewport scrolluje się WEWNĘTRZNIE (.slide-scroll). */
+
+.deck {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  overscroll-behavior: none;
 }
 
-/* Scroll-reveal (motion) — sekcje wjeżdżają przy wejściu w viewport.
-   Jedna właściwość transform+opacity, wygaszane przy prefers-reduced-motion. */
-.reveal {
+.slide {
+  position: absolute;
+  inset: 0;
   opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  visibility: hidden;
+  pointer-events: none;
+  transform: scale(0.94);
+  transition:
+    opacity 0.42s cubic-bezier(0.3, 0, 1, 1),
+    transform 0.42s cubic-bezier(0.3, 0, 1, 1),
+    visibility 0s linear 0.42s;
 }
-.reveal.in {
+.slide.passed {
+  transform: scale(1.06);
+}
+.slide.active {
   opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
   transform: none;
+  transition:
+    opacity 0.6s cubic-bezier(0.05, 0.7, 0.1, 1) 0.12s,
+    transform 0.6s cubic-bezier(0.05, 0.7, 0.1, 1) 0.12s,
+    visibility 0s linear 0.12s;
 }
+
+.slide-scroll {
+  height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none; /* pasek scrolla psułby iluzję statycznej sceny */
+}
+.slide-scroll::-webkit-scrollbar {
+  display: none;
+}
+.slide-inner {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+/* margin:auto centruje treść, gdy się mieści, i NIE obcina góry, gdy jest
+   wyższa niż viewport (grid/flex place-center obcinałby) */
+.slide-content {
+  margin: auto 0;
+  width: 100%;
+  padding: 96px 0 44px; /* góra: pływający navbar */
+}
+
+/* kropki nawigacyjne — jedyny stały wskaźnik pozycji (nie ma paska scrolla) */
+.deck-dots {
+  position: fixed;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.deck-dots button {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  border: 1px solid var(--input);
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  transition:
+    background var(--motion),
+    border-color var(--motion),
+    transform var(--motion);
+}
+.deck-dots button:hover {
+  border-color: var(--primary);
+}
+.deck-dots button.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  transform: scale(1.3);
+}
+@media (max-width: 900px) {
+  .deck-dots {
+    right: 7px;
+    gap: 8px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .reveal {
-    opacity: 1;
-    transform: none;
+  .slide,
+  .slide.active {
     transition: none;
   }
 }

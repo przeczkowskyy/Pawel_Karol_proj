@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, Check, Clock, Play, TrendingUp } from "lucide-react";
+import { ArrowLeft, Check, Clock, TrendingUp } from "lucide-react";
 import { findModule, getModules } from "@/data/modules";
 import { useLang, pick } from "@/i18n";
 
@@ -27,7 +27,6 @@ const T = {
     pairsWith: "Dobrze łączy się z",
     cta: "Umów bezpłatną diagnozę",
     screenAlt: "Zrzut ekranu narzędzia",
-    liveDemo: "Zobacz żywe demo w przeglądarce",
   },
   en: {
     notFound: "Module not found",
@@ -47,7 +46,6 @@ const T = {
     pairsWith: "Pairs well with",
     cta: "Book a free diagnosis",
     screenAlt: "Tool screenshot",
-    liveDemo: "See the live in-browser demo",
   },
 };
 
@@ -169,12 +167,6 @@ export default function ModulePage({ onBook }: { onBook: () => void }) {
                 })}
               </div>
             </div>
-          )}
-
-          {mod.slug === "raport-zarzadczy" && (
-            <Link className="btn btn-secondary w-full justify-center" to="/#demo">
-              <Play size={15} /> {t.liveDemo}
-            </Link>
           )}
 
           <button className="btn btn-primary w-full justify-center" type="button" onClick={onBook}>

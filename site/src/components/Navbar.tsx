@@ -11,7 +11,7 @@ import { useLang, pick } from "@/i18n";
 const LINKS_I18N = {
   pl: [
     { label: "Moduły", to: "/#moduly" },
-    { label: "Demo", to: "/#demo" },
+    { label: "Wyróżniki", to: "/#wyrozniki" },
     { label: "Współpraca", to: "/#wspolpraca" },
     { label: "Dowód", to: "/#dowod" },
     { label: "FAQ", to: "/#faq" },
@@ -19,7 +19,7 @@ const LINKS_I18N = {
   ],
   en: [
     { label: "Modules", to: "/#moduly" },
-    { label: "Demo", to: "/#demo" },
+    { label: "Differentiators", to: "/#wyrozniki" },
     { label: "How we work", to: "/#wspolpraca" },
     { label: "Proof", to: "/#dowod" },
     { label: "FAQ", to: "/#faq" },
