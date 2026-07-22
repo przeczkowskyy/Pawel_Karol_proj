@@ -83,7 +83,6 @@ const HERO = {
       { id: "narzedzia", label: "Narzędzia" },
       { id: "wyrozniki", label: "Wyróżniki" },
       { id: "wspolpraca", label: "Współpraca" },
-      { id: "jak", label: "Dlaczego dni" },
       { id: "oferta", label: "Oferta" },
       { id: "faq", label: "FAQ" },
     ],
@@ -102,7 +101,6 @@ const HERO = {
       { id: "narzedzia", label: "Tools" },
       { id: "wyrozniki", label: "Differentiators" },
       { id: "wspolpraca", label: "How we work" },
-      { id: "jak", label: "Why days" },
       { id: "oferta", label: "Offer" },
       { id: "faq", label: "FAQ" },
     ],
@@ -258,48 +256,6 @@ function Collaboration() {
   );
 }
 
-/* ── DLACZEGO DNI ── */
-const HOW = {
-  pl: {
-    title: "Dlaczego dni, a nie miesiące",
-    sub: "Biblioteka wzorców z kilkunastu wdrożonych narzędzi · Excel zostaje Twoją warstwą danych (zero migracji) · zero serwera — narzędzie uruchamiasz dwuklikiem · wytwarzanie wspomagane AI. Narzędzie liczy deterministycznie — żadna liczba nie powstaje „z modelu”.",
-    steps: [
-      { icon: Copy, title: "1 · Diagnoza na kopiach", body: "Pracujemy wyłącznie na kopiach Twoich plików. Zakres zamrażamy na piśmie w Dniu 0." },
-      { icon: FileCode2, title: "2 · Budowa na wzorcach", body: "Silnik — bezpieczny zapis, walidacja, backup, log — jest gotowy. Dopasowujemy mapowania i reguły." },
-      { icon: Eye, title: "3 · TEST bez zapisu", body: "Identyczna ścieżka kodu, pełna lista zmian do przejrzenia — a w Twoich plikach nic się nie dzieje." },
-      { icon: Save, title: "4 · PROD z backupem", body: "Zapis dopiero po Twojej akceptacji: automatyczny backup przed każdą zmianą i log audytowy każdej operacji." },
-    ],
-  },
-  en: {
-    title: "Why days, not months",
-    sub: "A pattern library from a dozen-plus deployed tools · Excel stays your data layer (zero migration) · zero servers — you launch the tool with a double-click · AI-assisted development. The tool computes deterministically — no number ever comes “from a model”.",
-    steps: [
-      { icon: Copy, title: "1 · Diagnosis on copies", body: "We work exclusively on copies of your files. The scope is frozen in writing on Day 0." },
-      { icon: FileCode2, title: "2 · Built on patterns", body: "The engine — safe writes, validation, backup, log — is ready. We adapt mappings and rules." },
-      { icon: Eye, title: "3 · TEST without writing", body: "The identical code path, a full change list to review — and nothing happens in your files." },
-      { icon: Save, title: "4 · PROD with backup", body: "Writes only after your approval: an automatic backup before every change and an audit log of every operation." },
-    ],
-  },
-};
-
-function How() {
-  const { lang } = useLang();
-  const t = pick(lang, HOW);
-  return (
-    <Section title={t.title} sub={t.sub}>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {t.steps.map((s) => (
-          <div key={s.title} className="card">
-            <s.icon size={20} style={{ color: "var(--primary)" }} />
-            <h3 className="mt-3 text-[14px] font-bold" style={{ color: "var(--heading)" }}>{s.title}</h3>
-            <p className="mt-2 text-[12.5px] leading-relaxed" style={{ color: "var(--muted-foreground)" }}>{s.body}</p>
-          </div>
-        ))}
-      </div>
-    </Section>
-  );
-}
-
 /* ── WYRÓŻNIKI (zero chmury + determinizm) ── */
 const DIFF_TXT = {
   pl: {
@@ -322,91 +278,17 @@ function DiffSection() {
   );
 }
 
-/* ── DLA KOGO ── */
-const FIT = {
+/* ── OFERTA (skondensowana: pilot + dlaczego-dni + zaufanie + dla-kogo;
+      trzy dawne slajdy złożone do jednego — decyzja Karola 2026-07-22) ── */
+const OFFER = {
   pl: {
-    title: "Dla kogo (i dla kogo nie)",
-    yesHead: "Będzie nam po drodze, jeśli…",
-    noHead: "Uczciwie: to nie dla Ciebie, jeśli…",
-    yes: [
-      "Produkcja, budownictwo, dystrybucja, logistyka — dużo powtarzalnych danych operacyjnych",
-      "20–250 osób; jest ERP, ale raportowanie i tak żyje w Excelu",
-      "Środowisko Windows + Excel; 1–3 osoby „od liczb”",
-      "Chcesz efektu w dni, nie projektu wdrożeniowego na pół roku",
-    ],
-    no: [
-      "Szukasz migracji do chmury / zamiany ERP — tego nie robimy",
-      "Pracujecie na Google Sheets / Mac — moduły zapisujące wymagają Windows + Excel",
-      "Potrzebujesz zespołu do body-leasingu — sprzedajemy rezultat, nie godziny",
-    ],
-  },
-  en: {
-    title: "Who it's for (and who it isn't)",
-    yesHead: "We'll get along if…",
-    noHead: "Honestly: not for you if…",
-    yes: [
-      "Manufacturing, construction, distribution, logistics — lots of repetitive operational data",
-      "20–250 people; there is an ERP, but reporting still lives in Excel",
-      "Windows + Excel environment; 1–3 “numbers people”",
-      "You want results in days, not a six-month implementation project",
-    ],
-    no: [
-      "You're looking for a cloud migration / ERP replacement — we don't do that",
-      "You work on Google Sheets / Mac — writing modules require Windows + Excel",
-      "You need body-leasing — we sell results, not hours",
-    ],
-  },
-};
-
-function ForWhom() {
-  const { lang } = useLang();
-  const t = pick(lang, FIT);
-  return (
-    <Section title={t.title}>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="card">
-          <div className="lbl-sm" style={{ marginBottom: 12 }}>{t.yesHead}</div>
-          <ul className="flex flex-col gap-2.5">
-            {t.yes.map((x) => (
-              <li key={x} className="flex items-start gap-2 text-[13px]" style={{ color: "var(--foreground)" }}>
-                <Check size={14} style={{ color: "var(--funded)", flex: "0 0 auto", marginTop: 2 }} />
-                {x}
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="card">
-          <div className="lbl-sm" style={{ marginBottom: 12 }}>{t.noHead}</div>
-          <ul className="flex flex-col gap-2.5">
-            {t.no.map((x) => (
-              <li key={x} className="flex items-start gap-2 text-[13px]" style={{ color: "var(--muted-foreground)" }}>
-                <XIcon size={14} style={{ color: "var(--rejected)", flex: "0 0 auto", marginTop: 2 }} />
-                {x}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    </Section>
-  );
-}
-
-/* ── ZAUFANIE + OFERTA ── */
-const TRUST = {
-  pl: {
-    title: "Zaufanie na mechanizmach, nie na przymiotnikach",
-    items: [
-      { icon: Lock, text: "Narzędzia działają u Ciebie (on-premise) — dane nie opuszczają firmy. Nie mamy do nich dostępu po wdrożeniu." },
-      { icon: Eye, text: "Tryb TEST z pełnym podglądem zmian zanim cokolwiek zostanie zapisane." },
-      { icon: Save, text: "Automatyczny backup przed każdym zapisem i log audytowy każdej operacji." },
-      { icon: ScrollText, text: "Pełny kod źródłowy, dokumentacja i runbook zostają u Ciebie — narzędzie działa nawet bez nas." },
-      { icon: ShieldCheck, text: "Stała cena i zakres zamrożony na piśmie. Druga rata płatna po działającym odbiorze." },
-    ],
+    title: "Oferta: Pilot na kopii — efekt w dni, nie w miesiące",
+    sub: "Jeden proces, stała cena, ≤10 dni roboczych. Wszystko, co musisz wiedzieć, na jednym ekranie: jak pracujemy, na czym stoi zaufanie i czy będzie nam po drodze.",
     offerTag: "OFERTA WEJŚCIOWA",
     offerTitle: "Pilot na kopii",
-    offerBody1: "Jeden proces, stała cena, ",
-    offerStrong: "≤10 dni roboczych",
-    offerBody2: ". Budujemy na kopii Twoich plików, pierwszy namacalny efekt (raport błędów z Twoich prawdziwych danych) widzisz w dniu 5. Zapis na oryginałach — dopiero po Twojej akceptacji.",
+    offerBody1: "Budujemy na kopii Twoich plików, pierwszy namacalny efekt (raport błędów z Twoich prawdziwych danych) widzisz ",
+    offerStrong: "w dniu 5",
+    offerBody2: ". Zapis na oryginałach — dopiero po Twojej akceptacji.",
     bullets: [
       "· Dzień 0: wybór procesu i zamrożenie zakresu (wliczony)",
       "· Dni 1–4: budowa wyłącznie na kopiach",
@@ -417,21 +299,38 @@ const TRUST = {
     worst1: "Zanim cokolwiek kupisz: ",
     worstStrong: "przyślij nam swój najgorszy Excel",
     worst2: " — w 30 minut pokażemy na próbce, co da się z nim zrobić.",
+    whyHead: "Dlaczego dni, nie miesiące",
+    why: [
+      { icon: Copy, text: "Diagnoza na kopiach Twoich plików — zakres zamrożony na piśmie w Dniu 0" },
+      { icon: FileCode2, text: "Budowa na gotowych wzorcach — silnik (zapis, walidacja, backup, log) już istnieje" },
+      { icon: Eye, text: "TEST bez zapisu: pełna lista zmian do przejrzenia, w Twoich plikach nic się nie dzieje" },
+      { icon: Save, text: "PROD po Twojej akceptacji — backup przed każdą zmianą i log audytowy operacji" },
+    ],
+    trustHead: "Zaufanie na mechanizmach, nie przymiotnikach",
+    trust: [
+      { icon: Lock, text: "On-premise: dane nie opuszczają firmy; po wdrożeniu nie mamy do nich dostępu" },
+      { icon: ScrollText, text: "Kod, dokumentacja i runbook zostają u Ciebie — narzędzie działa nawet bez nas" },
+      { icon: ShieldCheck, text: "Stała cena i zakres na piśmie; druga rata po działającym odbiorze" },
+    ],
+    yesHead: "Będzie nam po drodze",
+    noHead: "Uczciwie: to nie dla Ciebie",
+    yes: [
+      "Produkcja / budownictwo / dystrybucja, 20–250 osób, Windows + Excel",
+      "Raportowanie i tak żyje w Excelu, a Ty chcesz efektu w dni",
+    ],
+    no: [
+      "Migracja do chmury / zamiana ERP — tego nie robimy",
+      "Google Sheets / Mac · body-leasing — sprzedajemy rezultat, nie godziny",
+    ],
   },
   en: {
-    title: "Trust built on mechanisms, not adjectives",
-    items: [
-      { icon: Lock, text: "The tools run at your site (on-premise) — data never leaves your company. We have no access after deployment." },
-      { icon: Eye, text: "A TEST mode with a full change preview before anything is written." },
-      { icon: Save, text: "An automatic backup before every write and an audit log of every operation." },
-      { icon: ScrollText, text: "Full source code, documentation and a runbook stay with you — the tool works even without us." },
-      { icon: ShieldCheck, text: "A fixed price and a scope frozen in writing. The second instalment is due after a working handover." },
-    ],
+    title: "The offer: Pilot on a copy — results in days, not months",
+    sub: "One process, a fixed price, ≤10 business days. Everything you need to know on one screen: how we work, what the trust stands on and whether we're a fit.",
     offerTag: "ENTRY OFFER",
     offerTitle: "Pilot on a copy",
-    offerBody1: "One process, a fixed price, ",
-    offerStrong: "≤10 business days",
-    offerBody2: ". We build on a copy of your files; you see the first tangible result (an error report from your real data) on day 5. Writes to the originals — only after your approval.",
+    offerBody1: "We build on a copy of your files; you see the first tangible result (an error report from your real data) ",
+    offerStrong: "on day 5",
+    offerBody2: ". Writes to the originals — only after your approval.",
     bullets: [
       "· Day 0: process selection and scope freeze (included)",
       "· Days 1–4: building exclusively on copies",
@@ -442,37 +341,53 @@ const TRUST = {
     worst1: "Before you buy anything: ",
     worstStrong: "send us your worst Excel",
     worst2: " — in 30 minutes we'll show you, on a sample, what can be done with it.",
+    whyHead: "Why days, not months",
+    why: [
+      { icon: Copy, text: "Diagnosis on copies of your files — scope frozen in writing on Day 0" },
+      { icon: FileCode2, text: "Built on ready patterns — the engine (writes, validation, backup, log) already exists" },
+      { icon: Eye, text: "TEST without writing: a full change list to review, nothing happens in your files" },
+      { icon: Save, text: "PROD after your approval — a backup before every change and an audit log" },
+    ],
+    trustHead: "Trust built on mechanisms, not adjectives",
+    trust: [
+      { icon: Lock, text: "On-premise: data never leaves your company; we have no access after deployment" },
+      { icon: ScrollText, text: "Code, documentation and runbook stay with you — the tool works even without us" },
+      { icon: ShieldCheck, text: "Fixed price and scope in writing; second instalment after a working handover" },
+    ],
+    yesHead: "We'll get along",
+    noHead: "Honestly: not for you",
+    yes: [
+      "Manufacturing / construction / distribution, 20–250 people, Windows + Excel",
+      "Reporting lives in Excel anyway and you want results in days",
+    ],
+    no: [
+      "Cloud migration / ERP replacement — we don't do that",
+      "Google Sheets / Mac · body-leasing — we sell results, not hours",
+    ],
   },
 };
 
-function TrustOffer({ onBook }: { onBook: () => void }) {
+function OfferSection({ onBook }: { onBook: () => void }) {
   const { lang } = useLang();
-  const t = pick(lang, TRUST);
+  const t = pick(lang, OFFER);
   return (
-    <Section title={t.title}>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
-        <div className="flex flex-col gap-3">
-          {t.items.map((x, i) => (
-            <div key={i} className="card flex flex-row items-start gap-3" style={{ padding: 16 }}>
-              <x.icon size={18} style={{ color: "var(--primary)", flex: "0 0 auto", marginTop: 2 }} />
-              <p className="text-[13px] leading-relaxed" style={{ color: "var(--foreground)" }}>{x.text}</p>
-            </div>
-          ))}
-        </div>
-        <div className="card" style={{ padding: 26 }}>
+    <Section title={t.title} sub={t.sub}>
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 items-start">
+        {/* karta oferty z CTA */}
+        <div className="card lg:col-span-2" style={{ padding: 24 }}>
           <span className="st st-accent">{t.offerTag}</span>
-          <h3 className="mt-4 text-[22px] font-extrabold" style={{ color: "var(--heading)" }}>{t.offerTitle}</h3>
-          <p className="mt-3 text-[14px] leading-relaxed" style={{ color: "var(--foreground)" }}>
+          <h3 className="mt-3 text-[21px] font-extrabold" style={{ color: "var(--heading)" }}>{t.offerTitle}</h3>
+          <p className="mt-3 text-[13.5px] leading-relaxed" style={{ color: "var(--foreground)" }}>
             {t.offerBody1}
             <strong>{t.offerStrong}</strong>
             {t.offerBody2}
           </p>
-          <ul className="mt-4 flex flex-col gap-2 text-[13px]" style={{ color: "var(--muted-foreground)" }}>
+          <ul className="mt-3 flex flex-col gap-1.5 text-[12.5px]" style={{ color: "var(--muted-foreground)" }}>
             {t.bullets.map((b) => (
               <li key={b}>{b}</li>
             ))}
           </ul>
-          <div className="mt-6 flex flex-wrap gap-3">
+          <div className="mt-5 flex flex-wrap gap-3">
             <button className="btn btn-primary" type="button" onClick={onBook}>{t.cta}</button>
             <a className="btn btn-secondary" href={PHONE_HREF}>
               <Phone size={15} /> {PHONE_DISPLAY}
@@ -483,6 +398,58 @@ function TrustOffer({ onBook }: { onBook: () => void }) {
             <strong>{t.worstStrong}</strong>
             {t.worst2}
           </p>
+        </div>
+
+        {/* skondensowane: dlaczego dni + zaufanie + dla kogo */}
+        <div className="lg:col-span-3 flex flex-col gap-4">
+          <div className="card" style={{ padding: 18 }}>
+            <div className="lbl-sm" style={{ marginBottom: 10 }}>{t.whyHead}</div>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-2.5">
+              {t.why.map((x, i) => (
+                <li key={i} className="flex items-start gap-2 text-[12.5px]" style={{ color: "var(--foreground)" }}>
+                  <x.icon size={14} style={{ color: "var(--primary)", flex: "0 0 auto", marginTop: 2 }} />
+                  {x.text}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="card" style={{ padding: 18 }}>
+            <div className="lbl-sm" style={{ marginBottom: 10 }}>{t.trustHead}</div>
+            <ul className="flex flex-col gap-2.5">
+              {t.trust.map((x, i) => (
+                <li key={i} className="flex items-start gap-2 text-[12.5px]" style={{ color: "var(--foreground)" }}>
+                  <x.icon size={14} style={{ color: "var(--primary)", flex: "0 0 auto", marginTop: 2 }} />
+                  {x.text}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="card" style={{ padding: 18 }}>
+              <div className="lbl-sm" style={{ marginBottom: 10 }}>{t.yesHead}</div>
+              <ul className="flex flex-col gap-2.5">
+                {t.yes.map((x) => (
+                  <li key={x} className="flex items-start gap-2 text-[12.5px]" style={{ color: "var(--foreground)" }}>
+                    <Check size={14} style={{ color: "var(--funded)", flex: "0 0 auto", marginTop: 2 }} />
+                    {x}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="card" style={{ padding: 18 }}>
+              <div className="lbl-sm" style={{ marginBottom: 10 }}>{t.noHead}</div>
+              <ul className="flex flex-col gap-2.5">
+                {t.no.map((x) => (
+                  <li key={x} className="flex items-start gap-2 text-[12.5px]" style={{ color: "var(--muted-foreground)" }}>
+                    <XIcon size={14} style={{ color: "var(--rejected)", flex: "0 0 auto", marginTop: 2 }} />
+                    {x}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </Section>
@@ -575,8 +542,6 @@ const SLIDES: { id: string; label: { pl: string; en: string } }[] = [
   { id: "narzedzia", label: { pl: "Narzędzia", en: "Tools" } },
   { id: "wyrozniki", label: { pl: "Wyróżniki", en: "Differentiators" } },
   { id: "wspolpraca", label: { pl: "Współpraca", en: "How we work" } },
-  { id: "jak", label: { pl: "Dlaczego dni", en: "Why days" } },
-  { id: "dla-kogo", label: { pl: "Dla kogo", en: "Who it's for" } },
   { id: "oferta", label: { pl: "Oferta", en: "Offer" } },
   { id: "faq", label: { pl: "FAQ", en: "FAQ" } },
 ];
@@ -587,6 +552,8 @@ const HASH_ALIAS: Record<string, string> = {
   kontakt: "oferta",
   demo: "narzedzia",
   dowod: "narzedzia", // sekcja Dowód złożona do nagłówka Narzędzi (2026-07-22)
+  jak: "oferta", // „Dlaczego dni" + „Dla kogo" skondensowane w Ofercie (2026-07-22)
+  "dla-kogo": "oferta",
 };
 
 const slideIndexFromHash = (hash: string): number => {
@@ -650,9 +617,7 @@ function Landing({
     <Tools />,
     <DiffSection />,
     <Collaboration />,
-    <How />,
-    <ForWhom />,
-    <TrustOffer onBook={onBook} />,
+    <OfferSection onBook={onBook} />,
     <FaqSection />,
   ];
 
@@ -697,8 +662,14 @@ export default function App() {
 
   return (
     <div style={{ background: "var(--body-bg)" }}>
-      {/* tło CAŁEJ strony: GLSL Hills (lazy chunk z three.js), spowolnione */}
-      <div className="fixed inset-0 z-0 pointer-events-none bg-[#121212]" aria-hidden="true">
+      {/* tło CAŁEJ strony: GLSL Hills (lazy chunk z three.js), spowolnione.
+          isolation + z-index: warstwa canvasa (GPU) nie może wyskoczyć ponad
+          treść nawet na kapryśnych mobilnych kompozytorach */}
+      <div
+        className="fixed inset-0 z-0 pointer-events-none bg-[#121212]"
+        style={{ top: 0, right: 0, bottom: 0, left: 0, isolation: "isolate" }}
+        aria-hidden="true"
+      >
         <Suspense fallback={null}>
           <GLSLHills width="100%" height="100%" speed={0.2} zoomRef={zoomRef} />
         </Suspense>

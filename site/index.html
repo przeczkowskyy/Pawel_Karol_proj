@@ -37,6 +37,80 @@
         },
         true
       );
+
+      /* Tryb diagnostyczny: klarow.com/?debug=1 — wypisuje na ekranie błędy JS
+         i stan strony (działa nawet, gdy React nie wstanie). Do zdalnej
+         diagnozy "strony tylko z tłem" na telefonach. Czysty ES5. */
+      if (location.search.indexOf("debug") !== -1) {
+        (function () {
+          var box = document.createElement("div");
+          box.style.cssText =
+            "position:fixed;left:0;top:0;right:0;max-height:70vh;overflow:auto;" +
+            "background:#ffffff;color:#111111;font:11px/1.5 monospace;z-index:2147483647;" +
+            "padding:10px;white-space:pre-wrap;border-bottom:3px solid #a8b4c2";
+          var buf = [];
+          function log(m) {
+            buf.push(m);
+            box.textContent = buf.join("\n");
+          }
+          function mount() {
+            if (document.body && !box.parentNode) document.body.appendChild(box);
+          }
+          document.addEventListener("DOMContentLoaded", mount);
+          setTimeout(mount, 500);
+          log("KLAROW DEBUG");
+          log("UA: " + navigator.userAgent);
+          log("viewport: " + window.innerWidth + "x" + window.innerHeight + " dpr=" + (window.devicePixelRatio || "?"));
+          window.addEventListener(
+            "error",
+            function (e) {
+              var t = e.target;
+              if (t && (t.tagName === "SCRIPT" || t.tagName === "LINK")) {
+                log("ASSET ERR: " + (t.src || t.href));
+              } else {
+                log("JS ERR: " + (e.message || "?") + " @ " + (e.filename || "?") + ":" + (e.lineno || "?"));
+              }
+            },
+            true
+          );
+          window.addEventListener("unhandledrejection", function (e) {
+            log("PROMISE ERR: " + (e.reason && e.reason.message ? e.reason.message : e.reason));
+          });
+          function snapshot(tag) {
+            try {
+              var root = document.getElementById("root");
+              log("--- " + tag + " ---");
+              log("root dzieci: " + (root ? root.children.length : "BRAK #root"));
+              var deck = document.querySelector(".deck");
+              if (deck) {
+                var dc = getComputedStyle(deck);
+                log(".deck: pos=" + dc.position + " " + deck.offsetWidth + "x" + deck.offsetHeight + " z=" + dc.zIndex + " top=" + dc.top);
+              } else {
+                log(".deck: BRAK");
+              }
+              var slide = document.querySelector(".slide.active");
+              if (slide) {
+                var sc = getComputedStyle(slide);
+                log(
+                  ".slide.active: vis=" + sc.visibility + " op=" + sc.opacity +
+                  " " + slide.offsetWidth + "x" + slide.offsetHeight + " transform=" + sc.transform
+                );
+              } else {
+                log(".slide.active: BRAK");
+              }
+              var nav = document.querySelector("header");
+              log("navbar: " + (nav ? nav.offsetWidth + "x" + nav.offsetHeight : "BRAK"));
+              if (window.CSS && CSS.supports) {
+                log("CSS inset: " + CSS.supports("inset", "0") + " · @layer: " + CSS.supports("selector(:where(a))") + " · dvh: " + CSS.supports("height", "100dvh"));
+              }
+            } catch (err) {
+              log("snapshot err: " + err.message);
+            }
+          }
+          setTimeout(function () { snapshot("po 2s"); }, 2000);
+          setTimeout(function () { snapshot("po 6s"); }, 6000);
+        })();
+      }
     </script>
   </head>
   <body>

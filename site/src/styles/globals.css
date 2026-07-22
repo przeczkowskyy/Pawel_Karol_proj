@@ -17,13 +17,25 @@
 
 .deck {
   position: fixed;
+  /* longhandy PRZED inset — fallback dla starszych mobilnych przeglądarek
+     (brak wsparcia `inset` zostawiał deck o zerowym rozmiarze = „strona
+     tylko z tłem"; canvas tła ma pozycjonowanie inline, więc działał) */
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   inset: 0;
+  z-index: 10;
   overflow: hidden;
   overscroll-behavior: none;
 }
 
 .slide {
   position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   inset: 0;
   opacity: 0;
   visibility: hidden;
