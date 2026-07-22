@@ -20,6 +20,7 @@ import {
 import Navbar from "@/components/Navbar";
 import BookingModal, { PHONE_DISPLAY, PHONE_HREF } from "@/components/BookingModal";
 import CollaborationFlow from "@/components/CollaborationFlow";
+import DemoReport from "@/components/DemoReport";
 import Faq from "@/components/Faq";
 import ModulesGrid from "@/components/ModulesGrid";
 import ModulePage from "@/pages/ModulePage";
@@ -92,7 +93,7 @@ const HERO = {
     lead2: " — a Twoje dane nie opuszczają firmy.",
     proof: "Raport zarządczy w kilkanaście sekund zamiast godzin.",
     ctaMain: "Umów bezpłatną diagnozę",
-    ctaModules: "Zobacz moduły",
+    ctaModules: "Zobacz żywe demo",
     qualifier: "Dla firm 20–250 osób · środowisko Windows + Excel · narzędzia działają on-premise, u Ciebie",
   },
   en: {
@@ -103,7 +104,7 @@ const HERO = {
     lead2: " — and your data never leaves your company.",
     proof: "A board report in seconds instead of hours.",
     ctaMain: "Book a free diagnosis",
-    ctaModules: "See the modules",
+    ctaModules: "See the live demo",
     qualifier: "For companies of 20–250 people · Windows + Excel environment · tools run on-premise, at your site",
   },
 };
@@ -134,7 +135,7 @@ function Hero({ onBook }: { onBook: () => void }) {
           <button className="btn btn-primary" type="button" onClick={onBook}>
             {t.ctaMain}
           </button>
-          <a className="btn btn-secondary" href="#moduly">
+          <a className="btn btn-secondary" href="#demo">
             {t.ctaModules}
           </a>
         </div>
@@ -321,6 +322,28 @@ function Proof() {
           </div>
         ))}
       </div>
+    </Section>
+  );
+}
+
+/* ── DEMO M2 (żywy dowód) ── */
+const DEMO_TXT = {
+  pl: {
+    title: "Zobacz, jak to działa — żywe demo raportu",
+    sub: "Odtworzone od zera narzędzie modułu „Raport zarządczy”, na fikcyjnych danych. Wklej własną tabelę z Excela albo załaduj przykład — całość liczy się w Twojej przeglądarce, nic nie wychodzi do sieci. Dokładnie tak działają narzędzia, które instalujemy u klientów.",
+  },
+  en: {
+    title: "See it work — a live report demo",
+    sub: "The “Board report” module tool rebuilt from scratch, on fictional data. Paste your own table from Excel or load the example — everything computes in your browser, nothing leaves for the network. This is exactly how the tools we install at clients work.",
+  },
+};
+
+function Demo() {
+  const { lang } = useLang();
+  const t = pick(lang, DEMO_TXT);
+  return (
+    <Section id="demo" title={t.title} sub={t.sub}>
+      <DemoReport />
     </Section>
   );
 }
@@ -557,6 +580,7 @@ function Landing({ onBook }: { onBook: () => void }) {
       <Hero onBook={onBook} />
       <Pain />
       <Modules />
+      <Demo />
       <Collaboration />
       <How />
       <Proof />
