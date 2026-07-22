@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Aktualizuj przy dodaniu narzędzia (slug z site/src/data/tools.ts)! -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://klarow.com/</loc><priority>1.0</priority></url>
+  <url><loc>https://klarow.com/narzedzia/raport-zarzadczy</loc><priority>0.9</priority></url>
+  <url><loc>https://klarow.com/narzedzia/audyt-jakosci-danych</loc><priority>0.9</priority></url>
+  <url><loc>https://klarow.com/narzedzia/dashboard-produkcji</loc><priority>0.8</priority></url>
+  <url><loc>https://klarow.com/narzedzia/os-czasu-zadan</loc><priority>0.8</priority></url>
+  <url><loc>https://klarow.com/narzedzia/import-z-rekoncyliacja</loc><priority>0.8</priority></url>
+  <url><loc>https://klarow.com/narzedzia/importy-erp</loc><priority>0.8</priority></url>
+  <url><loc>https://klarow.com/narzedzia/kontroling-kosztow</loc><priority>0.8</priority></url>
+  <url><loc>https://klarow.com/narzedzia/kalkulator-transz</loc><priority>0.7</priority></url>
+  <url><loc>https://klarow.com/narzedzia/obieg-przelewow</loc><priority>0.7</priority></url>
+  <url><loc>https://klarow.com/narzedzia/billing-us-g703</loc><priority>0.7</priority></url>
+  <url><loc>https://klarow.com/narzedzia/protokoly-robocizny</loc><priority>0.7</priority></url>
+  <url><loc>https://klarow.com/narzedzia/rejestr-umow</loc><priority>0.7</priority></url>
+</urlset>

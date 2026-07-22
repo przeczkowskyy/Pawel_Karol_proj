@@ -194,3 +194,54 @@
     transition: none;
   }
 }
+
+/* ── Wydruk dokumentów z narzędzi ──────────────────────────────────────
+   Przy window.print() widoczny jest WYŁĄCZNIE element .print-area
+   (dokument narzędzia: protokół, plan płatności, rejestr, raport).
+   Druk zawsze na białym, czarnym tekstem — niezależnie od motywu. */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .print-area,
+  .print-area * {
+    visibility: visible;
+  }
+  .print-area {
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 100%;
+    padding: 24px;
+    background: #fff !important;
+    color: #111 !important;
+  }
+  .print-area h1,
+  .print-area h2,
+  .print-area h3,
+  .print-area strong,
+  .print-area td,
+  .print-area th,
+  .print-area p,
+  .print-area span,
+  .print-area div {
+    color: #111 !important;
+    background: transparent !important;
+    border-color: #999 !important;
+  }
+  .print-area table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .print-area th,
+  .print-area td {
+    border: 1px solid #999 !important;
+    padding: 6px 8px !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+}
+/* elementy widoczne tylko na wydruku (nagłówek dokumentu) */
+.print-only {
+  display: none;
+}

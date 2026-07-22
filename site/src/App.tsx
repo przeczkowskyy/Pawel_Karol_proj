@@ -25,6 +25,7 @@ import Differentiators from "@/components/Differentiators";
 import Faq from "@/components/Faq";
 import ToolsGrid from "@/components/ToolsGrid";
 import SlideDeck, { type SlideDef } from "@/components/SlideDeck";
+import Seo, { ORG_JSONLD } from "@/components/Seo";
 import ToolPage from "@/pages/ToolPage";
 import { useLang, pick } from "@/i18n";
 
@@ -208,12 +209,12 @@ function Pain() {
 /* ── NARZĘDZIA (interaktywne dashboardy — w budowie) ── */
 const TOOLS_TXT = {
   pl: {
-    title: "Narzędzia — zobacz je w akcji, nie na slajdzie",
-    sub: "Przenosimy nasze dashboardy kontrolingu, importów i produkcji wprost na tę stronę — z pełną funkcjonalnością, na danych przykładowych. Klikasz, filtrujesz, eksportujesz — dokładnie tak, jak działają u klienta (lokalnie, bez chmury). Pierwsze interaktywne narzędzia pojawiają się tu w tej chwili.",
+    title: "Narzędzia — wybierz dział i korzystaj",
+    sub: "Wszystkie nasze narzędzia działają na tej stronie na żywo, na danych przykładowych: klikasz, liczysz, drukujesz dokumenty — dokładnie tak, jak u klienta (lokalnie, bez chmury, bez logowania). Wybierz dział, żeby zobaczyć narzędzia.",
   },
   en: {
-    title: "Tools — see them in action, not on a slide",
-    sub: "We bring our controlling, import and production dashboards straight onto this page — fully functional, on sample data. Click, filter, export — exactly how they run at the client (locally, no cloud). The first interactive tools are landing here right now.",
+    title: "Tools — pick a department and use them",
+    sub: "All our tools run live on this page, on sample data: click, compute, print documents — exactly like at the client (locally, no cloud, no sign-up). Pick a department to see the tools.",
   },
 };
 
@@ -694,6 +695,20 @@ function Landing({
 
   return (
     <>
+      <Seo
+        title={
+          lang === "pl"
+            ? "Klarow — automatyzacja danych i narzędzia kontrolingu. Wdrożenie w dni."
+            : "Klarow — data automation and controlling tools. Deployed in days."
+        }
+        description={
+          lang === "pl"
+            ? "Porządek w danych dla firm 20–250 osób, które wyrosły na Excelu. Działające demo narzędzi: raport zarządczy, kontroling kosztów, audyt jakości danych, importy ERP, płatności. Dane zostają u Ciebie (on-premise)."
+            : "Order in the data of 20–250-person companies that grew up on Excel. Live tool demos: board report, cost controlling, data quality audit, ERP imports, payments. Your data stays with you (on-premise)."
+        }
+        path="/"
+        jsonLd={ORG_JSONLD}
+      />
       <SlideDeck
         slides={slides}
         active={active}

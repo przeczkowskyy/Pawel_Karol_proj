@@ -19,13 +19,10 @@ import type { Lang } from "@/i18n";
    narzędzi kontrolingu/produkcji/finansów firmy produkcyjno-budowlanej.
    Twarda zasada #3 CLAUDE.md: zero marki i liczb źródłowych — nazwy generyczne,
    dane fikcyjne, opis neutralny („firma produkcyjno-budowlana").
-   status:
-     live    → interaktywny dashboard wpięty na podstronie (pełna funkcjonalność),
-     preview → opis + zapowiedź (dashboard w budowie),
-     soon    → na roadmapie narzędzi.
-   Docelowo YAML w site/content/tools/. */
+   KAŻDE narzędzie DZIAŁA NA ŻYWO na danych DEMO (decyzja 2026-07-22 — bez
+   statusów live/preview). Na zakładce Narzędzia użytkownik widzi najpierw
+   BOXY DZIAŁÓW (dept), narzędzia dopiero w środku. Docelowo YAML. */
 
-export type ToolStatus = "live" | "preview" | "soon";
 export type ToolCategory =
   | "kpi-zarzad"
   | "produkcja"
@@ -35,6 +32,56 @@ export type ToolCategory =
   | "obieg-dokumentow"
   | "kontroling";
 
+/* działy (boxy pierwszego poziomu zakładki Narzędzia) */
+export type Dept = "kontroling" | "finanse" | "produkcja" | "dane" | "administracja";
+
+export const DEPTS: { key: Dept; label: { pl: string; en: string }; desc: { pl: string; en: string } }[] = [
+  {
+    key: "kontroling",
+    label: { pl: "Kontroling i raportowanie", en: "Controlling & reporting" },
+    desc: {
+      pl: "Raport zarządczy i widok kontrolera: marża, estymaty, zatwierdzanie tygodnia.",
+      en: "The board report and the controller's view: margin, estimates, week approval.",
+    },
+  },
+  {
+    key: "finanse",
+    label: { pl: "Finanse i płatności", en: "Finance & payments" },
+    desc: {
+      pl: "Transze, obieg akceptacji przelewów i fakturowanie klientów US (AIA G703).",
+      en: "Tranches, payment approval flow and US client billing (AIA G703).",
+    },
+  },
+  {
+    key: "produkcja",
+    label: { pl: "Produkcja i harmonogram", en: "Production & schedule" },
+    desc: {
+      pl: "Wykonanie hal w jednym kadrze i Gantt pokazujący, co się obsunęło.",
+      en: "Hall completion in one frame and a Gantt showing what slipped.",
+    },
+  },
+  {
+    key: "dane",
+    label: { pl: "Dane i importy", en: "Data & imports" },
+    desc: {
+      pl: "Audyt jakości, importy z ERP i rekoncyliacja sum co do grosza.",
+      en: "Quality audit, ERP imports and totals reconciled to the cent.",
+    },
+  },
+  {
+    key: "administracja",
+    label: { pl: "Administracja i dokumenty", en: "Administration & documents" },
+    desc: {
+      pl: "Protokoły robocizny z wydrukiem i rejestr umów bez psujących się linków.",
+      en: "Printable labour protocols and a contract register without breaking links.",
+    },
+  },
+];
+
+export const DEPT_LABEL: Record<Dept, { pl: string; en: string }> = Object.fromEntries(
+  DEPTS.map((d) => [d.key, d.label])
+) as Record<Dept, { pl: string; en: string }>;
+
 export interface ToolText {
   name: string;
   tagline: string; // 1 zdanie: co robi
@@ -43,14 +90,28 @@ export interface ToolText {
   bullets: string[]; // 3–4 konkrety
 }
 
+export type DashboardKey =
+  | "report"
+  | "production"
+  | "quality"
+  | "timeline"
+  | "payments"
+  | "reconciliation"
+  | "g703"
+  | "paymentflow"
+  | "costcontrol"
+  | "erpimports"
+  | "protocols"
+  | "contracts";
+
 export interface ToolBase {
   id: number;
   slug: string;
   icon: ComponentType<{ size?: number | string; className?: string }>;
   category: ToolCategory;
-  status: ToolStatus;
-  /* klucz osadzonego dashboardu (tylko dla status:"live") */
-  dashboard?: "report" | "production" | "quality" | "timeline" | "payments" | "reconciliation" | "g703";
+  dept: Dept;
+  /* każdy ma działający dashboard na danych DEMO */
+  dashboard: DashboardKey;
   i18n: { pl: ToolText; en: ToolText };
 }
 
@@ -59,8 +120,8 @@ export interface ToolItem extends ToolText {
   slug: string;
   icon: ToolBase["icon"];
   category: ToolCategory;
-  status: ToolStatus;
-  dashboard?: ToolBase["dashboard"];
+  dept: Dept;
+  dashboard: DashboardKey;
 }
 
 export const CATEGORY_LABEL: Record<ToolCategory, { pl: string; en: string }> = {
@@ -79,7 +140,7 @@ const BASE: ToolBase[] = [
     slug: "raport-zarzadczy",
     icon: BarChart3,
     category: "kpi-zarzad",
-    status: "live",
+    dept: "kontroling",
     dashboard: "report",
     i18n: {
       pl: {
@@ -117,7 +178,7 @@ const BASE: ToolBase[] = [
     slug: "dashboard-produkcji",
     icon: Factory,
     category: "produkcja",
-    status: "live",
+    dept: "produkcja",
     dashboard: "production",
     i18n: {
       pl: {
@@ -155,7 +216,7 @@ const BASE: ToolBase[] = [
     slug: "audyt-jakosci-danych",
     icon: ShieldCheck,
     category: "jakosc-danych",
-    status: "live",
+    dept: "dane",
     dashboard: "quality",
     i18n: {
       pl: {
@@ -193,7 +254,7 @@ const BASE: ToolBase[] = [
     slug: "import-z-rekoncyliacja",
     icon: Database,
     category: "import-danych",
-    status: "live",
+    dept: "dane",
     dashboard: "reconciliation",
     i18n: {
       pl: {
@@ -231,7 +292,7 @@ const BASE: ToolBase[] = [
     slug: "os-czasu-zadan",
     icon: GanttChartSquare,
     category: "produkcja",
-    status: "live",
+    dept: "produkcja",
     dashboard: "timeline",
     i18n: {
       pl: {
@@ -269,7 +330,7 @@ const BASE: ToolBase[] = [
     slug: "kalkulator-transz",
     icon: Calculator,
     category: "platnosci",
-    status: "live",
+    dept: "finanse",
     dashboard: "payments",
     i18n: {
       pl: {
@@ -307,7 +368,8 @@ const BASE: ToolBase[] = [
     slug: "obieg-przelewow",
     icon: Wallet,
     category: "platnosci",
-    status: "soon",
+    dept: "finanse",
+    dashboard: "paymentflow",
     i18n: {
       pl: {
         name: "Obieg akceptacji przelewów",
@@ -344,7 +406,7 @@ const BASE: ToolBase[] = [
     slug: "billing-us-g703",
     icon: Landmark,
     category: "platnosci",
-    status: "live",
+    dept: "finanse",
     dashboard: "g703",
     i18n: {
       pl: {
@@ -382,7 +444,8 @@ const BASE: ToolBase[] = [
     slug: "kontroling-kosztow",
     icon: FolderKanban,
     category: "kontroling",
-    status: "soon",
+    dept: "kontroling",
+    dashboard: "costcontrol",
     i18n: {
       pl: {
         name: "Kontroling kosztów projektu",
@@ -419,7 +482,8 @@ const BASE: ToolBase[] = [
     slug: "importy-erp",
     icon: ArrowLeftRight,
     category: "import-danych",
-    status: "soon",
+    dept: "dane",
+    dashboard: "erpimports",
     i18n: {
       pl: {
         name: "Importy ERP → Excel",
@@ -456,7 +520,8 @@ const BASE: ToolBase[] = [
     slug: "protokoly-robocizny",
     icon: ClipboardCheck,
     category: "obieg-dokumentow",
-    status: "soon",
+    dept: "administracja",
+    dashboard: "protocols",
     i18n: {
       pl: {
         name: "Protokoły robocizny",
@@ -493,7 +558,8 @@ const BASE: ToolBase[] = [
     slug: "rejestr-umow",
     icon: FileSignature,
     category: "obieg-dokumentow",
-    status: "soon",
+    dept: "administracja",
+    dashboard: "contracts",
     i18n: {
       pl: {
         name: "Rejestr umów",
@@ -533,7 +599,7 @@ export function getTools(lang: Lang): ToolItem[] {
     slug: b.slug,
     icon: b.icon,
     category: b.category,
-    status: b.status,
+    dept: b.dept,
     dashboard: b.dashboard,
     ...b.i18n[lang],
   }));
