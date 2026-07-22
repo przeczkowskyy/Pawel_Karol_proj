@@ -29,7 +29,17 @@
 4. **Każdą skończoną zmianę commituj i pushuj na `main`** (`origin` = github.com/przeczkowskyy/Pawel_Karol_proj — wspólne repo Pawła i Karola).
    Komunikaty po polsku, stopka `Co-Authored-By: Claude ...`. Tożsamość gita ustawiona per-repo.
 5. Teksty strony dwujęzycznie **PL + EN** (wzorzec: obiekt `{ pl, en }` + `pick()` z `src/i18n.tsx`).
-6. Środowisko: Windows 11, PowerShell; Node 24, npm 11, Python 3.
+6. Środowisko: Windows 11, PowerShell; Node 24, npm 11, Python 3. **Nauczki środowiskowe:**
+   - **`npx` nie działa w tym repo** — znak `&` w ścieżce katalogu łamie shimy cmd. Wywołuj
+     binarki wprost: `node node_modules/typescript/bin/tsc --noEmit`,
+     `node node_modules/vite/bin/vite.js build`.
+   - **`git push` może wisieć bez końca** — Git Credential Manager otwiera niewidoczne okno
+     OAuth. Naprawione per-repo: `credential.helper=wincred` (czyta PAT z Menedżera poświadczeń
+     Windows, wpis `git:https://github.com`). Gdy push rzuci 401/403 → PAT wygasł: odnowić
+     wpis w Menedżerze poświadczeń albo tymczasowo `git config --unset credential.helper`
+     (wróci GCM z oknem logowania).
+   - **DEMO i silniki liczące**: zero `Date.now`/`Math.random`/sieci w logice — determinizm
+     jest obietnicą produktową (i tak testujemy: dwa przebiegi muszą dać identyczny JSON).
 7. **Wzbogacaj wiedzę projektu (każde okno/sesja):** na koniec pracy zaktualizuj sekcję
    „Stan operacyjny" (nowe decyzje, co zrobione, co dalej) i dopisz trwałe nauczki/zasady
    tutaj. Wiedza ma się kumulować między oknami — następne okno startuje z tego pliku, nie z zera.
@@ -51,15 +61,22 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
 
 ## Architektura strony (`site/`)
 
-- `src/App.tsx` — wszystkie sekcje landingu (hero → ból → moduły → współpraca → jak →
-  dowód → dla kogo → oferta → FAQ → stopka) + routing (`/`, `/moduly/:slug`) + modal rezerwacji.
-- `src/data/modules.ts` — **jedno źródło danych modułów M1–M8** (PL+EN: opisy, korzyści,
-  statusy, powiązania). Zrzuty ekranu: `public/screens/` (na razie `placeholder.svg`).
-- `src/components/ui/` — porty 21st.dev przemalowane na stal: `radial-orbital-timeline`
-  (karuzela modułów), `glsl-hills` (tło całej strony), `canvas-reveal-effect` (nieużywany, zapas).
-- `src/components/` — `Navbar` (przełącznik PL/EN), `BookingModal` (kalendarz → mailto/tel;
-  **do podmiany na embed Cal.com**, gdy founderzy podadzą link), `CollaborationFlow`
-  (schemat blokowy SVG), `Faq`.
+- `src/App.tsx` — wszystkie sekcje landingu (hero → ból → moduły → **żywe DEMO M2** →
+  **wyróżniki** → współpraca → jak → dowód → dla kogo → oferta → FAQ → stopka) + routing
+  (`/`, `/moduly/:slug`) + modal rezerwacji.
+- `src/data/modules.ts` — **jedno źródło danych modułów M1–M8** (PL+EN: `problem` w głosie
+  klienta, opisy, korzyści, statusy, `dept` jako filtr, powiązania). Zrzuty ekranu:
+  `public/screens/` (na razie `placeholder.svg`).
+- **DEMO M2 (sekcja `#demo`)** — `src/lib/report.ts` (deterministyczny silnik: parseCsv +
+  agregacje, czyste funkcje, spec: `docs/plan/demo-m2-spec.md`), `src/data/demo-sample.ts`
+  (fikcyjne 7×5 pozycji, identyczne liczby PL/EN), `src/components/DemoReport.tsx`
+  (wklej/wgraj/przykład → 3 KPI + wykres per-etap SVG + tabela + „ścieżka wyliczenia").
+- `src/components/` — `ModulesGrid` (oś problemowa modułów + filtr działów, auto-animate),
+  `Differentiators` (zero chmury + determinizm + blok ✕/✓ + galeria before/after),
+  `Navbar` (przełącznik PL/EN), `BookingModal` (kalendarz → mailto/tel; **do podmiany na
+  embed Cal.com**, gdy founderzy podadzą link), `CollaborationFlow` (schemat blokowy SVG), `Faq`.
+- `src/components/ui/` — porty 21st.dev przemalowane na stal: `glsl-hills` (tło całej strony),
+  `radial-orbital-timeline` i `canvas-reveal-effect` (**nieużywane, zapas** — poza bundlem).
 - `src/styles/company-ui.css` — **kopia kitu** (aktualizacja = nadpisanie NAD markerem
   APP-SPECIFIC świeżą kopią z `ui-kit/.../app.css` + zamiana ścieżek fontów na `/fonts/`).
 - `public/_redirects` — SPA-fallback dla podstron na Cloudflare Pages/Netlify.
@@ -67,6 +84,17 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
 
 ## Stan operacyjny (aktualizuj przy zmianach!)
 
+- **2026-07-22 (sesja strony) — landing v0.5 wdrożony na `main`:**
+  - **Sekcja „Moduły" przerobiona na oś problemową** (karta = problem w głosie klienta →
+    co dostajesz → co zyskujesz → dni → status; dział tylko jako filtr) — `ModulesGrid`.
+    Karuzela orbitalna wycofana z użycia (plik zostaje jako zapas).
+  - **Żywe DEMO M2 „Raport zarządczy" na landingu** (`#demo`, link w navbarze, hero-CTA):
+    100% client-side, dane fikcyjne, wejście wklej/wgraj/przykład, wyjście 3 KPI + wykres
+    per-etap + tabela z komentarzami PM + jawna „ścieżka wyliczenia" + eksport CSV.
+    Odtworzone od zera (zero kodu z Nuconic). Spec: `docs/plan/demo-m2-spec.md`.
+  - **Sekcja wyróżników** (`#wyrozniki`): prawdziwie zero chmury + determinizm, blok
+    ✕ Tradycyjnie / ✓ Klarow, galeria 3 narzędzi z liczbą before/after (opis anonimowy).
+  - Plan Karola odhaczony poza mini-case'ami („rozbiórka najgorszego Excela" — **do zrobienia**).
 - **2026-07-22 — decyzje founderów:**
   - **Forma prawna:** start jako **JDG Pawła** (waliduj taniej, tani exit), konwersja do
     **2-osobowej sp. z o.o. 50/50** przy pierwszym płatnym kliencie. Powód JDG→Paweł: potencjalny
