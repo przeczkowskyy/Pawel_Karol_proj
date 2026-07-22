@@ -80,7 +80,7 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
   - `src/components/ToolsGrid.tsx` — katalog na landingu (filtr kategorii, auto-animate),
     karty → `/narzedzia/:slug`; `live` wyróżnione i na początku.
   - `src/pages/ToolPage.tsx` — opis narzędzia + **OSADZONY interaktywny dashboard** (live).
-  - **5 dashboardów LIVE** (100% client-side, deterministyczne, dane fikcyjne):
+  - **7 dashboardów LIVE** (100% client-side, deterministyczne, dane fikcyjne):
     `DemoReport.tsx`+`lib/report.ts` („Raport zarządczy", spec `docs/plan/demo-m2-spec.md`) ·
     `dashboards/ProductionDashboard.tsx` (kafle hal + suwak tygodnia) ·
     `dashboards/QualityGate.tsx`+`lib/qualityGate.ts` („Audyt jakości" — reguły 1:1
@@ -88,7 +88,11 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
     OK/UWAGA/BŁĄD) · `dashboards/TaskTimeline.tsx` (Gantt compare-mode 2 snapshotów,
     dryf +Nd/−Nd, stała gęstość px/dobę; „Dziś"=stała 2026-07-22 dla determinizmu) ·
     `dashboards/PaymentCalculator.tsx` (transze: alokacja proporcjonalna w groszach,
-    reszta na ostatniej pozycji → Σ co do grosza; FX na kursach fikcyjnych).
+    reszta na ostatniej pozycji → Σ co do grosza; FX na kursach fikcyjnych) ·
+    `dashboards/ImportReconciliation.tsx` (diff 2 wersji + REKONCYLIACJA PASS/FAIL
+    z jawnym dowodem co do grosza, tryb TEST) · `dashboards/G703Billing.tsx`
+    (silnik G703: earned=D×M, proposal=earned−billed gdy M>40%, clawback
+    nieprzycinany, USD/centy — wątek rynku USA).
 - `src/components/` — `Differentiators` (zero chmury + determinizm + blok ✕/✓ + galeria
   before/after linkująca do live-dashboardów), `Navbar` (PL/EN, KLAROW→home), `BookingModal`
   (kalendarz → mailto/tel; **do podmiany na embed Cal.com**), `CollaborationFlow` (SVG), `Faq`.
@@ -103,17 +107,20 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
 
 ## Stan operacyjny (aktualizuj przy zmianach!)
 
-- **2026-07-22 (sesja strony, cz. 4) — „przenieś 1:1 narzędzia z gita": 5 dashboardów LIVE:**
-  - Do istniejących 2 (Raport zarządczy, Dashboard produkcji) doszły 3 kolejne, odtworzone
+- **2026-07-22 (sesja strony, cz. 4) — „przenieś 1:1 narzędzia z gita": 7 dashboardów LIVE:**
+  - Do istniejących 2 (Raport zarządczy, Dashboard produkcji) doszło 5 kolejnych, odtworzonych
     **1:1 co do logiki** ze wzbogaconych blueprintów (repo dostało fragmenty realnego kodu):
     **Audyt jakości danych** (reguły PM_MINUS/NEG_WEEK/E_NONZERO/BAD_DATE, tydzień ISO,
     macierz pewności — silnik przetestowany node'em), **Oś czasu/Gantt** (compare-mode Old/New,
-    czerwony ogon obsuwy, dryf +Nd/−Nd), **Kalkulator transz** (alokacja proporcjonalna
-    w groszach, reszta na ostatniej pozycji — dokładnie algorytm `_allocate` z blueprintu).
+    czerwony ogon obsuwy, dryf +Nd/−Nd), **Kalkulator transz** (algorytm `_allocate`:
+    alokacja proporcjonalna w groszach, reszta na ostatniej pozycji), **Import
+    z rekoncyliacją** (diff + PASS/FAIL z jawnym dowodem co do grosza), **Billing US G703**
+    (silnik `compute_proposals`: earned=D×M, próg depozytu 40%, clawback nieprzycinany).
   - Wszystko odbrandowane (zasada #3), dane fikcyjne, deterministyczne, client-side.
-  - **Następne w kolejce:** Import z rekoncyliacją (PASS/FAIL co do grosza) i Billing US G703
-    (silnik propozycji) — wykonalne client-side; importy piszące przez Excel COM tylko jako
-    podgląd/TEST.
+  - **Zostały (preview/soon):** Obieg przelewów (plan 14-dniowy — natura backendowa,
+    pokazać macierz), Kontroling kosztów projektu (widok PM — duży, warto), Importy ERP
+    (piszą przez Excel COM → tylko podgląd/TEST), Protokoły robocizny i Rejestr umów
+    (obieg dokumentów — formularze + cykl życia jako symulacja).
 - **2026-07-22 (sesja strony, cz. 3) — landing v0.7 + sekcja Narzędzia (decyzje Karola):**
   - **Poprawki UX decka:** kontakt = **stała stopka** (`FooterBar`, nie slajd); **KLAROW →
     slajd 0**; lepsze skalowanie slajdów (padding `clamp()` wg wysokości ekranu) i mobile
