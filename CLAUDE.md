@@ -69,9 +69,10 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
   **wewnętrznie** (`.slide-scroll`) — deck przełącza dopiero od krawędzi treści. Hash ↔
   slajd zsynchronizowane (navbar i podstrony działają; `HASH_ALIAS` mapuje stare hashe);
   hero ma rząd przycisków szybkiej nawigacji; **KLAROW w navbarze → slajd 0** (CustomEvent
-  `klarow:home`). Kolejność: start → ból → **narzędzia** → wyróżniki → współpraca → jak →
-  dowód → dla-kogo → oferta → faq (lista `SLIDES` w `App.tsx`). **Kontakt = stała stopka
-  `FooterBar`** (fixed dół, opaque) — telefon+e-mail zawsze widoczne (nie slajd).
+  `klarow:home`). Kolejność (9 slajdów): start → ból → **narzędzia** → wyróżniki →
+  współpraca → jak → dla-kogo → oferta → faq (lista `SLIDES` w `App.tsx`). **Sekcja
+  „Dowód" złożona do akapitu-nagłówka w Narzędziach** (2026-07-22; hash #dowod →
+  #narzedzia). **Kontakt = stała stopka `FooterBar`** (fixed dół, opaque).
 - `src/App.tsx` — definicje sekcji + deck + routing (`/`, `/narzedzia/:slug`) + modal rezerwacji.
 - **Sekcja „Narzędzia" (rdzeń dowodu — zamiast fikcyjnych modułów):**
   - **BEZ statusów — KAŻDE z 12 narzędzi DZIAŁA NA ŻYWO na danych DEMO** (decyzja Karola).
@@ -135,9 +136,13 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
   - Lekki zoom całej strony na dużych ekranach; KPI w dashboardach responsywne na mobile.
   - **Bug „klarow.com na telefonie = samo tło":** zdiagnozowane jako stary `index.html`
     z cache przeglądarki wołający purge'owane assety (SPA-fallback oddaje im HTML).
-    Fix: `public/_headers` — HTML `no-cache`, `/assets/*` + `/fonts/*` `immutable`.
-    Telefon Karola naprawi się po następnym wejściu z odświeżeniem (stary wpis cache
-    wygaśnie); jeśli nie — otworzyć w oknie prywatnym dla potwierdzenia diagnozy.
+    Kluczowy dowód od Karola: **z otwartą inspekcją strona działa** (DevTools domyślnie
+    wyłącza cache!). Fix dwuwarstwowy: (1) `public/_headers` — HTML `no-cache`,
+    `/assets/*` + `/fonts/*` `immutable`; (2) inline skrypt samonaprawy w `index.html` —
+    przy błędzie ładowania script/link JEDNORAZOWY `location.reload()`
+    (sessionStorage-guard) → świeży HTML z poprawnymi hashami. Leczy też urządzenia
+    zatrute przed wdrożeniem nagłówków.
+  - **Sekcja „Dowód" usunięta jako slajd** — liczby wplecione w nagłówek Narzędzi.
 - **2026-07-22 (sesja strony, cz. 5) — komplet 12/12 narzędzi + działy + wydruk + SEO:**
   - **Decyzje Karola:** zero statusów („każde narzędzie musi działać na żywo, zawsze DEMO
     dane"); zakładka Narzędzia = najpierw **boxy działów** (drill-down); **wydruk
