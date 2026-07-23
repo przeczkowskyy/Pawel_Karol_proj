@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import type { ComponentType } from "react";
 import type { Lang } from "@/i18n";
+import { TOOLS_SEO } from "./toolsSeo";
 
 /* Katalog NARZĘDZI Klarow — dashboardy odtworzone OD ZERA na wzór wewnętrznych
    narzędzi kontrolingu/produkcji/finansów firmy produkcyjno-budowlanej.
@@ -598,15 +599,22 @@ const BASE: ToolBase[] = [
 ];
 
 export function getTools(lang: Lang): ToolItem[] {
-  return BASE.map((b) => ({
-    id: b.id,
-    slug: b.slug,
-    icon: b.icon,
-    category: b.category,
-    dept: b.dept,
-    dashboard: b.dashboard,
-    ...b.i18n[lang],
-  }));
+  return BASE.map((b) => {
+    /* long-tail meta + FAQ dolatują z generowanego pliku toolsSeo.ts —
+       merge po slugu; brak wpisu = strona działa jak dotąd (fallbacki) */
+    const extra = TOOLS_SEO[b.slug]?.[lang];
+    return {
+      id: b.id,
+      slug: b.slug,
+      icon: b.icon,
+      category: b.category,
+      dept: b.dept,
+      dashboard: b.dashboard,
+      ...b.i18n[lang],
+      seo: extra?.seo,
+      faq: extra?.faq,
+    };
+  });
 }
 
 export const findTool = (slug: string, lang: Lang): ToolItem | undefined =>
