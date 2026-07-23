@@ -32,7 +32,9 @@
 6. Środowisko: Windows 11, PowerShell; Node 24, npm 11, Python 3. **Nauczki środowiskowe:**
    - **`npx` nie działa w tym repo** — znak `&` w ścieżce katalogu łamie shimy cmd. Wywołuj
      binarki wprost: `node node_modules/typescript/bin/tsc --noEmit`,
-     `node node_modules/vite/bin/vite.js build`.
+     `node node_modules/vite/bin/vite.js build`. Dotyczy też **npm-skryptów** wołających
+     binarki z `node_modules/.bin` („'Pawe' is not recognized...") — dlatego package.json
+     strony woła `node node_modules/vite/bin/vite.js ...` wprost (działa lokalnie i na CI).
    - **`git push` może wisieć bez końca** — Git Credential Manager otwiera niewidoczne okno
      OAuth. Naprawione per-repo: `credential.helper=wincred` (czyta PAT z Menedżera poświadczeń
      Windows, wpis `git:https://github.com`). Gdy push rzuci 401/403 → PAT wygasł: odnowić
@@ -128,6 +130,38 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
 
 ## Stan operacyjny (aktualizuj przy zmianach!)
 
+- **2026-07-23 (sesja cz. 7) — SEO + GEO + mobile ROZWIĄZANE:**
+  - **Mobile „samo tło" — przyczyna znaleziona i usunięta u źródła.** Repro Playwright/WebKit
+    na produkcji: brak WebGL (iOS Lockdown Mode / wyczerpany limit kontekstów przy dziesiątkach
+    otwartych kart) LUB bloker treści tnący lazy-chunk three.js → wyjątek bez error boundary →
+    React zdejmował CAŁE drzewo (#root pusty — zostawała czerń/tło). Fix trójwarstwowy:
+    `BgBoundary` wokół `GLSLHills` (awaria tła = brak tła, treść żyje), sonda WebGL + try/catch
+    konstruktora renderera w glsl-hills, stalowy gradient awaryjny na `.bg-layer`; w `?debug=1`
+    doszła sonda WebGL/WebGL2. **Po deployu oba scenariusze awarii renderują pełną treść NA
+    PRODUKCJI** (Playwright, viewport iPhone). iOS Karola = 26, świeża karta nie pomagała —
+    obraz pasuje; zrzut `?debug=1` nadal mile widziany jako domknięcie (który wariant trafił).
+  - **SEO — prerender/SSG bez przeglądarki (działa i lokalnie, i na CI Pages):** `npm run build`
+    = build klienta → `vite build --ssr src/prerender/entry.tsx` → `scripts/prerender.mjs`.
+    Wynik: 13 statycznych HTML (`/` + 12 × `dist/narzedzia/<slug>.html`; Pages serwuje je
+    bezrozszerzeniowo, `_redirects` łapie resztę) z meta/canonical/OG/JSON-LD i PEŁNĄ treścią
+    tekstową bez JS; React po starcie podmienia shell (zweryfikowane WebKitem z JS i bez JS —
+    strona degraduje się łaskawie, gdy JS nie wstanie). Skrypt wymaga PUSTEGO
+    `<div id="root"></div>` w index.html (twardy assert).
+  - **sitemap.xml i llms.txt GENEROWANE z tools.ts** przy buildzie — `public/sitemap.xml`
+    USUNIĘTY (nie odtwarzać ręcznie!); nowe narzędzie dopisane do tools.ts wpada do sitemapy
+    i llms.txt automatycznie.
+  - **GEO:** dane FAQ landingu przeniesione do `src/data/faq.ts` (JEDNO źródło: akordeon Faq +
+    FAQPage JSON-LD + prerender); FAQPage JSON-LD na landingu i na podstronach narzędzi;
+    `llms.txt` (opis firmy, wyróżniki, 12 narzędzi z linkami, kontakt, sekcja EN); na każdej
+    podstronie narzędzia sekcja „Częste pytania o to narzędzie" (treść stale w DOM).
+  - **Treści long-tail:** NOWY generowany plik `src/data/toolsSeo.ts` — title/description
+    (≤62 zn. / 130–165 zn.) + 4 pary Q&A per narzędzie, PL/EN; merge po slugu w `getTools()`
+    (brak wpisu = fallbacki, strona działa). Powstał wsadowo: 12 draftów + adwersarialna
+    weryfikacja (zasada #3, liczby tylko publiczne, spójność z tools.ts, samowystarczalność
+    odpowiedzi pod cytowanie przez LLM-y) + bramka skryptowa (audyt wszystkich liczb, limity
+    długości, komplet PL/EN) + przegląd ręczny. To zwykły plik danych — można edytować.
+  - Spójność NAP potwierdzona: `786 296 426` (display) / `+48 786 296 426` (JSON-LD) /
+    `kontakt@klarow.com` — jednolicie w całym serwisie.
 - **2026-07-22 (sesja strony, cz. 6) — PDF, iteracje UI Narzędzi, skalowanie, mobile:**
   - **Dokumenty → pobieranie PDF** (pdfmake, lazy ~830 KB gz ładowane przy kliknięciu;
     polskie znaki wbudowane; dokument projektowany na 1 stronę A4). Print-CSS usunięty.
@@ -250,10 +284,11 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
   (`kontakt@klarow.com` → prywatny Gmail) + wysyłka jako `kontakt@` przez Gmail „Wyślij jako"
   + Resend SMTP; SPF ✓, DKIM (Resend) ✓, DMARC `p=none` dodany (po ~tygodniu → `p=quarantine`).
   Telefon na stronie: **786 296 426**.
-- **NASTĘPNA SESJA (brief gotowy):** `prompt-wprowadzajacy-seo-mobile.md` — SEO
-  (prerender/SSG podstron narzędzi, long-tail, sitemap z tools.ts) + GEO (FAQPage
-  JSON-LD, llms.txt, treść pod odpowiedzi AI) + **mobile „samo tło"** (pełny stan
-  śledztwa w briefie; brakuje: wersja iOS Karola + zrzut `?debug=1`).
+- **Brief `prompt-wprowadzajacy-seo-mobile.md` ZREALIZOWANY 2026-07-23** (sesja cz. 7 wyżej:
+  mobile naprawione u źródła, prerender+sitemap+llms.txt+FAQPage wdrożone na produkcji).
+  Resztki: zrzut `?debug=1` od Karola (domknięcie diagnozy — który wariant awarii WebGL),
+  po ~tygodniu ocena efektów (Google Search Console — dodać property, jeśli brak);
+  hreflang dopiero przy przejściu na trasy `/pl/` `/en/` (plan §4.2).
 - **Do zrobienia** (szczegóły: `docs/plan/nastepne-kroki.md`): konto Cal.com →
   embed w `BookingModal`; umowa IP z Nuconic; mini-case'y „rozbiórka najgorszego
   Excela"; plugin MCP od Karola (link z mcpmarket wygasł); opisy i liczby od

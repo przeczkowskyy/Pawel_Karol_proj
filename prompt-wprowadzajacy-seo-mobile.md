@@ -1,5 +1,12 @@
 # Prompt wprowadzający — sesja: SEO + GEO + naprawa widoku mobilnego
 
+> ✅ **ZREALIZOWANE 2026-07-23 (sesja cz. 7)** — nie wklejać ponownie. Mobile naprawione
+> u źródła (WebGL/chunk tła zdejmował całe drzewo React — teraz BgBoundary + guard),
+> prerender 13 stron + sitemap/llms.txt z tools.ts + FAQPage JSON-LD + treści long-tail
+> (`toolsSeo.ts`) wdrożone i zweryfikowane na produkcji. Szczegóły: CLAUDE.md
+> „Stan operacyjny → 2026-07-23". Zostało: zrzut `?debug=1` od Karola (domknięcie
+> diagnozy) i po ~tygodniu ocena efektów w Search Console.
+
 > **Jak używać.** Wklej całość poniżej linii `— — —` do **nowego okna Claude Code**
 > otwartego w katalogu repo Klarow. Sesja implementacyjna.
 
