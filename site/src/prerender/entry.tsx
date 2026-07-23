@@ -238,6 +238,16 @@ function ToolShell({ pl, en, all }: { pl: ToolItem; en: ToolItem; all: ToolItem[
             <li key={b}>· {b}</li>
           ))}
         </ul>
+        {/* EN FAQ dla botów bez JS (LLM-y); Google i tak indeksuje PL —
+            pełne EN SEO dopiero przy trasach /en/ (plan §4.2) */}
+        {en.faq?.length
+          ? en.faq.map((f) => (
+              <section key={f.q} className="mt-3 max-w-3xl">
+                <h3 className="text-[13px] font-bold" style={HEAD}>{f.q}</h3>
+                <p className="mt-1 text-[12.5px] leading-relaxed" style={MUTED}>{f.a}</p>
+              </section>
+            ))
+          : null}
       </section>
 
       <ContactLine />
@@ -321,9 +331,10 @@ export function prerenderAll(): { routes: RouteOut[]; sitemap: string; llms: str
     {
       file: "index.html",
       path: "/",
-      title: "Klarow — automatyzacja danych i narzędzia kontrolingu. Wdrożenie w dni.",
+      /* te same stringi co w App.tsx (Landing/Seo) — ≤60 / ≤165 znaków */
+      title: "Klarow — automatyzacja danych i kontroling. Wdrożenie w dni.",
       description:
-        "Porządek w danych dla firm 20–250 osób, które wyrosły na Excelu. Działające demo narzędzi: raport zarządczy, kontroling kosztów, audyt jakości danych, importy ERP, płatności. Dane zostają u Ciebie (on-premise).",
+        "Porządek w danych dla firm 20–250 osób wyrosłych na Excelu. 12 działających demo: raport zarządczy, importy ERP, audyt danych, płatności. Dane zostają u Ciebie.",
       jsonLd: [ORG_JSONLD, faqPageJsonLd(FAQ_I18N.pl)],
       bodyHtml: renderToStaticMarkup(<HomeShell pl={pl} en={en} />),
     },

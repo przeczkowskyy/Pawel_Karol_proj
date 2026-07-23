@@ -45,13 +45,18 @@ for (const r of routes) {
     `    <meta property="og:title" content="${esc(r.title)}" />\n` +
     `    <meta property="og:description" content="${esc(r.description)}" />\n` +
     `    <meta property="og:url" content="${url}" />\n` +
-    `    <script type="application/ld+json">${jsonLdSafe(r.jsonLd)}</script>\n  </head>`;
-  html = html.replace(/<\/head>/, head);
+    /* id=seo-jsonld: klientowy Seo.tsx zdejmuje ten blok przy montażu i wstawia
+       własny — bez id po starcie Reacta strona miałaby PODWÓJNY JSON-LD,
+       a po nawigacji SPA nieaktualny */
+    `    <script type="application/ld+json" id="seo-jsonld">${jsonLdSafe(r.jsonLd)}</script>\n  </head>`;
+  /* replacement jako FUNKCJA: string interpretowałby sekwencje $ ($&, $', $1)
+     z treści (np. kwoty "$'000" przy narzędziu USD) i cicho korumpował HTML */
+  html = html.replace(/<\/head>/, () => head);
 
   if (!html.includes('<div id="root"></div>')) {
     throw new Error(`Szablon bez pustego #root — prerender ${r.file} przerwany`);
   }
-  html = html.replace('<div id="root"></div>', `<div id="root">${r.bodyHtml}</div>`);
+  html = html.replace('<div id="root"></div>', () => `<div id="root">${r.bodyHtml}</div>`);
 
   const out = path.join(dist, r.file);
   mkdirSync(path.dirname(out), { recursive: true });

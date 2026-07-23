@@ -81,7 +81,7 @@ const T = {
     badgeNew: "NOWE",
     badgeRemoved: "USUNIĘTE",
     foot: "Dane fikcyjne · read-only · „Dziś” = 22.07.2026 (stała). Dryf liczony między dwoma snapshotami.",
-    hint: "Suwak = wybrana data (złota linia). Przewiń oś w bok. Czerwony ogon = obsuwa poza pierwotny termin.",
+    hint: "Suwak = wybrana data (stalowa linia). Przewiń oś w bok. Czerwony ogon = obsuwa poza pierwotny termin.",
   },
   en: {
     shifted: "shifted",
@@ -101,7 +101,7 @@ const T = {
     badgeNew: "NEW",
     badgeRemoved: "REMOVED",
     foot: "Fictional data · read-only · “Today” = 2026-07-22 (fixed). Drift computed between two snapshots.",
-    hint: "Slider = selected date (gold line). Scroll the axis sideways. Red tail = slip past the original deadline.",
+    hint: "Slider = selected date (steel line). Scroll the axis sideways. Red tail = slip past the original deadline.",
   },
 };
 

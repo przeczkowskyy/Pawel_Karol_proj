@@ -236,6 +236,29 @@
   }
 }
 
+/* ── akordeon FAQ ────────────────────────────────────────────────────────
+   Odpowiedź zawsze w DOM (pokrycie FAQPage JSON-LD w treści strony);
+   zwijanie przez animowalne grid-template-rows. Wewnętrzny div bez
+   paddingu clipuje treść (padding siedzi na <p>, więc rząd 0fr składa
+   się naprawdę do zera). Stare silniki bez animacji rows: skok 0↔1. */
+.faq-answer {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s cubic-bezier(0.05, 0.7, 0.1, 1);
+}
+.faq-answer[data-open="true"] {
+  grid-template-rows: 1fr;
+}
+.faq-answer > div {
+  overflow: hidden;
+  min-height: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .faq-answer {
+    transition: none;
+  }
+}
+
 /* ── Pas kolumn działów (sekcja Narzędzia, poziom 1) ────────────────────
    Jeden panel na scrimie; działy to KOLUMNY rozdzielone strukturalnymi
    liniami 1px (celowo nie osobne boxy). Separatory dopasowane do układu:

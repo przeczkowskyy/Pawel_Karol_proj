@@ -182,6 +182,21 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
     długości, komplet PL/EN) + przegląd ręczny. To zwykły plik danych — można edytować.
   - Spójność NAP potwierdzona: `786 296 426` (display) / `+48 786 296 426` (JSON-LD) /
     `kontakt@klarow.com` — jednolicie w całym serwisie.
+  - **Przegląd adwersarialny diffu sesji → 7 potwierdzonych poprawek (wdrożone):**
+    (1) wstrzykiwany prerenderem JSON-LD dostał `id="seo-jsonld"` — bez tego po starcie
+    Reacta strona miała PODWÓJNY JSON-LD, a po nawigacji SPA nieaktualny; (2) podmiany
+    w prerender.mjs jako funkcje — replacement-string interpretował sekwencje `$` z treści
+    (repro: „$'000" w FAQ rozwalało HTML przy zielonym buildzie); (3) odpowiedzi FAQ
+    landingu ZAWSZE w DOM (`.faq-answer`, animacja grid-template-rows zamiast auto-animate)
+    — FAQPage JSON-LD musi mieć pokrycie w treści strony; (4) title strony głównej 71→60 zn.
+    i description 210→160 zn. (Google ucina ~55–60 — hak „Wdrożenie w dni" wypadał);
+    (5) „złota linia"→„stalowa" w TaskTimeline (resztka języka starej marki, linia i tak
+    renderuje się w stali); (6) FAQ osi czasu nie obiecuje już eksportu (demo go nie ma;
+    io w tools.ts opisuje wersję wdrożeniową — OK); (7) EN FAQ dodane do shella podstron.
+  - **ZNANE OGRANICZENIE (świadome):** warstwa EN SEO (title/description/FAQ z toolsSeo.ts)
+    jest niewidoczna dla Google — PL i EN dzielą URL, crawler bez localStorage renderuje PL;
+    EN meta ożyje dopiero przy trasach `/en/` (plan §4.2, dopisane do „Do zrobienia").
+    Boty bez JS (LLM-y) dostają EN przez sekcję `lang="en"` w shellu i `llms.txt`.
 - **2026-07-22 (sesja strony, cz. 6) — PDF, iteracje UI Narzędzi, skalowanie, mobile:**
   - **Dokumenty → pobieranie PDF** (pdfmake, lazy ~830 KB gz ładowane przy kliknięciu;
     polskie znaki wbudowane; dokument projektowany na 1 stronę A4). Print-CSS usunięty.
@@ -312,7 +327,9 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
 - **Do zrobienia** (szczegóły: `docs/plan/nastepne-kroki.md`): konto Cal.com →
   embed w `BookingModal`; umowa IP z Nuconic; mini-case'y „rozbiórka najgorszego
   Excela"; plugin MCP od Karola (link z mcpmarket wygasł); opisy i liczby od
-  founderów; case study PL/EN.
+  founderów; case study PL/EN; trasy `/pl/` `/en/` build-time (plan §4.2 —
+  dopiero wtedy EN meta z toolsSeo.ts staje się widoczne dla Google + hreflang);
+  Google Search Console (property dla klarow.com — mierzenie efektów SEO).
 
 ## Kontekst biznesowy w pigułce (pełnia: `docs/plan/plan-strategiczny.md`)
 

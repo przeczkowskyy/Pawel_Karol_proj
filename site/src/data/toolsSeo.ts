@@ -221,7 +221,7 @@ export const TOOLS_SEO: Record<string, Record<Lang, ToolSeoText>> = {
       "faq": [
         {
           "q": "Jak działa oś czasu zadań i co robi z naszymi plikami harmonogramu?",
-          "a": "Narzędzie czyta tygodniowe snapshoty harmonogramu — niczego w plikach nie nadpisuje — i rysuje każde zadanie jako dwa pasy: poprzedni oraz bieżący plan. Przy zadaniu stoi etykieta dryfu +Nd/−Nd, więc obsuwy widać od razu, bez porównywania dwóch wersji „na oko”. Znacznik „dziś” i suwak daty pokazują, gdzie jesteście względem planu, a wynik można wyeksportować."
+          "a": "Narzędzie czyta tygodniowe snapshoty harmonogramu — niczego w plikach nie nadpisuje — i rysuje każde zadanie jako dwa pasy: poprzedni oraz bieżący plan. Przy zadaniu stoi etykieta dryfu +Nd/−Nd, więc obsuwy widać od razu, bez porównywania dwóch wersji „na oko”. Znacznik „dziś” i suwak daty pokazują, gdzie jesteście względem planu."
         },
         {
           "q": "Czy dane naszego harmonogramu wychodzą do chmury?",
@@ -245,7 +245,7 @@ export const TOOLS_SEO: Record<string, Record<Lang, ToolSeoText>> = {
       "faq": [
         {
           "q": "How does the task timeline work and what does it do with our schedule files?",
-          "a": "The tool reads weekly snapshots of your schedule — it never overwrites the files — and draws each task as two bars: the previous plan and the current one. A drift label of +N/−N days sits next to each task, so slips are visible at a glance instead of comparing two versions by eye. A “today” marker and a date slider show where you stand, and the result can be exported."
+          "a": "The tool reads weekly snapshots of your schedule — it never overwrites the files — and draws each task as two bars: the previous plan and the current one. A drift label of +N/−N days sits next to each task, so slips are visible at a glance instead of comparing two versions by eye. A “today” marker and a date slider show where you stand."
         },
         {
           "q": "Does our schedule data go to the cloud?",

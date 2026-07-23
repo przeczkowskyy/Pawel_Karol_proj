@@ -631,16 +631,18 @@ function Landing({
 
   return (
     <>
+      {/* title ≤60 zn. (Google ucina ~55–60 — hak „Wdrożenie w dni" musi się
+          zmieścić), description ≤165 zn.; identyczne stringi w prerenderze */}
       <Seo
         title={
           lang === "pl"
-            ? "Klarow — automatyzacja danych i narzędzia kontrolingu. Wdrożenie w dni."
-            : "Klarow — data automation and controlling tools. Deployed in days."
+            ? "Klarow — automatyzacja danych i kontroling. Wdrożenie w dni."
+            : "Klarow — data automation & controlling. Deployed in days."
         }
         description={
           lang === "pl"
-            ? "Porządek w danych dla firm 20–250 osób, które wyrosły na Excelu. Działające demo narzędzi: raport zarządczy, kontroling kosztów, audyt jakości danych, importy ERP, płatności. Dane zostają u Ciebie (on-premise)."
-            : "Order in the data of 20–250-person companies that grew up on Excel. Live tool demos: board report, cost controlling, data quality audit, ERP imports, payments. Your data stays with you (on-premise)."
+            ? "Porządek w danych dla firm 20–250 osób wyrosłych na Excelu. 12 działających demo: raport zarządczy, importy ERP, audyt danych, płatności. Dane zostają u Ciebie."
+            : "Order in the data of 20–250-person companies that grew up on Excel. 12 live demos: board report, ERP imports, data audit, payments. Your data stays with you."
         }
         path="/"
         jsonLd={[ORG_JSONLD, faqPageJsonLd(pick(lang, FAQ_I18N))]}

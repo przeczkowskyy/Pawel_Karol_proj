@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { useLang, pick } from "@/i18n";
 import { FAQ_I18N } from "@/data/faq";
 
 /* FAQ = typowe obiekcje + nasze kontry (plan strategiczny §2.5), PL/EN.
    Dane w src/data/faq.ts (wspólne z FAQPage JSON-LD i prerenderem).
-   Akordeon animowany auto-animate — ref na rodzicu zwijanej treści,
-   stabilne klucze, szanuje prefers-reduced-motion. */
+   Odpowiedź jest ZAWSZE w DOM (FAQPage JSON-LD musi mieć pokrycie w treści
+   strony — warunkowy render zostawiał Google 6 pytań bez odpowiedzi);
+   zwijanie animuje grid-template-rows (.faq-answer w globals.css),
+   z poszanowaniem prefers-reduced-motion. */
 
 function FaqItem({
   q,
@@ -20,9 +21,8 @@ function FaqItem({
   open: boolean;
   onToggle: () => void;
 }) {
-  const [parent] = useAutoAnimate();
   return (
-    <div ref={parent} className="card" style={{ padding: 0 }}>
+    <div className="card" style={{ padding: 0 }}>
       <button
         type="button"
         className="w-full flex items-center justify-between gap-3 px-5 py-4 text-left cursor-pointer"
@@ -38,15 +38,16 @@ function FaqItem({
           style={{ color: "var(--primary)" }}
         />
       </button>
-      {open && (
-        <p
-          key="answer"
-          className="px-5 pb-5 text-[13px] leading-relaxed"
-          style={{ color: "var(--muted-foreground)" }}
-        >
-          {a}
-        </p>
-      )}
+      <div className="faq-answer" data-open={open ? "true" : "false"}>
+        <div>
+          <p
+            className="px-5 pb-5 text-[13px] leading-relaxed"
+            style={{ color: "var(--muted-foreground)" }}
+          >
+            {a}
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
