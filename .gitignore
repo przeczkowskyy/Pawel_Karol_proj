@@ -2,3 +2,7 @@ node_modules/
 dist/
 dist-ssr/
 *.local
+
+# Lead-Scout — sekrety lokalne (token bota Telegram + wykryty chat_id)
+leadscout/.env
+leadscout/.chat_id
