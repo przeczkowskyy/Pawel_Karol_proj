@@ -13,7 +13,8 @@
 | `ui-kit/` | **Company UI kit (marka KLAROW)** — obowiązkowy design-system wszystkich narzędzi i stron: `ui-kit/skills/company-ui/` (SKILL.md + app.css + fonty + komponenty React) |
 | `site/` | **Landing klarow.com** — Vite + React 19 + TS + Tailwind (tylko layout), dwujęzyczny PL/EN |
 | `demo/` | Statyczna prezentacja modułu M2 (Raport zarządczy) — pokaz kitu, dane fikcyjne |
-| `.claude/skills/` | Skille projektu: `auto-animate` (animacje list/akordeonów), `aceternity-ui` |
+| `.claude/skills/` | Skille projektu: `auto-animate` (animacje list/akordeonów), `aceternity-ui`, `motion-design` (animacje/przejścia), `lead-scout` (agent researchu leadów) |
+| `leadscout/` | **Agent pozyskiwania leadów** — baza `leads.json`, digesty na Telegram (@Klarow_BOT przez `notify.mjs`; token w `.env` POZA gitem), przewodnik źródeł `zrodla.md`, playbook outboundu, ranking kanałów marketingowych, kolejka rund `nastepne-rundy.md`. Uruchamianie: `/lead-scout` |
 
 ## Twarde zasady (obowiązują każdą sesję)
 
@@ -130,6 +131,25 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
 
 ## Stan operacyjny (aktualizuj przy zmianach!)
 
+- **2026-07-23 (sesja lead-scout) — agent pozyskiwania leadów + pierwsza runda researchu:**
+  - Zbudowany **agent Lead-Scout**: skill `/lead-scout` (ICP, scoring 0–10, procedura rundy)
+    + katalog `leadscout/` (README z instrukcją). Wysyłka na Telegram: `node leadscout/notify.mjs`
+    (`npx` nie działa — node wprost); token bota w `leadscout/.env` **poza gitem**; chat_id
+    wykrywany automatycznie z getUpdates. **BLOKER jednorazowy:** founder musi napisać
+    cokolwiek do t.me/Klarow_BOT (boty nie piszą pierwsze) → potem
+    `node leadscout/notify.mjs --file leadscout/digesty/digest-2026-07-23.md`.
+  - **Runda 1 (workflow 13 agentów, weryfikacja adwersaryjna):** 32 zweryfikowane leady
+    w `leads.json` (22 PL: produkcja/budownictwo/dystrybucja + 10 US: modular/subcontractors
+    pod G703; US = segment odroczony do ~6. mies.), 12 kandydatów odrzuconych (poza ICP,
+    grupy kapitałowe, martwe domeny, duplikaty). Wszystkie leady PL z sygnałem zakupu.
+  - **Artefakty researchu:** `zrodla.md` (JobAlerty pracuj.pl/LinkedIn jako system wczesnego
+    ostrzegania, Aleo/REGON/e-KRS, Diamenty/Gazele, katalogi targów, MBI directory dla US),
+    `playbook-outbound.md` (rytm 20 kontaktów/tydz. + szablony **zgodne z PKE**: LinkedIn →
+    mail po zgodzie → telefon), `marketing-kanaly.md` (ranking: 1. partnerstwa z wdrożeniowcami
+    ERP, 2. ICV Polska, 3. cold outreach dwuetapowy, 4. biura rachunkowe, 5. content/SEO),
+    `nastepne-rundy.md` (kolejka 10 rund + luki od krytyka).
+  - **GitHub przemianowany:** konto `bibaczebe` → `przeczkowskyy` (stary remote przekierowuje;
+    push działa bez zmian).
 - **2026-07-23 (sesja cz. 7) — SEO + GEO + mobile ROZWIĄZANE:**
   - **Mobile „samo tło" — przyczyna znaleziona i usunięta u źródła.** Repro Playwright/WebKit
     na produkcji: brak WebGL (iOS Lockdown Mode / wyczerpany limit kontekstów przy dziesiątkach
@@ -162,6 +182,27 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
     długości, komplet PL/EN) + przegląd ręczny. To zwykły plik danych — można edytować.
   - Spójność NAP potwierdzona: `786 296 426` (display) / `+48 786 296 426` (JSON-LD) /
     `kontakt@klarow.com` — jednolicie w całym serwisie.
+=======
+- **2026-07-23 (sesja lead-scout) — agent pozyskiwania leadów + pierwsza runda researchu:**
+  - Zbudowany **agent Lead-Scout**: skill `/lead-scout` (ICP, scoring 0–10, procedura rundy)
+    + katalog `leadscout/` (README z instrukcją). Wysyłka na Telegram: `node leadscout/notify.mjs`
+    (`npx` nie działa — node wprost); token bota w `leadscout/.env` **poza gitem**; chat_id
+    wykrywany automatycznie z getUpdates. **BLOKER jednorazowy:** founder musi napisać
+    cokolwiek do t.me/Klarow_BOT (boty nie piszą pierwsze) → potem
+    `node leadscout/notify.mjs --file leadscout/digesty/digest-2026-07-23.md`.
+  - **Runda 1 (workflow 13 agentów, weryfikacja adwersaryjna):** 32 zweryfikowane leady
+    w `leads.json` (22 PL: produkcja/budownictwo/dystrybucja + 10 US: modular/subcontractors
+    pod G703; US = segment odroczony do ~6. mies.), 12 kandydatów odrzuconych (poza ICP,
+    grupy kapitałowe, martwe domeny, duplikaty). Wszystkie leady PL z sygnałem zakupu.
+  - **Artefakty researchu:** `zrodla.md` (JobAlerty pracuj.pl/LinkedIn jako system wczesnego
+    ostrzegania, Aleo/REGON/e-KRS, Diamenty/Gazele, katalogi targów, MBI directory dla US),
+    `playbook-outbound.md` (rytm 20 kontaktów/tydz. + szablony **zgodne z PKE**: LinkedIn →
+    mail po zgodzie → telefon), `marketing-kanaly.md` (ranking: 1. partnerstwa z wdrożeniowcami
+    ERP, 2. ICV Polska, 3. cold outreach dwuetapowy, 4. biura rachunkowe, 5. content/SEO),
+    `nastepne-rundy.md` (kolejka 10 rund + luki od krytyka).
+  - **GitHub przemianowany:** konto `bibaczebe` → `przeczkowskyy` (stary remote przekierowuje;
+    push działa bez zmian).
+>>>>>>> 84f5690 (Lead-Scout runda 1: 32 zweryfikowane leady + źródła + playbook outboundu + kanały marketingowe)
 - **2026-07-22 (sesja strony, cz. 6) — PDF, iteracje UI Narzędzi, skalowanie, mobile:**
   - **Dokumenty → pobieranie PDF** (pdfmake, lazy ~830 KB gz ładowane przy kliknięciu;
     polskie znaki wbudowane; dokument projektowany na 1 stronę A4). Print-CSS usunięty.
