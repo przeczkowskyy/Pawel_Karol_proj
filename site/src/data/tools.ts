@@ -88,6 +88,10 @@ export interface ToolText {
   replaces: string; // co zastępuje / oszczędność (bez liczb źródłowych)
   io: string; // wejście → wyjście
   bullets: string[]; // 3–4 konkrety
+  /* SEO long-tail per podstrona: title <=62 zn., description 130–165 zn. */
+  seo?: { title: string; description: string };
+  /* 4 pary Q&A — sekcja „Częste pytania" + FAQPage JSON-LD (GEO) */
+  faq?: { q: string; a: string }[];
 }
 
 export type DashboardKey =

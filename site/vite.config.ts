@@ -6,11 +6,13 @@ import { fileURLToPath } from "node:url";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
-export default defineConfig({
+export default defineConfig(({ isSsrBuild }) => ({
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: { "@": path.resolve(dirname, "src") },
   },
+  /* build SSR (prerender) nie potrzebuje kopii public/ w dist-ssr */
+  publicDir: isSsrBuild ? false : "public",
   build: {
     /* Kompatybilność ze starszymi WebKitami (iPhone'y bez najnowszego iOS):
        - target JS: bez składni nowszej niż es2019/safari13,
@@ -22,4 +24,4 @@ export default defineConfig({
     target: ["es2019", "safari13"],
     cssTarget: ["safari13"],
   },
-});
+}));

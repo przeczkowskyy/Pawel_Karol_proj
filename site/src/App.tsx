@@ -26,9 +26,10 @@ import Differentiators from "@/components/Differentiators";
 import Faq from "@/components/Faq";
 import ToolsGrid from "@/components/ToolsGrid";
 import SlideDeck, { type SlideDef } from "@/components/SlideDeck";
-import Seo, { ORG_JSONLD } from "@/components/Seo";
+import Seo, { ORG_JSONLD, faqPageJsonLd } from "@/components/Seo";
 import ToolPage from "@/pages/ToolPage";
 import { useLang, pick } from "@/i18n";
+import { FAQ_I18N } from "@/data/faq";
 
 /* Landing Klarow v0.6 — motion-graphic deck, dark-only, PL/EN. Strona jest
    STATYCZNA (zero scrolla dokumentu): gest scrolla / swipe / klawiatura
@@ -642,7 +643,7 @@ function Landing({
             : "Order in the data of 20–250-person companies that grew up on Excel. Live tool demos: board report, cost controlling, data quality audit, ERP imports, payments. Your data stays with you (on-premise)."
         }
         path="/"
-        jsonLd={ORG_JSONLD}
+        jsonLd={[ORG_JSONLD, faqPageJsonLd(pick(lang, FAQ_I18N))]}
       />
       <SlideDeck
         slides={slides}

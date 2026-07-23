@@ -26,7 +26,9 @@ export default function Seo({
   title: string;
   description: string;
   path: string; // np. "/" albo "/narzedzia/raport-zarzadczy"
-  jsonLd?: object;
+  /* pojedynczy obiekt albo tablica bloków (np. [SoftwareApplication, FAQPage]) —
+     Google akceptuje tablicę w jednym <script type="application/ld+json"> */
+  jsonLd?: object | object[];
 }) {
   useEffect(() => {
     document.title = title;
@@ -89,5 +91,20 @@ export function toolJsonLd(name: string, description: string, path: string) {
     operatingSystem: "Windows",
     offers: { "@type": "Offer", priceCurrency: "PLN", price: "0", description: "Demo online" },
     provider: { "@type": "Organization", name: "Klarow", url: ORIGIN },
+  };
+}
+
+/* FAQPage JSON-LD (GEO): pytania-obiekcje z landingu i per-narzędzie —
+   materiał wprost cytowalny przez wyszukiwarki i LLM-y */
+export function faqPageJsonLd(items: { q: string; a: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: items.map((f) => ({
+      "@type": "Question",
+      /* cudzysłowy „obiekcji" zostają — tak brzmi naturalne pytanie klienta */
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
   };
 }

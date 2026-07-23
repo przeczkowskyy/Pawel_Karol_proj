@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { ArrowLeft, ArrowRightLeft, Check, Play, TrendingUp } from "lucide-react";
 import { findTool, getTools, CATEGORY_LABEL, DEPT_LABEL, type DashboardKey } from "@/data/tools";
 import { useLang, pick } from "@/i18n";
-import Seo, { toolJsonLd } from "@/components/Seo";
+import Seo, { toolJsonLd, faqPageJsonLd } from "@/components/Seo";
 import DemoReport from "@/components/DemoReport";
 import ProductionDashboard from "@/components/dashboards/ProductionDashboard";
 import QualityGate from "@/components/dashboards/QualityGate";
@@ -48,6 +48,7 @@ const T = {
     io: "Wejście → wyjście",
     whatYouGet: "Co dostajesz",
     otherTools: "Inne narzędzia",
+    faqHead: "Częste pytania o to narzędzie",
     cta: "Umów bezpłatną diagnozę",
     ctaSub: "Chcesz zobaczyć to narzędzie na SWOICH danych? Przyślij nam swój najgorszy Excel.",
   },
@@ -61,6 +62,7 @@ const T = {
     io: "Input → output",
     whatYouGet: "What you get",
     otherTools: "Other tools",
+    faqHead: "Common questions about this tool",
     cta: "Book a free diagnosis",
     ctaSub: "Want to see this tool on YOUR data? Send us your worst Excel.",
   },
@@ -96,10 +98,14 @@ export default function ToolPage({ onBook }: { onBook: () => void }) {
   return (
     <div className="max-w-6xl mx-auto px-6 pt-32 pb-24">
       <Seo
-        title={`${tool.name} — ${lang === "pl" ? "działające demo online" : "live online demo"} | Klarow`}
-        description={tool.tagline}
+        title={tool.seo?.title ?? `${tool.name} — ${lang === "pl" ? "działające demo online" : "live online demo"} | Klarow`}
+        description={tool.seo?.description ?? tool.tagline}
         path={path}
-        jsonLd={toolJsonLd(tool.name, tool.tagline, path)}
+        jsonLd={
+          tool.faq?.length
+            ? [toolJsonLd(tool.name, tool.seo?.description ?? tool.tagline, path), faqPageJsonLd(tool.faq)]
+            : toolJsonLd(tool.name, tool.seo?.description ?? tool.tagline, path)
+        }
       />
 
       <Link
@@ -175,6 +181,27 @@ export default function ToolPage({ onBook }: { onBook: () => void }) {
           </ul>
         </div>
       </div>
+
+      {/* częste pytania (GEO: treść stale w DOM — bez akordeonu) */}
+      {tool.faq?.length ? (
+        <div className="mt-10">
+          <h2 className="text-[20px] font-extrabold tracking-tight" style={{ color: "var(--heading)" }}>
+            {t.faqHead}
+          </h2>
+          <div className="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+            {tool.faq.map((f) => (
+              <div key={f.q} className="card" style={{ padding: 18 }}>
+                <h3 className="text-[13.5px] font-bold" style={{ color: "var(--heading)" }}>
+                  {f.q}
+                </h3>
+                <p className="mt-2 text-[13px] leading-relaxed" style={{ color: "var(--muted-foreground)" }}>
+                  {f.a}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : null}
 
       {/* inne narzędzia (crosslinki = SEO wewnętrzne) */}
       <div className="mt-10">
