@@ -27,7 +27,17 @@
   left: 0;
   z-index: 0;
   pointer-events: none;
-  background: #121212;
+  /* statyczny „awaryjny pejzaż": delikatna stalowa łuna od dołu — widoczna,
+     gdy WebGL padnie (Lockdown Mode / limit kontekstów / bloker) i canvas
+     się nie narysuje; z canvasem siedzi pod nim i nie przeszkadza */
+  background:
+    radial-gradient(
+      120% 85% at 50% 100%,
+      rgba(168, 180, 194, 0.14) 0%,
+      rgba(168, 180, 194, 0.05) 45%,
+      rgba(18, 18, 18, 0) 75%
+    ),
+    #121212;
   isolation: isolate;
 }
 .content-layer {

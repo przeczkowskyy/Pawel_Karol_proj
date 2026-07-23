@@ -156,6 +156,16 @@ export const GLSLHills = ({
     const canvas = canvasRef.current;
     if (!canvas) return;
 
+    /* Tło jest ozdobą — bez WebGL (Lockdown Mode, wyczerpane konteksty przy
+       wielu kartach) po prostu go nie ma; treść strony zostaje na statycznym
+       gradiencie .bg-layer. Sonda na osobnym canvasie + natychmiastowe
+       zwolnienie kontekstu; konstruktor renderera dodatkowo w try/catch,
+       bo kontekst potrafi paść dopiero przy tworzeniu właściwego. */
+    const probe = document.createElement("canvas");
+    const gl = probe.getContext("webgl2") || probe.getContext("webgl");
+    if (!gl) return;
+    (gl.getExtension("WEBGL_lose_context") as { loseContext(): void } | null)?.loseContext();
+
     const uniforms = { time: { value: 0 } };
     const geometry = new THREE.PlaneGeometry(planeSize, planeSize, planeSize, planeSize);
     const material = new THREE.RawShaderMaterial({
@@ -166,7 +176,15 @@ export const GLSLHills = ({
     });
     const mesh = new THREE.Mesh(geometry, material);
 
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: false });
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ canvas, antialias: false });
+    } catch (err) {
+      console.warn("Tło WebGL wyłączone — brak kontekstu:", err);
+      geometry.dispose();
+      material.dispose();
+      return;
+    }
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
       45,

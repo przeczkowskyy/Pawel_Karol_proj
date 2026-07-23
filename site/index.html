@@ -112,6 +112,18 @@
                   " · dvh: " + CSS.supports("height", "100dvh")
                 );
               }
+              /* WebGL: Lockdown Mode / limit kontekstów wyłącza tło 3D —
+                 od 2026-07-23 strona MA to przeżyć (BgBoundary); sonda mówi,
+                 czy na tym urządzeniu tło w ogóle ma prawo działać */
+              try {
+                var pc = document.createElement("canvas");
+                var g2 = pc.getContext("webgl2");
+                var g1 = g2 || pc.getContext("webgl");
+                log("WebGL2: " + !!g2 + " · WebGL: " + !!g1 +
+                  " · canvas tła: " + !!document.querySelector(".bg-layer canvas"));
+              } catch (e2) {
+                log("WebGL probe err: " + e2.message);
+              }
             } catch (err) {
               log("snapshot err: " + err.message);
             }

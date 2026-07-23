@@ -19,6 +19,7 @@ import {
   Mail,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
+import BgBoundary from "@/components/BgBoundary";
 import BookingModal, { PHONE_DISPLAY, PHONE_HREF } from "@/components/BookingModal";
 import CollaborationFlow from "@/components/CollaborationFlow";
 import Differentiators from "@/components/Differentiators";
@@ -666,9 +667,12 @@ export default function App() {
           .bg-layer/.content-layer = czysty CSS (globals) — szkielet strony
           nie może zależeć od Tailwinda (stare WebKity) ani od kompozytora GPU */}
       <div className="bg-layer" aria-hidden="true">
-        <Suspense fallback={null}>
-          <GLSLHills width="100%" height="100%" speed={0.2} zoomRef={zoomRef} />
-        </Suspense>
+        {/* boundary: awaria WebGL/chunka NIE MOŻE zdjąć treści strony */}
+        <BgBoundary>
+          <Suspense fallback={null}>
+            <GLSLHills width="100%" height="100%" speed={0.2} zoomRef={zoomRef} />
+          </Suspense>
+        </BgBoundary>
       </div>
 
       <div className="content-layer">
