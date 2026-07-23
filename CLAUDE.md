@@ -97,8 +97,11 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
     robocizny, plan płatności, raport importu, podsumowanie tygodnia PM, rejestr umów.
   - **Skalowanie:** root `zoom` 1.08 od 1500px / 1.18 od 1900px (globals.css).
   - **SEO:** `src/components/Seo.tsx` (title/description/canonical/OG/JSON-LD per strona;
-    `ORG_JSONLD` na landingu, `toolJsonLd` per narzędzie), `public/robots.txt`,
-    `public/sitemap.xml` (**aktualizuj przy dodaniu narzędzia!**), meta w `index.html`.
+    `ORG_JSONLD` + `faqPageJsonLd` na landingu, `toolJsonLd`+FAQPage per narzędzie),
+    `public/robots.txt`, meta w `index.html`; **prerender** `src/prerender/entry.tsx` +
+    `scripts/prerender.mjs` (13 statycznych HTML; `sitemap.xml` i `llms.txt` GENEROWANE
+    z `tools.ts` przy buildzie — ręcznego `public/sitemap.xml` NIE MA, nie odtwarzać);
+    treści long-tail + FAQ per narzędzie w `src/data/toolsSeo.ts` (merge w `getTools()`).
   - **12 dashboardów (komplet)** — 100% client-side, deterministyczne, dane fikcyjne:
     `DemoReport.tsx`+`lib/report.ts` („Raport zarządczy", spec `docs/plan/demo-m2-spec.md`) ·
     `dashboards/ProductionDashboard.tsx` (kafle hal + suwak tygodnia) ·
