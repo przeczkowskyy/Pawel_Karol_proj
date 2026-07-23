@@ -250,11 +250,14 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
   (`kontakt@klarow.com` → prywatny Gmail) + wysyłka jako `kontakt@` przez Gmail „Wyślij jako"
   + Resend SMTP; SPF ✓, DKIM (Resend) ✓, DMARC `p=none` dodany (po ~tygodniu → `p=quarantine`).
   Telefon na stronie: **786 296 426**.
-- **Do zrobienia** (szczegóły: `docs/plan/nastepne-kroki.md`): deploy `site/` na Cloudflare
-  Pages (root `site`, build `npm run build`, output `dist`) + custom domain; konto Cal.com →
-  embed w `BookingModal`; umowa IP z Nuconic; realne zrzuty narzędzi po ich rebrandzie na
-  `company-ui` (kopiuj `ui-kit/skills/company-ui/` do `.claude/skills/` projektu narzędzia);
-  opisy modułów i liczby oszczędności od founderów; case study PL/EN.
+- **NASTĘPNA SESJA (brief gotowy):** `prompt-wprowadzajacy-seo-mobile.md` — SEO
+  (prerender/SSG podstron narzędzi, long-tail, sitemap z tools.ts) + GEO (FAQPage
+  JSON-LD, llms.txt, treść pod odpowiedzi AI) + **mobile „samo tło"** (pełny stan
+  śledztwa w briefie; brakuje: wersja iOS Karola + zrzut `?debug=1`).
+- **Do zrobienia** (szczegóły: `docs/plan/nastepne-kroki.md`): konto Cal.com →
+  embed w `BookingModal`; umowa IP z Nuconic; mini-case'y „rozbiórka najgorszego
+  Excela"; plugin MCP od Karola (link z mcpmarket wygasł); opisy i liczby od
+  founderów; case study PL/EN.
 
 ## Kontekst biznesowy w pigułce (pełnia: `docs/plan/plan-strategiczny.md`)
 
