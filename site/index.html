@@ -124,6 +124,51 @@
               } catch (e2) {
                 log("WebGL probe err: " + e2.message);
               }
+              /* Co REALNIE leży na wierzchu piksela — rozstrzyga między:
+                 treść pod tłem (błąd stackingu) a treść, która się nie maluje
+                 mimo poprawnej geometrii (błąd paintu/kompozycji iOS). */
+              var elDesc = function (el) {
+                if (!el) return "null";
+                var c =
+                  typeof el.className === "string" && el.className
+                    ? "." + el.className.trim().split(/\s+/).join(".")
+                    : "";
+                return el.tagName.toLowerCase() + c;
+              };
+              try {
+                var cx = Math.round(window.innerWidth / 2);
+                var ys = [0.28, 0.5, 0.72];
+                for (var pi = 0; pi < ys.length; pi++) {
+                  var py = Math.round(window.innerHeight * ys[pi]);
+                  log("na wierzchu @(" + cx + "," + py + "): " + elDesc(document.elementFromPoint(cx, py)));
+                }
+              } catch (e3) {
+                log("elementFromPoint err: " + e3.message);
+              }
+              var cs = getComputedStyle(document.documentElement);
+              log(
+                "token --heading=" + cs.getPropertyValue("--heading").trim() +
+                " --body-bg=" + cs.getPropertyValue("--body-bg").trim()
+              );
+              var cl = document.querySelector(".content-layer");
+              if (cl) {
+                var clc = getComputedStyle(cl);
+                log(".content-layer: pos=" + clc.position + " z=" + clc.zIndex + " " + cl.offsetWidth + "x" + cl.offsetHeight);
+              } else {
+                log(".content-layer: BRAK");
+              }
+              var h1 = document.querySelector(".slide.active h1");
+              if (h1) {
+                var r = h1.getBoundingClientRect();
+                var h1c = getComputedStyle(h1);
+                log(
+                  "hero h1: " + Math.round(r.left) + "," + Math.round(r.top) +
+                  " " + Math.round(r.width) + "x" + Math.round(r.height) +
+                  " color=" + h1c.color + " vis=" + h1c.visibility + " op=" + h1c.opacity
+                );
+              } else {
+                log("hero h1: BRAK");
+              }
             } catch (err) {
               log("snapshot err: " + err.message);
             }

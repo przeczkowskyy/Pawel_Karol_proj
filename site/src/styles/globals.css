@@ -25,7 +25,12 @@
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 0;
+  /* z-index UJEMNY — tło zawsze POD treścią (kanoniczny „fixed background").
+     Dzięki temu .content-layer NIE musi być kontekstem stackingu (z-index:10),
+     który uwięziłby elementy fixed pod `overflow:hidden` i psuł malowanie na
+     iOS. Treść (fixed z-index dodatni albo normalny flow podstron) i tak jest
+     nad tłem. */
+  z-index: -1;
   pointer-events: none;
   /* statyczny „awaryjny pejzaż": delikatna stalowa łuna od dołu — widoczna,
      gdy WebGL padnie (Lockdown Mode / limit kontekstów / bloker) i canvas
@@ -41,8 +46,14 @@
   isolation: isolate;
 }
 .content-layer {
+  /* CELOWO bez z-index / kontekstu stackingu. Elementy fixed (deck, navbar,
+     stopka) muszą żyć w GŁÓWNYM kontekście stackingu strony. Uwięzione w
+     kontekście z-index:10 pod `overflow:hidden` (html/body ustawia SlideDeck)
+     iOS Safari/Chrome ich NIE malował — cała treść znikała, zostawało samo tło
+     (nawracający bug klarow.com na iPhone). Dowód: panel ?debug=1 to też
+     position:fixed, ale BEZ takiego wrappera — malował się bez zarzutu.
+     Tło .bg-layer ma z-index:-1, więc treść jest nad nim także bez tego stackingu. */
   position: relative;
-  z-index: 10;
 }
 
 .deck {
