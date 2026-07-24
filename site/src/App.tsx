@@ -43,6 +43,25 @@ const GLSLHills = lazy(() =>
   import("@/components/ui/glsl-hills").then((m) => ({ default: m.GLSLHills }))
 );
 
+/* Czy renderować ozdobne tło WebGL (animowane wzgórza).
+   NIE na urządzeniach dotykowych (telefony/tablety): iOS Safari potrafi
+   błędnie skomponować pełnoekranowy `position:fixed` <canvas> WebGL NAD
+   warstwą treści (która też jest position:fixed — deck, navbar, stopka) —
+   cała treść znika i zostaje „samo tło". To był nawracający bug klarow.com
+   na iPhone (diagnoza 2026-07-24). Na mobile zostaje statyczny stalowy
+   gradient .bg-layer (zaprojektowany fallback) → nic nie może przykryć
+   treści. Desktop (fine pointer) dostaje pełne animowane wzgórza.
+   SSR/prerender: false (brak window) — bg-layer i tak jest tam puste. */
+function useAnimatedBg(): boolean {
+  const [enabled, setEnabled] = useState(false);
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.matchMedia) return;
+    const coarse = window.matchMedia("(pointer: coarse)").matches;
+    setEnabled(!coarse);
+  }, []);
+  return enabled;
+}
+
 function Section({
   title,
   sub,
@@ -663,19 +682,26 @@ export default function App() {
   const onBook = () => setBookingOpen(true);
   /* docelowy zoom tła — mutowany przez Landing, czytany przez pętlę GLSL Hills */
   const zoomRef = useRef(1);
+  /* animowane tło WebGL tylko na desktopie — na mobile zostaje statyczny
+     gradient .bg-layer (patrz useAnimatedBg: fixed canvas na iOS przykrywał treść) */
+  const animatedBg = useAnimatedBg();
 
   return (
     <div style={{ background: "var(--body-bg)" }}>
       {/* tło CAŁEJ strony: GLSL Hills (lazy chunk z three.js), spowolnione.
           .bg-layer/.content-layer = czysty CSS (globals) — szkielet strony
-          nie może zależeć od Tailwinda (stare WebKity) ani od kompozytora GPU */}
+          nie może zależeć od Tailwinda (stare WebKity) ani od kompozytora GPU.
+          Na urządzeniach dotykowych canvas WebGL się NIE renderuje (bug iOS:
+          fixed canvas komponowany nad fixed treścią) — zostaje sam gradient. */}
       <div className="bg-layer" aria-hidden="true">
         {/* boundary: awaria WebGL/chunka NIE MOŻE zdjąć treści strony */}
-        <BgBoundary>
-          <Suspense fallback={null}>
-            <GLSLHills width="100%" height="100%" speed={0.2} zoomRef={zoomRef} />
-          </Suspense>
-        </BgBoundary>
+        {animatedBg && (
+          <BgBoundary>
+            <Suspense fallback={null}>
+              <GLSLHills width="100%" height="100%" speed={0.2} zoomRef={zoomRef} />
+            </Suspense>
+          </BgBoundary>
+        )}
       </div>
 
       <div className="content-layer">

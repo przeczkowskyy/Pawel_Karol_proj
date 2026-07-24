@@ -125,7 +125,10 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
   (kalendarz → mailto/tel; **do podmiany na embed Cal.com**), `CollaborationFlow` (SVG), `Faq`.
 - `src/components/ui/glsl-hills.tsx` — tło całej strony (three.js, spowolnione `speed=0.2`);
   prop `zoomRef` = docelowy zoom kamery mutowany przez deck (płynne dojście w pętli renderu,
-  bez remontu sceny WebGL) — tło „wjeżdża w głąb" z każdym slajdem.
+  bez remontu sceny WebGL) — tło „wjeżdża w głąb" z każdym slajdem. **Renderowane TYLKO na
+  desktopie** — `App.tsx` `useAnimatedBg()` gasi canvas na `(pointer: coarse)` (telefony/tablety),
+  bo iOS Safari komponował fixed canvas WebGL nad fixed treścią = „samo tło" (patrz Stan
+  operacyjny 2026-07-24). Na mobile zostaje statyczny gradient `.bg-layer`.
 - **Zapas (nieużywane, poza bundlem):** `radial-orbital-timeline`, `canvas-reveal-effect`.
 - `src/styles/company-ui.css` — **kopia kitu** (aktualizacja = nadpisanie NAD markerem
   APP-SPECIFIC świeżą kopią z `ui-kit/.../app.css` + zamiana ścieżek fontów na `/fonts/`).
@@ -133,6 +136,40 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
 - Docelowo (plan §4.2): treść do YAML w `site/content/` + trasy `/pl/` `/en/` build-time.
 
 ## Stan operacyjny (aktualizuj przy zmianach!)
+
+- **2026-07-24 (sesja mobile) — „samo tło na telefonie" NAPRAWIONE U ŹRÓDŁA (prawdziwa przyczyna, wreszcie zreprodukowana):**
+  - **Diagnoza przez REPRODUKCJĘ, nie teorię.** Uruchomiony prawdziwy silnik WebKit
+    (Playwright `webkit-2311` z cache `~/AppData/Local/ms-playwright`, `executablePath`
+    wprost — pakiet `playwright-core` w scratchpadzie, bo scratchpad nie ma `&` w ścieżce)
+    na buildzie `dist`, viewport iPhone 390×844. **Cała treść renderuje się poprawnie**:
+    `elementFromPoint` w środku ekranu zwraca Hero (nie canvas), `content-layer` z-index:10
+    stoi nad `bg-layer` z-index:0. DOM/CSS są OK. To dowodzi: bug NIE jest w kodzie strony.
+  - **Prawdziwa przyczyna:** kompozytor GPU **iOS Safari** komponuje pełnoekranowy
+    `position:fixed` **canvas WebGL** (tło GLSLHills) NAD rodzeństwem `position:fixed`
+    (`.deck`, `header`, `.deck-footer`, `.deck-dots`) — cała treść (a jest fixed) znika mimo
+    poprawnego z-index. Software WebKit (Playwright na Windows) tego NIE odtwarza (brak realnej
+    kompozycji GPU) — dlatego wszystkie wcześniejsze „weryfikacje Playwrightem" przechodziły,
+    a telefon dalej był czarny. To NIE był problem WebGL-failure/BgBoundary, ani starego
+    WebKita/@property/oklch (iOS Karola = 26, nowoczesny — te funkcje działają), ani cache.
+    Cała warstwa hipotez z sesji cz. 6–7 chybiała, bo nikt nie zreprodukował na realnej kompozycji.
+  - **Naprawa (gwarantowana, u źródła):** `App.tsx` `useAnimatedBg()` — canvas WebGL
+    renderowany **tylko na desktopie** (`matchMedia("(pointer: coarse)")` = false). Na
+    urządzeniach dotykowych (telefony/tablety, w tym iPad) zostaje statyczny **stalowy gradient
+    `.bg-layer`** (zaprojektowany fallback). Brak canvasu → nic nie może przykryć treści → bug
+    znika w 100%. Desktop bez zmian (animowane wzgórza zostają). Bonus: oszczędność baterii/GPU.
+  - **Zweryfikowane w WebKit po buildzie:** mobile (pointer:coarse) → `bgCanvasExists:false`,
+    pełna treść widoczna na gradiencie; desktop → canvas jest, treść na wierzchu, zero regresji.
+    tsc + build (13 tras + sitemap + llms.txt) przechodzą.
+  - **ŚWIADOMY TRADE-OFF:** mobile traci ANIMOWANE tło (zostaje statyczny gradient). Jeśli
+    Karol chce wzgórza z powrotem na telefonie — dopiero po potwierdzeniu na jego realnym
+    iPhonie, że promocja warstw (`translateZ(0)`/`will-change` na fixed) faktycznie naprawia
+    kompozycję; bez tego zostać przy gradiencie (niezawodność > ozdoba). Alternatywa premium:
+    statyczny pre-render wzgórz jako obraz tła na mobile.
+  - Zostaje diagnostyka `?debug=1` i `BgBoundary` (nieszkodliwe, chronią inne scenariusze).
+    Uwaga poboczna: `cssTarget:["safari13"]` w vite.config NIE robi tego, co zakładała sesja
+    cz. 6 — Vite domyślnie minifikuje CSS esbuildem (nie Lightning CSS), więc `@property`
+    (57×), `@layer`, `color-mix`, `backdrop-filter` ZOSTAJĄ w zbudowanym CSS. Na iOS 26 to
+    nieszkodliwe (wspiera), ale to NIE jest transpilacja pod stare Safari — nie polegać na tym.
 
 - **2026-07-23 (sesja lead-scout) — agent pozyskiwania leadów + pierwsza runda researchu:**
   - Zbudowany **agent Lead-Scout**: skill `/lead-scout` (ICP, scoring 0–10, procedura rundy)
