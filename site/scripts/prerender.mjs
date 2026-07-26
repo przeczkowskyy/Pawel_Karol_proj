@@ -66,6 +66,7 @@ for (const r of routes) {
 writeFileSync(path.join(dist, "sitemap.xml"), sitemap, "utf8");
 writeFileSync(path.join(dist, "llms.txt"), llms, "utf8");
 
+const toolCount = routes.filter((r) => r.path.startsWith("/narzedzia/")).length;
 console.log(
-  `prerender: ${routes.length} tras (index + ${routes.length - 1} narzędzi) + sitemap.xml + llms.txt`
+  `prerender: ${routes.length} tras (/, /narzedzia, /oferta, /faq + ${toolCount} narzędzi) + sitemap.xml + llms.txt`
 );

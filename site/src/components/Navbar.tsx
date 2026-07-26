@@ -10,18 +10,14 @@ import { useLang, pick } from "@/i18n";
 
 const LINKS_I18N = {
   pl: [
-    { label: "Narzędzia", to: "/#narzedzia" },
-    { label: "Wyróżniki", to: "/#wyrozniki" },
-    { label: "Współpraca", to: "/#wspolpraca" },
-    { label: "Oferta", to: "/#oferta" },
-    { label: "FAQ", to: "/#faq" },
+    { label: "Narzędzia", to: "/narzedzia" },
+    { label: "Oferta", to: "/oferta" },
+    { label: "FAQ", to: "/faq" },
   ],
   en: [
-    { label: "Tools", to: "/#narzedzia" },
-    { label: "Differentiators", to: "/#wyrozniki" },
-    { label: "How we work", to: "/#wspolpraca" },
-    { label: "Offer", to: "/#oferta" },
-    { label: "FAQ", to: "/#faq" },
+    { label: "Tools", to: "/narzedzia" },
+    { label: "Offer", to: "/oferta" },
+    { label: "FAQ", to: "/faq" },
   ],
 };
 
@@ -88,11 +84,7 @@ export default function Navbar({ onBook }: { onBook: () => void }) {
           to="/"
           className="brand-word"
           style={{ fontSize: 13 }}
-          onClick={() => {
-            setIsOpen(false);
-            /* na landingu resetuje deck do pierwszego slajdu (Landing nasłuchuje) */
-            window.dispatchEvent(new CustomEvent("klarow:home"));
-          }}
+          onClick={() => setIsOpen(false)}
         >
           KLAROW
         </Link>

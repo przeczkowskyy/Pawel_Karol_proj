@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, Link, useLocation } from "react-router-dom";
 import {
   ShieldCheck,
   Copy,
@@ -16,7 +16,6 @@ import {
   Check,
   X as XIcon,
   Phone,
-  Mail,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import BgBoundary from "@/components/BgBoundary";
@@ -25,19 +24,18 @@ import CollaborationFlow from "@/components/CollaborationFlow";
 import Differentiators from "@/components/Differentiators";
 import Faq from "@/components/Faq";
 import ToolsGrid from "@/components/ToolsGrid";
-import SlideDeck, { type SlideDef } from "@/components/SlideDeck";
 import Seo, { ORG_JSONLD, faqPageJsonLd } from "@/components/Seo";
 import ToolPage from "@/pages/ToolPage";
 import { useLang, pick } from "@/i18n";
 import { FAQ_I18N } from "@/data/faq";
+import { PAGES_SEO } from "@/data/pagesSeo";
 
-/* Landing Klarow v0.6 — motion-graphic deck, dark-only, PL/EN. Strona jest
-   STATYCZNA (zero scrolla dokumentu): gest scrolla / swipe / klawiatura
-   przełącza sekcje-slajdy (SlideDeck) z przejściem zoom+fade; tło GLSL Hills
-   (warstwa fixed pod całością, lazy chunk z three.js) robi zoom w głąb wraz
-   z kolejnymi slajdami. Kolejność: hero (+szybka nawigacja) → ból → moduły
-   (oś problemowa) → wyróżniki → współpraca → jak → dowód → dla kogo →
-   oferta → FAQ → kontakt/stopka. Komponenty i tokeny: kit company-ui. */
+/* Landing Klarow — dark-only, PL/EN. Zwykłe podstrony ze standardowym scrollem
+   (react-router): / (home) · /narzedzia (hub) · /oferta · /faq · /narzedzia/:slug.
+   Każda trasa = własne SEO (title/description/canonical/JSON-LD + prerenderowany
+   HTML). Dawny „motion-graphic deck" (slajdy przełączane gestem) usunięty
+   2026-07-26 — rozbicie na trasy o odrębnej intencji jest lepsze pod SEO.
+   Tło całej strony: GLSL Hills (desktop) / stalowy gradient (mobile). */
 
 const GLSLHills = lazy(() =>
   import("@/components/ui/glsl-hills").then((m) => ({ default: m.GLSLHills }))
@@ -46,12 +44,10 @@ const GLSLHills = lazy(() =>
 /* Czy renderować ozdobne tło WebGL (animowane wzgórza).
    NIE na urządzeniach dotykowych (telefony/tablety): iOS Safari potrafi
    błędnie skomponować pełnoekranowy `position:fixed` <canvas> WebGL NAD
-   warstwą treści (która też jest position:fixed — deck, navbar, stopka) —
-   cała treść znika i zostaje „samo tło". To był nawracający bug klarow.com
-   na iPhone (diagnoza 2026-07-24). Na mobile zostaje statyczny stalowy
-   gradient .bg-layer (zaprojektowany fallback) → nic nie może przykryć
-   treści. Desktop (fine pointer) dostaje pełne animowane wzgórza.
-   SSR/prerender: false (brak window) — bg-layer i tak jest tam puste. */
+   warstwą treści — cała treść znika i zostaje „samo tło" (nawracający bug
+   klarow.com na iPhone, diagnoza 2026-07-24). Na mobile zostaje statyczny
+   stalowy gradient .bg-layer (zaprojektowany fallback). Desktop (fine pointer)
+   dostaje pełne animowane wzgórza. SSR/prerender: false (brak window). */
 function useAnimatedBg(): boolean {
   const [enabled, setEnabled] = useState(false);
   useEffect(() => {
@@ -101,11 +97,9 @@ const HERO = {
     ctaModules: "Zobacz narzędzia",
     qualifier: "Dla firm 20–250 osób · środowisko Windows + Excel · narzędzia działają on-premise, u Ciebie",
     quickNav: [
-      { id: "narzedzia", label: "Narzędzia" },
-      { id: "wyrozniki", label: "Wyróżniki" },
-      { id: "wspolpraca", label: "Współpraca" },
-      { id: "oferta", label: "Oferta" },
-      { id: "faq", label: "FAQ" },
+      { to: "/narzedzia", label: "Narzędzia" },
+      { to: "/oferta", label: "Oferta" },
+      { to: "/faq", label: "FAQ" },
     ],
   },
   en: {
@@ -119,16 +113,14 @@ const HERO = {
     ctaModules: "See the tools",
     qualifier: "For companies of 20–250 people · Windows + Excel environment · tools run on-premise, at your site",
     quickNav: [
-      { id: "narzedzia", label: "Tools" },
-      { id: "wyrozniki", label: "Differentiators" },
-      { id: "wspolpraca", label: "How we work" },
-      { id: "oferta", label: "Offer" },
-      { id: "faq", label: "FAQ" },
+      { to: "/narzedzia", label: "Tools" },
+      { to: "/oferta", label: "Offer" },
+      { to: "/faq", label: "FAQ" },
     ],
   },
 };
 
-function Hero({ onBook, onGoTo }: { onBook: () => void; onGoTo: (id: string) => void }) {
+function Hero({ onBook }: { onBook: () => void }) {
   const { lang } = useLang();
   const t = pick(lang, HERO);
   return (
@@ -153,9 +145,9 @@ function Hero({ onBook, onGoTo }: { onBook: () => void; onGoTo: (id: string) => 
         <button className="btn btn-primary" type="button" onClick={onBook}>
           {t.ctaMain}
         </button>
-        <button className="btn btn-secondary" type="button" onClick={() => onGoTo("narzedzia")}>
+        <Link className="btn btn-secondary" to="/narzedzia">
           {t.ctaModules}
-        </button>
+        </Link>
       </div>
       <a
         href={PHONE_HREF}
@@ -167,12 +159,12 @@ function Hero({ onBook, onGoTo }: { onBook: () => void; onGoTo: (id: string) => 
       <p className="mt-6 text-xs" style={{ color: "var(--muted-foreground)" }}>
         {t.qualifier}
       </p>
-      {/* szybka nawigacja — deck „przezoomowuje" wprost do sekcji */}
+      {/* szybka nawigacja do głównych podstron */}
       <div className="mt-7 flex flex-wrap items-center justify-center gap-2 max-w-2xl">
         {t.quickNav.map((q) => (
-          <button key={q.id} className="btn btn-secondary btn-sm" type="button" onClick={() => onGoTo(q.id)}>
+          <Link key={q.to} className="btn btn-secondary btn-sm" to={q.to}>
             {q.label}
-          </button>
+          </Link>
         ))}
       </div>
     </div>
@@ -223,7 +215,7 @@ function Pain() {
   );
 }
 
-/* ── NARZĘDZIA (interaktywne dashboardy — w budowie) ── */
+/* ── NARZĘDZIA (interaktywne dashboardy) ── */
 const TOOLS_TXT = {
   pl: {
     title: "Narzędzia — wybierz dział i korzystaj",
@@ -299,8 +291,7 @@ function DiffSection() {
   );
 }
 
-/* ── OFERTA (skondensowana: pilot + dlaczego-dni + zaufanie + dla-kogo;
-      trzy dawne slajdy złożone do jednego — decyzja Karola 2026-07-22) ── */
+/* ── OFERTA (skondensowana: pilot + dlaczego-dni + zaufanie + dla-kogo) ── */
 const OFFER = {
   pl: {
     title: "Oferta: Pilot na kopii — efekt w dni, nie w miesiące",
@@ -495,18 +486,74 @@ function FaqSection() {
   );
 }
 
+/* ── „Zobacz też" — crosslinki z home do głównych podstron (SEO wewnętrzne + UX) ── */
+const HOME_NEXT = {
+  pl: {
+    title: "Zobacz konkrety",
+    open: "Otwórz →",
+    items: [
+      { to: "/narzedzia", h: "Narzędzia", d: "12 działających demo — kliknij, policz, pobierz dokument. Bez logowania, bez chmury." },
+      { to: "/oferta", h: "Oferta: Pilot na kopii", d: "Jeden proces, stała cena, efekt w dni. Budujemy na kopii Twoich plików." },
+      { to: "/faq", h: "Najczęstsze pytania", d: "Bezpieczeństwo danych, koszt, zgodność z ERP, los działających makr — wprost." },
+    ],
+  },
+  en: {
+    title: "See the specifics",
+    open: "Open →",
+    items: [
+      { to: "/narzedzia", h: "Tools", d: "12 live demos — click, compute, download a document. No sign-up, no cloud." },
+      { to: "/oferta", h: "Offer: Pilot on a copy", d: "One process, a fixed price, results in days. We build on a copy of your files." },
+      { to: "/faq", h: "Common questions", d: "Data security, cost, ERP compatibility, the fate of existing macros — head-on." },
+    ],
+  },
+};
+
+function HomeNext() {
+  const { lang } = useLang();
+  const t = pick(lang, HOME_NEXT);
+  return (
+    <Section title={t.title}>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {t.items.map((x) => (
+          <Link key={x.to} to={x.to} className="card" style={{ display: "block" }}>
+            <h3 className="text-[15px] font-bold" style={{ color: "var(--heading)" }}>{x.h}</h3>
+            <p className="mt-2 text-[13px] leading-relaxed" style={{ color: "var(--muted-foreground)" }}>{x.d}</p>
+            <span className="mt-3 inline-block text-[12.5px] font-bold" style={{ color: "var(--accent-foreground)" }}>
+              {t.open}
+            </span>
+          </Link>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
 /* ── STOPKA ── */
 const FOOT = {
-  pl: { tagline: "Automatyzacja i porządek w danych dla MŚP · Polska / USA", note: "© 2026 Klarow · strona robocza v0.7" },
-  en: { tagline: "Automation and order in SME data · Poland / USA", note: "© 2026 Klarow · working draft v0.7" },
+  pl: { tagline: "Automatyzacja i porządek w danych dla MŚP · Polska / USA", note: "© 2026 Klarow · strona robocza v0.8" },
+  en: { tagline: "Automation and order in SME data · Poland / USA", note: "© 2026 Klarow · working draft v0.8" },
 };
 
 const EMAIL = "kontakt@klarow.com";
 
-/* pełna stopka — dla podstron narzędzi/modułów (normalny scroll dokumentu) */
+const FOOT_NAV = {
+  pl: [
+    { to: "/narzedzia", label: "Narzędzia" },
+    { to: "/oferta", label: "Oferta" },
+    { to: "/faq", label: "FAQ" },
+  ],
+  en: [
+    { to: "/narzedzia", label: "Tools" },
+    { to: "/oferta", label: "Offer" },
+    { to: "/faq", label: "FAQ" },
+  ],
+};
+
+/* pełna stopka — kontakt + nawigacja, na każdej podstronie (normalny scroll) */
 function Footer() {
   const { lang } = useLang();
   const t = pick(lang, FOOT);
+  const nav = pick(lang, FOOT_NAV);
   return (
     <footer
       id="kontakt"
@@ -515,8 +562,15 @@ function Footer() {
     >
       <div className="max-w-6xl mx-auto px-6 py-12 flex flex-col sm:flex-row items-center justify-between gap-6">
         <div className="flex flex-col items-center sm:items-start gap-2">
-          <span className="brand-word" style={{ fontSize: 14 }}>KLAROW</span>
+          <Link to="/" className="brand-word" style={{ fontSize: 14 }}>KLAROW</Link>
           <p className="text-xs" style={{ color: "var(--muted-foreground)" }}>{t.tagline}</p>
+          <nav className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-1">
+            {nav.map((n) => (
+              <Link key={n.to} to={n.to} className="text-xs font-bold" style={{ color: "var(--muted-foreground)" }}>
+                {n.label}
+              </Link>
+            ))}
+          </nav>
         </div>
         <div className="flex flex-col items-center sm:items-end gap-2">
           <a className="text-sm font-bold inline-flex items-center gap-2" style={{ color: "var(--accent-foreground)" }} href={PHONE_HREF}>
@@ -532,169 +586,118 @@ function Footer() {
   );
 }
 
-/* stała, slim stopka landingu (deck) — kontakt ZAWSZE widoczny na dole ekranu */
-function FooterBar() {
+/* wspólny padding górny podstron (pod pływającym navbarem) */
+function PageMain({ children }: { children: React.ReactNode }) {
+  return <div style={{ paddingTop: 96 }}>{children}</div>;
+}
+
+/* ── PODSTRONY ── */
+
+function HomePage({ onBook }: { onBook: () => void }) {
   const { lang } = useLang();
-  const t = pick(lang, FOOT);
   return (
-    <footer className="deck-footer" aria-label={lang === "pl" ? "Stopka i kontakt" : "Footer and contact"}>
-      <div className="deck-footer-inner">
-        <div className="deck-footer-brand">
-          <span className="brand-word" style={{ fontSize: 12 }}>KLAROW</span>
-          <span className="deck-footer-tag">{t.tagline}</span>
+    <>
+      <Seo
+        title={pick(lang, PAGES_SEO.home.title)}
+        description={pick(lang, PAGES_SEO.home.description)}
+        path="/"
+        jsonLd={[ORG_JSONLD]}
+      />
+      <PageMain>
+        <div className="pb-4">
+          <Hero onBook={onBook} />
         </div>
-        <div className="deck-footer-contact">
-          <a href={PHONE_HREF}>
-            <Phone size={13} style={{ color: "var(--primary)" }} /> {PHONE_DISPLAY}
-          </a>
-          <a href={`mailto:${EMAIL}`} className="deck-footer-email">
-            <Mail size={13} style={{ color: "var(--primary)" }} /> {EMAIL}
-          </a>
+        <Pain />
+        <div id="wyrozniki">
+          <DiffSection />
         </div>
-      </div>
-    </footer>
+        <HomeNext />
+      </PageMain>
+      <Footer />
+    </>
   );
 }
 
-/* ── DECK: kolejność slajdów + mapowanie hash ↔ slajd ── */
-const SLIDES: { id: string; label: { pl: string; en: string } }[] = [
-  { id: "start", label: { pl: "Start", en: "Start" } },
-  { id: "bol", label: { pl: "Znasz to?", en: "Sound familiar?" } },
-  { id: "narzedzia", label: { pl: "Narzędzia", en: "Tools" } },
-  { id: "wyrozniki", label: { pl: "Wyróżniki", en: "Differentiators" } },
-  { id: "wspolpraca", label: { pl: "Współpraca", en: "How we work" } },
-  { id: "oferta", label: { pl: "Oferta", en: "Offer" } },
-  { id: "faq", label: { pl: "FAQ", en: "FAQ" } },
-];
-
-/* aliasy starych/pomocniczych hashy → indeks slajdu */
-const HASH_ALIAS: Record<string, string> = {
-  moduly: "narzedzia",
-  kontakt: "oferta",
-  demo: "narzedzia",
-  dowod: "narzedzia", // sekcja Dowód złożona do nagłówka Narzędzi (2026-07-22)
-  jak: "oferta", // „Dlaczego dni" + „Dla kogo" skondensowane w Ofercie (2026-07-22)
-  "dla-kogo": "oferta",
-};
-
-const slideIndexFromHash = (hash: string): number => {
-  const raw = hash.replace(/^#/, "");
-  const id = HASH_ALIAS[raw] ?? raw;
-  const i = SLIDES.findIndex((s) => s.id === id);
-  return i >= 0 ? i : 0;
-};
-
-/* zoom tła per slajd — każdy krok w głąb strony przybliża wzgórza */
-const ZOOM_STEP = 0.09;
-
-function Landing({
-  onBook,
-  zoomRef,
-}: {
-  onBook: () => void;
-  zoomRef: React.MutableRefObject<number>;
-}) {
+function ToolsPage() {
   const { lang } = useLang();
-  const { hash } = useLocation();
-  const [active, setActive] = useState(() => slideIndexFromHash(window.location.hash));
-
-  /* nawigacja hashem (navbar, powrót z podstrony modułu) */
-  useEffect(() => {
-    if (hash) setActive(slideIndexFromHash(hash));
-  }, [hash]);
-
-  /* KLAROW w navbarze → powrót na pierwszy slajd (gdy już jesteśmy na landingu) */
-  useEffect(() => {
-    const home = () => setActive(0);
-    window.addEventListener("klarow:home", home);
-    return () => window.removeEventListener("klarow:home", home);
-  }, []);
-
-  /* slajd → zoom tła + hash w pasku adresu (replaceState — bez śmiecenia historią) */
-  useEffect(() => {
-    zoomRef.current = 1 + active * ZOOM_STEP;
-    const id = SLIDES[active].id;
-    const want = id === "start" ? "" : `#${id}`;
-    if (window.location.hash !== want) {
-      history.replaceState(null, "", want === "" ? window.location.pathname : want);
-    }
-  }, [active, zoomRef]);
-
-  /* przy wyjściu z landingu (podstrony modułów scrollują się normalnie) */
-  useEffect(() => {
-    return () => {
-      zoomRef.current = 1;
-    };
-  }, [zoomRef]);
-
-  const goTo = (id: string) => {
-    const i = SLIDES.findIndex((s) => s.id === id);
-    if (i >= 0) setActive(i);
-  };
-
-  const nodes: React.ReactNode[] = [
-    <Hero onBook={onBook} onGoTo={goTo} />,
-    <Pain />,
-    <Tools />,
-    <DiffSection />,
-    <Collaboration />,
-    <OfferSection onBook={onBook} />,
-    <FaqSection />,
-  ];
-
-  const slides: SlideDef[] = SLIDES.map((s, i) => ({
-    id: s.id,
-    label: pick(lang, s.label),
-    node: nodes[i],
-  }));
-
   return (
     <>
-      {/* title ≤60 zn. (Google ucina ~55–60 — hak „Wdrożenie w dni" musi się
-          zmieścić), description ≤165 zn.; identyczne stringi w prerenderze */}
       <Seo
-        title={
-          lang === "pl"
-            ? "Klarow — automatyzacja danych i kontroling. Wdrożenie w dni."
-            : "Klarow — data automation & controlling. Deployed in days."
-        }
-        description={
-          lang === "pl"
-            ? "Porządek w danych dla firm 20–250 osób wyrosłych na Excelu. 12 działających demo: raport zarządczy, importy ERP, audyt danych, płatności. Dane zostają u Ciebie."
-            : "Order in the data of 20–250-person companies that grew up on Excel. 12 live demos: board report, ERP imports, data audit, payments. Your data stays with you."
-        }
-        path="/"
-        jsonLd={[ORG_JSONLD, faqPageJsonLd(pick(lang, FAQ_I18N))]}
+        title={pick(lang, PAGES_SEO.tools.title)}
+        description={pick(lang, PAGES_SEO.tools.description)}
+        path="/narzedzia"
+        jsonLd={[ORG_JSONLD]}
       />
-      <SlideDeck
-        slides={slides}
-        active={active}
-        onNavigate={setActive}
-        dotsLabel={lang === "pl" ? "Nawigacja sekcji" : "Section navigation"}
-      />
-      <FooterBar />
+      <PageMain>
+        <Tools />
+      </PageMain>
+      <Footer />
     </>
   );
+}
+
+function OfferPage({ onBook }: { onBook: () => void }) {
+  const { lang } = useLang();
+  return (
+    <>
+      <Seo
+        title={pick(lang, PAGES_SEO.oferta.title)}
+        description={pick(lang, PAGES_SEO.oferta.description)}
+        path="/oferta"
+        jsonLd={[ORG_JSONLD]}
+      />
+      <PageMain>
+        <OfferSection onBook={onBook} />
+        <div id="wspolpraca">
+          <Collaboration />
+        </div>
+      </PageMain>
+      <Footer />
+    </>
+  );
+}
+
+function FaqPage() {
+  const { lang } = useLang();
+  return (
+    <>
+      <Seo
+        title={pick(lang, PAGES_SEO.faq.title)}
+        description={pick(lang, PAGES_SEO.faq.description)}
+        path="/faq"
+        jsonLd={[faqPageJsonLd(pick(lang, FAQ_I18N))]}
+      />
+      <PageMain>
+        <FaqSection />
+      </PageMain>
+      <Footer />
+    </>
+  );
+}
+
+/* każda zmiana trasy → scroll na górę (react-router nie robi tego sam) */
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
 }
 
 export default function App() {
   const [bookingOpen, setBookingOpen] = useState(false);
   const onBook = () => setBookingOpen(true);
-  /* docelowy zoom tła — mutowany przez Landing, czytany przez pętlę GLSL Hills */
+  /* zoom tła — stały (bez decka nie ma per-slajd zoomu); pętla GLSL i tak czyta ref */
   const zoomRef = useRef(1);
-  /* animowane tło WebGL tylko na desktopie — na mobile zostaje statyczny
-     gradient .bg-layer (patrz useAnimatedBg: fixed canvas na iOS przykrywał treść) */
+  /* animowane tło WebGL tylko na desktopie — na mobile statyczny gradient .bg-layer */
   const animatedBg = useAnimatedBg();
 
   return (
     <div style={{ background: "var(--body-bg)" }}>
       {/* tło CAŁEJ strony: GLSL Hills (lazy chunk z three.js), spowolnione.
-          .bg-layer/.content-layer = czysty CSS (globals) — szkielet strony
-          nie może zależeć od Tailwinda (stare WebKity) ani od kompozytora GPU.
-          Na urządzeniach dotykowych canvas WebGL się NIE renderuje (bug iOS:
-          fixed canvas komponowany nad fixed treścią) — zostaje sam gradient. */}
+          .bg-layer/.content-layer = czysty CSS (globals). Na urządzeniach
+          dotykowych canvas WebGL się NIE renderuje (bug iOS) — zostaje gradient. */}
       <div className="bg-layer" aria-hidden="true">
-        {/* boundary: awaria WebGL/chunka NIE MOŻE zdjąć treści strony */}
         {animatedBg && (
           <BgBoundary>
             <Suspense fallback={null}>
@@ -705,9 +708,13 @@ export default function App() {
       </div>
 
       <div className="content-layer">
+        <ScrollToTop />
         <Navbar onBook={onBook} />
         <Routes>
-          <Route path="/" element={<Landing onBook={onBook} zoomRef={zoomRef} />} />
+          <Route path="/" element={<HomePage onBook={onBook} />} />
+          <Route path="/narzedzia" element={<ToolsPage />} />
+          <Route path="/oferta" element={<OfferPage onBook={onBook} />} />
+          <Route path="/faq" element={<FaqPage />} />
           <Route
             path="/narzedzia/:slug"
             element={

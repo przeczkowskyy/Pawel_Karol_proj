@@ -64,20 +64,19 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
 
 ## Architektura strony (`site/`)
 
-- **Landing = motion-graphic DECK (v0.6):** strona jest **statyczna — dokument się nie
-  scrolluje**. Gest scrolla / swipe / klawiatura przełącza 11 sekcji-slajdów
-  (`src/components/SlideDeck.tsx`) z przejściem zoom+fade (archetyp Premium ze skilla
-  `motion-design`: wyjście 420 ms accelerate, wejście 600 ms decelerate z opóźnieniem
-  120 ms; CSS w `src/styles/globals.css`). Slajd wyższy niż viewport scrolluje się
-  **wewnętrznie** (`.slide-scroll`) — deck przełącza dopiero od krawędzi treści. Hash ↔
-  slajd zsynchronizowane (navbar i podstrony działają; `HASH_ALIAS` mapuje stare hashe);
-  hero ma rząd przycisków szybkiej nawigacji; **KLAROW w navbarze → slajd 0** (CustomEvent
-  `klarow:home`). Kolejność (**7 slajdów**): start → ból → **narzędzia** → wyróżniki →
-  współpraca → **oferta (skondensowana)** → faq (lista `SLIDES` w `App.tsx`).
-  **Kondensacje 2026-07-22:** „Dowód" → akapit-nagłówek w Narzędziach; „Dlaczego dni" +
-  „Dla kogo" + „Zaufanie" → JEDEN slajd Oferta (`OfferSection`). Stare hashe aliasowane
-  w `HASH_ALIAS`. **Kontakt = stała stopka `FooterBar`** (fixed dół, opaque).
-- `src/App.tsx` — definicje sekcji + deck + routing (`/`, `/narzedzia/:slug`) + modal rezerwacji.
+- **Landing = zwykłe podstrony ze standardowym scrollem (v0.8, od 2026-07-26):** dawny
+  „motion-graphic deck" (slajdy przełączane gestem scrolla/swipe/klawiaturą) **USUNIĘTY** —
+  decyzja Karola: rozbicie na trasy o odrębnej intencji jest lepsze pod SEO. `SlideDeck.tsx`,
+  `FooterBar`, `HASH_ALIAS`, event `klarow:home`, cała mechanika `.deck/.slide/.deck-footer/
+  .deck-dots` (z globals.css) — skasowane. **Trasy (react-router, każda z własnym SEO):**
+  `/` (home: hero + ból + wyróżniki + „zobacz konkrety"), `/narzedzia` (**hub**: 5 działów →
+  12 kart), `/oferta` (pilot + dlaczego-dni + zaufanie + dla-kogo + współpraca), `/faq`,
+  `/narzedzia/:slug` (12 podstron narzędzi — bez zmian). `ScrollToTop` scrolluje na górę przy
+  zmianie trasy. Navbar linkuje do TRAS (nie `#hash`): Narzędzia/Oferta/FAQ; KLAROW → `/`.
+  Kontakt = zwykła stopka `Footer` (na każdej podstronie) z linkami nawigacyjnymi.
+- `src/App.tsx` — definicje sekcji + komponenty podstron (HomePage/ToolsPage/OfferPage/FaqPage)
+  + routing + modal rezerwacji. SEO stron (title/description PL+EN) w `src/data/pagesSeo.ts`
+  (jedno źródło — konsumuje je i klientowy `Seo`, i prerender; muszą być identyczne).
 - **Sekcja „Narzędzia" (rdzeń dowodu — zamiast fikcyjnych modułów):**
   - **BEZ statusów — KAŻDE z 12 narzędzi DZIAŁA NA ŻYWO na danych DEMO** (decyzja Karola).
   - `src/data/tools.ts` — katalog 12 narzędzi (PL/EN): **`dept` (5 działów: kontroling,
@@ -97,11 +96,17 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
     robocizny, plan płatności, raport importu, podsumowanie tygodnia PM, rejestr umów.
   - **Skalowanie:** root `zoom` 1.08 od 1500px / 1.18 od 1900px (globals.css).
   - **SEO:** `src/components/Seo.tsx` (title/description/canonical/OG/JSON-LD per strona;
-    `ORG_JSONLD` + `faqPageJsonLd` na landingu, `toolJsonLd`+FAQPage per narzędzie),
-    `public/robots.txt`, meta w `index.html`; **prerender** `src/prerender/entry.tsx` +
-    `scripts/prerender.mjs` (13 statycznych HTML; `sitemap.xml` i `llms.txt` GENEROWANE
-    z `tools.ts` przy buildzie — ręcznego `public/sitemap.xml` NIE MA, nie odtwarzać);
-    treści long-tail + FAQ per narzędzie w `src/data/toolsSeo.ts` (merge w `getTools()`).
+    `ORG_JSONLD` na /, /narzedzia, /oferta; `FAQPage` na /faq; `toolJsonLd`+FAQPage per
+    narzędzie), title/description stron w `src/data/pagesSeo.ts` (jedno źródło dla klienta
+    i prerenderu), `public/robots.txt`, meta w `index.html`; **prerender**
+    `src/prerender/entry.tsx` + `scripts/prerender.mjs` (**16 statycznych HTML**: `/`,
+    `/narzedzia`, `/oferta`, `/faq` + 12 × `dist/narzedzia/<slug>.html` — osobny shell z H1 i
+    pełną treścią per strona, treść ROZDZIELONA między trasy bez duplikacji; `sitemap.xml` i
+    `llms.txt` GENEROWANE z `tools.ts`+trasy przy buildzie — ręcznego `public/sitemap.xml`
+    NIE MA, nie odtwarzać); treści long-tail + FAQ per narzędzie w `src/data/toolsSeo.ts`
+    (merge w `getTools()`). **Nowa strona główna dopisana do `entry.tsx` `prerenderAll()`
+    wpada do prerenderu i sitemapy automatycznie** (dla nowej trasy: dodać wpis do routes
+    + link w Navbarze/stopce).
   - **12 dashboardów (komplet)** — 100% client-side, deterministyczne, dane fikcyjne:
     `DemoReport.tsx`+`lib/report.ts` („Raport zarządczy", spec `docs/plan/demo-m2-spec.md`) ·
     `dashboards/ProductionDashboard.tsx` (kafle hal + suwak tygodnia) ·
@@ -136,6 +141,30 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
 - Docelowo (plan §4.2): treść do YAML w `site/content/` + trasy `/pl/` `/en/` build-time.
 
 ## Stan operacyjny (aktualizuj przy zmianach!)
+
+- **2026-07-26 (sesja rozbicia na strony) — DECK USUNIĘTY, landing rozbity na trasy pod SEO:**
+  - **Mobile „samo tło" POTWIERDZONE jako naprawione** (Karol na swoim iPhonie). Prawdziwa
+    przyczyna (z sesji cz. 8, po zrzucie `?debug=1`): `content-layer` był kontekstem stackingu
+    (`z-index:10`) i pod `overflow:hidden` iOS nie malował uwięzionych w nim elementów `fixed`
+    — NIE „canvas WebGL nad treścią" (ta teoria była błędna, choć canvas i tak zdjęliśmy z
+    mobile). Fix: `content-layer` bez `z-index`, `bg-layer` `z-index:-1`. Dowód kierunkowy:
+    panel `?debug=1` (fixed, ale bez wrappera) malował się poprawnie.
+  - **Deck (SlideDeck) SKASOWANY** (decyzja Karola — pod SEO lepiej rozbić na strony):
+    usunięte `SlideDeck.tsx`, `FooterBar`, `Landing`, `HASH_ALIAS`, `slideIndexFromHash`,
+    `ZOOM_STEP`, event `klarow:home`; z globals.css cała mechanika `.deck/.slide/.slide-scroll/
+    .deck-footer/.deck-dots` + blokada `html/body overflow:hidden`. Strona = zwykły scroll.
+  - **Nowe trasy (react-router), każda z własnym prerenderem i SEO:** `/` (home), `/narzedzia`
+    (hub), `/oferta`, `/faq` + istniejące `/narzedzia/:slug`. `ScrollToTop` na zmianę trasy.
+    Navbar/hero/stopka linkują do tras (nie `#hash`).
+  - **SEO — treść ROZDZIELONA bez duplikacji** (zweryfikowane w `dist`): `/` linkuje tylko do
+    hubów (0 linków do narzędzi), `/narzedzia` = 12 kart, `/oferta` = pilot+współpraca,
+    `/faq` = FAQPage. Prerender: **16 statycznych HTML** (było 13), osobny shell z H1 per
+    strona (`HomeShell/ToolsShell/OfferShell/FaqShell` w `entry.tsx`). Sitemap ma nowe trasy
+    (/narzedzia 0.9, /oferta 0.9, /faq 0.7). `llms.txt` linkuje do /narzedzia, /oferta, /faq.
+    Title/description stron w NOWYM `src/data/pagesSeo.ts` (jedno źródło: klient + prerender).
+  - **Trasy językowe `/pl/ /en/` ŚWIADOMIE ODROczone** (decyzja Karola) — teraz PL kanoniczne
+    + przełącznik EN; pełne EN-SEO + hreflang w osobnym kroku (plan §4.2). tsc + build (16
+    tras + sitemap + llms) przechodzą.
 
 - **2026-07-24 (sesja mobile) — „samo tło na telefonie" NAPRAWIONE U ŹRÓDŁA (prawdziwa przyczyna, wreszcie zreprodukowana):**
   - **Diagnoza przez REPRODUKCJĘ, nie teorię.** Uruchomiony prawdziwy silnik WebKit

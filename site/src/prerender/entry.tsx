@@ -1,14 +1,15 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { getTools, DEPTS, type ToolItem } from "@/data/tools";
 import { FAQ_I18N } from "@/data/faq";
+import { PAGES_SEO } from "@/data/pagesSeo";
 import { ORG_JSONLD, toolJsonLd, faqPageJsonLd } from "@/components/Seo";
 
 /* Prerender (SSG) — budowany osobno przez `vite build --ssr` i odpalany
    node'em PO buildzie klienta (scripts/prerender.mjs). Generuje:
-   - statyczny HTML „SEO shell" dla / i 12 podstron /narzedzia/* — meta,
-     JSON-LD i PEŁNA treść tekstowa strony są w HTML-u bez JS (crawlery
-     Google/Bing/LLM bez wykonywania JS widzą wszystko; przy okazji strona
-     degraduje się łaskawie, gdy JS w ogóle nie wstanie),
+   - statyczny HTML „SEO shell" dla stron głównych (/, /narzedzia, /oferta,
+     /faq) i 12 podstron /narzedzia/* — meta, JSON-LD i PEŁNA treść tekstowa
+     są w HTML-u bez JS (crawlery Google/Bing/LLM bez wykonywania JS widzą
+     wszystko; strona degraduje się łaskawie, gdy JS nie wstanie),
    - sitemap.xml i llms.txt liczone z tools.ts (jedno źródło prawdy).
    React po zamontowaniu PODMIENIA zawartość #root (createRoot().render
    czyści kontener) — shell żyje tylko do startu aplikacji.
@@ -19,7 +20,7 @@ const EMAIL = "kontakt@klarow.com";
 const PHONE_DISPLAY = "786 296 426";
 const PHONE_HREF = "tel:+48786296426";
 
-/* priorytety sitemap jak w dotychczasowym ręcznym pliku */
+/* priorytety sitemap dla podstron narzędzi */
 const SITEMAP_PRIORITY: Record<string, string> = {
   "raport-zarzadczy": "0.9",
   "audyt-jakosci-danych": "0.9",
@@ -47,6 +48,7 @@ export interface RouteOut {
 const MUTED = { color: "var(--muted-foreground)" } as const;
 const HEAD = { color: "var(--heading)" } as const;
 const BODY = { color: "var(--foreground)" } as const;
+const LINK = { color: "var(--accent-foreground)", fontWeight: 700 } as const;
 
 function ShellChrome({ children }: { children: React.ReactNode }) {
   return (
@@ -61,12 +63,27 @@ function ShellChrome({ children }: { children: React.ReactNode }) {
   );
 }
 
+/* pasek nawigacji tekstowej (crawler widzi linki między stronami) */
+function ShellNav() {
+  return (
+    <p className="text-[13px]" style={MUTED}>
+      <a href="/" style={LINK}>KLAROW</a>
+      {" · "}
+      <a href="/narzedzia" style={LINK}>Narzędzia</a>
+      {" · "}
+      <a href="/oferta" style={LINK}>Oferta</a>
+      {" · "}
+      <a href="/faq" style={LINK}>FAQ</a>
+    </p>
+  );
+}
+
 function ContactLine() {
   return (
     <p className="mt-6 text-sm" style={BODY}>
-      Kontakt: <a href={`mailto:${EMAIL}`} style={{ color: "var(--accent-foreground)", fontWeight: 700 }}>{EMAIL}</a>
+      Kontakt: <a href={`mailto:${EMAIL}`} style={LINK}>{EMAIL}</a>
       {" · "}
-      <a href={PHONE_HREF} style={{ color: "var(--accent-foreground)", fontWeight: 700 }}>{PHONE_DISPLAY}</a>
+      <a href={PHONE_HREF} style={LINK}>{PHONE_DISPLAY}</a>
       {" · Polska / USA"}
     </p>
   );
@@ -80,9 +97,9 @@ function H2({ children }: { children: React.ReactNode }) {
   );
 }
 
-/* ── shell strony głównej ───────────────────────────────────────────── */
+/* ── shell strony głównej (/) ───────────────────────────────────────── */
 
-function HomeShell({ pl, en }: { pl: ToolItem[]; en: ToolItem[] }) {
+function HomeShell() {
   return (
     <ShellChrome>
       <span className="brand-word" style={{ fontSize: 15 }}>KLAROW</span>
@@ -97,31 +114,13 @@ function HomeShell({ pl, en }: { pl: ToolItem[]; en: ToolItem[] }) {
       </p>
       <ContactLine />
 
-      <H2>Narzędzia — każde działa na tej stronie na żywo, na danych przykładowych</H2>
+      <H2>To działa, więc boisz się ruszać — słusznie</H2>
       <p className="mt-2 max-w-3xl text-sm" style={MUTED}>
-        Klikasz, liczysz, pobierasz dokumenty — dokładnie tak, jak u klienta: lokalnie, bez chmury,
-        bez logowania. Zbudowaliśmy wcześniej ekosystem kilkunastu takich narzędzi dla firmy
-        produkcyjno-budowlanej (~30 równoległych projektów, klienci w USA): ~10 000 wierszy kosztów
-        z ERP miesięcznie, raport zarządczy w kilkanaście sekund, zamknięcie ~30 projektów jednym
-        przyciskiem i kontrola sum co do grosza.
+        Nie każemy Ci migrować z Excela ani zmieniać sposobu pracy — wchodzimy obok Twoich plików.
+        Makro po kimś, kto odszedł; ręczne przeklejanie tysięcy wierszy między ERP a arkuszami;
+        ciche pomyłki wychodzące u zarządu; raport składany godzinami; wszystko na jednej osobie —
+        te bóle znamy i to je usuwamy.
       </p>
-      {DEPTS.map((d) => (
-        <section key={d.key}>
-          <h3 className="mt-5 text-[15px] font-bold" style={HEAD}>{d.label.pl}</h3>
-          <p className="text-[13px]" style={MUTED}>{d.desc.pl}</p>
-          <ul className="mt-2 flex flex-col gap-1.5">
-            {pl.filter((t) => t.dept === d.key).map((t) => (
-              <li key={t.slug} className="text-[13.5px]" style={BODY}>
-                <a href={`/narzedzia/${t.slug}`} style={{ color: "var(--accent-foreground)", fontWeight: 700 }}>
-                  {t.name}
-                </a>
-                {" — "}
-                {t.tagline}
-              </li>
-            ))}
-          </ul>
-        </section>
-      ))}
 
       <H2>Dwa twarde wyróżniki: zero chmury i zero wróżenia</H2>
       <p className="mt-2 max-w-3xl text-sm" style={BODY}>
@@ -131,22 +130,21 @@ function HomeShell({ pl, en }: { pl: ToolItem[]; en: ToolItem[] }) {
         zawsze ten sam wynik — kalkulator, nie wróżka — więc każdą liczbę możesz policzyć ręcznie.
       </p>
 
-      <H2>Oferta: Pilot na kopii — jeden proces, stała cena, ≤10 dni roboczych</H2>
+      <H2>Zobacz konkrety</H2>
       <ul className="mt-2 flex flex-col gap-1.5 text-sm" style={BODY}>
-        <li>· Dzień 0: wybór procesu i zamrożenie zakresu (wliczony)</li>
-        <li>· Dni 1–4: budowa wyłącznie na kopiach Twoich plików</li>
-        <li>· Dzień 5: pokaz na żywo + raport błędów z Twoich prawdziwych danych</li>
-        <li>· Płatność 50/50 — druga rata po działającym odbiorze</li>
-        <li>· Zanim cokolwiek kupisz: przyślij nam swój najgorszy Excel — w 30 minut pokażemy na próbce, co da się z nim zrobić</li>
+        <li>
+          <a href="/narzedzia" style={LINK}>Narzędzia</a> — 12 działających demo online (kliknij,
+          policz, pobierz dokument; bez logowania, bez chmury).
+        </li>
+        <li>
+          <a href="/oferta" style={LINK}>Oferta: Pilot na kopii</a> — jeden proces, stała cena,
+          efekt w dni; budujemy na kopii Twoich plików.
+        </li>
+        <li>
+          <a href="/faq" style={LINK}>Najczęstsze pytania</a> — bezpieczeństwo danych, koszt,
+          zgodność z ERP, los działających makr.
+        </li>
       </ul>
-
-      <H2>Najczęstsze obiekcje — odpowiadamy wprost</H2>
-      {FAQ_I18N.pl.map((f) => (
-        <section key={f.id} className="mt-4 max-w-3xl">
-          <h3 className="text-[14px] font-bold" style={HEAD}>{f.q}</h3>
-          <p className="mt-1 text-[13px] leading-relaxed" style={MUTED}>{f.a}</p>
-        </section>
-      ))}
 
       <section lang="en">
         <H2>Klarow in English</H2>
@@ -154,14 +152,57 @@ function HomeShell({ pl, en }: { pl: ToolItem[]; en: ToolItem[] }) {
           Order in the data of 20–250-person companies that grew up on Excel. We turn manual
           copy-pasting, fragile macros and email-driven document flows into auditable tools —
           deployed in days, not months, running on-premise so your data never leaves your company.
-          Live demos of all tools run on this site, entirely in your browser.
+          See the <a href="/narzedzia" style={LINK}>tools</a>, the{" "}
+          <a href="/oferta" style={LINK}>offer</a> and the <a href="/faq" style={LINK}>FAQ</a>.
         </p>
-        <ul className="mt-3 flex flex-col gap-1.5 text-[13.5px]" style={BODY}>
+      </section>
+
+      <p className="mt-8 text-xs" style={MUTED}>
+        Interaktywna wersja strony (żywe dema) uruchamia się z JavaScriptem.
+        © 2026 Klarow · Automatyzacja i porządek w danych dla MŚP · Polska / USA
+      </p>
+    </ShellChrome>
+  );
+}
+
+/* ── shell huba narzędzi (/narzedzia) ───────────────────────────────── */
+
+function ToolsShell({ pl, en }: { pl: ToolItem[]; en: ToolItem[] }) {
+  return (
+    <ShellChrome>
+      <ShellNav />
+      <h1 className="mt-4 text-4xl font-extrabold tracking-tight" style={HEAD}>
+        Narzędzia — każde działa na tej stronie na żywo, na danych przykładowych
+      </h1>
+      <p className="mt-4 max-w-3xl text-sm" style={MUTED}>
+        Klikasz, liczysz, pobierasz dokumenty — dokładnie tak, jak u klienta: lokalnie, bez chmury,
+        bez logowania. Zbudowaliśmy wcześniej ekosystem kilkunastu takich narzędzi dla firmy
+        produkcyjno-budowlanej (~30 równoległych projektów, klienci w USA): ~10 000 wierszy kosztów
+        z ERP miesięcznie, raport zarządczy w kilkanaście sekund, zamknięcie ~30 projektów jednym
+        przyciskiem i kontrola sum co do grosza.
+      </p>
+      {DEPTS.map((d) => (
+        <section key={d.key}>
+          <h2 className="mt-6 text-[17px] font-bold" style={HEAD}>{d.label.pl}</h2>
+          <p className="text-[13px]" style={MUTED}>{d.desc.pl}</p>
+          <ul className="mt-2 flex flex-col gap-1.5">
+            {pl.filter((t) => t.dept === d.key).map((t) => (
+              <li key={t.slug} className="text-[13.5px]" style={BODY}>
+                <a href={`/narzedzia/${t.slug}`} style={LINK}>{t.name}</a>
+                {" — "}
+                {t.tagline}
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+
+      <section lang="en">
+        <H2>Tools (English)</H2>
+        <ul className="mt-2 flex flex-col gap-1.5 text-[13.5px]" style={BODY}>
           {en.map((t) => (
             <li key={t.slug}>
-              <a href={`/narzedzia/${t.slug}`} style={{ color: "var(--accent-foreground)", fontWeight: 700 }}>
-                {t.name}
-              </a>
+              <a href={`/narzedzia/${t.slug}`} style={LINK}>{t.name}</a>
               {" — "}
               {t.tagline}
             </li>
@@ -169,10 +210,108 @@ function HomeShell({ pl, en }: { pl: ToolItem[]; en: ToolItem[] }) {
         </ul>
       </section>
 
-      <p className="mt-8 text-xs" style={MUTED}>
-        Interaktywna wersja strony (żywe dema, deck) uruchamia się z JavaScriptem.
-        © 2026 Klarow · Automatyzacja i porządek w danych dla MŚP · Polska / USA
+      <ContactLine />
+    </ShellChrome>
+  );
+}
+
+/* ── shell oferty (/oferta) ─────────────────────────────────────────── */
+
+function OfferShell() {
+  return (
+    <ShellChrome>
+      <ShellNav />
+      <h1 className="mt-4 text-4xl font-extrabold tracking-tight" style={HEAD}>
+        Oferta: Pilot na kopii — efekt w dni, nie w miesiące
+      </h1>
+      <p className="mt-4 max-w-3xl text-sm" style={BODY}>
+        Jeden proces, stała cena, ≤10 dni roboczych. Budujemy na kopii Twoich plików, a pierwszy
+        namacalny efekt — raport błędów z Twoich prawdziwych danych — widzisz w dniu 5. Zapis na
+        oryginałach dopiero po Twojej akceptacji.
       </p>
+      <ul className="mt-3 flex flex-col gap-1.5 text-sm" style={BODY}>
+        <li>· Dzień 0: wybór procesu i zamrożenie zakresu (wliczony)</li>
+        <li>· Dni 1–4: budowa wyłącznie na kopiach Twoich plików</li>
+        <li>· Dzień 5: pokaz na żywo + raport błędów z Twoich prawdziwych danych</li>
+        <li>· Płatność 50/50 — druga rata po działającym odbiorze</li>
+        <li>· Zanim cokolwiek kupisz: przyślij nam swój najgorszy Excel — w 30 minut pokażemy na próbce, co da się z nim zrobić</li>
+      </ul>
+
+      <H2>Dlaczego dni, nie miesiące</H2>
+      <p className="mt-2 max-w-3xl text-sm" style={BODY}>
+        Diagnoza na kopiach Twoich plików, zakres zamrożony na piśmie w Dniu 0; budowa na gotowych
+        wzorcach — silnik (zapis, walidacja, backup, log audytowy) już istnieje; TEST bez zapisu
+        (pełna lista zmian do przejrzenia, w Twoich plikach nic się nie dzieje); PROD dopiero po
+        Twojej akceptacji — z backupem przed każdą zmianą i logiem operacji.
+      </p>
+
+      <H2>Zaufanie na mechanizmach, nie przymiotnikach</H2>
+      <p className="mt-2 max-w-3xl text-sm" style={BODY}>
+        On-premise: dane nie opuszczają firmy, a po wdrożeniu nie mamy do nich dostępu. Kod,
+        dokumentacja i runbook zostają u Ciebie — narzędzie działa nawet bez nas. Stała cena i
+        zakres na piśmie; druga rata dopiero po działającym odbiorze.
+      </p>
+
+      <H2>Dla kogo (i dla kogo nie)</H2>
+      <p className="mt-2 max-w-3xl text-sm" style={BODY}>
+        Będzie nam po drodze z firmami produkcyjnymi, budowlanymi i dystrybucyjnymi (20–250 osób,
+        Windows + Excel), którym raportowanie i tak żyje w Excelu, a chcą efektu w dni. Nie robimy
+        migracji do chmury ani wymiany ERP; nie działamy na Google Sheets / Mac i nie sprzedajemy
+        godzin (body-leasing) — sprzedajemy rezultat.
+      </p>
+
+      <H2>Jak wygląda współpraca</H2>
+      <p className="mt-2 max-w-3xl text-sm" style={BODY}>
+        Od pierwszej wiadomości, przez bezpłatną diagnozę na próbce i pilot na kopii, do działającego
+        narzędzia i opieki — z dwiema decyzjami, które zawsze należą do Ciebie: co budujemy (zakres
+        w Dniu 0) i kiedy wchodzimy na oryginały (po akceptacji TEST-u).
+      </p>
+
+      <section lang="en">
+        <H2>The offer (English)</H2>
+        <p className="mt-2 max-w-3xl text-sm" style={BODY}>
+          Pilot on a copy — one process, a fixed price, ≤10 business days. We build on a copy of your
+          files; you see the first tangible result (an error report from your real data) on day 5.
+          Writes to the originals only after your approval. On-premise, deterministic, 50/50 payment.
+        </p>
+      </section>
+
+      <ContactLine />
+    </ShellChrome>
+  );
+}
+
+/* ── shell FAQ (/faq) ───────────────────────────────────────────────── */
+
+function FaqShell() {
+  return (
+    <ShellChrome>
+      <ShellNav />
+      <h1 className="mt-4 text-4xl font-extrabold tracking-tight" style={HEAD}>
+        Najczęstsze obiekcje — odpowiadamy wprost
+      </h1>
+      <p className="mt-3 max-w-3xl text-sm" style={MUTED}>
+        Te same pytania słyszymy w każdej rozmowie. Oto odpowiedzi — o bezpieczeństwie danych,
+        koszcie pilota, zgodności z Twoim ERP i losie działających makr.
+      </p>
+      {FAQ_I18N.pl.map((f) => (
+        <section key={f.id} className="mt-4 max-w-3xl">
+          <h2 className="text-[15px] font-bold" style={HEAD}>{f.q}</h2>
+          <p className="mt-1 text-[13px] leading-relaxed" style={MUTED}>{f.a}</p>
+        </section>
+      ))}
+
+      <section lang="en">
+        <H2>FAQ (English)</H2>
+        {FAQ_I18N.en.map((f) => (
+          <section key={f.id} className="mt-3 max-w-3xl">
+            <h3 className="text-[13px] font-bold" style={HEAD}>{f.q}</h3>
+            <p className="mt-1 text-[12.5px] leading-relaxed" style={MUTED}>{f.a}</p>
+          </section>
+        ))}
+      </section>
+
+      <ContactLine />
     </ShellChrome>
   );
 }
@@ -183,9 +322,9 @@ function ToolShell({ pl, en, all }: { pl: ToolItem; en: ToolItem; all: ToolItem[
   return (
     <ShellChrome>
       <p className="text-[13px]" style={MUTED}>
-        <a href="/" style={{ color: "var(--accent-foreground)", fontWeight: 700 }}>KLAROW</a>
+        <a href="/" style={LINK}>KLAROW</a>
         {" · "}
-        <a href="/#narzedzia" style={{ color: "var(--accent-foreground)", fontWeight: 700 }}>Wszystkie narzędzia</a>
+        <a href="/narzedzia" style={LINK}>Wszystkie narzędzia</a>
       </p>
       <h1 className="mt-4 text-3xl font-extrabold tracking-tight" style={HEAD}>{pl.name}</h1>
       <p className="mt-3 max-w-3xl text-[15px] leading-relaxed" style={BODY}>{pl.tagline}</p>
@@ -223,9 +362,7 @@ function ToolShell({ pl, en, all }: { pl: ToolItem; en: ToolItem; all: ToolItem[
       <ul className="mt-2 flex flex-col gap-1 text-[13.5px]">
         {all.filter((x) => x.slug !== pl.slug).map((x) => (
           <li key={x.slug}>
-            <a href={`/narzedzia/${x.slug}`} style={{ color: "var(--accent-foreground)", fontWeight: 700 }}>
-              {x.name}
-            </a>
+            <a href={`/narzedzia/${x.slug}`} style={LINK}>{x.name}</a>
           </li>
         ))}
       </ul>
@@ -238,8 +375,6 @@ function ToolShell({ pl, en, all }: { pl: ToolItem; en: ToolItem; all: ToolItem[
             <li key={b}>· {b}</li>
           ))}
         </ul>
-        {/* EN FAQ dla botów bez JS (LLM-y); Google i tak indeksuje PL —
-            pełne EN SEO dopiero przy trasach /en/ (plan §4.2) */}
         {en.faq?.length
           ? en.faq.map((f) => (
               <section key={f.q} className="mt-3 max-w-3xl">
@@ -260,6 +395,9 @@ function ToolShell({ pl, en, all }: { pl: ToolItem; en: ToolItem; all: ToolItem[
 function sitemapXml(tools: ToolItem[]): string {
   const urls = [
     `  <url><loc>${ORIGIN}/</loc><priority>1.0</priority></url>`,
+    `  <url><loc>${ORIGIN}/narzedzia</loc><priority>0.9</priority></url>`,
+    `  <url><loc>${ORIGIN}/oferta</loc><priority>0.9</priority></url>`,
+    `  <url><loc>${ORIGIN}/faq</loc><priority>0.7</priority></url>`,
     ...tools.map(
       (t) =>
         `  <url><loc>${ORIGIN}/narzedzia/${t.slug}</loc><priority>${SITEMAP_PRIORITY[t.slug] ?? "0.7"}</priority></url>`
@@ -286,6 +424,8 @@ function llmsTxt(pl: ToolItem[], en: ToolItem[]): string {
 > (produkcja, budownictwo, dystrybucja; Windows + Excel). Wdrożenie w dni, nie w miesiące.
 > Narzędzia działają on-premise — dane nie opuszczają firmy.
 
+Główne strony: [Narzędzia](${ORIGIN}/narzedzia) · [Oferta](${ORIGIN}/oferta) · [FAQ](${ORIGIN}/faq)
+
 Dwa twarde wyróżniki:
 - Prawdziwie zero chmury: narzędzia działają lokalnie, bez API i bez serwera — nie mają nawet
   którędy wysłać danych. Dema na klarow.com liczą w 100% w przeglądarce, bez logowania.
@@ -295,6 +435,7 @@ Dwa twarde wyróżniki:
 Oferta wejściowa: „Pilot na kopii" — jeden proces, stała cena, ≤10 dni roboczych, budowa na
 kopiach plików, pierwszy efekt w dniu 5, płatność 50/50 (druga rata po działającym odbiorze).
 Przed zakupem: „przyślij nam swój najgorszy Excel" — bezpłatna 30-minutowa diagnoza na próbce.
+Szczegóły: ${ORIGIN}/oferta
 
 ## Narzędzia (każde z działającym demo na żywo)
 
@@ -303,7 +444,7 @@ ${toolsPl}
 ## FAQ
 
 Odpowiedzi na typowe obiekcje (koszt, bezpieczeństwo danych, „mamy już ERP", ryzyko dla
-działających makr): ${ORIGIN}/#faq
+działających makr): ${ORIGIN}/faq
 
 ## Kontakt
 
@@ -331,12 +472,34 @@ export function prerenderAll(): { routes: RouteOut[]; sitemap: string; llms: str
     {
       file: "index.html",
       path: "/",
-      /* te same stringi co w App.tsx (Landing/Seo) — ≤60 / ≤165 znaków */
-      title: "Klarow — automatyzacja danych i kontroling. Wdrożenie w dni.",
-      description:
-        "Porządek w danych dla firm 20–250 osób wyrosłych na Excelu. 12 działających demo: raport zarządczy, importy ERP, audyt danych, płatności. Dane zostają u Ciebie.",
-      jsonLd: [ORG_JSONLD, faqPageJsonLd(FAQ_I18N.pl)],
-      bodyHtml: renderToStaticMarkup(<HomeShell pl={pl} en={en} />),
+      title: PAGES_SEO.home.title.pl,
+      description: PAGES_SEO.home.description.pl,
+      jsonLd: [ORG_JSONLD],
+      bodyHtml: renderToStaticMarkup(<HomeShell />),
+    },
+    {
+      file: "narzedzia.html",
+      path: "/narzedzia",
+      title: PAGES_SEO.tools.title.pl,
+      description: PAGES_SEO.tools.description.pl,
+      jsonLd: [ORG_JSONLD],
+      bodyHtml: renderToStaticMarkup(<ToolsShell pl={pl} en={en} />),
+    },
+    {
+      file: "oferta.html",
+      path: "/oferta",
+      title: PAGES_SEO.oferta.title.pl,
+      description: PAGES_SEO.oferta.description.pl,
+      jsonLd: [ORG_JSONLD],
+      bodyHtml: renderToStaticMarkup(<OfferShell />),
+    },
+    {
+      file: "faq.html",
+      path: "/faq",
+      title: PAGES_SEO.faq.title.pl,
+      description: PAGES_SEO.faq.description.pl,
+      jsonLd: [faqPageJsonLd(FAQ_I18N.pl)],
+      bodyHtml: renderToStaticMarkup(<FaqShell />),
     },
     ...pl.map((t): RouteOut => {
       const path = `/narzedzia/${t.slug}`;

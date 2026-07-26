@@ -109,7 +109,7 @@ export default function ToolPage({ onBook }: { onBook: () => void }) {
       />
 
       <Link
-        to="/#narzedzia"
+        to="/narzedzia"
         className="inline-flex items-center gap-1.5 text-[13px] font-bold"
         style={{ color: "var(--muted-foreground)" }}
       >
