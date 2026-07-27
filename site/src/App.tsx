@@ -181,29 +181,29 @@ function Hero({ onBook }: { onBook: () => void }) {
 const CAPS = {
   pl: {
     title: "Co możemy zbudować",
-    sub: "Nie mamy zamkniętego katalogu. Jeśli to żyje w Excelu, plikach albo w ERP — zwykle da się to zautomatyzować. Oto rodzaje narzędzi, które robimy:",
+    sub: "Nie zamknięty katalog — budujemy pod Twój proces.",
     items: [
-      { icon: BarChart3, h: "Raporty i kontroling", d: "Panele zarządcze, marża i estymaty na żywo, zamknięcie miesiąca." },
-      { icon: Plug, h: "Integracje i e-dokumenty", d: "KSeF, e-faktury, API urzędowe, wymiana z ERP i systemami." },
-      { icon: ArrowLeftRight, h: "Importy i scalanie danych", d: "ERP ↔ Excel, łączenie źródeł, rekoncyliacja co do grosza." },
-      { icon: ClipboardCheck, h: "Obieg dokumentów", d: "Akceptacje, protokoły, rejestry — koniec obiegu w mailu." },
-      { icon: Gauge, h: "Panele i dashboardy", d: "Produkcja, KPI, płynność — obraz firmy w jednym kadrze." },
-      { icon: Database, h: "Porządek w danych", d: "Audyt jakości, deduplikacja, czyszczenie i migracje." },
+      { icon: BarChart3, h: "Raporty i kontroling", d: "marża i KPI na żywo" },
+      { icon: Plug, h: "Integracje i e-dokumenty", d: "KSeF · API · ERP" },
+      { icon: ArrowLeftRight, h: "Importy i scalanie", d: "ERP ↔ Excel, co do grosza" },
+      { icon: ClipboardCheck, h: "Obieg dokumentów", d: "akcept · protokoły · rejestry" },
+      { icon: Gauge, h: "Panele i dashboardy", d: "produkcja · płynność · KPI" },
+      { icon: Database, h: "Porządek w danych", d: "audyt · dedup · migracje" },
     ],
-    foot: "Nie widzisz swojego przypadku? Napisz — najczęściej właśnie to robimy.",
+    foot: "Nie widzisz swojego? Napisz — pewnie to robimy.",
   },
   en: {
     title: "What we can build",
-    sub: "We don't have a fixed catalogue. If it lives in Excel, files or an ERP — it can usually be automated. Here are the kinds of tools we build:",
+    sub: "Not a fixed catalogue — we build around your process.",
     items: [
-      { icon: BarChart3, h: "Reports & controlling", d: "Board panels, live margin and estimates, month-end close." },
-      { icon: Plug, h: "Integrations & e-documents", d: "KSeF, e-invoices, government APIs, ERP and system exchange." },
-      { icon: ArrowLeftRight, h: "Imports & data merging", d: "ERP ↔ Excel, combining sources, reconciliation to the cent." },
-      { icon: ClipboardCheck, h: "Document workflows", d: "Approvals, protocols, registers — no more email routing." },
-      { icon: Gauge, h: "Panels & dashboards", d: "Production, KPIs, liquidity — the company in one frame." },
-      { icon: Database, h: "Order in your data", d: "Quality audit, deduplication, cleaning and migrations." },
+      { icon: BarChart3, h: "Reports & controlling", d: "live margin & KPIs" },
+      { icon: Plug, h: "Integrations & e-docs", d: "KSeF · APIs · ERP" },
+      { icon: ArrowLeftRight, h: "Imports & merging", d: "ERP ↔ Excel, to the cent" },
+      { icon: ClipboardCheck, h: "Document workflows", d: "approvals · protocols · registers" },
+      { icon: Gauge, h: "Panels & dashboards", d: "production · liquidity · KPIs" },
+      { icon: Database, h: "Order in your data", d: "audit · dedup · migration" },
     ],
-    foot: "Don't see your case? Write to us — it's usually exactly what we do.",
+    foot: "Don't see yours? Write — it's usually what we do.",
   },
 };
 
@@ -235,7 +235,7 @@ function Capabilities() {
 const PROOF = {
   pl: {
     title: "Co już zrobiliśmy",
-    sub: "Zbudowaliśmy od środka ekosystem kilkunastu narzędzi dla firmy produkcyjno-budowlanej (~30 równoległych projektów, klienci w USA) — plus integrację kontrolingową z KSeF. Kilka liczb:",
+    sub: "Kilkanaście narzędzi dla firmy produkcyjno-budowlanej + integracja z KSeF.",
     stats: [
       { icon: Gauge, v: "kilkanaście", l: "narzędzi wdrożonych wewnętrznie" },
       { icon: ArrowLeftRight, v: "≈10 000", l: "wierszy kosztów z ERP na miesiąc" },
@@ -245,7 +245,7 @@ const PROOF = {
   },
   en: {
     title: "What we've already built",
-    sub: "From the inside we built an ecosystem of a dozen-plus tools for a manufacturing-and-construction company (~30 parallel projects, US clients) — plus a KSeF controlling integration. A few numbers:",
+    sub: "A dozen+ tools for a manufacturing-and-construction company + a KSeF integration.",
     stats: [
       { icon: Gauge, v: "a dozen+", l: "tools deployed internally" },
       { icon: ArrowLeftRight, v: "≈10,000", l: "ERP cost rows per month" },
@@ -279,7 +279,7 @@ function ProofBand() {
 const PAIN = {
   pl: {
     title: "To działa, więc boisz się ruszać. Słusznie.",
-    sub: "Dlatego nie każemy Ci migrować z Excela ani zmieniać sposobu pracy — wchodzimy obok Twoich plików.",
+    sub: "Nie migrujemy Cię z Excela — wchodzimy obok Twoich plików.",
     items: [
       { icon: UserX, title: "Makro po kimś, kto odszedł", body: "Nikt nie wie, jak działa w środku — więc wszyscy boją się je ruszyć." },
       { icon: ClipboardPaste, title: "Ręczne przeklejanie", body: "Tysiące wierszy między ERP a arkuszami, co tydzień, na piechotę." },
@@ -290,7 +290,7 @@ const PAIN = {
   },
   en: {
     title: "It works, so you're afraid to touch it. Rightly so.",
-    sub: "That's why we don't ask you to migrate off Excel or change how you work — we build alongside your files.",
+    sub: "No migration off Excel — we build alongside your files.",
     items: [
       { icon: UserX, title: "A macro by someone long gone", body: "Nobody knows how it works inside — so everyone is afraid to touch it." },
       { icon: ClipboardPaste, title: "Manual copy-pasting", body: "Thousands of rows between the ERP and spreadsheets, every week, by hand." },
@@ -308,10 +308,9 @@ function Pain() {
     <Section title={t.title} sub={t.sub}>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         {t.items.map((p) => (
-          <div key={p.title} className="card">
-            <p.icon size={20} style={{ color: "var(--primary)" }} />
-            <h3 className="mt-3 text-[14px] font-bold" style={{ color: "var(--heading)" }}>{p.title}</h3>
-            <p className="mt-2 text-[12.5px] leading-relaxed" style={{ color: "var(--muted-foreground)" }}>{p.body}</p>
+          <div key={p.title} className="card flex flex-col gap-3">
+            <p.icon size={22} style={{ color: "var(--primary)" }} />
+            <h3 className="text-[14px] font-bold leading-snug" style={{ color: "var(--heading)" }}>{p.title}</h3>
           </div>
         ))}
       </div>
@@ -323,15 +322,13 @@ function Pain() {
 const TOOLS_TXT = {
   pl: {
     title: "Przykłady realizacji — kliknij i sprawdź",
-    sub: "To nie pełna lista usług, tylko próbki tego, co już zbudowaliśmy. Wybierz dział, żeby zobaczyć przykłady. Twoje narzędzie budujemy pod Twój proces.",
-    proof:
-      "Większość odpalisz tu na żywo, na danych przykładowych (bez logowania); część to realne wdrożenia u klienta, np. integracja kontrolingowa z KSeF. Wszystko odtworzone od zera, na danych fikcyjnych.",
+    sub: "Próbki tego, co zbudowaliśmy — nie pełna lista. Twoje narzędzie robimy pod Twój proces.",
+    proof: "Większość odpalisz na żywo; część to wdrożenia u klienta (np. KSeF). Dane fikcyjne.",
   },
   en: {
     title: "Examples of what we've built — click and try",
-    sub: "This isn't a full list of services, just samples of what we've already built. Pick a department to see the examples. We build your tool around your process.",
-    proof:
-      "Most run live here on sample data (no sign-up); some are real client deployments, e.g. a KSeF controlling integration. All rebuilt from scratch on fictional data.",
+    sub: "Samples of what we've built — not a full list. We build your tool around your process.",
+    proof: "Most run live; some are client deployments (e.g. KSeF). Fictional data.",
   },
 };
 
@@ -377,11 +374,11 @@ function Collaboration() {
 const DIFF_TXT = {
   pl: {
     title: "Dwa twarde wyróżniki: zero chmury i zero wróżenia",
-    sub: "„On-premise” deklaruje dziś każdy. My idziemy krok dalej — narzędzie nie ma nawet którędy wysłać Twoich danych, a każdą liczbę możesz policzyć ręcznie.",
+    sub: "Narzędzie nie ma nawet którędy wysłać danych — a każdą liczbę policzysz ręcznie.",
   },
   en: {
     title: "Two hard differentiators: zero cloud, zero fortune-telling",
-    sub: "Everyone claims “on-premise” these days. We go one step further — the tool has no way to send your data anywhere, and you can verify every number by hand.",
+    sub: "The tool has no way to send your data anywhere — and you check every number by hand.",
   },
 };
 
@@ -601,18 +598,18 @@ const HOME_NEXT = {
     title: "Zobacz konkrety",
     open: "Otwórz →",
     items: [
-      { to: "/narzedzia", h: "Przykłady realizacji", d: "Klikalne dema i wdrożenia (m.in. integracja z KSeF) — zobacz, co potrafimy." },
-      { to: "/oferta", h: "Oferta i wycena", d: "Pilot na kopii: jeden proces, efekt w dni, płatność 50/50. Wycena po bezpłatnej diagnozie." },
-      { to: "/faq", h: "Najczęstsze pytania", d: "Bezpieczeństwo danych, koszt, zgodność z ERP, los działających makr — wprost." },
+      { to: "/narzedzia", h: "Przykłady realizacji", d: "Klikalne dema i wdrożenia — zobacz, co potrafimy." },
+      { to: "/oferta", h: "Oferta i wycena", d: "Pilot na kopii, efekt w dni. Wycena po diagnozie." },
+      { to: "/faq", h: "Najczęstsze pytania", d: "Bezpieczeństwo, koszt, ERP, makra — wprost." },
     ],
   },
   en: {
     title: "See the specifics",
     open: "Open →",
     items: [
-      { to: "/narzedzia", h: "Examples we've built", d: "Clickable demos and deployments (incl. a KSeF integration) — see what we can do." },
-      { to: "/oferta", h: "Offer & pricing", d: "Pilot on a copy: one process, results in days, 50/50 payment. Quote after a free diagnosis." },
-      { to: "/faq", h: "Common questions", d: "Data security, cost, ERP compatibility, the fate of existing macros — head-on." },
+      { to: "/narzedzia", h: "Examples we've built", d: "Clickable demos and deployments — see what we can do." },
+      { to: "/oferta", h: "Offer & pricing", d: "Pilot on a copy, results in days. Quote after a diagnosis." },
+      { to: "/faq", h: "Common questions", d: "Security, cost, ERP, macros — head-on." },
     ],
   },
 };

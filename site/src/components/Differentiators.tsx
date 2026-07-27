@@ -175,9 +175,6 @@ export default function Differentiators() {
             <h3 className="mt-3 text-[17px] font-extrabold" style={{ color: "var(--heading)" }}>
               {c.title}
             </h3>
-            <p className="mt-2 text-[13px] leading-relaxed" style={{ color: "var(--foreground)" }}>
-              {c.body}
-            </p>
             <ul className="mt-4 flex flex-col gap-2.5">
               {c.bullets.map((b) => (
                 <li key={b} className="flex items-start gap-2 text-[13px]" style={{ color: "var(--foreground)" }}>
