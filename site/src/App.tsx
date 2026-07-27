@@ -804,7 +804,12 @@ export default function App() {
   const animatedBg = useAnimatedBg();
 
   return (
-    <div style={{ background: "var(--body-bg)" }}>
+    /* UWAGA: ten wrapper MUSI być bez nieprzezroczystego tła. `.bg-layer` ma
+       z-index:-1 (fixed background pod treścią), a wrapper po rozbiciu na
+       strony ma pełną wysokość dokumentu — nieprzezroczyste tło (np.
+       background:var(--body-bg)) zamalowałoby wzgórza/gradient. Podkład #121212
+       daje body (company-ui.css) i sama .bg-layer. NIE dodawać tu tła. */
+    <div>
       {/* tło CAŁEJ strony: GLSL Hills (lazy chunk z three.js), spowolnione.
           .bg-layer/.content-layer = czysty CSS (globals). Na urządzeniach
           dotykowych canvas WebGL się NIE renderuje (bug iOS) — zostaje gradient. */}
