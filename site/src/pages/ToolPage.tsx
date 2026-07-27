@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, ArrowRightLeft, Check, Play, TrendingUp } from "lucide-react";
+import { ArrowLeft, ArrowRightLeft, Building2, Check, Play, TrendingUp } from "lucide-react";
 import { findTool, getTools, CATEGORY_LABEL, DEPT_LABEL, type DashboardKey } from "@/data/tools";
 import { useLang, pick } from "@/i18n";
 import Seo, { toolJsonLd, faqPageJsonLd } from "@/components/Seo";
@@ -43,7 +43,10 @@ const T = {
     back: "Wróć na stronę główną",
     all: "Wszystkie narzędzia",
     demo: "DEMO — dane przykładowe",
+    deployed: "WDROŻONE — realizacja u klienta",
     liveHint: "Pełna wersja działa poniżej — w całości w Twojej przeglądarce, bez logowania.",
+    caseTitle: "To realne wdrożenie, nie demo w przeglądarce",
+    caseHint: "Wymaga integracji z zewnętrznym systemem i pracy po stronie serwera, więc nie da się jej odpalić na tej stronie. Poniżej — co robi i jak jest zbudowana; na żywo pokażemy ją na Twoich danych.",
     replaces: "Co zastępuje",
     io: "Wejście → wyjście",
     whatYouGet: "Co dostajesz",
@@ -57,7 +60,10 @@ const T = {
     back: "Back to the homepage",
     all: "All tools",
     demo: "DEMO — sample data",
+    deployed: "DELIVERED — a real client build",
     liveHint: "The full version runs below — entirely in your browser, no sign-up.",
+    caseTitle: "A real deployment, not an in-browser demo",
+    caseHint: "It needs an integration with an external system and server-side work, so it can't run on this page. Below — what it does and how it's built; we'll show it live on your data.",
     replaces: "What it replaces",
     io: "Input → output",
     whatYouGet: "What you get",
@@ -92,7 +98,7 @@ export default function ToolPage({ onBook }: { onBook: () => void }) {
   }
 
   const Icon = tool.icon;
-  const Dashboard = DASHBOARDS[tool.dashboard];
+  const Dashboard = tool.dashboard ? DASHBOARDS[tool.dashboard] : undefined;
   const path = `/narzedzia/${tool.slug}`;
 
   return (
@@ -129,9 +135,15 @@ export default function ToolPage({ onBook }: { onBook: () => void }) {
             {tool.name}
           </h1>
           <div className="mt-3 flex flex-wrap items-center gap-2">
-            <span className="st st-green">
-              <Play className="st-ico" /> {t.demo}
-            </span>
+            {tool.kind === "case" ? (
+              <span className="st st-blue">
+                <Check className="st-ico" /> {t.deployed}
+              </span>
+            ) : (
+              <span className="st st-green">
+                <Play className="st-ico" /> {t.demo}
+              </span>
+            )}
             <span className="chip">{pick(lang, DEPT_LABEL[tool.dept])}</span>
             <span className="chip">{pick(lang, CATEGORY_LABEL[tool.category])}</span>
           </div>
@@ -141,13 +153,34 @@ export default function ToolPage({ onBook }: { onBook: () => void }) {
         </div>
       </div>
 
-      {/* interaktywny dashboard — zawsze */}
-      <div className="mt-8">
-        <p className="text-[12px]" style={{ color: "var(--muted-foreground)", marginBottom: 10 }}>
-          {t.liveHint}
-        </p>
-        <Dashboard />
-      </div>
+      {/* demo → interaktywny dashboard; realizacja (case) → panel „jak działa" */}
+      {tool.kind === "case" || !Dashboard ? (
+        <div className="mt-8 card" style={{ padding: 22 }}>
+          <div className="flex items-start gap-3">
+            <div
+              className="w-10 h-10 rounded-[10px] flex items-center justify-center shrink-0"
+              style={{ background: "rgba(168,180,194,.14)", color: "var(--primary)" }}
+            >
+              <Building2 size={19} />
+            </div>
+            <div className="min-w-0">
+              <h2 className="text-[16px] font-extrabold" style={{ color: "var(--heading)" }}>
+                {t.caseTitle}
+              </h2>
+              <p className="mt-1 text-[13px] leading-relaxed" style={{ color: "var(--muted-foreground)" }}>
+                {t.caseHint}
+              </p>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="mt-8">
+          <p className="text-[12px]" style={{ color: "var(--muted-foreground)", marginBottom: 10 }}>
+            {t.liveHint}
+          </p>
+          <Dashboard />
+        </div>
+      )}
 
       {/* opis: co zastępuje / we-wy / co dostajesz */}
       <div className="mt-10 grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">

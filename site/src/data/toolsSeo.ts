@@ -611,5 +611,55 @@ export const TOOLS_SEO: Record<string, Record<Lang, ToolSeoText>> = {
         }
       ]
     }
+  },
+  "kontroling-ksef": {
+    "pl": {
+      "seo": {
+        "title": "Kontroling z KSeF — budżet i prognoza cashflow | Klarow",
+        "description": "Read-only integracja z API KSeF (Ministerstwo Finansów): faktury sprzedaży i zakupu, budżet vs wykonanie, prognoza cashflow 13 tyg., raporty XLSX. On-premise — dane u Ciebie."
+      },
+      "faq": [
+        {
+          "q": "Czym jest kontroling na danych z KSeF?",
+          "a": "To read-only warstwa analityczna nad Krajowym Systemem e-Faktur: pobiera z oficjalnego API KSeF faktury sprzedaży i zakupu, przypisuje je do kategorii i projektów, a następnie liczy budżet vs wykonanie i rolującą prognozę cashflow na 13 tygodni. KSeF sam w sobie jest tylko archiwum faktur — to narzędzie zamienia je w odpowiedź, czy projekt zarabia i czy starczy gotówki."
+        },
+        {
+          "q": "Czy integracja z KSeF wysyła moje faktury albo dane do chmury?",
+          "a": "Nie. Connector jest wyłącznie odczytowy — nie wysyła żadnych faktur do KSeF, tylko pobiera i liczy. Całość działa on-premise, na Twoim serwerze (Flask + SQLite), a oryginalny XML faktur zostaje lokalnie do celów audytu. Opcjonalny asystent AI, jeśli go włączysz, dostaje wyłącznie agregaty i nazwy kontrahentów — nigdy pełnych danych faktur."
+        },
+        {
+          "q": "Skąd narzędzie bierze dane i co dostaję na wyjściu?",
+          "a": "Na wejściu: faktury z oficjalnego API KSeF (autoryzacja tokenem Aplikacji Podatnika, parser schematu FA(3)) oraz Twój budżet i mapa kategorii wgrane z plików CSV. Na wyjściu: pulpity Budżet vs Wykonanie i Prognoza Cashflow, aging należności, alerty oraz gotowe raporty XLSX. Wszystkie kwoty liczone są w PLN, deterministycznie."
+        },
+        {
+          "q": "Czy to gotowe pudełko, czy budujecie je pod naszą firmę?",
+          "a": "Budujemy je pod Twój plan kont i procesy — kategoryzacja faktur (po NIP i słowach kluczowych), definicje projektów i budżet konfigurujemy pod Ciebie. To realne wdrożenie, nie demo w przeglądarce, bo wymaga połączenia z API KSeF i Twojego serwera. Zaczynamy od diagnozy, a zakres i wycenę ustalamy pod Twoją firmę."
+        }
+      ]
+    },
+    "en": {
+      "seo": {
+        "title": "KSeF controlling — budget & cash-flow forecast | Klarow",
+        "description": "Read-only integration with the KSeF API (Polish Ministry of Finance): sales and purchase invoices, budget vs actual, 13-week cash-flow forecast, XLSX reports. On-premise."
+      },
+      "faq": [
+        {
+          "q": "What is controlling on KSeF data?",
+          "a": "It is a read-only analytics layer over Poland's national e-invoicing system (KSeF): it pulls sales and purchase invoices from the official KSeF API, assigns them to categories and projects, and computes budget-vs-actual and a rolling 13-week cash-flow forecast. KSeF itself is only an invoice archive — this tool turns it into an answer to whether a project is profitable and whether there will be enough cash."
+        },
+        {
+          "q": "Does the KSeF integration send my invoices or data to the cloud?",
+          "a": "No. The connector is strictly read-only — it never sends invoices to KSeF, it only pulls and computes. Everything runs on-premise on your own server (Flask + SQLite), and the original invoice XML stays local for audit. The optional AI assistant, if you enable it, receives only aggregates and contractor names — never full invoice data."
+        },
+        {
+          "q": "Where does the data come from and what do I get out?",
+          "a": "Input: invoices from the official KSeF API (Taxpayer Application token auth, FA(3) schema parser) plus your budget and category map loaded from CSV files. Output: Budget-vs-Actual and Cash-flow forecast dashboards, receivables aging, alerts and ready XLSX reports. All amounts are computed in PLN, deterministically."
+        },
+        {
+          "q": "Is it an off-the-shelf box, or do you build it for our company?",
+          "a": "We build it around your chart of accounts and processes — invoice categorization (by tax ID and keywords), project definitions and the budget are configured for you. It is a real deployment, not an in-browser demo, because it needs a connection to the KSeF API and your server. We start with a diagnosis and set the scope and price for your company."
+        }
+      ]
+    }
   }
 };

@@ -11,6 +11,7 @@ import {
   FolderKanban,
   ArrowLeftRight,
   ClipboardCheck,
+  ReceiptText,
 } from "lucide-react";
 import type { ComponentType } from "react";
 import type { Lang } from "@/i18n";
@@ -109,24 +110,31 @@ export type DashboardKey =
   | "protocols"
   | "contracts";
 
+/* demo = klikalny dashboard na tej stronie; case = wdrożona realizacja
+   u klienta bez interaktywnego dema (np. integracja przez zewnętrzne API). */
+export type ToolKind = "demo" | "case";
+
 export interface ToolBase {
   id: number;
   slug: string;
   icon: ComponentType<{ size?: number | string; className?: string }>;
   category: ToolCategory;
   dept: Dept;
-  /* każdy ma działający dashboard na danych DEMO */
-  dashboard: DashboardKey;
+  kind?: ToolKind; // domyślnie "demo"
+  /* dema mają działający dashboard na danych DEMO; realizacje (case) nie */
+  dashboard?: DashboardKey;
   i18n: { pl: ToolText; en: ToolText };
 }
 
 export interface ToolItem extends ToolText {
   id: number;
   slug: string;
+  hook: string;
   icon: ToolBase["icon"];
   category: ToolCategory;
   dept: Dept;
-  dashboard: DashboardKey;
+  kind: ToolKind;
+  dashboard?: DashboardKey;
 }
 
 export const CATEGORY_LABEL: Record<ToolCategory, { pl: string; en: string }> = {
@@ -137,6 +145,24 @@ export const CATEGORY_LABEL: Record<ToolCategory, { pl: string; en: string }> = 
   platnosci: { pl: "Płatności", en: "Payments" },
   "obieg-dokumentow": { pl: "Obieg dokumentów", en: "Document workflow" },
   kontroling: { pl: "Kontroling kosztów", en: "Cost controlling" },
+};
+
+/* krótkie chwyty na karty/kafle — mniej tekstu, więcej przekazu (PL/EN po slugu).
+   Długi opis (tagline) zostaje na podstronie narzędzia. */
+export const HOOKS: Record<string, { pl: string; en: string }> = {
+  "raport-zarzadczy": { pl: "Raport zarządu w sekundy", en: "The board report in seconds" },
+  "dashboard-produkcji": { pl: "Cały portfel w jednym kadrze", en: "The whole portfolio in one frame" },
+  "audyt-jakosci-danych": { pl: "Błędy złapane przed raportem", en: "Errors caught before the report" },
+  "import-z-rekoncyliacja": { pl: "Import zgodny co do grosza", en: "Imports reconciled to the cent" },
+  "os-czasu-zadan": { pl: "Widać, co się obsunęło", en: "See what slipped, at a glance" },
+  "kalkulator-transz": { pl: "Transze i waluty co do grosza", en: "Tranches & FX to the cent" },
+  "obieg-przelewow": { pl: "Przelewy: plan i cztery oczy", en: "Payments: a plan, four-eyes" },
+  "billing-us-g703": { pl: "Faktury AIA G702/G703 (USA)", en: "AIA G702/G703 billing (US)" },
+  "kontroling-kosztow": { pl: "Marża projektu na żywo", en: "Project margin, live" },
+  "importy-erp": { pl: "ERP → Excel bez przeklejania", en: "ERP → Excel, no pasting" },
+  "protokoly-robocizny": { pl: "Protokoły robocizny do faktury", en: "Labour protocols to invoice" },
+  "rejestr-umow": { pl: "Umowy bez psujących się linków", en: "Contracts, no broken links" },
+  "kontroling-ksef": { pl: "Kontroling na fakturach z KSeF", en: "Controlling on KSeF invoices" },
 };
 
 const BASE: ToolBase[] = [
@@ -596,6 +622,44 @@ const BASE: ToolBase[] = [
       },
     },
   },
+  {
+    id: 13,
+    slug: "kontroling-ksef",
+    icon: ReceiptText,
+    category: "kontroling",
+    dept: "kontroling",
+    kind: "case",
+    i18n: {
+      pl: {
+        name: "Kontroling na danych z KSeF",
+        tagline:
+          "Read-only warstwa kontrolingu nad Krajowym Systemem e-Faktur: integruje się z oficjalnym API Ministerstwa Finansów, pobiera faktury sprzedaży i zakupu i liczy budżet vs wykonanie oraz prognozę płynności — u Ciebie na serwerze, bez wysyłania danych w chmurę.",
+        replaces:
+          "Ręczne zestawianie faktur z KSeF w Excelu i zgadywanie płynności — KSeF jest tylko archiwum, nie odpowiada „czy projekt zarabia” ani „czy starczy gotówki”.",
+        io: "Faktury z KSeF (API MF) + budżet i mapa kategorii (CSV) → pulpity Budżet vs Wykonanie i Prognoza Cashflow (13 tyg.) + raporty XLSX.",
+        bullets: [
+          "Integracja z oficjalnym API KSeF 2.0: autoryzacja tokenem, szyfrowanie RSA-OAEP, parser FA(3)",
+          "Pulpit Budżet vs Wykonanie i rolująca prognoza cashflow na 13 tygodni",
+          "Read-only: żadnej faktury nie wysyła — tylko czyta i liczy; dane zostają na Twoim serwerze",
+          "Aging należności, alerty „czerwonej lampki” i raporty XLSX; opcjonalny asystent AI (tylko agregaty)",
+        ],
+      },
+      en: {
+        name: "Controlling on KSeF data",
+        tagline:
+          "A read-only controlling layer over Poland's national e-invoicing system (KSeF): it integrates with the official Ministry of Finance API, pulls sales and purchase invoices and computes budget-vs-actual and a liquidity forecast — on your own server, with no data sent to the cloud.",
+        replaces:
+          "Hand-assembling KSeF invoices in Excel and guessing at liquidity — KSeF is just an archive; it doesn't answer “is the project profitable” or “will there be enough cash”.",
+        io: "KSeF invoices (MF API) + a budget and category map (CSV) → Budget-vs-Actual and Cash-flow forecast (13 wks) dashboards + XLSX reports.",
+        bullets: [
+          "Integration with the official KSeF 2.0 API: token auth, RSA-OAEP encryption, FA(3) parser",
+          "A Budget-vs-Actual dashboard and a rolling 13-week cash-flow forecast",
+          "Read-only: it never sends an invoice — only reads and computes; data stays on your server",
+          "Receivables aging, “red-light” alerts and XLSX reports; optional AI assistant (aggregates only)",
+        ],
+      },
+    },
+  },
 ];
 
 export function getTools(lang: Lang): ToolItem[] {
@@ -609,8 +673,10 @@ export function getTools(lang: Lang): ToolItem[] {
       icon: b.icon,
       category: b.category,
       dept: b.dept,
+      kind: b.kind ?? "demo",
       dashboard: b.dashboard,
       ...b.i18n[lang],
+      hook: HOOKS[b.slug]?.[lang] ?? b.i18n[lang].name,
       seo: extra?.seo,
       faq: extra?.faq,
     };

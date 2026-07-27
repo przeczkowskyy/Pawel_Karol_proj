@@ -69,16 +69,16 @@ const T = {
         demo: true,
       },
       {
-        name: "Importy ERP → Excel",
-        val: "z 2 dni do kilkunastu minut",
-        foot: "klasyfikacja słownikiem, tylko nowe wiersze, backup i log audytowy",
-        linkLabel: "Zobacz opis",
-        to: "/narzedzia/importy-erp",
+        name: "Kontroling z KSeF",
+        val: "faktury z KSeF → budżet i cashflow",
+        foot: "read-only integracja z API Ministerstwa Finansów, on-premise — realizacja u klienta",
+        linkLabel: "Zobacz realizację",
+        to: "/narzedzia/kontroling-ksef",
         demo: false,
       },
     ],
     galleryNote:
-      "Liczby z wewnętrznych wdrożeń w firmie produkcyjno-budowlanej. Narzędzia odtwarzamy od zera na tych wzorcach — na danych fikcyjnych tutaj, a u klienta na Twoich plikach.",
+      "Liczby z wewnętrznych wdrożeń w firmie produkcyjno-budowlanej; integracja z KSeF to osobne wdrożenie. Narzędzia odtwarzamy od zera na tych wzorcach — na danych fikcyjnych tutaj, a u klienta na Twoich plikach.",
   },
   en: {
     zeroTitle: "Truly zero cloud",
@@ -140,16 +140,16 @@ const T = {
         demo: true,
       },
       {
-        name: "ERP → Excel imports",
-        val: "from 2 days to minutes",
-        foot: "dictionary classification, only new rows, backup and audit log",
-        linkLabel: "See description",
-        to: "/narzedzia/importy-erp",
+        name: "KSeF controlling",
+        val: "KSeF invoices → budget & cash flow",
+        foot: "read-only integration with the Ministry of Finance API, on-premise — a client build",
+        linkLabel: "See the build",
+        to: "/narzedzia/kontroling-ksef",
         demo: false,
       },
     ],
     galleryNote:
-      "Numbers from internal deployments at a manufacturing-and-construction company. We rebuild the tools from scratch on these patterns — on fictional data here, on your files at the client.",
+      "Numbers from internal deployments at a manufacturing-and-construction company; the KSeF integration is a separate build. We rebuild the tools from scratch on these patterns — on fictional data here, on your files at the client.",
   },
 };
 

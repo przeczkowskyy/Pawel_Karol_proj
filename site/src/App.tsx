@@ -16,6 +16,14 @@ import {
   Check,
   X as XIcon,
   Phone,
+  BarChart3,
+  Plug,
+  ArrowLeftRight,
+  ClipboardCheck,
+  Gauge,
+  Database,
+  Zap,
+  CircleDot,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import BgBoundary from "@/components/BgBoundary";
@@ -84,39 +92,39 @@ function Section({
   );
 }
 
-/* ── HERO ── */
+/* ── HERO ── (mniej tekstu; breadth = chipy ikonowe, nie akapit) */
 const HERO = {
   pl: {
     h1a: "Porządek w danych dla firm,",
     h1b: "które wyrosły na Excelu.",
-    lead1: "Zamieniamy ręczne przeklejanie, kruche makra i mailowy obieg dokumentów w audytowalne narzędzia. ",
-    leadStrong: "Wdrożenie w dni, nie w miesiące",
-    lead2: " — a Twoje dane nie opuszczają firmy.",
-    proof: "Raport zarządczy w kilkanaście sekund zamiast godzin.",
-    ctaMain: "Umów bezpłatną diagnozę",
-    ctaModules: "Zobacz narzędzia",
-    qualifier: "Dla firm 20–250 osób · środowisko Windows + Excel · narzędzia działają on-premise, u Ciebie",
-    quickNav: [
-      { to: "/narzedzia", label: "Narzędzia" },
-      { to: "/oferta", label: "Oferta" },
-      { to: "/faq", label: "FAQ" },
+    lead: "Custom narzędzia pod Twój proces — automatyzacja, kontroling, integracje. ",
+    leadStrong: "Wdrożenie w dni",
+    lead2: ", a dane zostają u Ciebie.",
+    chips: [
+      { icon: BarChart3, label: "Raporty i kontroling" },
+      { icon: Plug, label: "Integracje (KSeF, ERP)" },
+      { icon: ArrowLeftRight, label: "Importy danych" },
+      { icon: ClipboardCheck, label: "Obieg dokumentów" },
+      { icon: Gauge, label: "Panele i dashboardy" },
     ],
+    ctaMain: "Umów bezpłatną diagnozę",
+    ctaSee: "Zobacz, co zbudowaliśmy",
   },
   en: {
     h1a: "Order in the data of companies",
     h1b: "that grew up on Excel.",
-    lead1: "We turn manual copy-pasting, fragile macros and email-driven document flows into auditable tools. ",
-    leadStrong: "Deployed in days, not months",
-    lead2: " — and your data never leaves your company.",
-    proof: "A board report in seconds instead of hours.",
-    ctaMain: "Book a free diagnosis",
-    ctaModules: "See the tools",
-    qualifier: "For companies of 20–250 people · Windows + Excel environment · tools run on-premise, at your site",
-    quickNav: [
-      { to: "/narzedzia", label: "Tools" },
-      { to: "/oferta", label: "Offer" },
-      { to: "/faq", label: "FAQ" },
+    lead: "Custom tools built around your process — automation, controlling, integrations. ",
+    leadStrong: "Deployed in days",
+    lead2: ", and your data stays with you.",
+    chips: [
+      { icon: BarChart3, label: "Reports & controlling" },
+      { icon: Plug, label: "Integrations (KSeF, ERP)" },
+      { icon: ArrowLeftRight, label: "Data imports" },
+      { icon: ClipboardCheck, label: "Document workflows" },
+      { icon: Gauge, label: "Panels & dashboards" },
     ],
+    ctaMain: "Book a free diagnosis",
+    ctaSee: "See what we've built",
   },
 };
 
@@ -134,19 +142,28 @@ function Hero({ onBook }: { onBook: () => void }) {
         <br className="hidden md:block" /> {t.h1b}
       </h1>
       <p className="mt-5 max-w-2xl text-lg md:text-xl" style={{ color: "var(--foreground)" }}>
-        {t.lead1}
+        {t.lead}
         <strong>{t.leadStrong}</strong>
         {t.lead2}
       </p>
-      <p className="mt-3 text-sm font-semibold tracking-wide" style={{ color: "var(--accent-foreground)" }}>
-        {t.proof}
-      </p>
+      {/* breadth = chipy ikonowe (mniej tekstu, więcej przekazu) */}
+      <div className="mt-6 flex flex-wrap items-center justify-center gap-2 max-w-2xl">
+        {t.chips.map((c) => (
+          <span
+            key={c.label}
+            className="chip"
+            style={{ display: "inline-flex", alignItems: "center", gap: 6 }}
+          >
+            <c.icon size={13} style={{ color: "var(--primary)" }} /> {c.label}
+          </span>
+        ))}
+      </div>
       <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
         <button className="btn btn-primary" type="button" onClick={onBook}>
           {t.ctaMain}
         </button>
         <Link className="btn btn-secondary" to="/narzedzia">
-          {t.ctaModules}
+          {t.ctaSee}
         </Link>
       </div>
       <a
@@ -156,18 +173,105 @@ function Hero({ onBook }: { onBook: () => void }) {
       >
         <Phone size={14} style={{ color: "var(--primary)" }} /> {PHONE_DISPLAY}
       </a>
-      <p className="mt-6 text-xs" style={{ color: "var(--muted-foreground)" }}>
-        {t.qualifier}
-      </p>
-      {/* szybka nawigacja do głównych podstron */}
-      <div className="mt-7 flex flex-wrap items-center justify-center gap-2 max-w-2xl">
-        {t.quickNav.map((q) => (
-          <Link key={q.to} className="btn btn-secondary btn-sm" to={q.to}>
-            {q.label}
-          </Link>
+    </div>
+  );
+}
+
+/* ── CO MOŻEMY ZBUDOWAĆ (breadth — kafle ikonowe, nie zamknięte menu) ── */
+const CAPS = {
+  pl: {
+    title: "Co możemy zbudować",
+    sub: "Nie mamy zamkniętego katalogu. Jeśli to żyje w Excelu, plikach albo w ERP — zwykle da się to zautomatyzować. Oto rodzaje narzędzi, które robimy:",
+    items: [
+      { icon: BarChart3, h: "Raporty i kontroling", d: "Panele zarządcze, marża i estymaty na żywo, zamknięcie miesiąca." },
+      { icon: Plug, h: "Integracje i e-dokumenty", d: "KSeF, e-faktury, API urzędowe, wymiana z ERP i systemami." },
+      { icon: ArrowLeftRight, h: "Importy i scalanie danych", d: "ERP ↔ Excel, łączenie źródeł, rekoncyliacja co do grosza." },
+      { icon: ClipboardCheck, h: "Obieg dokumentów", d: "Akceptacje, protokoły, rejestry — koniec obiegu w mailu." },
+      { icon: Gauge, h: "Panele i dashboardy", d: "Produkcja, KPI, płynność — obraz firmy w jednym kadrze." },
+      { icon: Database, h: "Porządek w danych", d: "Audyt jakości, deduplikacja, czyszczenie i migracje." },
+    ],
+    foot: "Nie widzisz swojego przypadku? Napisz — najczęściej właśnie to robimy.",
+  },
+  en: {
+    title: "What we can build",
+    sub: "We don't have a fixed catalogue. If it lives in Excel, files or an ERP — it can usually be automated. Here are the kinds of tools we build:",
+    items: [
+      { icon: BarChart3, h: "Reports & controlling", d: "Board panels, live margin and estimates, month-end close." },
+      { icon: Plug, h: "Integrations & e-documents", d: "KSeF, e-invoices, government APIs, ERP and system exchange." },
+      { icon: ArrowLeftRight, h: "Imports & data merging", d: "ERP ↔ Excel, combining sources, reconciliation to the cent." },
+      { icon: ClipboardCheck, h: "Document workflows", d: "Approvals, protocols, registers — no more email routing." },
+      { icon: Gauge, h: "Panels & dashboards", d: "Production, KPIs, liquidity — the company in one frame." },
+      { icon: Database, h: "Order in your data", d: "Quality audit, deduplication, cleaning and migrations." },
+    ],
+    foot: "Don't see your case? Write to us — it's usually exactly what we do.",
+  },
+};
+
+function Capabilities() {
+  const { lang } = useLang();
+  const t = pick(lang, CAPS);
+  return (
+    <Section title={t.title} sub={t.sub}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {t.items.map((c) => (
+          <div key={c.h} className="card flex flex-col gap-2">
+            <div
+              className="w-10 h-10 rounded-[10px] flex items-center justify-center"
+              style={{ background: "rgba(168,180,194,.14)", color: "var(--primary)" }}
+            >
+              <c.icon size={19} />
+            </div>
+            <h3 className="mt-1 text-[15px] font-extrabold" style={{ color: "var(--heading)" }}>{c.h}</h3>
+            <p className="text-[12.5px] leading-relaxed" style={{ color: "var(--muted-foreground)" }}>{c.d}</p>
+          </div>
         ))}
       </div>
-    </div>
+      <p className="mt-5 text-[13px] font-semibold" style={{ color: "var(--accent-foreground)" }}>{t.foot}</p>
+    </Section>
+  );
+}
+
+/* ── DOWÓD (pasek statystyk — „co już zrobiliśmy", liczby anonimowe) ── */
+const PROOF = {
+  pl: {
+    title: "Co już zrobiliśmy",
+    sub: "Zbudowaliśmy od środka ekosystem kilkunastu narzędzi dla firmy produkcyjno-budowlanej (~30 równoległych projektów, klienci w USA) — plus integrację kontrolingową z KSeF. Kilka liczb:",
+    stats: [
+      { icon: Gauge, v: "kilkanaście", l: "narzędzi wdrożonych wewnętrznie" },
+      { icon: ArrowLeftRight, v: "≈10 000", l: "wierszy kosztów z ERP na miesiąc" },
+      { icon: Zap, v: "sekundy", l: "raport zarządu zamiast godzin" },
+      { icon: CircleDot, v: "co do grosza", l: "kontrola sum w każdym imporcie" },
+    ],
+  },
+  en: {
+    title: "What we've already built",
+    sub: "From the inside we built an ecosystem of a dozen-plus tools for a manufacturing-and-construction company (~30 parallel projects, US clients) — plus a KSeF controlling integration. A few numbers:",
+    stats: [
+      { icon: Gauge, v: "a dozen+", l: "tools deployed internally" },
+      { icon: ArrowLeftRight, v: "≈10,000", l: "ERP cost rows per month" },
+      { icon: Zap, v: "seconds", l: "the board report, instead of hours" },
+      { icon: CircleDot, v: "to the cent", l: "totals controlled on every import" },
+    ],
+  },
+};
+
+function ProofBand() {
+  const { lang } = useLang();
+  const t = pick(lang, PROOF);
+  return (
+    <Section title={t.title} sub={t.sub}>
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {t.stats.map((s) => (
+          <div key={s.l} className="card flex flex-col gap-2">
+            <s.icon size={20} style={{ color: "var(--primary)" }} />
+            <div className="text-[22px] font-extrabold tracking-tight leading-none" style={{ color: "var(--heading)" }}>
+              {s.v}
+            </div>
+            <p className="text-[12px] leading-relaxed" style={{ color: "var(--muted-foreground)" }}>{s.l}</p>
+          </div>
+        ))}
+      </div>
+    </Section>
   );
 }
 
@@ -218,16 +322,16 @@ function Pain() {
 /* ── NARZĘDZIA (interaktywne dashboardy) ── */
 const TOOLS_TXT = {
   pl: {
-    title: "Narzędzia — wybierz dział i korzystaj",
-    sub: "Wszystkie nasze narzędzia działają na tej stronie na żywo, na danych przykładowych: klikasz, liczysz, pobierasz dokumenty — dokładnie tak, jak u klienta (lokalnie, bez chmury, bez logowania). Wybierz dział, żeby zobaczyć narzędzia.",
+    title: "Przykłady realizacji — kliknij i sprawdź",
+    sub: "To nie pełna lista usług, tylko próbki tego, co już zbudowaliśmy. Wybierz dział, żeby zobaczyć przykłady. Twoje narzędzie budujemy pod Twój proces.",
     proof:
-      "Zrobiliśmy to już od środka: ekosystem kilkunastu takich narzędzi zbudowaliśmy dla firmy produkcyjno-budowlanej (~30 równoległych projektów, klienci w USA) — ~10 000 wierszy kosztów z ERP miesięcznie, raport zarządczy w kilkanaście sekund zamiast godzin, zamknięcie ~30 projektów jednym przyciskiem i kontrola sum co do grosza.",
+      "Większość odpalisz tu na żywo, na danych przykładowych (bez logowania); część to realne wdrożenia u klienta, np. integracja kontrolingowa z KSeF. Wszystko odtworzone od zera, na danych fikcyjnych.",
   },
   en: {
-    title: "Tools — pick a department and use them",
-    sub: "All our tools run live on this page, on sample data: click, compute, download documents — exactly like at the client (locally, no cloud, no sign-up). Pick a department to see the tools.",
+    title: "Examples of what we've built — click and try",
+    sub: "This isn't a full list of services, just samples of what we've already built. Pick a department to see the examples. We build your tool around your process.",
     proof:
-      "We've already done this from the inside: we built an ecosystem of a dozen-plus such tools for a manufacturing-and-construction company (~30 parallel projects, US clients) — ~10,000 ERP cost rows a month, a board report in seconds instead of hours, ~30 projects closed with one click and totals controlled to the cent.",
+      "Most run live here on sample data (no sign-up); some are real client deployments, e.g. a KSeF controlling integration. All rebuilt from scratch on fictional data.",
   },
 };
 
@@ -295,7 +399,7 @@ function DiffSection() {
 const OFFER = {
   pl: {
     title: "Oferta: Pilot na kopii — efekt w dni, nie w miesiące",
-    sub: "Jeden proces, stała cena, ≤10 dni roboczych. Wszystko, co musisz wiedzieć, na jednym ekranie: jak pracujemy, na czym stoi zaufanie i czy będzie nam po drodze.",
+    sub: "Zaczynamy pilotem: jeden proces, ≤10 dni roboczych, pierwszy efekt w dniu 5, płatność 50/50. Wycenę ustalamy po bezpłatnej diagnozie — stała cena za zamrożony zakres, bez stawki godzinowej.",
     offerTag: "OFERTA WEJŚCIOWA",
     offerTitle: "Pilot na kopii",
     offerBody1: "Budujemy na kopii Twoich plików, pierwszy namacalny efekt (raport błędów z Twoich prawdziwych danych) widzisz ",
@@ -311,6 +415,7 @@ const OFFER = {
     worst1: "Zanim cokolwiek kupisz: ",
     worstStrong: "przyślij nam swój najgorszy Excel",
     worst2: " — w 30 minut pokażemy na próbce, co da się z nim zrobić.",
+    priceNote: "Wyceniamy stałą ceną za ustalony zakres — po bezpłatnej diagnozie, bez stawki godzinowej. Kolejne narzędzia wyceniamy osobno.",
     whyHead: "Dlaczego dni, nie miesiące",
     why: [
       { icon: Copy, text: "Diagnoza na kopiach Twoich plików — zakres zamrożony na piśmie w Dniu 0" },
@@ -337,7 +442,7 @@ const OFFER = {
   },
   en: {
     title: "The offer: Pilot on a copy — results in days, not months",
-    sub: "One process, a fixed price, ≤10 business days. Everything you need to know on one screen: how we work, what the trust stands on and whether we're a fit.",
+    sub: "We start with a pilot: one process, ≤10 business days, first result on day 5, 50/50 payment. We set the price after a free diagnosis — a fixed price for a frozen scope, no hourly rate.",
     offerTag: "ENTRY OFFER",
     offerTitle: "Pilot on a copy",
     offerBody1: "We build on a copy of your files; you see the first tangible result (an error report from your real data) ",
@@ -353,6 +458,7 @@ const OFFER = {
     worst1: "Before you buy anything: ",
     worstStrong: "send us your worst Excel",
     worst2: " — in 30 minutes we'll show you, on a sample, what can be done with it.",
+    priceNote: "We price a fixed fee for a defined scope — after a free diagnosis, with no hourly rate. Additional tools are quoted separately.",
     whyHead: "Why days, not months",
     why: [
       { icon: Copy, text: "Diagnosis on copies of your files — scope frozen in writing on Day 0" },
@@ -409,6 +515,9 @@ function OfferSection({ onBook }: { onBook: () => void }) {
             {t.worst1}
             <strong>{t.worstStrong}</strong>
             {t.worst2}
+          </p>
+          <p className="mt-3 text-[12px] font-semibold" style={{ color: "var(--accent-foreground)" }}>
+            {t.priceNote}
           </p>
         </div>
 
@@ -492,8 +601,8 @@ const HOME_NEXT = {
     title: "Zobacz konkrety",
     open: "Otwórz →",
     items: [
-      { to: "/narzedzia", h: "Narzędzia", d: "12 działających demo — kliknij, policz, pobierz dokument. Bez logowania, bez chmury." },
-      { to: "/oferta", h: "Oferta: Pilot na kopii", d: "Jeden proces, stała cena, efekt w dni. Budujemy na kopii Twoich plików." },
+      { to: "/narzedzia", h: "Przykłady realizacji", d: "Klikalne dema i wdrożenia (m.in. integracja z KSeF) — zobacz, co potrafimy." },
+      { to: "/oferta", h: "Oferta i wycena", d: "Pilot na kopii: jeden proces, efekt w dni, płatność 50/50. Wycena po bezpłatnej diagnozie." },
       { to: "/faq", h: "Najczęstsze pytania", d: "Bezpieczeństwo danych, koszt, zgodność z ERP, los działających makr — wprost." },
     ],
   },
@@ -501,8 +610,8 @@ const HOME_NEXT = {
     title: "See the specifics",
     open: "Open →",
     items: [
-      { to: "/narzedzia", h: "Tools", d: "12 live demos — click, compute, download a document. No sign-up, no cloud." },
-      { to: "/oferta", h: "Offer: Pilot on a copy", d: "One process, a fixed price, results in days. We build on a copy of your files." },
+      { to: "/narzedzia", h: "Examples we've built", d: "Clickable demos and deployments (incl. a KSeF integration) — see what we can do." },
+      { to: "/oferta", h: "Offer & pricing", d: "Pilot on a copy: one process, results in days, 50/50 payment. Quote after a free diagnosis." },
       { to: "/faq", h: "Common questions", d: "Data security, cost, ERP compatibility, the fate of existing macros — head-on." },
     ],
   },
@@ -607,6 +716,8 @@ function HomePage({ onBook }: { onBook: () => void }) {
         <div className="pb-4">
           <Hero onBook={onBook} />
         </div>
+        <Capabilities />
+        <ProofBand />
         <Pain />
         <div id="wyrozniki">
           <DiffSection />

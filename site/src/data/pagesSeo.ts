@@ -19,18 +19,18 @@ export const PAGES_SEO: Record<"home" | "tools" | "oferta" | "faq", PageSeo> = {
       en: "Klarow — data automation & controlling. Deployed in days.",
     },
     description: {
-      pl: "Porządek w danych dla firm 20–250 osób wyrosłych na Excelu. 12 działających demo: raport zarządczy, importy ERP, audyt danych, płatności. Dane zostają u Ciebie.",
-      en: "Order in the data of 20–250-person companies that grew up on Excel. 12 live demos: board report, ERP imports, data audit, payments. Your data stays with you.",
+      pl: "Custom narzędzia pod Twój proces dla firm wyrosłych na Excelu: kontroling, integracje (KSeF), importy z ERP, obieg dokumentów. Wdrożenie w dni, dane u Ciebie.",
+      en: "Custom tools built around your process for companies that grew up on Excel: controlling, integrations (KSeF), ERP imports, document workflows. Deployed in days.",
     },
   },
   tools: {
     title: {
-      pl: "Narzędzia Klarow — 12 działających demo online",
-      en: "Klarow tools — 12 live online demos",
+      pl: "Narzędzia Klarow — przykłady realizacji i dema",
+      en: "Klarow tools — examples we've built, live demos",
     },
     description: {
-      pl: "Raport zarządczy, audyt danych, importy ERP, kontroling kosztów, płatności — 12 narzędzi działających na żywo w przeglądarce. On-premise, dane zostają u Ciebie.",
-      en: "Board report, data-quality audit, ERP imports, cost control, payments — 12 tools running live in your browser. On-premise, your data stays with you.",
+      pl: "Przykłady narzędzi, które budujemy: raport zarządczy, kontroling, integracja z KSeF, importy z ERP, płatności. Klikalne dema i wdrożenia. On-premise, dane u Ciebie.",
+      en: "Examples of tools we build: board report, controlling, KSeF integration, ERP imports, payments. Clickable demos and client deployments. On-premise, your data stays.",
     },
   },
   oferta: {
@@ -39,8 +39,8 @@ export const PAGES_SEO: Record<"home" | "tools" | "oferta" | "faq", PageSeo> = {
       en: "Klarow offer: Pilot on a copy — results in days",
     },
     description: {
-      pl: "Jeden proces, stała cena, ≤10 dni roboczych. Budujemy na kopii Twoich plików, pierwszy efekt w dniu 5, płatność 50/50. Twoje dane nie opuszczają firmy.",
-      en: "One process, a fixed price, ≤10 business days. We build on a copy of your files, first result on day 5, 50/50 payment. Your data never leaves your company.",
+      pl: "Pilot na kopii: jeden proces, ≤10 dni roboczych, pierwszy efekt w dniu 5, płatność 50/50. Wycena po bezpłatnej diagnozie. Dane nie opuszczają Twojej firmy.",
+      en: "Pilot on a copy: one process, ≤10 business days, first result on day 5, 50/50 payment. Price set after a free diagnosis. Your data never leaves your company.",
     },
   },
   faq: {

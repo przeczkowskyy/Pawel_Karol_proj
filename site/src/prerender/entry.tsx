@@ -29,6 +29,7 @@ const SITEMAP_PRIORITY: Record<string, string> = {
   "import-z-rekoncyliacja": "0.8",
   "importy-erp": "0.8",
   "kontroling-kosztow": "0.8",
+  "kontroling-ksef": "0.8",
 };
 
 export interface RouteOut {
@@ -107,12 +108,35 @@ function HomeShell() {
         Porządek w danych dla firm, które wyrosły na Excelu.
       </h1>
       <p className="mt-4 max-w-3xl text-lg" style={BODY}>
-        Zamieniamy ręczne przeklejanie, kruche makra i mailowy obieg dokumentów w audytowalne
-        narzędzia. <strong>Wdrożenie w dni, nie w miesiące</strong> — a Twoje dane nie opuszczają
-        firmy. Raport zarządczy w kilkanaście sekund zamiast godzin. Dla firm 20–250 osób,
-        środowisko Windows + Excel, narzędzia działają on-premise.
+        Budujemy <strong>custom narzędzia pod Twój proces</strong>: automatyzacja, kontroling,
+        integracje (m.in. z KSeF), importy z ERP i obieg dokumentów. <strong>Wdrożenie w dni,
+        nie w miesiące</strong> — a Twoje dane nie opuszczają firmy (on-premise). Dla firm
+        20–250 osób, środowisko Windows + Excel.
       </p>
       <ContactLine />
+
+      <H2>Co możemy zbudować</H2>
+      <p className="mt-2 max-w-3xl text-sm" style={MUTED}>
+        Nie mamy zamkniętego katalogu — jeśli to żyje w Excelu, plikach albo w ERP, zwykle da się
+        to zautomatyzować. Rodzaje narzędzi, które robimy:
+      </p>
+      <ul className="mt-2 flex flex-col gap-1.5 text-sm" style={BODY}>
+        <li><strong>Raporty i kontroling</strong> — panele zarządcze, marża i estymaty na żywo, zamknięcie miesiąca.</li>
+        <li><strong>Integracje i e-dokumenty</strong> — KSeF, e-faktury, API urzędowe, wymiana z ERP i systemami.</li>
+        <li><strong>Importy i scalanie danych</strong> — ERP ↔ Excel, łączenie źródeł, rekoncyliacja co do grosza.</li>
+        <li><strong>Obieg dokumentów</strong> — akceptacje, protokoły, rejestry, koniec obiegu w mailu.</li>
+        <li><strong>Panele i dashboardy</strong> — produkcja, KPI, płynność w jednym kadrze.</li>
+        <li><strong>Porządek w danych</strong> — audyt jakości, deduplikacja, czyszczenie i migracje.</li>
+      </ul>
+
+      <H2>Co już zrobiliśmy</H2>
+      <p className="mt-2 max-w-3xl text-sm" style={BODY}>
+        Zbudowaliśmy od środka ekosystem kilkunastu narzędzi dla firmy produkcyjno-budowlanej
+        (~30 równoległych projektów, klienci w USA): ~10 000 wierszy kosztów z ERP miesięcznie,
+        raport zarządczy w kilkanaście sekund zamiast godzin, kontrola sum co do grosza.
+        Osobnym wdrożeniem jest <a href="/narzedzia/kontroling-ksef" style={LINK}>kontroling na
+        danych z KSeF</a> — read-only integracja z oficjalnym API Ministerstwa Finansów.
+      </p>
 
       <H2>To działa, więc boisz się ruszać — słusznie</H2>
       <p className="mt-2 max-w-3xl text-sm" style={MUTED}>
@@ -133,12 +157,12 @@ function HomeShell() {
       <H2>Zobacz konkrety</H2>
       <ul className="mt-2 flex flex-col gap-1.5 text-sm" style={BODY}>
         <li>
-          <a href="/narzedzia" style={LINK}>Narzędzia</a> — 12 działających demo online (kliknij,
-          policz, pobierz dokument; bez logowania, bez chmury).
+          <a href="/narzedzia" style={LINK}>Przykłady realizacji</a> — klikalne dema i wdrożenia
+          u klienta (m.in. integracja z KSeF); to próbki, a Twoje narzędzie budujemy pod Twój proces.
         </li>
         <li>
-          <a href="/oferta" style={LINK}>Oferta: Pilot na kopii</a> — jeden proces, stała cena,
-          efekt w dni; budujemy na kopii Twoich plików.
+          <a href="/oferta" style={LINK}>Oferta: Pilot na kopii</a> — jeden proces, efekt w dni,
+          płatność 50/50; wycena po bezpłatnej diagnozie.
         </li>
         <li>
           <a href="/faq" style={LINK}>Najczęstsze pytania</a> — bezpieczeństwo danych, koszt,
@@ -149,10 +173,10 @@ function HomeShell() {
       <section lang="en">
         <H2>Klarow in English</H2>
         <p className="mt-2 max-w-3xl text-sm" style={BODY}>
-          Order in the data of 20–250-person companies that grew up on Excel. We turn manual
-          copy-pasting, fragile macros and email-driven document flows into auditable tools —
-          deployed in days, not months, running on-premise so your data never leaves your company.
-          See the <a href="/narzedzia" style={LINK}>tools</a>, the{" "}
+          We build custom tools around your process — automation, controlling, integrations
+          (including KSeF), ERP imports and document workflows — deployed in days, not months,
+          running on-premise so your data never leaves your company. For 20–250-person companies
+          on Windows + Excel. See the <a href="/narzedzia" style={LINK}>tools we've built</a>, the{" "}
           <a href="/oferta" style={LINK}>offer</a> and the <a href="/faq" style={LINK}>FAQ</a>.
         </p>
       </section>
@@ -172,14 +196,15 @@ function ToolsShell({ pl, en }: { pl: ToolItem[]; en: ToolItem[] }) {
     <ShellChrome>
       <ShellNav />
       <h1 className="mt-4 text-4xl font-extrabold tracking-tight" style={HEAD}>
-        Narzędzia — każde działa na tej stronie na żywo, na danych przykładowych
+        Przykłady realizacji — dema i wdrożenia
       </h1>
       <p className="mt-4 max-w-3xl text-sm" style={MUTED}>
-        Klikasz, liczysz, pobierasz dokumenty — dokładnie tak, jak u klienta: lokalnie, bez chmury,
-        bez logowania. Zbudowaliśmy wcześniej ekosystem kilkunastu takich narzędzi dla firmy
-        produkcyjno-budowlanej (~30 równoległych projektów, klienci w USA): ~10 000 wierszy kosztów
-        z ERP miesięcznie, raport zarządczy w kilkanaście sekund, zamknięcie ~30 projektów jednym
-        przyciskiem i kontrola sum co do grosza.
+        To nie pełna lista usług, tylko próbki tego, co już zbudowaliśmy. Większość odpalisz na
+        żywo na danych przykładowych (bez logowania); część to realne wdrożenia u klienta, jak
+        kontroling na danych z KSeF. Twoje narzędzie budujemy pod Twój proces. Wcześniej
+        zbudowaliśmy od środka ekosystem kilkunastu narzędzi dla firmy produkcyjno-budowlanej
+        (~30 równoległych projektów, klienci w USA): ~10 000 wierszy kosztów z ERP miesięcznie,
+        raport zarządczy w kilkanaście sekund i kontrola sum co do grosza.
       </p>
       {DEPTS.map((d) => (
         <section key={d.key}>
@@ -329,8 +354,9 @@ function ToolShell({ pl, en, all }: { pl: ToolItem; en: ToolItem; all: ToolItem[
       <h1 className="mt-4 text-3xl font-extrabold tracking-tight" style={HEAD}>{pl.name}</h1>
       <p className="mt-3 max-w-3xl text-[15px] leading-relaxed" style={BODY}>{pl.tagline}</p>
       <p className="mt-2 text-[12.5px]" style={MUTED}>
-        DEMO na danych przykładowych — pełna, interaktywna wersja działa na tej stronie po
-        uruchomieniu JavaScriptu: w całości w Twojej przeglądarce, bez logowania i bez chmury.
+        {pl.kind === "case"
+          ? "WDROŻENIE u klienta — to realna integracja/aplikacja, nie demo w przeglądarce (wymaga połączenia z zewnętrznym systemem i serwera). Poniżej opis, jak działa i jak jest zbudowana; na żywo pokażemy ją na Twoich danych."
+          : "DEMO na danych przykładowych — pełna, interaktywna wersja działa na tej stronie po uruchomieniu JavaScriptu: w całości w Twojej przeglądarce, bez logowania i bez chmury."}
       </p>
 
       <H2>Co zastępuje</H2>
@@ -420,9 +446,10 @@ function llmsTxt(pl: ToolItem[], en: ToolItem[]): string {
     .join("\n");
   return `# Klarow
 
-> Automatyzacja, upraszczanie i porządek w danych dla firm 20–250 osób, które „wyrosły na Excelu"
-> (produkcja, budownictwo, dystrybucja; Windows + Excel). Wdrożenie w dni, nie w miesiące.
-> Narzędzia działają on-premise — dane nie opuszczają firmy.
+> Custom narzędzia pod proces dla firm 20–250 osób, które „wyrosły na Excelu" (produkcja,
+> budownictwo, dystrybucja; Windows + Excel): automatyzacja, kontroling, integracje (m.in. KSeF),
+> importy z ERP, obieg dokumentów. Wdrożenie w dni, nie w miesiące. Narzędzia działają on-premise
+> — dane nie opuszczają firmy. To nie zamknięty katalog: budujemy narzędzie pod konkretny proces.
 
 Główne strony: [Narzędzia](${ORIGIN}/narzedzia) · [Oferta](${ORIGIN}/oferta) · [FAQ](${ORIGIN}/faq)
 
@@ -432,12 +459,18 @@ Dwa twarde wyróżniki:
 - Determinizm: te same dane wejściowe zawsze dają ten sam wynik („kalkulator, nie wróżka");
   każdą liczbę można sprawdzić ręcznie dzięki jawnej ścieżce wyliczenia.
 
-Oferta wejściowa: „Pilot na kopii" — jeden proces, stała cena, ≤10 dni roboczych, budowa na
-kopiach plików, pierwszy efekt w dniu 5, płatność 50/50 (druga rata po działającym odbiorze).
-Przed zakupem: „przyślij nam swój najgorszy Excel" — bezpłatna 30-minutowa diagnoza na próbce.
-Szczegóły: ${ORIGIN}/oferta
+Oferta wejściowa: „Pilot na kopii" — jeden proces, ≤10 dni roboczych, budowa na kopiach plików,
+pierwszy efekt w dniu 5, płatność 50/50 (druga rata po działającym odbiorze). Wycena po bezpłatnej
+diagnozie: stała cena za zamrożony zakres, bez stawki godzinowej; kolejne narzędzia wyceniane
+osobno. Przed zakupem: „przyślij nam swój najgorszy Excel" — bezpłatna 30-minutowa diagnoza na
+próbce. Szczegóły: ${ORIGIN}/oferta
 
-## Narzędzia (każde z działającym demo na żywo)
+## Co budujemy
+
+Raporty i kontroling · integracje i e-dokumenty (KSeF, e-faktury, API urzędowe, ERP) · importy
+i scalanie danych · obieg dokumentów · panele i dashboardy · porządek w danych (audyt, migracje).
+
+## Narzędzia i realizacje (dema na żywo + wdrożenia u klienta)
 
 ${toolsPl}
 

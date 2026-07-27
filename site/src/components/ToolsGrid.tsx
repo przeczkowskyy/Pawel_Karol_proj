@@ -5,42 +5,61 @@ import {
   ArrowRight,
   Banknote,
   BarChart3,
+  Check,
   FileSpreadsheet,
   HardHat,
   Play,
   Stamp,
 } from "lucide-react";
-import { getTools, DEPTS, type Dept } from "@/data/tools";
+import { getTools, DEPTS, type Dept, type ToolKind } from "@/data/tools";
 import { useLang, pick } from "@/i18n";
 
-/* Sekcja „Narzędzia" — DRILL-DOWN (rewizja 2026-07-22 wieczór):
-   poziom 1 = PANEL KOLUMN DZIAŁÓW (jeden pas na scrimie, kolumny rozdzielone
-   strukturalnymi liniami 1px — celowo NIE osobne boxy), poziom 2 = siatka
-   kart narzędzi działu (powrót do wcześniejszej wersji; karuzela orbitalna
-   usunięta decyzją Karola). KAŻDE narzędzie działa na żywo na danych DEMO. */
+/* Sekcja „Narzędzia" = PRZYKŁADY REALIZACJI (reframe 2026-07-27): dowody tego,
+   co już zbudowaliśmy — nie zamknięte menu. DRILL-DOWN: poziom 1 = pas kolumn
+   działów (jeden panel na scrimie, kolumny rozdzielone liniami 1px — celowo NIE
+   boxy), poziom 2 = siatka kart. Karta = ikona + nazwa + krótki HOOK + badge
+   (DEMO = klikalne / WDROŻONE = realizacja u klienta). Mniej tekstu, więcej ikon. */
 
 const DEPT_ICON: Record<Dept, React.ComponentType<{ size?: number | string; className?: string }>> = {
-  kontroling: BarChart3, // wykresy = raportowanie/kontroling
-  finanse: Banknote, // banknot = finanse i płatności
-  produkcja: HardHat, // kask = budowa/produkcja
-  dane: FileSpreadsheet, // arkusz = dane i importy Excel
-  administracja: Stamp, // pieczątka = dokumenty i administracja
+  kontroling: BarChart3,
+  finanse: Banknote,
+  produkcja: HardHat,
+  dane: FileSpreadsheet,
+  administracja: Stamp,
 };
 
 const T = {
   pl: {
-    tools: (n: number) => `${n} ${n === 1 ? "narzędzie" : n <= 4 ? "narzędzia" : "narzędzi"}`,
+    tools: (n: number) => `${n} ${n === 1 ? "przykład" : n <= 4 ? "przykłady" : "przykładów"}`,
     back: "Wszystkie działy",
-    open: "Otwórz narzędzie",
-    demoNote: "Wszystkie narzędzia działają na danych przykładowych — klikasz i korzystasz, bez logowania.",
+    openDemo: "Otwórz demo",
+    openCase: "Zobacz realizację",
+    demo: "DEMO",
+    live: "WDROŻONE",
+    note: "DEMO = klikasz i korzystasz tu, na danych przykładowych (bez logowania). WDROŻONE = realizacja u klienta. To próbki — Twoje narzędzie budujemy pod Twój proces.",
   },
   en: {
-    tools: (n: number) => `${n} ${n === 1 ? "tool" : "tools"}`,
+    tools: (n: number) => `${n} ${n === 1 ? "example" : "examples"}`,
     back: "All departments",
-    open: "Open the tool",
-    demoNote: "All tools run on sample data — click and use, no sign-up.",
+    openDemo: "Open the demo",
+    openCase: "See the build",
+    demo: "DEMO",
+    live: "DELIVERED",
+    note: "DEMO = click and use it here on sample data (no sign-up). DELIVERED = a real client build. These are samples — we build your tool around your process.",
   },
 };
+
+function KindBadge({ kind, t }: { kind: ToolKind; t: (typeof T)["pl"] }) {
+  return kind === "case" ? (
+    <span className="st st-blue">
+      <Check className="st-ico" /> {t.live}
+    </span>
+  ) : (
+    <span className="st st-green">
+      <Play className="st-ico" /> {t.demo}
+    </span>
+  );
+}
 
 export default function ToolsGrid() {
   const { lang } = useLang();
@@ -86,16 +105,15 @@ export default function ToolsGrid() {
                   style={{ color: "var(--accent-foreground)", borderColor: "var(--border)" }}
                 >
                   {t.tools(inDept.length)}
-                  <span className="st st-green" style={{ marginLeft: "auto" }}>
-                    <Play className="st-ico" /> DEMO
-                  </span>
-                  <ArrowRight size={13} style={{ color: "var(--primary)" }} />
+                  <ArrowRight size={13} style={{ color: "var(--primary)", marginLeft: "auto" }} />
                 </span>
               </button>
             );
           })}
         </div>
-        <p className="mt-4 text-[12px]" style={{ color: "var(--muted-foreground)" }}>{t.demoNote}</p>
+        <p className="mt-4 text-[12px] leading-relaxed max-w-3xl" style={{ color: "var(--muted-foreground)" }}>
+          {t.note}
+        </p>
       </div>
     );
   }
@@ -129,26 +147,24 @@ export default function ToolsGrid() {
           >
             <div className="flex items-start justify-between gap-2">
               <div
-                className="w-9 h-9 rounded-[10px] flex items-center justify-center shrink-0"
+                className="w-10 h-10 rounded-[10px] flex items-center justify-center shrink-0"
                 style={{ background: "rgba(168,180,194,.14)", color: "var(--primary)" }}
               >
-                <tool.icon size={17} />
+                <tool.icon size={19} />
               </div>
-              <span className="st st-green">
-                <Play className="st-ico" /> DEMO
-              </span>
+              <KindBadge kind={tool.kind} t={t} />
             </div>
-            <h3 className="text-[15px] font-bold leading-snug" style={{ color: "var(--heading)" }}>
+            <h3 className="text-[15.5px] font-extrabold leading-snug" style={{ color: "var(--heading)" }}>
               {tool.name}
             </h3>
-            <p className="text-[12.5px] leading-relaxed flex-1" style={{ color: "var(--muted-foreground)" }}>
-              {tool.tagline}
+            <p className="text-[13px] font-semibold leading-snug flex-1" style={{ color: "var(--accent-foreground)" }}>
+              {tool.hook}
             </p>
             <div
               className="flex items-center justify-end gap-1.5 pt-3 border-t text-[12.5px] font-bold"
-              style={{ borderColor: "var(--border)", color: "var(--funded)" }}
+              style={{ borderColor: "var(--border)", color: "var(--primary)" }}
             >
-              {t.open} <Play size={13} />
+              {tool.kind === "case" ? t.openCase : t.openDemo} <ArrowRight size={13} />
             </div>
           </Link>
         ))}

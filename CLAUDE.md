@@ -99,8 +99,8 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
     `ORG_JSONLD` na /, /narzedzia, /oferta; `FAQPage` na /faq; `toolJsonLd`+FAQPage per
     narzędzie), title/description stron w `src/data/pagesSeo.ts` (jedno źródło dla klienta
     i prerenderu), `public/robots.txt`, meta w `index.html`; **prerender**
-    `src/prerender/entry.tsx` + `scripts/prerender.mjs` (**16 statycznych HTML**: `/`,
-    `/narzedzia`, `/oferta`, `/faq` + 12 × `dist/narzedzia/<slug>.html` — osobny shell z H1 i
+    `src/prerender/entry.tsx` + `scripts/prerender.mjs` (**17 statycznych HTML**: `/`,
+    `/narzedzia`, `/oferta`, `/faq` + 13 × `dist/narzedzia/<slug>.html` — osobny shell z H1 i
     pełną treścią per strona, treść ROZDZIELONA między trasy bez duplikacji; `sitemap.xml` i
     `llms.txt` GENEROWANE z `tools.ts`+trasy przy buildzie — ręcznego `public/sitemap.xml`
     NIE MA, nie odtwarzać); treści long-tail + FAQ per narzędzie w `src/data/toolsSeo.ts`
@@ -141,6 +141,34 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
 - Docelowo (plan §4.2): treść do YAML w `site/content/` + trasy `/pl/` `/en/` build-time.
 
 ## Stan operacyjny (aktualizuj przy zmianach!)
+
+- **2026-07-27 (sesja reframe „szeroki wachlarz" + KSeF + redesign) — POZYCJONOWANIE ZMIENIONE:**
+  - **Reframe z „12 gotowych narzędzi (menu)" na „budujemy custom pod proces — oto DOWODY"**
+    (decyzja Karola: sztywna lista sugerowała zamknięty katalog, co myliło). Hero sygnalizuje
+    wachlarz (chipy ikonowe), nowa sekcja home **„Co możemy zbudować"** (6 kafli ikonowych +
+    „nie mamy zamkniętego katalogu"), pasek **„Co już zrobiliśmy"** (4 statystyki). Zakładka
+    Narzędzia = **„Przykłady realizacji"** (nie menu): karta = ikona + nazwa + krótki HOOK + badge.
+  - **Redesign „mniej tekstu, więcej ikon" (dyrektywa Karola):** Hero odchudzony (długi lead +
+    proof + qualifier + quicknav → krótki lead + chipy ikonowe). Karty narzędzi pokazują HOOK
+    (2–6 słów; mapa `HOOKS` w `tools.ts`) zamiast długiego tagline'a (tagline zostaje na
+    podstronie). Wszystko w kicie `company-ui` (chipy `.st`, ikony lucide, akcent stalowy).
+  - **KSeF dodany jako REALIZACJA** (`kind: "case"`, slug `kontroling-ksef`, dept `kontroling`):
+    read-only integracja kontrolingowa z oficjalnym API KSeF (MF) — parser FA(3), budżet vs
+    wykonanie, prognoza cashflow 13 tyg., raporty XLSX, on-premise (Flask+SQLite+React). Model
+    `tools.ts` rozszerzony: **`kind: "demo"|"case"` + opcjonalny `dashboard`**; `case` = brak
+    żywego dashboardu (badge WDROŻONE `st-blue`, panel „jak działa" zamiast dema; ToolPage i
+    prerender ToolShell rozróżniają kind). Źródło: `C:\Users\bibac\OneDrive\KSeF app` (własny
+    produkt Karola „Kokpit KSeF") — na stronie ODBRANDOWANE (bez nazwy produktu/domeny).
+    **⚠️ W `.env` tamtej appki był ŻYWY klucz Anthropic API — Karol ma go ZROTOWAĆ; nie
+    publikujemy go ani realnych danych leadów z folderu `marketing/`.**
+  - **Wycena (rekomendacja + copy na stronie):** ZERO kwot per-narzędzie. Model value-based:
+    stała cena za zamrożony zakres PO bezpłatnej diagnozie, bez stawki godzinowej („dni nie
+    miesiące" uzasadnia cenę WYŻSZĄ). Ladder z planu §1.4: pilot 18–26k (podłoga 12k), retainer
+    1,9–4,9k/mies, panel 0,99–1,99k/mies; USA sprint $9,5–15k. Na `/oferta` i w `llms.txt`:
+    „wycena po diagnozie", NIE „stała cena" jako publiczny tag.
+  - **Prerender: 17 statycznych HTML** (było 16; +KSeF). SEO stron (`pagesSeo.ts`) i shelle
+    prerendera przepisane pod szeroką narrację (bez „12 demo"). tsc + build + sitemap + llms
+    przechodzą; KSeF w sitemap (0.8) i w liście działu Kontroling.
 
 - **2026-07-26 (sesja rozbicia na strony) — DECK USUNIĘTY, landing rozbity na trasy pod SEO:**
   - **Mobile „samo tło" POTWIERDZONE jako naprawione** (Karol na swoim iPhonie). Prawdziwa
