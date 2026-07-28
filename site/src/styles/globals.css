@@ -41,6 +41,16 @@
      kontekst z-index uwięziłby fixed pod overflow:hidden i psuł malowanie na
      iOS). Tło .bg-layer ma z-index:-1, więc treść jest nad nim bez stackingu. */
   position: relative;
+  /* sticky footer: kolumna na całą wysokość okna → krótkie podstrony nie
+     zostawiają stopki „w powietrzu" (stopka ma margin-top:auto). */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+/* stopka dosuwa się do dołu, gdy treść nie wypełnia ekranu */
+.content-layer > footer {
+  margin-top: auto;
 }
 
 /* ── akordeon FAQ ────────────────────────────────────────────────────────
