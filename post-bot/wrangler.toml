@@ -1,0 +1,6 @@
+# Konfiguracja Cloudflare Worker dla bota /post.
+# Sekretów NIE trzymamy tutaj — ustawiamy je przez `wrangler secret put ...`
+# albo w dashboardzie (Settings → Variables, zaszyfrowane).
+name = "klarow-post-bot"
+main = "worker.js"
+compatibility_date = "2026-01-01"
