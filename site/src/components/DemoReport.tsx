@@ -27,11 +27,11 @@ import {
 import { DEMO_SAMPLE } from "@/data/demo-sample";
 import { useLang, pick, type Lang } from "@/i18n";
 
-/* Żywe DEMO modułu M2 „Raport zarządczy” — 100% client-side, dane fikcyjne.
+/* Żywe DEMO modułu M2 „Raport zarządczy”: 100% client-side, dane fikcyjne.
    Wejście: załaduj przykład / wklej CSV (także wklejka z Excela, tab) /
    wgraj plik. Wyjście: 3 KPI + wykres per-etap (statyczny SVG w gramatyce
    kitu) + tabela projektów z komentarzami PM + jawna ścieżka wyliczenia.
-   Odtworzenie wzorca od zera — zero kodu z wcześniejszych wdrożeń. */
+   Odtworzenie wzorca od zera: zero kodu z wcześniejszych wdrożeń. */
 
 const T = {
   pl: {
@@ -39,15 +39,15 @@ const T = {
     paste: "Wklej dane",
     upload: "Wgraj plik CSV",
     formatHint:
-      "Format: Projekt; Etap; Budżet; Koszt; Zaawansowanie %; Komentarz — separator „;”, przecinek lub tabulator (wklejka prosto z Excela działa).",
-    emptyTitle: "Raport zbuduje się tutaj — z Twoich danych",
+      "Format: Projekt; Etap; Budżet; Koszt; Zaawansowanie %; Komentarz. Separator „;”, przecinek lub tabulator (wklejka prosto z Excela działa).",
+    emptyTitle: "Raport zbuduje się tutaj, z Twoich danych",
     emptyBody: "Jedno kliknięcie na przykładowych danych albo wklej własną tabelę z Excela.",
     pastePh: "Projekt;Etap;Budżet;Koszt;Zaawansowanie;Komentarz\nHala A;Montaż;2400000;1620000;68;…",
     compute: "Przelicz raport",
     close: "Zamknij",
     srcExample: "dane przykładowe (fikcyjne)",
     srcPaste: "dane wklejone",
-    errTitle: "Walidacja wejścia — pominięte wiersze:",
+    errTitle: "Walidacja wejścia, pominięte wiersze:",
     errLine: "wiersz",
     kBudget: "Budżet portfela",
     kBudgetFoot: (p: number, r: number) => `${p} projektów · ${r} pozycji kosztowych`,
@@ -56,13 +56,13 @@ const T = {
     kRisk: "Projekty w ryzyku",
     kRiskFootOk: "wszystkie projekty w normie",
     kRiskFoot: (name: string) => `największe odchylenie: ${name}`,
-    chartTitle: "Koszt vs zaawansowanie — per etap",
-    chartSub: "wykorzystanie budżetu (%) na tle zaawansowania prac (%) — tu widać, którędy wycieka marża",
+    chartTitle: "Koszt vs zaawansowanie: per etap",
+    chartSub: "wykorzystanie budżetu (%) na tle zaawansowania prac (%): tu widać, którędy wycieka marża",
     demoTag: "DEMO · dane fikcyjne",
     legProgress: "zaawansowanie prac",
     legOk: "koszt w normie",
     legOver: (t: number) => `koszt przekracza postęp o >${t} p.p.`,
-    tableTitle: "Projekty — szczegóły i komentarze",
+    tableTitle: "Projekty: szczegóły i komentarze",
     thProject: "Projekt",
     thBudget: "Budżet",
     thCost: "Koszt",
@@ -76,31 +76,30 @@ const T = {
     stRisk: "Ryzyko",
     pathBtn: "Ścieżka wyliczenia",
     downloadBtn: "Pobierz wynik (CSV)",
-    pathTitle: "Jawna ścieżka wyliczenia — kalkulator, nie wróżka",
+    pathTitle: "Jawna ścieżka wyliczenia: kalkulator, nie wróżka",
     pathIntro:
       "Te same dane zawsze dają ten sam wynik: zero modeli językowych, zero losowości, zero sieci. Każdą liczbę z raportu można sprawdzić ręcznie:",
     path1: (cost: string, budget: string, pctv: string) => `Wykorzystanie budżetu = Σ koszt / Σ budżet = ${cost} / ${budget} = ${pctv}`,
     path2: (prog: string) => `Zaawansowanie portfela = Σ (budżet pozycji × zaawansowanie) / Σ budżet = ${prog}`,
     path3: (costPct: string, prog: string, dev: string) => `Odchylenie = ${costPct} − ${prog} = ${dev}`,
     path4: `Status projektu: OK ≤ ${OK_PP} p.p. · Obserwuj ${OK_PP}–${RISK_PP} p.p. · Ryzyko > ${RISK_PP} p.p.`,
-    footFake: "Dane w tym demo są fikcyjne — to prezentacja modułu „Raport zarządczy”.",
+    footFake: "Dane w tym demo są fikcyjne: to prezentacja modułu „Raport zarządczy”.",
     footLocal: "100% w Twojej przeglądarce: zero serwera, zero wysyłki danych (sprawdź w DevTools → Sieć).",
-    footMs: (ms: string) => `przeliczono w ${ms} ms`,
   },
   en: {
     loadExample: "Load example data",
     paste: "Paste data",
     upload: "Upload CSV file",
     formatHint:
-      "Format: Project; Stage; Budget; Cost; Progress %; Comment — separated by “;”, comma or tab (pasting straight from Excel works).",
-    emptyTitle: "The report builds itself here — from your data",
+      "Format: Project; Stage; Budget; Cost; Progress %; Comment. Separated by “;”, comma or tab (pasting straight from Excel works).",
+    emptyTitle: "The report builds itself here, from your data",
     emptyBody: "One click on example data, or paste your own table from Excel.",
     pastePh: "Project;Stage;Budget;Cost;Progress;Comment\nHall A;Assembly;2400000;1620000;68;…",
     compute: "Compute the report",
     close: "Close",
     srcExample: "example data (fictional)",
     srcPaste: "pasted data",
-    errTitle: "Input validation — skipped rows:",
+    errTitle: "Input validation, skipped rows:",
     errLine: "line",
     kBudget: "Portfolio budget",
     kBudgetFoot: (p: number, r: number) => `${p} projects · ${r} cost line items`,
@@ -109,13 +108,13 @@ const T = {
     kRisk: "Projects at risk",
     kRiskFootOk: "all projects within range",
     kRiskFoot: (name: string) => `largest deviation: ${name}`,
-    chartTitle: "Cost vs progress — per stage",
-    chartSub: "budget used (%) against work progress (%) — this is where the margin leaks",
+    chartTitle: "Cost vs progress: per stage",
+    chartSub: "budget used (%) against work progress (%): this is where the margin leaks",
     demoTag: "DEMO · fictional data",
     legProgress: "work progress",
     legOk: "cost within range",
     legOver: (t: number) => `cost ahead of progress by >${t} pp`,
-    tableTitle: "Projects — details and comments",
+    tableTitle: "Projects: details and comments",
     thProject: "Project",
     thBudget: "Budget",
     thCost: "Cost",
@@ -129,16 +128,15 @@ const T = {
     stRisk: "Risk",
     pathBtn: "Calculation path",
     downloadBtn: "Download result (CSV)",
-    pathTitle: "Explicit calculation path — a calculator, not a fortune teller",
+    pathTitle: "Explicit calculation path: a calculator, not a fortune teller",
     pathIntro:
       "The same data always gives the same result: no language models, no randomness, no network. Every number in the report can be checked by hand:",
     path1: (cost: string, budget: string, pctv: string) => `Budget used = Σ cost / Σ budget = ${cost} / ${budget} = ${pctv}`,
     path2: (prog: string) => `Portfolio progress = Σ (line budget × progress) / Σ budget = ${prog}`,
     path3: (costPct: string, prog: string, dev: string) => `Deviation = ${costPct} − ${prog} = ${dev}`,
     path4: `Project status: OK ≤ ${OK_PP} pp · Watch ${OK_PP}–${RISK_PP} pp · Risk > ${RISK_PP} pp`,
-    footFake: "The data in this demo is fictional — a showcase of the “Board report” module.",
+    footFake: "The data in this demo is fictional: a showcase of the “Board report” module.",
     footLocal: "Runs 100% in your browser: no server, no data upload (check DevTools → Network).",
-    footMs: (ms: string) => `computed in ${ms} ms`,
   },
 };
 
@@ -169,7 +167,7 @@ function devColor(dev: number): string {
 }
 
 /* Statyczny SVG słupkowy per-etap (gramatyka kitu: .grid/.tick/.axis, tokeny
-   var(--…), zero animacji JS — jedyny ruch to fade .chart-reveal na wejściu). */
+   var(--…), zero animacji JS; jedyny ruch to fade .chart-reveal na wejściu). */
 function StageChart({ agg, lang, t }: { agg: ReportAgg; lang: Lang; t: (typeof T)["pl"] | (typeof T)["en"] }) {
   const stages = agg.stages;
   const W = 720;
@@ -256,11 +254,10 @@ export default function DemoReport() {
 
   const result = useMemo(() => {
     if (csvText === null) return null;
-    const t0 = performance.now();
+    /* zero pomiaru czasu: ten sam plik ma dawać ten sam ekran co do znaku (demo-determinism) */
     const parsed = parseCsv(csvText);
     const agg = aggregate(parsed.rows);
-    const ms = performance.now() - t0;
-    return { parsed, agg, ms };
+    return { parsed, agg };
   }, [csvText]);
 
   const loadExample = () => {
@@ -290,7 +287,7 @@ export default function DemoReport() {
 
   const downloadCsv = () => {
     if (!result) return;
-    /* BOM — Excel PL poprawnie otwiera UTF-8 */
+    /* BOM: Excel PL poprawnie otwiera UTF-8 */
     const blob = new Blob(["\uFEFF" + projectsToCsv(result.agg, lang)], { type: "text/csv;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -355,7 +352,7 @@ export default function DemoReport() {
         )}
       </div>
 
-      {/* stan pusty — tu żyje jedyny btn-primary sekcji */}
+      {/* stan pusty: tu żyje jedyny btn-primary sekcji */}
       {result === null && (
         <div className="empty mt-4">
           <FileSpreadsheet className="e-ico" />
@@ -460,7 +457,7 @@ export default function DemoReport() {
                       </td>
                       <td>{statusChip(p.status, t)}</td>
                       <td className="text-[12.5px]" style={{ color: "var(--muted-foreground)", maxWidth: 260 }}>
-                        {p.comment === "" ? "—" : p.comment}
+                        {p.comment}
                       </td>
                     </tr>
                   ))}
@@ -515,7 +512,6 @@ export default function DemoReport() {
           <div className="legend">
             <span>{t.footFake}</span>
             <span>{t.footLocal}</span>
-            <span className="tnum">{t.footMs(result!.ms.toLocaleString(lang === "pl" ? "pl-PL" : "en-US", { maximumFractionDigits: 1 }))}</span>
           </div>
         </div>
       )}

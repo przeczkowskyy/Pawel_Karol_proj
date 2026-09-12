@@ -25,6 +25,10 @@ dopowiedzenia (dozwolone: „Gotowe do wdrożenia" przy `product`). KSeF = `prod
 klienta lub żywego przebiegu na `api-demo.ksef.mf.gov.pl` (D-10). Etykiety nie są hard-kodowane
 w komponentach; jedno źródło = `messaging.ts`.
 
+**Etykiety podmiotu, nie tylko dowodu (rozszerzenie 2026-09-12: brak zarejestrowanej działalności).** Do czasu rejestracji zakazane są w copy publicznym: „nasza firma", „nasza spółka", „nasz zespół", „nasi eksperci", „nasze biuro", „od X lat na rynku", „lata doświadczenia" (EN: „our company", „our team", „years of experience"), a w danych strukturalnych pola `legalName`, `vatID`, `taxID`, `duns`, `address`, `foundingDate`, `numberOfEmployees`. Zakazane też „wystawiamy fakturę VAT" i „faktura z odroczonym terminem". Dozwolone: „KLAROW", „dwie osoby", „budujemy", `founder` w JSON-LD po D6, oraz opis modelu rozliczenia („stała cena za ustalony zakres", „płatność 50/50"), bo opisuje treść przyszłej umowy, a nie stan dzisiejszy; towarzyszy mu zdanie **„Cenę i zakres zapisujemy w umowie przed startem."** / „We put the price and scope in a contract before we start." Nazwa marki w stopce i w JSON-LD zostaje; nie dopisujemy do niej formy prawnej.
+
+**Lista fraz zakazanych przy pozycjach w `/narzedzia`** (uzupełnienie testu, nie zmiana zasady): „WDROŻONE", „Wdrożone u klienta", „Realizacja u klienta", „u klientów", „nasi klienci", „zaufali nam", „referencje", „case study", „sprawdzone w boju", „produkcyjnie od lat", „Gotowe" bez dopowiedzenia (dozwolone „Gotowe do wdrożenia" przy `product`), „gwarantujemy oszczędność", „zwrot w X miesięcy", „oszczędzisz etat", „nie musisz zatrudniać"; EN: „DEPLOYED", „deployed at a client", „our clients", „trusted by", „customers include", „battle-tested", „in production for years", „guaranteed savings", „ROI in X months", „cut headcount". Zakazana też nazwa własna i domena produktu KSeF (decyzja o odbrandowaniu z 2026-07-27).
+
 ## Mechanizm awarii (dlaczego)
 
 Pierwsza rozmowa z CFO zaczyna się od „u kogo to wdrożyliście?". Etykieta „WDROŻONE" przy produkcie
@@ -63,6 +67,12 @@ const label = MESSAGING.proofLabels[tool.kind];
 grep -rniE "WDROŻONE|Wdrożone u klient|realizacja u klienta|deployed at (a )?client" site/src --include=*.tsx --include=*.ts | grep -v "data/messaging.ts"
 # liczba mnoga klientów: 0 trafień (do 2. klienta)
 grep -rniE "u klientów|nasi klienci|naszych klientów|our clients|customers include" site/src site/public/llms.txt 2>/dev/null
+# etykiety podmiotu przed rejestracją działalności: 0 trafień
+grep -rniE "nasza firma|nasza spółka|nasz zespół|nasi eksperci|od [0-9]+ lat|lata doświadczenia|our company|our team|years of experience" site/src site/dist
+grep -rniE "\"(legalName|vatID|taxID|duns|foundingDate|numberOfEmployees)\"" site/src/components/Seo.tsx site/dist
+grep -rniE "wystawiamy fakturę|faktura VAT" site/src site/dist
+# frazy bez pokrycia przy pozycjach w /narzedzia: 0 trafień
+grep -rniE "case study|sprawdzone w boju|battle-tested|trusted by|zaufali nam|produkcyjnie od lat|gwarantujemy oszczędność|zwrot w [0-9]+ miesi|oszczędzisz etat|nie musisz zatrudniać|cut headcount" site/src site/dist
 # każdy kind: "case" ma wpis w DECISIONS.md
 grep -n 'kind: "case"' site/src/data/tools.ts; grep -niE "zgoda|umowa IP" docs/DECISIONS.md
 ```

@@ -16,6 +16,8 @@ Kolejność jest twarda i nie wolno jej odwracać. Zanim na `klarow.com` pojawi 
 4. `Content-Security-Policy` w `site/public/_headers` z wymienionymi hostami (`frame-src`, `script-src`, `connect-src`, `img-src`),
 5. jeśli embed zapisuje cookies nieniezbędne albo profiluje: **click-to-load** (iframe montowany dopiero po kliknięciu użytkownika w zastępczy przycisk) albo zgoda zgodna z `legal-analytics-cookieless-or-consent`.
 
+**Właściciel konta u dostawcy = administrator z `CONTROLLER`** (korekta 2026-09-12), także gdy jest osobą fizyczną bez NIP-u; wpis w kolumnie „właściciel konta" w `references/integrations-registry.md` jest częścią punktu 3.
+
 Do czasu spełnienia wszystkich pięciu obowiązuje faza 1 (D-15 a): Cal.com jako **zwykły link zewnętrzny** `target="_blank" rel="noopener noreferrer"`, zero skryptów, zero ramek; `/rodo` i tak opisuje Cal.com jako usługę, na którą użytkownik przechodzi. Ta reguła pilnuje warstwy prawnej (treść `/rodo`, podstawa, transfer, zgoda); `integ-embed-requires-privacy` pilnuje warstwy technicznej (rejestr, CSP, brak skryptów spoza allowlisty). Obie muszą przejść; w raporcie audytu zgłaszaj tę, której brakuje, a przy obu brakach — wersję prawną.
 
 To wymaganie produktowe, nie opinia prawna; kwalifikacja i treść klauzul do przeglądu radcy (D-21).

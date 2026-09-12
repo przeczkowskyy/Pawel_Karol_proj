@@ -4,13 +4,16 @@ import { BrowserRouter } from "react-router-dom";
 import "./styles/globals.css";
 import "./styles/company-ui.css";
 import { LangProvider } from "./i18n";
+import { MotionProvider } from "./motion/provider";
 import App from "./App";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
       <LangProvider>
-        <App />
+        <MotionProvider>
+          <App />
+        </MotionProvider>
       </LangProvider>
     </BrowserRouter>
   </StrictMode>

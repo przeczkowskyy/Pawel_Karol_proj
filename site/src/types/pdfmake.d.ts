@@ -1,4 +1,4 @@
-/* Minimalne deklaracje dla lazy-importów pdfmake (bez @types — używamy
+/* Minimalne deklaracje dla lazy-importów pdfmake (bez @types, bo używamy
    tylko createPdf(...).download()). */
 declare module "pdfmake/build/pdfmake" {
   const pdfMake: {

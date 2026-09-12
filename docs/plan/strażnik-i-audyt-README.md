@@ -9,15 +9,16 @@
 
 | Co | Gdzie | Po co |
 |---|---|---|
-| Plan przebudowy strony (v2) | `docs/plan/strona-v2-plan.md` | Pełna specyfikacja: trasy, sekcje, copy, motion, budżety, 6 faz (F0–F5), 14–17 dni roboczych |
-| Decyzje founderów | `docs/plan/decyzje-founderow-v2.md` | 24 pytania z opcjami i rekomendacją + fakty do potwierdzenia (F1–F5). **To czytasz jako drugie** |
-| Strażnik zasad | `.claude/skills/klarow-guardian/` | 144 reguły z ID, severity i testem mechanicznym; rejestr liczb, integracji, przekierowań; checklisty |
+| Plan przebudowy strony (v2) | `docs/plan/strona-v2-plan.md` | Pełna specyfikacja: trasy, sekcje, copy, motion, budżety, 6 faz (F0–F5), 15–16 dni roboczych |
+| **Korekta planu (2026-09-12)** | `docs/plan/reframe-2026-09-12.md` | **Plan został skorygowany po dyrektywie founderów** (brak zarejestrowanej działalności i NIP; strona jest wizytówką i CV dwóch osób z naciskiem na pokazanie narzędzi): co przestało być prawdziwe i dlaczego, w 5 minut. **To czytasz jako pierwsze** |
+| Decyzje founderów | `docs/plan/decyzje-founderow-v2.md` | 35 pytań z opcjami i rekomendacją (D1–D35, w tym nowa część G po korekcie) + fakty do potwierdzenia (F1–F6). **To czytasz jako drugie** |
+| Strażnik zasad | `.claude/skills/klarow-guardian/` | 145 reguł z ID, severity i testem mechanicznym; rejestr liczb, integracji, przekierowań; checklisty |
 | Audytorzy | `.claude/agents/` (8 plików) | 7 audytorów read-only (design/a11y, motion, kod, integracje, SEO, copy, wycieki marki) + orkiestrator |
 | Workflow audytu | `.claude/workflows/ui-audit.js`, `.claude/skills/ui-audit/SKILL.md` | Uruchamia bramki, audytorów, weryfikację adwersaryjną i raport `INDEX.md` |
 | Skrypty bramek | `.claude/skills/klarow-guardian/scripts/` (8 plików `.mjs`) | Deterministyczne sprawdzenia bez modelu — te same wyniki za każdym razem |
 
 Struktura strażnika: `SKILL.md` (115 linii — to czyta agent na starcie) · `AGENTS.md` (generowany,
-pełna treść 144 reguł) · `rules/` (jedna reguła = jeden plik) · `references/` (13 plików: dozwolone
+pełna treść 145 reguł) · `rules/` (jedna reguła = jeden plik) · `references/` (13 plików: dozwolone
 liczby, tokeny, integracje, przekierowania, locki designu, ściąga motion, pipeline assetów, dziennik
 decyzji, znane awarie) · `checklists/` (5: pre-flight, Definition of Done, szablon raportu, nowy
 asset, synchronizacja przekazu) · `baseline/` (zamrożony dług z 2026-09-12).
@@ -84,13 +85,13 @@ Wyłączenie: skasuj sekcję `hooks`. Nic poza tym się nie zmienia.
 
 ## Co jest jeszcze do decyzji
 
-1. **24 decyzje D1–D24** z `decyzje-founderow-v2.md` — bez nich faza F0 nie rusza. Najcięższe:
-   przekaz i jedno zdanie marki, font, trial Higgsfield (wideo w hero), zakres wyceny na stronie,
-   hooki (D21), moment podniesienia React 19.2.7 → 19.3.0.
-2. **5 faktów do potwierdzenia (F1–F5)**: czy repo GitHub jest prywatne (leżą w nim materiały
-   poprzedniej firmy i `leads.json`), rotacja klucza Anthropic z appki KSeF, licencja Motion+,
-   dane administratora do klauzuli RODO, zgoda na trzymanie `leads.json` na OneDrive.
-3. **`/rodo` przed pierwszym kontaktem handlowym** — twardy bloker prawny (art. 14 RODO). Trasa
+1. **35 decyzji D1–D35** z `decyzje-founderow-v2.md` (D25–D35 doszły z korektą 2026-09-12) — bez nich faza F0 nie rusza. Najcięższe:
+   przekaz i jedno zdanie marki, font, kto jest administratorem danych (D25), żywe demo na stronie
+   głównej (D29), kolejność sekcji (D32), hooki (D21), moment podniesienia React 19.2.7 → 19.3.0.
+2. **6 faktów do potwierdzenia (F1–F6)**: czy repo GitHub jest prywatne (leżą w nim materiały
+   poprzedniej firmy i `leads.json`), **tożsamość administratora i nazwisko Pawła** (blokują publikację),
+   rotacja klucza Anthropic z appki KSeF, status umowy IP, zakres liczby „3 dni".
+3. **`/rodo`: dwa progi** (korekta 2026-09-12). Publikacja strony wymaga wyłącznie tożsamości administratora (`SITE_PUBLISHABLE`); dopiero pierwszy kontakt handlowy wymaga kompletu art. 14 i zgód PKE (`OUTREACH_READY`). Rejestracja działalności nie jest warunkiem żadnego z nich, jest warunkiem pierwszej faktury. **`/rodo` przed pierwszym kontaktem handlowym** — twardy bloker prawny (art. 14 RODO). Trasa
    kanoniczna to `/rodo`, `/polityka-prywatnosci` = przekierowanie 301. Treść pisze Claude Code,
    **zatwierdza radca prawny**; do przeglądu strona ma `noindex`, ale jest publicznie dostępna,
    bo linkują do niej wszystkie szablony outboundu.

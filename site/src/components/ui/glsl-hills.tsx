@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 
-/* GLSLHills (port 21st.dev) — animowane wzgórza z szumu Perlina (RawShader),
+/* GLSLHills (port 21st.dev): animowane wzgórza z szumu Perlina (RawShader),
    przemalowane na stal Klarow. Poprawki względem oryginału (zasady kitu):
    - cleanup: cancelAnimationFrame + dispose geometrii/materiału/renderera,
    - pauza przy document.hidden (GPU nie mieli w tle),
@@ -138,7 +138,7 @@ export interface GLSLHillsProps {
   speed?: number;
   /* Docelowy zoom tła (1 = baza). Parent mutuje ref (bez re-renderu),
      pętla renderująca płynnie dochodzi do celu (kamera zbliża się do
-     wzgórz) — deck ustawia głębszy zoom z każdym kolejnym slajdem. */
+     wzgórz), a deck ustawia głębszy zoom z każdym kolejnym slajdem. */
   zoomRef?: React.MutableRefObject<number>;
 }
 
@@ -156,7 +156,7 @@ export const GLSLHills = ({
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    /* Tło jest ozdobą — bez WebGL (Lockdown Mode, wyczerpane konteksty przy
+    /* Tło jest ozdobą: bez WebGL (Lockdown Mode, wyczerpane konteksty przy
        wielu kartach) po prostu go nie ma; treść strony zostaje na statycznym
        gradiencie .bg-layer. Sonda na osobnym canvasie + natychmiastowe
        zwolnienie kontekstu; konstruktor renderera dodatkowo w try/catch,
@@ -180,7 +180,7 @@ export const GLSLHills = ({
     try {
       renderer = new THREE.WebGLRenderer({ canvas, antialias: false });
     } catch (err) {
-      console.warn("Tło WebGL wyłączone — brak kontekstu:", err);
+      console.warn("Tło WebGL wyłączone, brak kontekstu:", err);
       geometry.dispose();
       material.dispose();
       return;
@@ -201,7 +201,7 @@ export const GLSLHills = ({
     };
 
     const lookTarget = new THREE.Vector3(0, 28, 0);
-    /* zoom: wygładzanie wykładnicze do celu z zoomRef (materiał „fluid" —
+    /* zoom: wygładzanie wykładnicze do celu z zoomRef (materiał „fluid”:
        tło dopływa na miejsce ~1 s po przełączeniu slajdu, zero overshootu) */
     let zoom = Math.max(1, zoomRef?.current ?? 1);
 
@@ -227,7 +227,7 @@ export const GLSLHills = ({
 
     let raf: number | null = null;
     let last = 0;
-    const FRAME_MS = 33; /* ~30 fps — tło nie potrzebuje 60 */
+    const FRAME_MS = 33; /* ~30 fps, tło nie potrzebuje 60 */
 
     const loop = (now: number) => {
       raf = requestAnimationFrame(loop);

@@ -1,24 +1,28 @@
 import { renderToStaticMarkup } from "react-dom/server";
-import { getTools, DEPTS, type ToolItem } from "@/data/tools";
+import { DEPTS, type ToolItem } from "@/data/tools";
+import { getToolsWithSeo } from "@/data/toolsSeo";
 import { FAQ_I18N } from "@/data/faq";
-import { PAGES_SEO } from "@/data/pagesSeo";
+import { NOT_FOUND_COPY, PAGES_SEO, SKIP_LINK } from "@/data/pagesSeo";
+import { MESSAGING } from "@/data/messaging";
+import { RODO, type RodoObjection, type RodoSection } from "@/data/rodo";
+import { EMAIL, MAIL_HREF, ORIGIN, PHONE_DISPLAY, PHONE_E164, PHONE_HREF } from "@/data/contact";
 import { ORG_JSONLD, toolJsonLd, faqPageJsonLd } from "@/components/Seo";
 
-/* Prerender (SSG) — budowany osobno przez `vite build --ssr` i odpalany
+/* Prerender (SSG): budowany osobno przez `vite build --ssr` i odpalany
    node'em PO buildzie klienta (scripts/prerender.mjs). Generuje:
-   - statyczny HTML „SEO shell" dla stron głównych (/, /narzedzia, /oferta,
-     /faq) i 12 podstron /narzedzia/* — meta, JSON-LD i PEŁNA treść tekstowa
+   - statyczny HTML „SEO shell” dla tras /, /narzedzia, /oferta, /faq, /rodo,
+     404 i 13 podstron /narzedzia/*; meta, JSON-LD i PEŁNA treść tekstowa
      są w HTML-u bez JS (crawlery Google/Bing/LLM bez wykonywania JS widzą
      wszystko; strona degraduje się łaskawie, gdy JS nie wstanie),
-   - sitemap.xml i llms.txt liczone z tools.ts (jedno źródło prawdy).
+   - sitemap.xml (trasy BEZ noindex) i llms.txt, liczone z tools.ts
+     i messaging.ts (jedno źródło prawdy).
    React po zamontowaniu PODMIENIA zawartość #root (createRoot().render
-   czyści kontener) — shell żyje tylko do startu aplikacji.
-   Zero window/document, zero dat, zero losowości — czysty render. */
+   czyści kontener): shell żyje tylko do startu aplikacji.
 
-const ORIGIN = "https://klarow.com";
-const EMAIL = "kontakt@klarow.com";
-const PHONE_DISPLAY = "786 296 426";
-const PHONE_HREF = "tel:+48786296426";
+   Zasady tego pliku: zero window/document, zero dat, zero losowości, zero
+   importów z motion/* (SSR build pada na `window is not defined`), zero prozy
+   pisanej tutaj: copy przychodzi z src/data/* dokładnie tak samo jak do
+   komponentów Reacta (code-single-source-copy). */
 
 /* priorytety sitemap dla podstron narzędzi */
 const SITEMAP_PRIORITY: Record<string, string> = {
@@ -41,10 +45,14 @@ export interface RouteOut {
   path: string;
   jsonLd: object[];
   bodyHtml: string;
+  /* trasa poza indeksem: meta robots noindex i brak wpisu w sitemap.xml */
+  noindex?: boolean;
+  /* priorytet w sitemapie; pomijany dla tras z noindex */
+  priority?: string;
 }
 
 /* ── wspólne drobiazgi układu shella (klasy z kitu + utility już użyte
-      w aplikacji — Tailwind na pewno je wygenerował) ─────────────────── */
+      w aplikacji, Tailwind na pewno je wygenerował) ─────────────────── */
 
 const MUTED = { color: "var(--muted-foreground)" } as const;
 const HEAD = { color: "var(--heading)" } as const;
@@ -56,7 +64,20 @@ function ShellChrome({ children }: { children: React.ReactNode }) {
     <>
       <div className="bg-layer" aria-hidden="true"></div>
       <div className="content-layer">
-        <main className="max-w-6xl mx-auto px-6" style={{ paddingTop: 40, paddingBottom: 64 }}>
+        {/* ten sam komplet landmarków co po starcie Reacta: skip-link, potem
+            dokładnie jeden <main id="main"> (a11y-main-and-skip-link) */}
+        <a
+          href="#main"
+          className="skip-link btn btn-secondary"
+          style={{ position: "fixed", left: 16, top: -9999, zIndex: 100 }}
+        >
+          {SKIP_LINK.pl}
+        </a>
+        <main
+          id="main"
+          className="max-w-6xl mx-auto px-6"
+          style={{ paddingTop: 40, paddingBottom: 64 }}
+        >
           {children}
         </main>
       </div>
@@ -79,14 +100,21 @@ function ShellNav() {
   );
 }
 
+/* Kontakt plus link do klauzuli: /rodo musi być osiągalne z KAŻDEJ trasy
+   (legal-rodo-page-required), a shell nie ma stopki Reacta. */
 function ContactLine() {
   return (
-    <p className="mt-6 text-sm" style={BODY}>
-      Kontakt: <a href={`mailto:${EMAIL}`} style={LINK}>{EMAIL}</a>
-      {" · "}
-      <a href={PHONE_HREF} style={LINK}>{PHONE_DISPLAY}</a>
-      {" · Polska / USA"}
-    </p>
+    <>
+      <p className="mt-6 text-sm" style={BODY}>
+        Kontakt: <a href={MAIL_HREF} style={LINK}>{EMAIL}</a>
+        {" · "}
+        <a href={PHONE_HREF} style={LINK}>{PHONE_DISPLAY}</a>
+        {" · Polska / USA"}
+      </p>
+      <p className="mt-2 text-xs" style={MUTED}>
+        <a href="/rodo" style={LINK}>RODO i prywatność</a>
+      </p>
+    </>
   );
 }
 
@@ -105,28 +133,28 @@ function HomeShell() {
     <ShellChrome>
       <span className="brand-word" style={{ fontSize: 15 }}>KLAROW</span>
       <h1 className="mt-4 text-4xl font-extrabold tracking-tight" style={HEAD}>
-        Porządek w danych dla firm, które wyrosły na Excelu.
+        {MESSAGING.oneLiner.pl}
       </h1>
       <p className="mt-4 max-w-3xl text-lg" style={BODY}>
-        Budujemy <strong>custom narzędzia pod Twój proces</strong>: automatyzacja, kontroling,
-        integracje (m.in. z KSeF), importy z ERP i obieg dokumentów. <strong>Wdrożenie w dni,
-        nie w miesiące</strong> — a Twoje dane nie opuszczają firmy (on-premise). Dla firm
-        20–250 osób, środowisko Windows + Excel.
+        {MESSAGING.subtext.pl}
+      </p>
+      <p className="mt-3 max-w-3xl text-sm" style={MUTED}>
+        {MESSAGING.zeroVendorCloud.pl}
       </p>
       <ContactLine />
 
       <H2>Co możemy zbudować</H2>
       <p className="mt-2 max-w-3xl text-sm" style={MUTED}>
-        Nie mamy zamkniętego katalogu — jeśli to żyje w Excelu, plikach albo w ERP, zwykle da się
-        to zautomatyzować. Rodzaje narzędzi, które robimy:
+        Nie mamy zamkniętego katalogu: jeśli proces żyje w plikach albo w ERP, zwykle da się go
+        zautomatyzować. Rodzaje narzędzi, które robimy:
       </p>
       <ul className="mt-2 flex flex-col gap-1.5 text-sm" style={BODY}>
-        <li><strong>Raporty i kontroling</strong> — panele zarządcze, marża i estymaty na żywo, zamknięcie miesiąca.</li>
-        <li><strong>Integracje i e-dokumenty</strong> — KSeF, e-faktury, API urzędowe, wymiana z ERP i systemami.</li>
-        <li><strong>Importy i scalanie danych</strong> — ERP ↔ Excel, łączenie źródeł, rekoncyliacja co do grosza.</li>
-        <li><strong>Obieg dokumentów</strong> — akceptacje, protokoły, rejestry, koniec obiegu w mailu.</li>
-        <li><strong>Panele i dashboardy</strong> — produkcja, KPI, płynność w jednym kadrze.</li>
-        <li><strong>Porządek w danych</strong> — audyt jakości, deduplikacja, czyszczenie i migracje.</li>
+        <li><strong>Raporty i kontroling</strong>: panele zarządcze, marża i estymaty na żywo, zamknięcie miesiąca.</li>
+        <li><strong>Integracje i e-dokumenty</strong>: KSeF, e-faktury, API urzędowe, wymiana z ERP i systemami.</li>
+        <li><strong>Importy i scalanie danych</strong>: ERP ↔ Excel, łączenie źródeł, rekoncyliacja co do grosza.</li>
+        <li><strong>Obieg dokumentów</strong>: akceptacje, protokoły, rejestry, koniec obiegu w mailu.</li>
+        <li><strong>Panele i dashboardy</strong>: produkcja, KPI, płynność w jednym kadrze.</li>
+        <li><strong>Porządek w danych</strong>: audyt jakości, deduplikacja, czyszczenie i migracje.</li>
       </ul>
 
       <H2>Co już zrobiliśmy</H2>
@@ -135,37 +163,37 @@ function HomeShell() {
         (~30 równoległych projektów, klienci w USA): ~10 000 wierszy kosztów z ERP miesięcznie,
         raport zarządczy w kilkanaście sekund zamiast godzin, kontrola sum co do grosza.
         Osobnym wdrożeniem jest <a href="/narzedzia/kontroling-ksef" style={LINK}>kontroling na
-        danych z KSeF</a> — read-only integracja z oficjalnym API Ministerstwa Finansów.
+        danych z KSeF</a>: read-only integracja z oficjalnym API Ministerstwa Finansów.
       </p>
 
-      <H2>To działa, więc boisz się ruszać — słusznie</H2>
+      <H2>To działa, więc boisz się ruszać. I słusznie</H2>
       <p className="mt-2 max-w-3xl text-sm" style={MUTED}>
-        Nie każemy Ci migrować z Excela ani zmieniać sposobu pracy — wchodzimy obok Twoich plików.
+        Nie każemy Ci migrować z Excela ani zmieniać sposobu pracy. Wchodzimy obok Twoich plików.
         Makro po kimś, kto odszedł; ręczne przeklejanie tysięcy wierszy między ERP a arkuszami;
-        ciche pomyłki wychodzące u zarządu; raport składany godzinami; wszystko na jednej osobie —
+        ciche pomyłki wychodzące u zarządu; raport składany godzinami; wszystko na jednej osobie:
         te bóle znamy i to je usuwamy.
       </p>
 
       <H2>Dwa twarde wyróżniki: zero chmury i zero wróżenia</H2>
       <p className="mt-2 max-w-3xl text-sm" style={BODY}>
-        „On-premise" deklaruje dziś każdy — my idziemy krok dalej. Narzędzia Klarow nie mają nawet
+        „On-premise” deklaruje dziś każdy, my idziemy krok dalej. Narzędzia Klarow nie mają nawet
         którędy wysłać Twoich danych: działają lokalnie, bez API, bez serwera, a dema na tej
-        stronie liczą w 100% w przeglądarce. Druga rzecz: determinizm. Te same dane wejściowe dają
-        zawsze ten sam wynik — kalkulator, nie wróżka — więc każdą liczbę możesz policzyć ręcznie.
+        stronie liczą w 100% w przeglądarce. Druga rzecz: {MESSAGING.determinism.pl} Każdą liczbę
+        możesz sprawdzić ręcznie dzięki jawnej ścieżce wyliczenia.
       </p>
 
       <H2>Zobacz konkrety</H2>
       <ul className="mt-2 flex flex-col gap-1.5 text-sm" style={BODY}>
         <li>
-          <a href="/narzedzia" style={LINK}>Przykłady realizacji</a> — klikalne dema i wdrożenia
+          <a href="/narzedzia" style={LINK}>Przykłady realizacji</a>: klikalne dema i wdrożenia
           u klienta (m.in. integracja z KSeF); to próbki, a Twoje narzędzie budujemy pod Twój proces.
         </li>
         <li>
-          <a href="/oferta" style={LINK}>Oferta: Pilot na kopii</a> — jeden proces, efekt w dni,
+          <a href="/oferta" style={LINK}>Oferta: pilot na kopii</a>, czyli jeden proces, efekt w dni,
           płatność 50/50; wycena po bezpłatnej diagnozie.
         </li>
         <li>
-          <a href="/faq" style={LINK}>Najczęstsze pytania</a> — bezpieczeństwo danych, koszt,
+          <a href="/faq" style={LINK}>Najczęstsze pytania</a>: bezpieczeństwo danych, koszt,
           zgodność z ERP, los działających makr.
         </li>
       </ul>
@@ -173,17 +201,19 @@ function HomeShell() {
       <section lang="en">
         <H2>Klarow in English</H2>
         <p className="mt-2 max-w-3xl text-sm" style={BODY}>
-          We build custom tools around your process — automation, controlling, integrations
-          (including KSeF), ERP imports and document workflows — deployed in days, not months,
-          running on-premise so your data never leaves your company. For 20–250-person companies
-          on Windows + Excel. See the <a href="/narzedzia" style={LINK}>tools we've built</a>, the{" "}
-          <a href="/oferta" style={LINK}>offer</a> and the <a href="/faq" style={LINK}>FAQ</a>.
+          {MESSAGING.oneLiner.en} {MESSAGING.subtext.en}
+        </p>
+        <p className="mt-2 max-w-3xl text-sm" style={MUTED}>
+          {MESSAGING.determinism.en} See the{" "}
+          <a href="/narzedzia" style={LINK}>work we've done</a>, the{" "}
+          <a href="/oferta" style={LINK}>offer</a>, the <a href="/faq" style={LINK}>FAQ</a> and our{" "}
+          <a href="/rodo" style={LINK}>privacy notice</a>.
         </p>
       </section>
 
       <p className="mt-8 text-xs" style={MUTED}>
         Interaktywna wersja strony (żywe dema) uruchamia się z JavaScriptem.
-        © 2026 Klarow · Automatyzacja i porządek w danych dla MŚP · Polska / USA
+        © 2026 Klarow · Polska / USA
       </p>
     </ShellChrome>
   );
@@ -196,7 +226,7 @@ function ToolsShell({ pl, en }: { pl: ToolItem[]; en: ToolItem[] }) {
     <ShellChrome>
       <ShellNav />
       <h1 className="mt-4 text-4xl font-extrabold tracking-tight" style={HEAD}>
-        Przykłady realizacji — dema i wdrożenia
+        Przykłady realizacji: dema i wdrożenia
       </h1>
       <p className="mt-4 max-w-3xl text-sm" style={MUTED}>
         To nie pełna lista usług, tylko próbki tego, co już zbudowaliśmy. Większość odpalisz na
@@ -214,7 +244,7 @@ function ToolsShell({ pl, en }: { pl: ToolItem[]; en: ToolItem[] }) {
             {pl.filter((t) => t.dept === d.key).map((t) => (
               <li key={t.slug} className="text-[13.5px]" style={BODY}>
                 <a href={`/narzedzia/${t.slug}`} style={LINK}>{t.name}</a>
-                {" — "}
+                {": "}
                 {t.tagline}
               </li>
             ))}
@@ -228,7 +258,7 @@ function ToolsShell({ pl, en }: { pl: ToolItem[]; en: ToolItem[] }) {
           {en.map((t) => (
             <li key={t.slug}>
               <a href={`/narzedzia/${t.slug}`} style={LINK}>{t.name}</a>
-              {" — "}
+              {": "}
               {t.tagline}
             </li>
           ))}
@@ -247,33 +277,33 @@ function OfferShell() {
     <ShellChrome>
       <ShellNav />
       <h1 className="mt-4 text-4xl font-extrabold tracking-tight" style={HEAD}>
-        Oferta: Pilot na kopii — efekt w dni, nie w miesiące
+        Oferta: pilot na kopii, efekt w dni, nie w miesiące
       </h1>
       <p className="mt-4 max-w-3xl text-sm" style={BODY}>
         Jeden proces, stała cena, ≤10 dni roboczych. Budujemy na kopii Twoich plików, a pierwszy
-        namacalny efekt — raport błędów z Twoich prawdziwych danych — widzisz w dniu 5. Zapis na
+        namacalny efekt (raport błędów z Twoich prawdziwych danych) widzisz w dniu 5. Zapis na
         oryginałach dopiero po Twojej akceptacji.
       </p>
       <ul className="mt-3 flex flex-col gap-1.5 text-sm" style={BODY}>
         <li>· Dzień 0: wybór procesu i zamrożenie zakresu (wliczony)</li>
         <li>· Dni 1–4: budowa wyłącznie na kopiach Twoich plików</li>
         <li>· Dzień 5: pokaz na żywo + raport błędów z Twoich prawdziwych danych</li>
-        <li>· Płatność 50/50 — druga rata po działającym odbiorze</li>
-        <li>· Zanim cokolwiek kupisz: przyślij nam swój najgorszy Excel — w 30 minut pokażemy na próbce, co da się z nim zrobić</li>
+        <li>· Płatność 50/50: druga rata po działającym odbiorze</li>
+        <li>· Zanim cokolwiek kupisz: przyślij nam swój najgorszy Excel. W 30 minut pokażemy na próbce, co da się z nim zrobić</li>
       </ul>
 
       <H2>Dlaczego dni, nie miesiące</H2>
       <p className="mt-2 max-w-3xl text-sm" style={BODY}>
         Diagnoza na kopiach Twoich plików, zakres zamrożony na piśmie w Dniu 0; budowa na gotowych
-        wzorcach — silnik (zapis, walidacja, backup, log audytowy) już istnieje; TEST bez zapisu
+        wzorcach: silnik (zapis, walidacja, backup, log audytowy) już istnieje; TEST bez zapisu
         (pełna lista zmian do przejrzenia, w Twoich plikach nic się nie dzieje); PROD dopiero po
-        Twojej akceptacji — z backupem przed każdą zmianą i logiem operacji.
+        Twojej akceptacji, z backupem przed każdą zmianą i logiem operacji.
       </p>
 
       <H2>Zaufanie na mechanizmach, nie przymiotnikach</H2>
       <p className="mt-2 max-w-3xl text-sm" style={BODY}>
         On-premise: dane nie opuszczają firmy, a po wdrożeniu nie mamy do nich dostępu. Kod,
-        dokumentacja i runbook zostają u Ciebie — narzędzie działa nawet bez nas. Stała cena i
+        dokumentacja i runbook zostają u Ciebie: narzędzie działa nawet bez nas. Stała cena i
         zakres na piśmie; druga rata dopiero po działającym odbiorze.
       </p>
 
@@ -282,20 +312,20 @@ function OfferShell() {
         Będzie nam po drodze z firmami produkcyjnymi, budowlanymi i dystrybucyjnymi (20–250 osób,
         Windows + Excel), którym raportowanie i tak żyje w Excelu, a chcą efektu w dni. Nie robimy
         migracji do chmury ani wymiany ERP; nie działamy na Google Sheets / Mac i nie sprzedajemy
-        godzin (body-leasing) — sprzedajemy rezultat.
+        godzin (body-leasing); sprzedajemy rezultat.
       </p>
 
       <H2>Jak wygląda współpraca</H2>
       <p className="mt-2 max-w-3xl text-sm" style={BODY}>
         Od pierwszej wiadomości, przez bezpłatną diagnozę na próbce i pilot na kopii, do działającego
-        narzędzia i opieki — z dwiema decyzjami, które zawsze należą do Ciebie: co budujemy (zakres
+        narzędzia i opieki, z dwiema decyzjami, które zawsze należą do Ciebie: co budujemy (zakres
         w Dniu 0) i kiedy wchodzimy na oryginały (po akceptacji TEST-u).
       </p>
 
       <section lang="en">
         <H2>The offer (English)</H2>
         <p className="mt-2 max-w-3xl text-sm" style={BODY}>
-          Pilot on a copy — one process, a fixed price, ≤10 business days. We build on a copy of your
+          Pilot on a copy: one process, a fixed price, ≤10 business days. We build on a copy of your
           files; you see the first tangible result (an error report from your real data) on day 5.
           Writes to the originals only after your approval. On-premise, deterministic, 50/50 payment.
         </p>
@@ -313,10 +343,10 @@ function FaqShell() {
     <ShellChrome>
       <ShellNav />
       <h1 className="mt-4 text-4xl font-extrabold tracking-tight" style={HEAD}>
-        Najczęstsze obiekcje — odpowiadamy wprost
+        Najczęstsze obiekcje: odpowiadamy wprost
       </h1>
       <p className="mt-3 max-w-3xl text-sm" style={MUTED}>
-        Te same pytania słyszymy w każdej rozmowie. Oto odpowiedzi — o bezpieczeństwie danych,
+        Te same pytania słyszymy w każdej rozmowie. Oto odpowiedzi: o bezpieczeństwie danych,
         koszcie pilota, zgodności z Twoim ERP i losie działających makr.
       </p>
       {FAQ_I18N.pl.map((f) => (
@@ -355,8 +385,8 @@ function ToolShell({ pl, en, all }: { pl: ToolItem; en: ToolItem; all: ToolItem[
       <p className="mt-3 max-w-3xl text-[15px] leading-relaxed" style={BODY}>{pl.tagline}</p>
       <p className="mt-2 text-[12.5px]" style={MUTED}>
         {pl.kind === "case"
-          ? "WDROŻENIE u klienta — to realna integracja/aplikacja, nie demo w przeglądarce (wymaga połączenia z zewnętrznym systemem i serwera). Poniżej opis, jak działa i jak jest zbudowana; na żywo pokażemy ją na Twoich danych."
-          : "DEMO na danych przykładowych — pełna, interaktywna wersja działa na tej stronie po uruchomieniu JavaScriptu: w całości w Twojej przeglądarce, bez logowania i bez chmury."}
+          ? "WDROŻENIE u klienta: to realna integracja/aplikacja, nie demo w przeglądarce (wymaga połączenia z zewnętrznym systemem i serwera). Poniżej opis, jak działa i jak jest zbudowana; na żywo pokażemy ją na Twoich danych."
+          : "DEMO na danych przykładowych: pełna, interaktywna wersja działa na tej stronie po uruchomieniu JavaScriptu: w całości w Twojej przeglądarce, bez logowania i bez chmury."}
       </p>
 
       <H2>Co zastępuje</H2>
@@ -416,27 +446,163 @@ function ToolShell({ pl, en, all }: { pl: ToolItem; en: ToolItem; all: ToolItem[
   );
 }
 
+/* ── shell klauzuli RODO (/rodo) ────────────────────────────────────── */
+
+function RodoSectionShell({ section }: { section: RodoSection }) {
+  return (
+    <section id={section.id} className="mt-6 max-w-3xl">
+      <h2 className="text-xl font-extrabold tracking-tight" style={HEAD}>
+        {section.title.pl}
+      </h2>
+      {section.variant === "list" ? (
+        <ul className="mt-2 flex flex-col gap-1.5 text-sm" style={BODY}>
+          {section.body.pl.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+      ) : (
+        section.body.pl.map((paragraph) => (
+          <p key={paragraph} className="mt-2 text-sm leading-relaxed" style={BODY}>
+            {paragraph}
+          </p>
+        ))
+      )}
+      {section.note ? (
+        <p className="mt-2 text-xs leading-relaxed" style={MUTED}>
+          {section.note.pl}
+        </p>
+      ) : null}
+    </section>
+  );
+}
+
+function RodoObjectionShell({ objection }: { objection: RodoObjection }) {
+  return (
+    <section id={objection.id} className="card mt-8 max-w-3xl" style={{ padding: 24 }}>
+      <h2 className="text-2xl font-extrabold tracking-tight" style={HEAD}>
+        {objection.title.pl}
+      </h2>
+      {objection.body.pl.map((paragraph) => (
+        <p key={paragraph} className="mt-2 text-base leading-relaxed" style={BODY}>
+          {paragraph}
+        </p>
+      ))}
+      <p className="mt-3 text-sm">
+        <a href={objection.cta.href.pl} style={LINK}>{objection.cta.label.pl}</a>
+      </p>
+    </section>
+  );
+}
+
+function RodoShell() {
+  const o: RodoObjection = RODO.objection;
+  return (
+    <ShellChrome>
+      <ShellNav />
+      <h1 className="mt-4 text-3xl font-extrabold tracking-tight" style={HEAD}>
+        {RODO.h1.pl}
+      </h1>
+      <p className="mt-4 max-w-3xl text-base leading-relaxed" style={BODY}>
+        {RODO.lead.pl}
+      </p>
+      <p className="mt-2 text-xs" style={MUTED}>
+        {`Ostatnia aktualizacja: ${RODO.updated}`}
+      </p>
+      <p className="mt-1 text-xs" style={MUTED}>
+        {RODO.disclaimer.pl}
+      </p>
+
+      {RODO.sections.map((section) => (
+        <div key={section.id}>
+          {section.id === o.renderBefore ? <RodoObjectionShell objection={o} /> : null}
+          <RodoSectionShell section={section} />
+        </div>
+      ))}
+
+      <section id="organ" className="mt-6 max-w-3xl">
+        <h2 className="text-xl font-extrabold tracking-tight" style={HEAD}>
+          Skarga do organu nadzorczego
+        </h2>
+        <p className="mt-2 text-sm leading-relaxed" style={BODY}>
+          {RODO.authority.note.pl}
+        </p>
+        <p className="mt-1 text-sm leading-relaxed" style={BODY}>
+          {`${RODO.authority.name.pl}, ${RODO.authority.address}`}
+        </p>
+      </section>
+
+      <section lang="en" className="mt-8 max-w-3xl">
+        <h2 className="text-xl font-extrabold tracking-tight" style={HEAD}>
+          {RODO.h1.en}
+        </h2>
+        <p className="mt-2 text-sm leading-relaxed" style={BODY}>{RODO.lead.en}</p>
+        <p className="mt-2 text-sm leading-relaxed" style={BODY}>{o.title.en}: {o.body.en[0]}</p>
+        <p className="mt-2 text-sm">
+          <a href={o.cta.href.en} style={LINK}>{o.cta.label.en}</a>
+        </p>
+        <p className="mt-2 text-xs" style={MUTED}>{RODO.disclaimer.en}</p>
+      </section>
+
+      <ContactLine />
+    </ShellChrome>
+  );
+}
+
+/* ── shell 404 ──────────────────────────────────────────────────────── */
+
+function NotFoundShell() {
+  return (
+    <ShellChrome>
+      <ShellNav />
+      <h1 className="mt-4 text-3xl font-extrabold tracking-tight" style={HEAD}>
+        {NOT_FOUND_COPY.h1.pl}
+      </h1>
+      <p className="mt-4 max-w-3xl text-base" style={MUTED}>
+        {NOT_FOUND_COPY.line.pl}
+      </p>
+      <ul className="mt-4 flex flex-col gap-1.5 text-sm" style={BODY}>
+        <li>
+          <a href="/narzedzia" style={LINK}>{NOT_FOUND_COPY.toTools.pl}</a>
+        </li>
+        <li>
+          <a href="/" style={LINK}>{NOT_FOUND_COPY.toHome.pl}</a>
+        </li>
+      </ul>
+      <section lang="en" className="mt-6">
+        <h2 className="text-xl font-extrabold tracking-tight" style={HEAD}>
+          {NOT_FOUND_COPY.h1.en}
+        </h2>
+        <p className="mt-2 text-sm" style={MUTED}>{NOT_FOUND_COPY.line.en}</p>
+      </section>
+      <ContactLine />
+    </ShellChrome>
+  );
+}
+
 /* ── wyjścia ────────────────────────────────────────────────────────── */
 
-function sitemapXml(tools: ToolItem[]): string {
-  const urls = [
-    `  <url><loc>${ORIGIN}/</loc><priority>1.0</priority></url>`,
-    `  <url><loc>${ORIGIN}/narzedzia</loc><priority>0.9</priority></url>`,
-    `  <url><loc>${ORIGIN}/oferta</loc><priority>0.9</priority></url>`,
-    `  <url><loc>${ORIGIN}/faq</loc><priority>0.7</priority></url>`,
-    ...tools.map(
-      (t) =>
-        `  <url><loc>${ORIGIN}/narzedzia/${t.slug}</loc><priority>${SITEMAP_PRIORITY[t.slug] ?? "0.7"}</priority></url>`
-    ),
-  ].join("\n");
+/* sitemap.xml: WYŁĄCZNIE trasy bez noindex (dziś odpadają 404 i /rodo, które
+   czeka na przegląd radcy). Plik jest generowany przy buildzie; ręcznego
+   public/sitemap.xml nie ma i nie wolno go odtworzyć (seo-sitemap-llms-generated). */
+function sitemapXml(routes: RouteOut[]): string {
+  const urls = routes
+    .filter((r) => !r.noindex)
+    .map(
+      (r) =>
+        `  <url><loc>${ORIGIN}${r.path === "/" ? "/" : r.path}</loc><priority>${r.priority ?? "0.7"}</priority></url>`
+    )
+    .join("\n");
   return `<?xml version="1.0" encoding="UTF-8"?>
-<!-- GENEROWANE przy buildzie z site/src/data/tools.ts (scripts/prerender.mjs) — nie edytuj ręcznie -->
+<!-- GENEROWANE przy buildzie z src/data/tools.ts i listy tras (scripts/prerender.mjs); nie edytuj ręcznie -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls}
 </urlset>
 `;
 }
 
+/* llms.txt: opis firmy ze zdań marki, filary, 13 pozycji z tools.ts, kontakt
+   z contact.ts i sekcja EN. /rodo JEST tutaj mimo noindex: to adres klauzuli
+   z każdego szablonu kontaktu, a llms.txt nie jest zgłoszeniem do indeksu. */
 function llmsTxt(pl: ToolItem[], en: ToolItem[]): string {
   const toolsPl = pl
     .map((t) => `- [${t.name}](${ORIGIN}/narzedzia/${t.slug}): ${t.tagline}`)
@@ -444,62 +610,64 @@ function llmsTxt(pl: ToolItem[], en: ToolItem[]): string {
   const toolsEn = en
     .map((t) => `- [${t.name}](${ORIGIN}/narzedzia/${t.slug}): ${t.tagline}`)
     .join("\n");
+  const pillars = MESSAGING.pillars.map((p) => `- ${p.name.pl}: ${p.text.pl}`).join("\n");
   return `# Klarow
 
-> Custom narzędzia pod proces dla firm 20–250 osób, które „wyrosły na Excelu" (produkcja,
-> budownictwo, dystrybucja; Windows + Excel): automatyzacja, kontroling, integracje (m.in. KSeF),
-> importy z ERP, obieg dokumentów. Wdrożenie w dni, nie w miesiące. Narzędzia działają on-premise
-> — dane nie opuszczają firmy. To nie zamknięty katalog: budujemy narzędzie pod konkretny proces.
+> ${MESSAGING.oneLiner.pl} ${MESSAGING.subtext.pl}
 
-Główne strony: [Narzędzia](${ORIGIN}/narzedzia) · [Oferta](${ORIGIN}/oferta) · [FAQ](${ORIGIN}/faq)
+Trzy filary:
+${pillars}
+
+Główne strony: [Realizacje i dema](${ORIGIN}/narzedzia) · [Oferta](${ORIGIN}/oferta) · [FAQ](${ORIGIN}/faq) · [RODO i prywatność](${ORIGIN}/rodo)
 
 Dwa twarde wyróżniki:
-- Prawdziwie zero chmury: narzędzia działają lokalnie, bez API i bez serwera — nie mają nawet
-  którędy wysłać danych. Dema na klarow.com liczą w 100% w przeglądarce, bez logowania.
-- Determinizm: te same dane wejściowe zawsze dają ten sam wynik („kalkulator, nie wróżka");
-  każdą liczbę można sprawdzić ręcznie dzięki jawnej ścieżce wyliczenia.
+- ${MESSAGING.zeroVendorCloud.pl} Dema na klarow.com liczą w 100% w przeglądarce, bez logowania.
+- ${MESSAGING.determinism.pl} Każdą liczbę można sprawdzić ręcznie dzięki jawnej ścieżce wyliczenia.
 
-Oferta wejściowa: „Pilot na kopii" — jeden proces, ≤10 dni roboczych, budowa na kopiach plików,
+Oferta wejściowa „Pilot na kopii”: jeden proces, do 10 dni roboczych, budowa na kopiach plików,
 pierwszy efekt w dniu 5, płatność 50/50 (druga rata po działającym odbiorze). Wycena po bezpłatnej
 diagnozie: stała cena za zamrożony zakres, bez stawki godzinowej; kolejne narzędzia wyceniane
-osobno. Przed zakupem: „przyślij nam swój najgorszy Excel" — bezpłatna 30-minutowa diagnoza na
-próbce. Szczegóły: ${ORIGIN}/oferta
+osobno. Przed zakupem „przyślij nam swój najgorszy Excel”, czyli bezpłatna 30-minutowa diagnoza
+na próbce. Szczegóły: ${ORIGIN}/oferta
 
 ## Co budujemy
 
 Raporty i kontroling · integracje i e-dokumenty (KSeF, e-faktury, API urzędowe, ERP) · importy
 i scalanie danych · obieg dokumentów · panele i dashboardy · porządek w danych (audyt, migracje).
 
-## Narzędzia i realizacje (dema na żywo + wdrożenia u klienta)
+## Narzędzia i realizacje (dema na żywo i wdrożenia u klienta)
 
 ${toolsPl}
 
 ## FAQ
 
-Odpowiedzi na typowe obiekcje (koszt, bezpieczeństwo danych, „mamy już ERP", ryzyko dla
+Odpowiedzi na typowe obiekcje (koszt, bezpieczeństwo danych, „mamy już ERP”, ryzyko dla
 działających makr): ${ORIGIN}/faq
+
+## Prywatność
+
+Skąd mamy dane kontaktowe, po co je przetwarzamy, jak długo je trzymamy i jak jednym mailem
+wnieść sprzeciw: ${ORIGIN}/rodo
 
 ## Kontakt
 
 - E-mail: ${EMAIL}
-- Telefon: +48 ${PHONE_DISPLAY}
+- Telefon: ${PHONE_E164}
 - Obszar działania: Polska i USA
 - Strona: ${ORIGIN}
 
 ## English
 
-Klarow builds on-premise data automation tools for 20–250-person companies that grew up on
-Excel (manufacturing, construction, distribution). Deployed in days, not months; truly
-zero-cloud (tools run locally, demos compute entirely in the browser) and deterministic
-(same input, same output — every number can be verified by hand).
+${MESSAGING.oneLiner.en} ${MESSAGING.subtext.en}
+${MESSAGING.determinism.en}
 
 ${toolsEn}
 `;
 }
 
 export function prerenderAll(): { routes: RouteOut[]; sitemap: string; llms: string } {
-  const pl = getTools("pl");
-  const en = getTools("en");
+  const pl = getToolsWithSeo("pl");
+  const en = getToolsWithSeo("en");
 
   const routes: RouteOut[] = [
     {
@@ -507,6 +675,7 @@ export function prerenderAll(): { routes: RouteOut[]; sitemap: string; llms: str
       path: "/",
       title: PAGES_SEO.home.title.pl,
       description: PAGES_SEO.home.description.pl,
+      priority: "1.0",
       jsonLd: [ORG_JSONLD],
       bodyHtml: renderToStaticMarkup(<HomeShell />),
     },
@@ -515,6 +684,7 @@ export function prerenderAll(): { routes: RouteOut[]; sitemap: string; llms: str
       path: "/narzedzia",
       title: PAGES_SEO.tools.title.pl,
       description: PAGES_SEO.tools.description.pl,
+      priority: "0.9",
       jsonLd: [ORG_JSONLD],
       bodyHtml: renderToStaticMarkup(<ToolsShell pl={pl} en={en} />),
     },
@@ -523,6 +693,7 @@ export function prerenderAll(): { routes: RouteOut[]; sitemap: string; llms: str
       path: "/oferta",
       title: PAGES_SEO.oferta.title.pl,
       description: PAGES_SEO.oferta.description.pl,
+      priority: "0.9",
       jsonLd: [ORG_JSONLD],
       bodyHtml: renderToStaticMarkup(<OfferShell />),
     },
@@ -531,8 +702,31 @@ export function prerenderAll(): { routes: RouteOut[]; sitemap: string; llms: str
       path: "/faq",
       title: PAGES_SEO.faq.title.pl,
       description: PAGES_SEO.faq.description.pl,
+      priority: "0.7",
       jsonLd: [faqPageJsonLd(FAQ_I18N.pl)],
       bodyHtml: renderToStaticMarkup(<FaqShell />),
+    },
+    /* /rodo: publiczna i linkowana ze stopki, ale POZA sitemapą do czasu
+       przeglądu radcy (noindex, decyzja D-21). */
+    {
+      file: "rodo.html",
+      path: "/rodo",
+      title: PAGES_SEO.rodo.title.pl,
+      description: PAGES_SEO.rodo.description.pl,
+      noindex: true,
+      jsonLd: [ORG_JSONLD],
+      bodyHtml: renderToStaticMarkup(<RodoShell />),
+    },
+    /* 404: plik dla Cloudflare Pages; bez canonical, bez og, poza sitemapą
+       i bez JSON-LD (seo-404-noindex-real-404). */
+    {
+      file: "404.html",
+      path: "/404",
+      title: PAGES_SEO.notFound.title.pl,
+      description: PAGES_SEO.notFound.description.pl,
+      noindex: true,
+      jsonLd: [],
+      bodyHtml: renderToStaticMarkup(<NotFoundShell />),
     },
     ...pl.map((t): RouteOut => {
       const path = `/narzedzia/${t.slug}`;
@@ -541,8 +735,9 @@ export function prerenderAll(): { routes: RouteOut[]; sitemap: string; llms: str
       return {
         file: `narzedzia/${t.slug}.html`,
         path,
-        title: t.seo?.title ?? `${t.name} — działające demo online | Klarow`,
+        title: t.seo?.title ?? `${t.name}: działające demo online | Klarow`,
         description,
+        priority: SITEMAP_PRIORITY[t.slug] ?? "0.7",
         jsonLd: t.faq?.length
           ? [toolJsonLd(t.name, description, path), faqPageJsonLd(t.faq)]
           : [toolJsonLd(t.name, description, path)],
@@ -551,5 +746,5 @@ export function prerenderAll(): { routes: RouteOut[]; sitemap: string; llms: str
     }),
   ];
 
-  return { routes, sitemap: sitemapXml(pl), llms: llmsTxt(pl, en) };
+  return { routes, sitemap: sitemapXml(routes), llms: llmsTxt(pl, en) };
 }

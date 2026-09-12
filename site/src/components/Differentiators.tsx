@@ -3,8 +3,8 @@ import { Calculator, Check, CloudOff, Play, X as XIcon } from "lucide-react";
 import { useLang, pick } from "@/i18n";
 
 /* Sekcja wyróżników (decyzja founderów 2026-07-22): on-prem to już za mało,
-   gramy „prawdziwie zero chmury" (zero API do LLM, zero serwera, działa
-   w Excelu) + determinizm („kalkulator, nie wróżka"). Do tego blok
+   gramy „prawdziwie zero chmury” (zero API do LLM, zero serwera, działa
+   w Excelu) + determinizm („kalkulator, nie wróżka”). Do tego blok
    ✕ Tradycyjnie / ✓ Klarow i galeria gotowych narzędzi z liczbą
    before/after (liczby z wdrożeń wewnętrznych, opisane anonimowo). */
 
@@ -12,18 +12,18 @@ const T = {
   pl: {
     zeroTitle: "Prawdziwie zero chmury",
     zeroBody:
-      "Modni „AI-agenci” i tak wysyłają Twoje dane do API modeli językowych i potrzebują serwera albo hostingu. Nasze narzędzia — nie. Działają w Twoim Excelu, na Twoim komputerze.",
+      "Modni „AI-agenci” i tak wysyłają Twoje dane do API modeli językowych i potrzebują serwera albo hostingu. Nasze narzędzia tego nie robią. Działają w Twoim Excelu, na Twoim komputerze.",
     zeroBullets: [
-      "Zero API do modeli językowych — żadna liczba nie opuszcza firmy",
-      "Zero serwera i kont w chmurze — narzędzie uruchamiasz dwuklikiem",
+      "Zero API do modeli językowych: żadna liczba nie opuszcza firmy",
+      "Zero serwera i kont w chmurze: narzędzie uruchamiasz dwuklikiem",
       "Działa w Twoim Excelu, także bez internetu",
     ],
-    detTitle: "Determinizm — kalkulator, nie wróżka",
+    detTitle: "Determinizm: kalkulator, nie wróżka",
     detBody:
-      "AI pomaga nam budować narzędzie (stąd tempo wdrożenia). Ale samo narzędzie liczy zwykłym, deterministycznym kodem — żadna liczba nie powstaje „z modelu”.",
+      "AI pomaga nam budować narzędzie (stąd tempo wdrożenia). Ale samo narzędzie liczy zwykłym, deterministycznym kodem; żadna liczba nie powstaje „z modelu”.",
     detBullets: [
       "Te same dane zawsze dają ten sam wynik",
-      "Jawna ścieżka wyliczenia — każdą liczbę sprawdzisz ręcznie (zobacz w demie powyżej)",
+      "Jawna ścieżka wyliczenia: każdą liczbę sprawdzisz ręcznie (zobacz w demie powyżej)",
       "Sanity-check sum co do grosza i log każdej operacji",
     ],
     cmpBad: "Tradycyjnie: automatyzacja „z chmurą i AI”",
@@ -34,8 +34,8 @@ const T = {
         good: "Dane zostają w Twoim Excelu, na Twoim komputerze",
       },
       {
-        bad: "Wynik „z modelu” — za każdym razem może wyjść inaczej",
-        good: "Deterministyczny kalkulator — ten sam wynik i jawna ścieżka wyliczenia",
+        bad: "Wynik „z modelu”: za każdym razem może wyjść inaczej",
+        good: "Deterministyczny kalkulator: ten sam wynik i jawna ścieżka wyliczenia",
       },
       {
         bad: "Wdrożenie liczone w miesiącach, faktury za godziny",
@@ -43,19 +43,19 @@ const T = {
       },
       {
         bad: "Migracja do nowego systemu i szkolenia zespołu",
-        good: "Excel zostaje — narzędzie wchodzi obok Twoich plików",
+        good: "Excel zostaje: narzędzie wchodzi obok Twoich plików",
       },
       {
         bad: "Vendor lock-in: bez dostawcy wszystko staje",
         good: "Kod, dokumentacja i runbook zostają u Ciebie",
       },
     ],
-    galleryLbl: "Gotowe narzędzia — wzorce z wdrożeń",
+    galleryLbl: "Gotowe narzędzia: wzorce z wdrożeń",
     tools: [
       {
         name: "Raport zarządczy",
         val: "z ~6 godz. do kilkunastu sekund",
-        foot: "raport składany z dziesiątek plików — działa na żywo na tej stronie",
+        foot: "raport składany z dziesiątek plików, działa na żywo na tej stronie",
         linkLabel: "Otwórz dashboard",
         to: "/narzedzia/raport-zarzadczy",
         demo: true,
@@ -63,7 +63,7 @@ const T = {
       {
         name: "Dashboard produkcji",
         val: "cały portfel w jednym kadrze",
-        foot: "kafle hal, suwak tygodnia, rozbicie na etapy — działa na żywo na tej stronie",
+        foot: "kafle hal, suwak tygodnia, rozbicie na etapy; działa na żywo na tej stronie",
         linkLabel: "Otwórz dashboard",
         to: "/narzedzia/dashboard-produkcji",
         demo: true,
@@ -71,30 +71,30 @@ const T = {
       {
         name: "Kontroling z KSeF",
         val: "faktury z KSeF → budżet i cashflow",
-        foot: "read-only integracja z API Ministerstwa Finansów, on-premise — realizacja u klienta",
+        foot: "read-only integracja z API Ministerstwa Finansów, on-premise; realizacja u klienta",
         linkLabel: "Zobacz realizację",
         to: "/narzedzia/kontroling-ksef",
         demo: false,
       },
     ],
     galleryNote:
-      "Liczby z wewnętrznych wdrożeń w firmie produkcyjno-budowlanej; integracja z KSeF to osobne wdrożenie. Narzędzia odtwarzamy od zera na tych wzorcach — na danych fikcyjnych tutaj, a u klienta na Twoich plikach.",
+      "Liczby z wewnętrznych wdrożeń w firmie produkcyjno-budowlanej; integracja z KSeF to osobne wdrożenie. Narzędzia odtwarzamy od zera na tych wzorcach: na danych fikcyjnych tutaj, a u klienta na Twoich plikach.",
   },
   en: {
     zeroTitle: "Truly zero cloud",
     zeroBody:
       "Fashionable “AI agents” still send your data to LLM APIs and need a server or hosting. Our tools don't. They run in your Excel, on your computer.",
     zeroBullets: [
-      "Zero LLM API calls — no number ever leaves your company",
-      "Zero servers and cloud accounts — you launch the tool with a double-click",
+      "Zero LLM API calls: no number ever leaves your company",
+      "Zero servers and cloud accounts: you launch the tool with a double-click",
       "Runs in your Excel, even without internet",
     ],
-    detTitle: "Determinism — a calculator, not a fortune teller",
+    detTitle: "Determinism: a calculator, not a fortune teller",
     detBody:
-      "AI helps us build the tool (that's where the speed comes from). But the tool itself computes with plain, deterministic code — no number ever comes “from a model”.",
+      "AI helps us build the tool (that's where the speed comes from). But the tool itself computes with plain, deterministic code; no number ever comes “from a model”.",
     detBullets: [
       "The same data always gives the same result",
-      "An explicit calculation path — you can check every number by hand (see the demo above)",
+      "An explicit calculation path: you can check every number by hand (see the demo above)",
       "Totals sanity-checked to the cent and a log of every operation",
     ],
     cmpBad: "The usual way: “cloud + AI” automation",
@@ -105,8 +105,8 @@ const T = {
         good: "Data stays in your Excel, on your computer",
       },
       {
-        bad: "Results “from a model” — they can come out different every time",
-        good: "A deterministic calculator — same result, explicit calculation path",
+        bad: "Results “from a model”: they can come out different every time",
+        good: "A deterministic calculator: same result, explicit calculation path",
       },
       {
         bad: "Deployment measured in months, invoices for hours",
@@ -114,19 +114,19 @@ const T = {
       },
       {
         bad: "Migration to a new system and team trainings",
-        good: "Excel stays — the tool works alongside your files",
+        good: "Excel stays: the tool works alongside your files",
       },
       {
         bad: "Vendor lock-in: everything stops without the vendor",
         good: "Code, documentation and runbook stay with you",
       },
     ],
-    galleryLbl: "Ready tools — patterns from deployments",
+    galleryLbl: "Ready tools: patterns from deployments",
     tools: [
       {
         name: "Board report",
         val: "from ~6 hours to seconds",
-        foot: "a report assembled from dozens of files — running live on this page",
+        foot: "a report assembled from dozens of files, running live on this page",
         linkLabel: "Open dashboard",
         to: "/narzedzia/raport-zarzadczy",
         demo: true,
@@ -134,7 +134,7 @@ const T = {
       {
         name: "Production dashboard",
         val: "the whole portfolio in one frame",
-        foot: "hall tiles, week slider, stage breakdown — running live on this page",
+        foot: "hall tiles, week slider, stage breakdown; running live on this page",
         linkLabel: "Open dashboard",
         to: "/narzedzia/dashboard-produkcji",
         demo: true,
@@ -142,14 +142,14 @@ const T = {
       {
         name: "KSeF controlling",
         val: "KSeF invoices → budget & cash flow",
-        foot: "read-only integration with the Ministry of Finance API, on-premise — a client build",
+        foot: "read-only integration with the Ministry of Finance API, on-premise; a client build",
         linkLabel: "See the build",
         to: "/narzedzia/kontroling-ksef",
         demo: false,
       },
     ],
     galleryNote:
-      "Numbers from internal deployments at a manufacturing-and-construction company; the KSeF integration is a separate build. We rebuild the tools from scratch on these patterns — on fictional data here, on your files at the client.",
+      "Numbers from internal deployments at a manufacturing-and-construction company; the KSeF integration is a separate build. We rebuild the tools from scratch on these patterns: on fictional data here, on your files at the client.",
   },
 };
 

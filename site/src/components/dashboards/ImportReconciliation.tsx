@@ -2,12 +2,12 @@ import { useMemo, useState } from "react";
 import { Check, XCircle, Plus, Minus, ArrowRightLeft, Play, ShieldCheck } from "lucide-react";
 import { useLang } from "@/i18n";
 
-/* Dashboard „Import z rekoncyliacją" — LIVE, dane fikcyjne, deterministyczny.
-   Odbrandowane odtworzenie rdzenia „Controlling Import": porównanie dwóch
+/* Dashboard „Import z rekoncyliacją”: LIVE, dane fikcyjne, deterministyczny.
+   Odbrandowane odtworzenie rdzenia „Controlling Import”: porównanie dwóch
    wersji danych (poprzednia vs nowa), diff per pozycja (DODANE / USUNIĘTE /
    ZMIENIONE) i rekoncyliacja sum CO DO GROSZA:
      Σ poprzednia + dodane − usunięte + zmiany == Σ nowa  →  PASS / FAIL.
-   Wszystko w groszach (int) — zero dryfu. Tryb TEST: nic nie jest zapisywane. */
+   Wszystko w groszach (int), zero dryfu. Tryb TEST: nic nie jest zapisywane. */
 
 interface Row {
   project: string;
@@ -71,7 +71,7 @@ function computeDiff(prev: Row[], curr: Row[]): DiffRow[] {
 }
 
 const fmt = (grv: number | null, lang: "pl" | "en") => {
-  if (grv === null) return "—";
+  if (grv === null) return "";
   const v = grv / 100;
   return lang === "pl"
     ? `${v.toLocaleString("pl-PL", { minimumFractionDigits: 2 })} zł`
@@ -81,9 +81,9 @@ const fmt = (grv: number | null, lang: "pl" | "en") => {
 const T = {
   pl: {
     run: "Uruchom import (TEST)",
-    intro: "Porównujemy dwie wersje danych kosztowych: poprzednią (zatwierdzoną) i nowy plik z ERP. Zanim cokolwiek zostanie zatwierdzone — pełny diff i rekoncyliacja sum.",
-    pass: "REKONCYLIACJA: PASS — sumy zgadzają się co do grosza",
-    fail: "REKONCYLIACJA: FAIL — rozjazd sum",
+    intro: "Porównujemy dwie wersje danych kosztowych: poprzednią (zatwierdzoną) i nowy plik z ERP. Zanim cokolwiek zostanie zatwierdzone: pełny diff i rekoncyliacja sum.",
+    pass: "REKONCYLIACJA: PASS, sumy zgadzają się co do grosza",
+    fail: "REKONCYLIACJA: FAIL, rozjazd sum",
     formula: "Σ poprzednia + dodane − usunięte + zmiany = Σ nowa",
     kPrev: "Σ poprzednia wersja",
     kCurr: "Σ nowa wersja",
@@ -99,14 +99,14 @@ const T = {
     thDelta: "Δ",
     thKind: "Zmiana",
     proof: "Dowód co do grosza",
-    testNote: "Tryb TEST — podgląd zmian. W realnym wdrożeniu zapis następuje dopiero po Twojej akceptacji, z backupem i logiem.",
+    testNote: "Tryb TEST: podgląd zmian. W realnym wdrożeniu zapis następuje dopiero po Twojej akceptacji, z backupem i logiem.",
     foot: "Dane fikcyjne · liczone w groszach (zero dryfu) · te same dane zawsze dają ten sam wynik.",
   },
   en: {
     run: "Run import (TEST)",
-    intro: "We compare two versions of cost data: the previous (approved) one and a new ERP file. Before anything is committed — a full diff and totals reconciliation.",
-    pass: "RECONCILIATION: PASS — totals reconcile to the cent",
-    fail: "RECONCILIATION: FAIL — totals mismatch",
+    intro: "We compare two versions of cost data: the previous (approved) one and a new ERP file. Before anything is committed: a full diff and totals reconciliation.",
+    pass: "RECONCILIATION: PASS, totals reconcile to the cent",
+    fail: "RECONCILIATION: FAIL, totals mismatch",
     formula: "Σ previous + added − removed + changes = Σ new",
     kPrev: "Σ previous version",
     kCurr: "Σ new version",
@@ -122,7 +122,7 @@ const T = {
     thDelta: "Δ",
     thKind: "Change",
     proof: "Proof to the cent",
-    testNote: "TEST mode — a change preview. In a real deployment the write happens only after your approval, with backup and log.",
+    testNote: "TEST mode: a change preview. In a real deployment the write happens only after your approval, with backup and log.",
     foot: "Fictional data · computed in cents (zero drift) · the same data always gives the same result.",
   },
 };

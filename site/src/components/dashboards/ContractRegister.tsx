@@ -3,7 +3,7 @@ import { Check, Clock, Download, FileSignature, Plus, Search, Trash2 } from "luc
 import PdfButton from "./PdfButton";
 import { useLang, type Lang } from "@/i18n";
 
-/* Dashboard „Rejestr umów" — LIVE, dane DEMO (CRUD lokalny w pamięci).
+/* Dashboard „Rejestr umów”: LIVE, dane DEMO (CRUD lokalny w pamięci).
    Odbrandowane odtworzenie rdzenia: elektroniczny rejestr umów z cyklem
    życia, wyszukiwarką, eksportem CSV i WYDRUKIEM rejestru. U klienta
    rejestr wymienia się dwukierunkowo z Excelem (arkusz = źródło prawdy)
@@ -20,15 +20,15 @@ interface Contract {
 }
 
 const INITIAL: Contract[] = [
-  { id: 1, number: "U-2026/031", vendor: "Monter-Bud sp. z o.o.", subject: { pl: "Montaż konstrukcji — Hala Poznań", en: "Structure assembly — Poznań hall" }, dateFrom: "2026-03-14", valueGr: 84200000, status: "active" },
-  { id: 2, number: "U-2026/030", vendor: "Elektro-Serwis J. Nowak", subject: { pl: "Instalacje elektryczne — Biurowiec Łódź", en: "Electrical installations — Łódź office" }, dateFrom: "2026-03-02", valueGr: 31600000, status: "active" },
+  { id: 1, number: "U-2026/031", vendor: "Monter-Bud sp. z o.o.", subject: { pl: "Montaż konstrukcji, Hala Poznań", en: "Structure assembly, Poznań hall" }, dateFrom: "2026-03-14", valueGr: 84200000, status: "active" },
+  { id: 2, number: "U-2026/030", vendor: "Elektro-Serwis J. Nowak", subject: { pl: "Instalacje elektryczne, Biurowiec Łódź", en: "Electrical installations, Łódź office" }, dateFrom: "2026-03-02", valueGr: 31600000, status: "active" },
   { id: 3, number: "U-2026/024", vendor: "TransLog", subject: { pl: "Ramowa: transport modułów", en: "Framework: module transport" }, dateFrom: "2026-02-10", valueGr: null, status: "active" },
-  { id: 4, number: "U-2025/118", vendor: "Beton-Mix", subject: { pl: "Dostawy betonu — Magazyn Wrocław", en: "Concrete supply — Wrocław warehouse" }, dateFrom: "2025-11-21", valueGr: 12750000, status: "ended" },
-  { id: 5, number: "U-2025/102", vendor: "Okna-System", subject: { pl: "Stolarka okienna — Moduły Gdańsk", en: "Windows — Gdańsk modules" }, dateFrom: "2025-10-05", valueGr: 25400000, status: "ended" },
+  { id: 4, number: "U-2025/118", vendor: "Beton-Mix", subject: { pl: "Dostawy betonu, Magazyn Wrocław", en: "Concrete supply, Wrocław warehouse" }, dateFrom: "2025-11-21", valueGr: 12750000, status: "ended" },
+  { id: 5, number: "U-2025/102", vendor: "Okna-System", subject: { pl: "Stolarka okienna, Moduły Gdańsk", en: "Windows, Gdańsk modules" }, dateFrom: "2025-10-05", valueGr: 25400000, status: "ended" },
 ];
 
 const fmt = (gr: number | null, lang: Lang) => {
-  if (gr === null) return "—";
+  if (gr === null) return "";
   return lang === "pl"
     ? `${(gr / 100).toLocaleString("pl-PL", { minimumFractionDigits: 2 })} zł`
     : `PLN ${(gr / 100).toLocaleString("en-US", { minimumFractionDigits: 2 })}`;
@@ -38,7 +38,7 @@ const subjectText = (c: Contract, lang: Lang) => (typeof c.subject === "string" 
 
 const T = {
   pl: {
-    intro: "Elektroniczny rejestr umów zamiast pliku Excel z psującymi się linkami do skanów: wyszukiwarka, cykl życia, eksport CSV i wydruk. Dodaj wpis albo usuń istniejący — wszystko dzieje się lokalnie, w Twojej przeglądarce.",
+    intro: "Elektroniczny rejestr umów zamiast pliku Excel z psującymi się linkami do skanów: wyszukiwarka, cykl życia, eksport CSV i wydruk. Dodaj wpis albo usuń istniejący; wszystko dzieje się lokalnie, w Twojej przeglądarce.",
     search: "Szukaj (numer, dostawca, przedmiot)…",
     add: "Dodaj umowę",
     number: "Numer",
@@ -59,11 +59,12 @@ const T = {
     phNumber: "U-2026/0XX",
     phVendor: "Nazwa dostawcy",
     phSubject: "Przedmiot umowy",
+    noSubject: "bez przedmiotu",
     note: "U klienta: dwukierunkowa wymiana z Excelem (arkusz = źródło prawdy), drzewo skanów PDF z linkami względnymi, naprawa duplikatów.",
     foot: "Dane fikcyjne · zmiany trzymane lokalnie · eksport i wydruk odzwierciedlają dokładnie bieżący widok.",
   },
   en: {
-    intro: "An electronic contract register instead of an Excel file with breaking scan links: search, lifecycle, CSV export and print. Add or remove an entry — everything happens locally, in your browser.",
+    intro: "An electronic contract register instead of an Excel file with breaking scan links: search, lifecycle, CSV export and print. Add or remove an entry; everything happens locally, in your browser.",
     search: "Search (number, vendor, subject)…",
     add: "Add contract",
     number: "Number",
@@ -84,6 +85,7 @@ const T = {
     phNumber: "U-2026/0XX",
     phVendor: "Vendor name",
     phSubject: "Contract subject",
+    noSubject: "no subject",
     note: "At the client: two-way Excel exchange (the sheet is the source of truth), a PDF scan tree with relative links, duplicate repair.",
     foot: "Fictional data · changes kept locally · export and print mirror exactly the current view.",
   },
@@ -119,7 +121,7 @@ export default function ContractRegister() {
         id: (prev[0]?.id ?? 0) + 100 + prev.length,
         number: fNumber.trim(),
         vendor: fVendor.trim(),
-        subject: fSubject.trim() || "—",
+        subject: fSubject.trim() || t.noSubject,
         dateFrom: "2026-07-22",
         valueGr: Number.isFinite(v) && v > 0 ? Math.round(v * 100) : null,
         status: "active",

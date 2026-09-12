@@ -3,7 +3,7 @@ import { Check, Clock, FileText, Send } from "lucide-react";
 import PdfButton from "./PdfButton";
 import { useLang, type Lang } from "@/i18n";
 
-/* Dashboard „Protokoły robocizny" — LIVE, dane DEMO.
+/* Dashboard „Protokoły robocizny”: LIVE, dane DEMO.
    Odbrandowane odtworzenie rdzenia: rejestr godzin → miesięczny protokół
    kosztu pracy per podwykonawca (kreator: wybór podwykonawcy → podgląd
    pozycji → generuj DRAFT → akceptacja → FINAL), z cyklem życia statusów
@@ -45,7 +45,7 @@ const fmt = (gr: number, lang: Lang) =>
 
 const T = {
   pl: {
-    intro: "Z rejestru godzin narzędzie składa miesięczny protokół kosztu pracy per podwykonawca i prowadzi go przez akceptację: DRAFT → wysłany → FINAL (do faktury). Wybierz podwykonawcę i przejdź cykl — na końcu wydrukuj gotowy dokument.",
+    intro: "Z rejestru godzin narzędzie składa miesięczny protokół kosztu pracy per podwykonawca i prowadzi go przez akceptację: DRAFT → wysłany → FINAL (do faktury). Wybierz podwykonawcę i przejdź cykl, a na końcu wydrukuj gotowy dokument.",
     pick: "Podwykonawca",
     period: "Okres: lipiec 2026",
     genDraft: "Generuj protokół (DRAFT)",
@@ -53,9 +53,9 @@ const T = {
     accept: "Akceptuj (KB) → FINAL",
     stDraft: "DRAFT",
     stSent: "wysłany do akceptacji",
-    stFinal: "FINAL — do faktury",
+    stFinal: "FINAL do faktury",
     doc: "PROTOKÓŁ ROZLICZENIA ROBOCIZNY",
-    docPeriod: "za okres: 01.07.2026 – 31.07.2026",
+    docPeriod: "za okres: 01.07.2026–31.07.2026",
     docSub: "Podwykonawca",
     docNip: "NIP",
     thInv: "Inwestycja",
@@ -71,7 +71,7 @@ const T = {
     foot: "Dane fikcyjne · dokument liczony z rejestru godzin deterministycznie · u klienta protokół idzie mailem z PDF-em i czeka na akceptację.",
   },
   en: {
-    intro: "From an hour register the tool assembles a monthly labour-cost protocol per subcontractor and walks it through approval: DRAFT → sent → FINAL (to invoice). Pick a subcontractor, run the cycle — then print the finished document.",
+    intro: "From an hour register the tool assembles a monthly labour-cost protocol per subcontractor and walks it through approval: DRAFT → sent → FINAL (to invoice). Pick a subcontractor, run the cycle, then print the finished document.",
     pick: "Subcontractor",
     period: "Period: July 2026",
     genDraft: "Generate protocol (DRAFT)",
@@ -79,9 +79,9 @@ const T = {
     accept: "Approve (site manager) → FINAL",
     stDraft: "DRAFT",
     stSent: "sent for approval",
-    stFinal: "FINAL — to invoice",
+    stFinal: "FINAL to invoice",
     doc: "LABOUR SETTLEMENT PROTOCOL",
-    docPeriod: "for the period: 2026-07-01 – 2026-07-31",
+    docPeriod: "for the period: 2026-07-01–2026-07-31",
     docSub: "Subcontractor",
     docNip: "Tax ID",
     thInv: "Investment",

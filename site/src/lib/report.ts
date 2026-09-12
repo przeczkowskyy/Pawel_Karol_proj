@@ -1,10 +1,10 @@
 import type { Lang } from "@/i18n";
 
-/* Silnik DEMO „Raport zarządczy” (M2) — czyste funkcje, 100% deterministyczne:
+/* Silnik DEMO „Raport zarządczy” (M2): czyste funkcje, 100% deterministyczne:
    parseCsv (autodetekcja separatora ; \t , + tolerancyjne nagłówki PL/EN)
    → aggregate (projekty, etapy, sumy portfela). Zero sieci, zero losowości,
-   zero dat systemowych — te same dane zawsze dają ten sam wynik (jawna
-   ścieżka wyliczenia jest pokazywana w UI). Odtworzenie wzorca od zera —
+   zero dat systemowych, więc te same dane zawsze dają ten sam wynik (jawna
+   ścieżka wyliczenia jest pokazywana w UI). Odtworzenie wzorca od zera:
    żaden kod nie pochodzi z wcześniejszych wdrożeń. */
 
 export interface ParsedRow {
@@ -65,7 +65,7 @@ export interface ReportAgg {
   };
 }
 
-/* Progi statusu (jawne — pokazywane w „ścieżce wyliczenia”): */
+/* Progi statusu (jawne, pokazywane w „ścieżce wyliczenia”): */
 export const OK_PP = 2; // odchylenie ≤ 2 p.p. → OK
 export const RISK_PP = 8; // odchylenie > 8 p.p. → ryzyko; pomiędzy → obserwuj
 export const STAGE_TOLERANCE_PP = 3; // wykres per-etap: koszt% > postęp% + 3 p.p. → przekroczenie
@@ -121,7 +121,7 @@ export function parseCsv(text: string): ParseResult {
     }
   }
   if (headerIdx === -1) {
-    return { rows, errors: [{ line: 1, msg: { pl: "Pusty plik — brak danych.", en: "Empty file — no data." } }] };
+    return { rows, errors: [{ line: 1, msg: { pl: "Pusty plik: brak danych.", en: "Empty file: no data." } }] };
   }
 
   const sep = detectSeparator(lines[headerIdx]);

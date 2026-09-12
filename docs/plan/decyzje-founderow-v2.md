@@ -2,7 +2,9 @@
 
 > Data: 2026-09-12 · Dla: Paweł + Karol · Plan, którego dotyczą: `docs/plan/strona-v2-plan.md`
 > **Termin odpowiedzi: 2026-09-16 (środa), 18:00.** Bez odpowiedzi obowiązuje „Domyślny wybór" i F0 rusza 2026-09-17. Odpowiedź może być jednym mailem lub wiadomością w formacie `D3: b` (litera opcji), z uwagami tam, gdzie chcecie inaczej. Claude Code przepisuje wynik do `docs/DECISIONS.md` (append-only) przed pierwszą edycją kodu, w tym samym commicie podmieniając stare ID `D-xx` w skillu strażnika wg **tabeli przejścia numeracji** (przed częścią F).
-> Numeracja: ten dokument używa `D1…D24`; `synthesis.md` i reguły w `.claude/skills/klarow-guardian/**` używają starszej `D-01…D-23` z INNYM mapowaniem. Przy czytaniu reguły strażnika sprawdzaj ID w tabeli przejścia, nie „na oko".
+> **Korekta 2026-09-12 (reframe).** Po dyrektywie founderów (brak zarejestrowanej działalności i NIP; strona jest wizytówką i CV dwóch osób z naciskiem na pokazanie narzędzi) doszła **część G z decyzjami D25–D35**, a sześć wcześniejszych decyzji zmieniło treść: **D6, D12, D13, D14, D15, D16**. Uzasadnienie i rozstrzygnięcie sprzecznych propozycji: `docs/plan/reframe-2026-09-12.md`.
+> **Korekta korekty 2026-09-12 (wieczór): wideo wraca do v1 decyzją Karola** („zależy mi na efekcie wow i animacyjnym"). Doszła **część H z decyzjami D36–D38**, a cztery decyzje zmieniły treść: **D12, D13, D28, D35**. Scenorys, budżety, koszt i procedura zakupu: `docs/plan/warstwa-wrazenia.md`.
+> Numeracja: ten dokument używa `D1…D35`; `synthesis.md` i reguły w `.claude/skills/klarow-guardian/**` używają starszej `D-01…D-23` z INNYM mapowaniem. Przy czytaniu reguły strażnika sprawdzaj ID w tabeli przejścia, nie „na oko".
 > Konwencje: bez pauzy „—"; „–" tylko w zakresach liczbowych. Marka poprzedniej firmy = „firma produkcyjno-budowlana".
 
 Każda decyzja ma: pytanie · opcje · **REKOMENDACJA** · **DOMYŚLNY WYBÓR** (gdy brak odpowiedzi do terminu) · konsekwencja · kto decyduje.
@@ -62,7 +64,8 @@ Każda decyzja ma: pytanie · opcje · **REKOMENDACJA** · **DOMYŚLNY WYBÓR** 
 - **Opcje:** (a) obaj z nazwiskiem, zdjęciem, rolą, jednym zdaniem i linkiem LinkedIn; (b) Paweł pełnie, Karol imię + rola + rama z inicjałem „K" (bez zdjęcia i nazwiska); (c) „zespół" bez osób = sekcja usunięta (home ma 8 sekcji).
 - **REKOMENDACJA:** (a), jeśli relacja Karola z obecnym pracodawcą i umowa IP na to pozwalają; w przeciwnym razie (b) do czasu umowy.
 - **DOMYŚLNY WYBÓR:** (b).
-- **Konsekwencja:** kanał LinkedIn (rdzeń outboundu) ląduje na stronie z twarzą co najmniej jednego foundera; przy (a) potrzebne 2 zdjęcia (neutralne tło, jedno światło) + 2 zdania bio do końca F1. Nigdy stock, nigdy placeholder.
+- **ZMIANA 2026-09-12 (rozszerzenie):** sekcja awansuje z pozycji 8 na **6** (D32) i rośnie. Bez zarejestrowanego podmiotu CV tworzą ludzie i ich artefakty, więc bio zawiera **przypisanie autorstwa**: Karol „Buduje narzędzia i integracje. Dwanaście dem na tej stronie i produkt na KSeF."; Paweł „Powadzi diagnozę procesu i odbiór wdrożenia. Ustala zakres, zanim powstanie pierwsza linia kodu." (dotychczasowe „prowadzi wdrożenia i rozmowy z klientami" jest wycofane: liczba mnoga „klienci" przy zerze płatnych klientów łamie `brand-honest-labels`). Nagłówek sekcji: „Rozmawiasz z osobą, która to zbudowała." (zamiast „… która narzędzie zbudowała", bo pokazujemy trzynaście pozycji). Wariant D6(b) nadal dopuszczalny.
+- **Konsekwencja:** kanał LinkedIn (rdzeń outboundu) ląduje na stronie z twarzą co najmniej jednego foundera; przy (a) potrzebne 2 zdjęcia (neutralne tło, jedno światło) + 2 zdania bio do końca F1. Nigdy stock, nigdy placeholder. **Uwaga po D25:** jeśli administratorem danych jest Paweł, jego nazwisko stoi w `/rodo`, więc fakt F4 blokuje publikację całej strony, nie tylko tę sekcję.
 - **Kto:** Karol (o sobie), Paweł (o sobie); zdjęcia i bio do 2026-09-19.
 
 ### D7 · Liczby i case z poprzedniej firmy przed umową IP
@@ -149,18 +152,21 @@ Każda decyzja ma: pytanie · opcje · **REKOMENDACJA** · **DOMYŚLNY WYBÓR** 
 
 - **Pytanie:** co porusza się w hero na desktopie?
 - **Opcje:** (a) hero-loop 8–10 s z Higgsfield (Kling 3.0, start = end frame), three.js schodzi z `dependencies` (−118 KB gz na wizytę desktop); (b) GLSL Hills wracają jako tło `/` montowane po idle, tylko `pointer: fine`, z gatingiem `saveData`; wideo po v1; (c) sam poster (statyczny still), zero ruchu w tle.
-- **REKOMENDACJA:** (a), ale decyzja zapada **PO trialu** (F1), testem Karola „czy da się poznać, że to AI?" na OLED. Jeśli nie przejdzie: (b). Nigdy oba na jednej trasie.
-- **DOMYŚLNY WYBÓR:** (b) (gdy trial nie odbędzie się do końca F1).
-- **Konsekwencja:** mobile zawsze poster; GLSL Hills zostają w repo jako wzorzec GPU-higieny; przy (a) `three` i `@react-three/fiber` usunięte.
+- **ZMIANA 2026-09-12 (rano): ani (a), ani (b).** W hero stoi **kadr prawdziwego pulpitu produkcji** (D28): WebP ≤ 110 KB desktop, ≤ 55 KB mobile, zrobiony Playwrightem za 0 kr, deterministyczny.
+- **ZMIANA 2026-09-12 (wieczór, D37): kadr zostaje, ale rusza.** W hero na desktopie gra **nagranie tego samego pulpitu** (8 s, jedno odtworzenie, bez pętli), a kadr jest jego klatką zero i nadal jest LCP. **Wariant (a) pozostaje odrzucony**: abstrakcyjna pętla zajęłaby jedyny slot autoodtwarzania na `/` i zabrałaby hero dowód. GLSL Hills schodzą z `/` w F0 i **nie wracają** (jedno ruchome tło na trasę jest zajęte); `three` i `@react-three/fiber` wypadają z `dependencies`.
+- **DOMYŚLNY WYBÓR:** kadr produktu, który po sekundzie ożywa (patrz D28 i D37).
+- **Konsekwencja:** na `/` jest ≤ 1 autoodtwarzane `<video>` (tylko `pointer: fine`, po `window.load`), na 18 pozostałych trasach 0; zero wideo i zero WebGL na telefonie; reguły `media-*` obowiązują **wprost od F1**.
 - **Kto:** Karol (oko marki) z głosem Pawła.
 
 ### D13 · Plan Higgsfield i płatnik
 
 - **Pytanie:** jaki plan kupujemy, kto płaci i czy akceptujemy licencję treningową Higgsfield dla abstrakcji?
 - **Opcje:** (a) trial 3-dniowy MCP (100 kr, 0 $, karta wymagana, auto-odnowienie do anulowania) → PLUS miesięczny 49 $ (1 000 kr) na finały, anulowany po sprincie; (b) od razu PLUS bez triala; (c) ULTRA 129 $ (3 000 kr); (d) roczny PLUS (468 $/rok) pod stałą produkcję treści; (e) nic z Higgsfield, tylko proceduralnie (Blender / three.js).
-- **REKOMENDACJA:** (a). Komplet assetów to ≈ 330–450 kr; ULTRA niepotrzebne przy jednym wideo; plan roczny tylko przy decyzji o stałej produkcji treści do LinkedIn. Konto i faktura na JDG Pawła. Zgoda na licencję treningową wyłącznie dla abstrakcyjnych stilli i pętli (zero zrzutów narzędzi, danych klientów, materiałów firmy źródłowej, twarzy); generacje usuwane z konta po sprincie.
-- **DOMYŚLNY WYBÓR:** trial tylko (bez PLUS), czyli dowód stylu bez finałów; przy braku PLUS obowiązuje D12(b).
-- **Konsekwencja:** przypomnienie w kalendarzu na dzień 3 triala + `cancel_trial_auto_renewal`; `get_cost: true` przed każdą serią.
+- **ZMIANA 2026-09-12 (rano): (e) w v1, czyli nie kupujemy nic.**
+- **ZMIANA 2026-09-12 (wieczór, D36): (a), ale wąsko i dwuetapowo.** Zakres potrzebny **stronie** (grunt hero, master still, tło OG ≈ 56 kredytów) mieści się w **bezpłatnym trialu 3-dniowym** (100 kr, **0 USD**, karta wymagana, auto-odnowienie), więc publikacja nie zależy od żadnej płatności. **PLUS 49 USD + VAT** jest potrzebny wyłącznie na **pętlę na LinkedIn, która nie trafia na stronę** (H4, ≈ 166 kr): to osobna decyzja, nieblokująca. ULTRA (c) i plan roczny (d) odpadają przy tym zakresie.
+- **Gdy jakikolwiek zakup narzędziowy będzie potrzebny** (Cal.com, subskrypcja, w fazie 2 Higgsfield), obowiązuje procedura z planu §7.2: konto i **karta prywatna administratora danych** (D25), faktura na osobę fizyczną, koszt sprzed rejestracji traktowany jako **nieodliczalny**, zero korekt danych nabywcy wstecz, po rejestracji zmiana danych rozliczeniowych na istniejącym koncie (nie drugie konto), prawa komercyjne potwierdzone na planie, z którego powstał finał, wpis do `site/media/SOURCES.md`. Zaleta uboczna zakupu prywatnego: brak obowiązku rejestracji VAT-UE i rozliczenia importu usług. **Ostrzeżenie:** karta prywatna plus auto-odnowienie plus brak firmowej kontroli kosztów to klasyczny sposób na „49 $ przez pół roku"; przypomnienia w kalendarzu na dzień 3 triala i dzień 27 pierwszego miesiąca planu płatnego.
+- **DOMYŚLNY WYBÓR:** trial (0 USD) na zakres strony; decyzja o PLUS 49 USD podejmowana osobno, po obejrzeniu materiału.
+- **Konsekwencja:** **dwa** przypomnienia w kalendarzu ustawione **przed** klikiem trialu (dzień 3: `cancel_trial_auto_renewal` → `confirm_trial_cancel`; dzień 27 pierwszego płatnego miesiąca), `get_cost: true` przed każdą serią, usunięcie generacji z konta po sprincie. **Agent nie uruchamia trialu ani zakupu**: przygotowuje gotowy do wykonania krok i czeka (procedura: `warstwa-wrazenia.md` §7).
 - **Kto:** Paweł (płatnik) + Karol (wykonanie w MCP).
 
 ### D20 · Licencje Adobe
@@ -182,7 +188,7 @@ Każda decyzja ma: pytanie · opcje · **REKOMENDACJA** · **DOMYŚLNY WYBÓR** 
 - **Opcje:** (a) konto Cal.com podpięte do kalendarzy founderów, event „Diagnoza automatyzacji: 30 min", link zewnętrzny z `BookingDialog` (0 skryptów, 0 CSP); (b) embed Cal.com na stronie (skrypt zewnętrzny, CSP w `_headers`, wpis w `/rodo`); (c) zostać przy mailto/tel z kalendarzem-protezą (po naprawie bugu daty).
 - **REKOMENDACJA:** (a) w v1, (b) w fazie 2.
 - **DOMYŚLNY WYBÓR:** (c) do czasu założenia konta (bug daty naprawiony w F0 niezależnie).
-- **Konsekwencja:** konwersja twarda mierzalna tylko przy (a)/(b); Cal.com jako procesor w `/rodo`.
+- **Konsekwencja:** konwersja twarda mierzalna tylko przy (a)/(b); Cal.com jako procesor w `/rodo`. **ZMIANA 2026-09-12:** konto zakłada **administrator danych jako osoba fizyczna** (D25), na ten sam adres `kontakt@klarow.com`; umowę powierzenia (DPA) można zawrzeć bez NIP-u; właściciel konta wpisany do nowej kolumny „właściciel konta" w `references/integrations-registry.md`.
 - **Kto:** Paweł (konto i link do 2026-09-19).
 
 ### D15 · Analityka
@@ -191,7 +197,7 @@ Każda decyzja ma: pytanie · opcje · **REKOMENDACJA** · **DOMYŚLNY WYBÓR** 
 - **Opcje:** (a) Google Search Console + Cloudflare Web Analytics (cookieless, bez banera) + zdarzenia CTA przez Cloudflare Zaraz albo Pages Function → Workers Analytics Engine; (b) GA4 (cookies, baner, polityka); (c) nic.
 - **REKOMENDACJA:** (a). Zero cookies = zero banera i spójność z „zero chmury dostawcy" w narracji.
 - **DOMYŚLNY WYBÓR:** (a) bez zdarzeń niestandardowych do czasu potwierdzenia mechanizmu (Zaraz vs Pages Function) i publikacji `/rodo`.
-- **Konsekwencja:** Paweł zakłada property GSC (TXT w Cloudflare DNS) i sprawdza w panelu CF, czy Web Analytics ma zdarzenia niestandardowe; UTM w profilach LinkedIn, mailach, QR i promptcie bota od dnia publikacji.
+- **Konsekwencja:** Paweł zakłada property GSC (TXT w Cloudflare DNS) i sprawdza w panelu CF, czy Web Analytics ma zdarzenia niestandardowe; UTM w profilach LinkedIn, mailach, QR i promptcie bota od dnia publikacji. **ZMIANA 2026-09-12:** właścicielem kont GSC i Cloudflare jest **administrator danych jako osoba fizyczna** (D25), wpisany do kolumny „właściciel konta" w rejestrze integracji. Do listy zdarzeń dochodzą `demo_own_file` i `wall_open_tool`; **żadne zdarzenie nie niesie nazwy ani treści pliku wgranego przez użytkownika**.
 - **Kto:** Paweł.
 
 ### D16 · `/rodo`: treść, administrator, radca
@@ -201,8 +207,9 @@ Każda decyzja ma: pytanie · opcje · **REKOMENDACJA** · **DOMYŚLNY WYBÓR** 
 - **REKOMENDACJA:** (a). Strona jest twardym blokerem outboundu (art. 14, precedens Bisnode 943 470 zł); szkielet z konkretnymi źródłami danych (pracuj.pl, LinkedIn Jobs, KRS, CEIDG, REGON, LinkedIn, strona firmy), z prawem sprzeciwu wyróżnionym odrębnie i mechanizmem `mailto:` jest gotowy do przeglądu; radca poprawia, nie pisze.
 - **DOMYŚLNY WYBÓR:** (a); do czasu przeglądu radcy outbound rusza wyłącznie po przeczytaniu `/rodo` przez obu founderów (ryzyko świadome).
 - **D16-b · indeksacja `/rodo` (pytanie rozstrzygnięte osobno, bo plan i `synthesis.md` mówiły co innego):** do czasu przeglądu radcy strona ma `<meta name="robots" content="noindex, follow">` i **nie wchodzi do `sitemap.xml`**; jest publiczna, linkowana ze stopki i z szablonów outboundu, co w zupełności wystarcza do art. 14 (przepis wymaga podania informacji, nie zaindeksowania jej w Google). Po przeglądzie radcy jednym commitem: `noindex` zdjęty, trasa w sitemapie z priorytetem 0.3, KPI indeksacji 17/17 → 18/18. Powód: nieprzejrzana przez prawnika klauzula administratora nie powinna być pozycjonowana jako oficjalny dokument firmy. **To jest zmiana wobec wcześniejszej wersji planu** („Indeksowalna, priorytet 0.3"), zgodna z domyślnym wyborem z `synthesis.md` D-21 („szkielet CC, `noindex` do przeglądu"). Jeśli wolicie indeksować od razu, wystarczy napisać `D16-b: indeksuj`.
-- **Konsekwencja:** **bez pełnej nazwy JDG, adresu i NIP-u administratora strona nie idzie na produkcję** (DoD F0). Newsletter i formularze tylko z double opt-in i odrębną, niezaznaczoną zgodą (PKE art. 398). Szkielet zawiera obowiązkową sekcję o **zautomatyzowanych decyzjach i profilowaniu** (art. 14 ust. 2 lit. g: prowadzimy research leadów z punktacją firm, więc milczenie o tym byłoby przy kontroli UODO kolejnym zarzutem obok art. 14) oraz jawne wskazanie **przekazywania danych do USA** (Cloudflare, Google, Resend, Cal.com) z podstawą SCC/DPF i sposobem uzyskania kopii zabezpieczeń.
-- **Kto:** Paweł (dane JDG do 2026-09-16, radca do 2026-09-30).
+- **ZMIANA 2026-09-12: dwie bramki zamiast jednej.** **Publikacja** wymaga wyłącznie tożsamości administratora (`SITE_PUBLISHABLE`: imię i nazwisko albo nazwa podmiotu + kanał kontaktu, zero markerów `[DECYZJA FOUNDERÓW: …]` w `dist/rodo.html`, kompletne sekcje o serwisie, strona nic nie zbiera). **Outbound** wymaga dodatkowo `OUTREACH_READY` (adres albo zdanie zastępcze, komplet art. 14 z podstawą transferu rozstrzygniętą per dostawca, zgody PKE w `data/consent.ts`, rejestry zgód i sprzeciwów poza repo, datowany wpis w `docs/DECISIONS.md`). **Rejestracja działalności i NIP nie są warunkiem żadnej z tych bramek**; są warunkiem pierwszej faktury (`CONTRACT_READY`). Okres przechowywania ujednolicony na **12 miesięcy od ostatniego kontaktu** (plan §4.6 pkt 5 i reguła `legal-rodo-page-required` pkt 6 miały różne wartości). Wybór administratora: D25; adres: D26.
+- **Konsekwencja:** stara formuła „bez pełnej nazwy JDG, adresu i NIP-u strona nie idzie na produkcję" jest **wycofana**. Newsletter i formularze tylko z double opt-in i odrębną, niezaznaczoną zgodą (PKE art. 398). Szkielet zawiera obowiązkową sekcję o **zautomatyzowanych decyzjach i profilowaniu** (art. 14 ust. 2 lit. g: prowadzimy research leadów z punktacją firm, więc milczenie o tym byłoby przy kontroli UODO kolejnym zarzutem obok art. 14) oraz jawne wskazanie **przekazywania danych do USA** (Cloudflare, Google, Resend, Cal.com) z podstawą SCC/DPF i sposobem uzyskania kopii zabezpieczeń.
+- **Kto:** Paweł (tożsamość administratora do 2026-09-16, radca do 2026-09-30).
 
 ---
 
@@ -246,6 +253,145 @@ Każda decyzja ma: pytanie · opcje · **REKOMENDACJA** · **DOMYŚLNY WYBÓR** 
 
 ---
 
+## Część G · Korekta 2026-09-12: brak działalności i nacisk na narzędzia (D25–D35)
+
+> Powstała po dyrektywie founderów z 2026-09-12. Trzy równoległe propozycje (prawo, kompozycja „wow", inwentarz narzędzi) używały tych samych numerów D25–D28 dla różnych rzeczy; ta część nadaje im jedną, rozłączną numerację. Rozstrzygnięcia sprzeczności są opisane w `docs/plan/reframe-2026-09-12.md`.
+
+### D25 · Kto jest administratorem danych
+
+- **Pytanie:** kto figuruje w `/rodo` jako administrator, skoro nie ma zarejestrowanej działalności?
+- **Opcje:** (a) Paweł jako jedyny administrator, Karol upoważniony na piśmie (art. 29 RODO); (b) Karol jako jedyny administrator; (c) obaj jako współadministratorzy (art. 26: uzgodnienia plus obowiązek opublikowania ich zasadniczej treści w `/rodo`).
+- **REKOMENDACJA:** (a). Administratorem może być osoba fizyczna (art. 4 pkt 7 RODO nie wymaga rejestracji, NIP-u ani REGON-u). Wskazanie jednego administratora unika współadministrowania; Paweł prowadzi outbound, a Karol ma zbieg z etatem.
+- **DOMYŚLNY WYBÓR:** (a).
+- **Konsekwencja:** imię i nazwisko administratora są publiczne w `/rodo`; skrzynkę `kontakt@`, bazę leadów oraz konta Cloudflare, GSC i Cal.com prowadzi ta sama osoba; przy administratorze Karolu wariant D6(b) „bez nazwiska" przestaje działać, bo nazwisko i tak stoi w klauzuli.
+- **Kto:** obaj; do 2026-09-16 (fakt F2).
+
+### D26 · Adres do korespondencji administratora
+
+- **Pytanie:** jaki adres podajemy w klauzuli, żeby nie publikować adresu zamieszkania?
+- **Opcje:** (a) skrytka pocztowa Poczty Polskiej (umowa z osobą fizyczną, kilkadziesiąt złotych rocznie); (b) adres do doręczeń u znajomego przedsiębiorcy za pisemną zgodą; (c) adres zamieszkania; (d) brak adresu w treści plus zdanie „Adres do korespondencji podajemy na żądanie wysłane na kontakt@klarow.com".
+- **REKOMENDACJA:** (d) na czas publikacji portfolio, (a) przed pierwszym kontaktem handlowym. Wariant (c) jest legalny i najprostszy, ale publikuje adres domowy w dokumencie, który zostaje w archiwach.
+- **DOMYŚLNY WYBÓR:** (d) do publikacji, (a) przed outboundem.
+- **Konsekwencja:** `address` w `CONTROLLER` pusty renderuje zdanie zastępcze; uzupełnienie adresu to jedno pole i jeden commit. **Do potwierdzenia u radcy:** czy zdanie zastępcze wystarcza w klauzuli art. 14.
+- **Kto:** Paweł.
+
+### D27 · Zakupy i konta bez firmy
+
+- **Pytanie:** na kogo kupujemy narzędzia (Cal.com, w fazie 2 Higgsfield) i co z kosztem sprzed rejestracji?
+- **Opcje:** (a) karta prywatna administratora, faktura na osobę fizyczną, koszt traktowany jako nieodliczalny, zero korekt wstecz; (b) czekamy z każdym zakupem do rejestracji; (c) zakup na kogoś trzeciego.
+- **REKOMENDACJA:** (a). Przy kwotach rzędu 49 $ różnica podatkowa nie uzasadnia naginania; zakup prywatny zdejmuje też obowiązek rejestracji VAT-UE i rozliczenia importu usług. (c) odpada: po rejestracji trzeba by przenosić licencje i umowy powierzenia.
+- **DOMYŚLNY WYBÓR:** (a).
+- **Konsekwencja:** właściciel każdego konta = administrator z `CONTROLLER`, wpisany do kolumny „właściciel konta" w `references/integrations-registry.md`; po rejestracji zmieniamy dane rozliczeniowe na istniejącym koncie. Warunek użycia assetu na stronie: potwierdzone prawa komercyjne na planie, z którego powstał finał. Do potwierdzenia z księgową.
+- **Kto:** Paweł (płatnik) + Karol (wykonanie).
+
+### D28 · Wizual hero: kadr produktu zamiast pętli generatywnej
+
+- **Pytanie:** co stoi w hero, skoro wideo z Higgsfield wypada?
+- **Opcje:** (a) kadr prawdziwego dashboardu (`ProductionDashboard`, Playwright, 0 kr, deterministyczny, WebP ≤ 110 KB / ≤ 55 KB); (b) GLSL Hills po idle; (c) sam gradient bez obrazu.
+- **REKOMENDACJA:** (a). Sędzia marki odrzucił abstrakcyjną stal mechanizmem „tekst plus gradient to nie jest hero"; kadr produktu jest jedynym wizualem, który w tej samej sekundzie mówi „co robimy", „dla kogo" i „na jakim poziomie wykonania", a przy okazji zdejmuje zależność od faktury i od trialu.
+- **DOMYŚLNY WYBÓR:** (a).
+- **ZMIANA 2026-09-12 (wieczór, D37):** wybór (a) **zostaje** (kadr `ProductionDashboard`, ten sam plik, ten sam budżet, ten sam LCP), ale kadr jest **klatką zero nagrania** tego dashboardu i po `window.load` przechodzi w ruch na desktopie.
+- **Konsekwencja (zaktualizowana):** `HeroMedia` i `MediaBoundary` **powstają** w F2; `three` i `@react-three/fiber` nadal wypadają z zależności; kadr nadal jest elementem LCP (bramka elementowa, nie tylko czasowa); reguła `design-hero-discipline` dostaje wariant B rozmieszczenia media (kadr w kolumnach 7–12, przycięcie layoutem, tekst na `--background` bez overlayu) z dopiskiem, że **media hero mogą nieść nagranie prawdziwego narzędzia**, a przycisk pauzy nie liczy się do czterech elementów hero, ale musi być recesywny i w obrębie ramy kadru.
+- **Kto:** Karol (oko marki).
+
+### D29 · Żywe demo na stronie głównej
+
+- **Pytanie:** czy `/` dostaje działający `DemoReport` bezpośrednio pod hero, z możliwością wgrania własnego pliku?
+- **Opcje:** (a) tak, sekcja S2 „Sprawdź to na swoim pliku", montaż lazy poniżej zgięcia; (b) nie, dowód zostaje na podstronach.
+- **REKOMENDACJA:** (a). To jedyne miejsce, w którym obietnica „dane zostają u Ciebie" przestaje być zdaniem i staje się demonstracją, a KPI „≥ 30 % wizyt z interakcją" przestaje być mierzalne wyłącznie na podstronach.
+- **DOMYŚLNY WYBÓR:** (a).
+- **Konsekwencja:** nowy komponent `DemoFrame` (opakowuje `DemoReport`, nie edytuje go: §12.1); budżet `homeLazyGz ≤ 45 KB gz` poza `modulepreload`; **obowiązkowa bramka „zero requestów sieciowych po wgraniu pliku"** (`check-client-only.mjs`, nowa reguła `demo-client-side-only-claim`): bez zielonego testu zdanie „nie wychodzi z przeglądarki" nie wchodzi na stronę. Awaryjny wyłącznik: `DemoFrame` zostaje przy zrzucie i linku do podstrony.
+- **Kto:** obaj (ryzyko INP na telefonie mierzymy w F4).
+
+### D30 · Pasek „W liczbach" jako sekcja home
+
+- **Pytanie:** zostawiamy pasek czterech wielkich liczb?
+- **Opcje:** (a) usunąć; (b) zostawić w wersji trzypozycyjnej; (c) zostawić w pełnej czwórce.
+- **REKOMENDACJA:** (a). Z czterech pozycji dwie są słowami („kilkanaście", „co do grosza"), jedna jest zablokowana umową IP, a jedna ma w rejestrze status DO POTWIERDZENIA, więc pasek startowo miałby trzy pozycje, w tym dwie słowne. Licznik jadący od zera przy zerowym portfolio klienckim to ten sam rodzaj teatru, który Karol kasował dwa razy.
+- **DOMYŚLNY WYBÓR:** (a).
+- **Konsekwencja:** „13" i „12" wchodzą do podpisu ściany narzędzi (użytkownik widzi ich pokrycie w tej samej sekundzie, bo może policzyć kafle), „co do grosza" zostaje w kolumnie ✓ sekcji „Kalkulator, nie wróżka"; komponenty `MetricsStrip` i `Counter` tracą konsumenta i wypadają z v1.
+- **Kto:** obaj.
+
+### D31 · Etykiety: „Narzędzia" zamiast „Realizacji"
+
+- **Pytanie:** jak nazywamy zakładkę, sekcję dowodu i CTA wtórne?
+- **Opcje:** (a) nav „Narzędzia" / „Tools", H2 na `/` „Co zbudowaliśmy" / „What we've built", H1 hubu „Narzędzia, które zbudowaliśmy" / „Tools we have built", `cta.secondary` „Zobacz narzędzia" / „See the tools"; (b) wszędzie „Narzędzia i dema" / „Tools and demos"; (c) bez zmian: „Realizacje i dema".
+- **REKOMENDACJA:** (a). „Realizacja" w polszczyźnie biznesowej znaczy „zlecenie wykonane dla klienta", a klientów jest zero: to nadinterpretacja na granicy `brand-honest-labels`. Wariant (a) łączy dwie propozycje: mocniejszy głos („Co zbudowaliśmy") stoi na `/`, a słowo kluczowe zgodne z URL `/narzedzia` zostaje w H1 hubu, więc nie tracimy pozycjonowania i nie duplikujemy nagłówka między trasami.
+- **DOMYŚLNY WYBÓR:** (a).
+- **Konsekwencja:** podmiana w `messaging.ts` (`toolsLabel`, `builtLabel`, `cta.secondary`) propaguje się na hero, nawigację, stopkę, okruszek podstrony, `llms.txt` i prompt bota; aliasy `/realizacje` i `/realizacje/*` w `_redirects` **zostają** (adresy z wizytówek i starych linków muszą działać).
+- **Kto:** Paweł (głos sprzedaży) z Karolem.
+
+### D32 · Nowa kolejność sekcji strony głównej
+
+- **Pytanie:** w jakiej kolejności stoi dziewięć sekcji `/`?
+- **Opcje:** (a) hero · żywe demo · ściana 13 · co budujemy · co osiągniesz · ludzie · kalkulator nie wróżka · jak pracujemy · zamknięcie; (b) kolejność z wersji porannej (hero · co budujemy · dowód · co osiągniesz · liczby · jak pracujemy · kalkulator · ludzie · zamknięcie).
+- **REKOMENDACJA:** (a). Dowód wchodzi na pozycję 2, warstwa sprzedażowa schodzi bliżej końca (dyrektywa: strona jest wizytówką, nie lejkiem), a sekcja o ludziach awansuje z 8 na 6, bo bez podmiotu CV tworzą ludzie i ich artefakty.
+- **DOMYŚLNY WYBÓR:** (a).
+- **Konsekwencja:** 9 sekcji i 9 rodzin layoutu bez zmian, eyebrow nadal 0; kotwica reguły `copy-persona-outcomes-section` przenosi się na „bezpośrednio po bloku dowodu i przed sekcją o ludziach"; kolejność pracy w F2 idzie tą samą listą.
+- **Kto:** Karol (kompozycja) z Pawłem.
+
+### D33 · Jak pokazujemy trzynaście narzędzi na `/`
+
+- **Pytanie:** cztery duże ramy czy cała ściana?
+- **Opcje:** (a) jeden featured (KSeF) plus 12 kafli, wszystkie jako prawdziwe zrzuty w jednym kadrowaniu 16:10, siatka gapless z hairline; (b) cztery ramy jak w wersji porannej; (c) trzynaście równych miniatur bez hierarchii.
+- **REKOMENDACJA:** (a). Cztery ramy pokazują próbkę, trzynaście kafli pokazuje warsztat, a featured daje hierarchię, której brakuje wariantowi (c). Cała ściana waży 480 KB i jest w całości `lazy`, czyli i tak mniej niż usunięte wideo.
+- **DOMYŚLNY WYBÓR:** (a).
+- **Konsekwencja i warunek:** trzynaście dashboardów dzieli ten sam kit, więc bez pracy nad kadrem wyjdzie „jeden ciemny prostokąt powielony trzynaście razy". Dlatego kadr `clip` dobiera się **per pozycja pod typ obrazu** (wykres, macierz, Gantt, kafle, dokument, diagram, badge PASS z linią dowodu sumy), a przegląd kontaktu zbiorczego (`shoot-tools.mjs --contact-sheet`) jest obowiązkowym punktem przed zamknięciem F3. Bliźniacze kadry poprawiamy zmianą sceny, nigdy filtrem graficznym. Kolejność kafli = pole `order` w `tools.ts`. **Pytanie zamknięte przy okazji:** wcześniejszy spór o „czwartą ramę" (audyt jakości kontra import z rekoncyliacją) znika, bo obie pozycje są na ścianie; z rekoncyliacji bierzemy natomiast kadr z badge PASS, bo to jedyny obraz na witrynie mówiący „sprawdź nas".
+- **Kto:** Karol (przegląd kadrów po F1).
+
+### D34 · Mapa integracji na stronie
+
+- **Pytanie:** czy dokładamy schemat „z czym się spinamy" (KSeF, ERP, magazyn, pliki Excel, poczta, podpis elektroniczny, rejestry publiczne)?
+- **Opcje:** (a) tak, wyłącznie jako deklaracja **umiejętności** („budujemy integracje z…"), nigdy jako „wdrożyliśmy u klienta", brzmienie zatwierdzone przez founderów przed F3; (b) nie do umowy IP.
+- **REKOMENDACJA:** (a). SVG na tokenach, ta sama rodzina co `KsefFlow`, 0,5–1 dnia, zero kredytów. Granica jest ostra: lista integracji opisuje pracę wykonaną wcześniej, więc bez umowy IP wolno mówić wyłącznie o umiejętności.
+- **DOMYŚLNY WYBÓR:** (a).
+- **Kto:** obaj (brzmienie), Karol (wykonanie).
+
+### D35 · Mikro-nagrania dem
+
+- **Pytanie:** czy w v1 są hover-klipy pokazujące dema w ruchu?
+- **Opcje:** (a) zero w v1, trzy w fazie 2 (`kontroling-kosztow`: ETC → marża; `raport-zarzadczy`: wklejka → raport; `import-z-rekoncyliacja`: FAIL → poprawka → PASS); (b) jeden klip już w F2; **(c) cztery klipy w v1 (cały pierwszy rząd ściany), dopisane 2026-09-12 wieczorem razem z D37**.
+- **REKOMENDACJA (rano):** (a), bo klip nie działa na telefonie i kosztuje transfer.
+- **ZMIANA 2026-09-12 (wieczór): (c) cztery klipy w v1.** Skoro `record-demos.mjs` i tak powstaje w F1 dla nagrania hero (D37), krańcowy koszt czterech klipów to kilka godzin, a nie dzień, i to one realizują „efekt animacyjny" tam, gdzie ma on wartość dowodową. Klipy dostaje **pierwszy rząd ściany** (`kontroling-kosztow`, `raport-zarzadczy`, `import-z-rekoncyliacja`, `os-czasu-zadan`), czyli dokładnie cztery kafle widoczne w jednym rzędzie na ≥ 1024 px. Nie dwanaście: 12 × 320 KB i dwanaście dekoderów, a „wszystko się rusza" znosi efekt odkrycia.
+- **DOMYŚLNY WYBÓR:** (c), cztery klipy pierwszego rzędu.
+- **Konsekwencja:** klipy startują wyłącznie po **progu intencji 120 ms** na hover albo na `focus-visible`, `preload="none"`, maksimum jeden naraz, `pointer-events: none` (kafel zostaje jednym `<a>`), poster = kafel 480×300, budżet ≤ 320 KB, zero na `pointer: coarse`, `saveData` i przy `prefers-reduced-motion`. Blokujące dla F2 jest tylko nagranie hero; klipy mogą dojechać do F3.
+- **Kto:** Karol.
+
+
+## Część H · Korekta wieczorna 2026-09-12: wideo wraca do v1 (D36–D38)
+
+> Decyzja Karola, wiążąca: **Higgsfield wchodzi do wersji 1**, powód w jego słowach: „zależy mi na efekcie wow i animacyjnym". Poniższe trzy decyzje mówią, **w jakim kształcie** to wchodzi, żeby wrażenie było duże, strona nadal ładowała się poniżej 2,5 s na telefonie i żeby nie złamać zasad, które founderzy sami ustanowili. Scenorys, budżety i procedura zakupu: `docs/plan/warstwa-wrazenia.md`.
+
+### D36 · Higgsfield w v1: w jakim zakresie i za ile
+
+- **Pytanie:** co dokładnie kupujemy i co z tego trafia na stronę?
+- **Opcje:** (a) **statyczna faktura na stronie** (grunt hero, master still, tło OG) plus opcjonalna pętla na LinkedIn poza stroną; (b) pętla wideo w tle hero na stronie plus stille; (c) pełna lista z researchu (przejścia, tła sekcyjne, mikro-animacje ikon, 1 300–2 200 kr, ULTRA 129 USD).
+- **REKOMENDACJA:** (a). To jedyny zakres, który kupuje rzecz, której nie zrobi ani nagranie Playwrightem, ani kod (fakturę materiału), nie zajmuje jedynego slotu autoodtwarzania na `/` i **mieści się w bezpłatnym trialu**, więc publikacja strony nie zależy od żadnej płatności. (c) odpada przy tym zakresie: ULTRA jest niepotrzebne.
+- **DOMYŚLNY WYBÓR:** (a).
+- **Konsekwencja:** ≈ 222 kredytów łącznie (H1 grunt 24, H2 master still 15, H3 tło OG 10, rezerwa 7 = **zakres strony ≈ 56 kr, 0 USD w trialu**; H4 pętla na LinkedIn ≈ 166 kr = **49 USD + VAT za jeden miesiąc PLUS**, osobna decyzja). Faktura na osobę fizyczną (D25, D27), koszt nieodliczalny. Do modelu **nigdy** nie trafiają nagrania ani zrzuty narzędzi, dane klientów, twarze i materiały firmy źródłowej; po sprincie generacje kasujemy z konta. **Agent nie uruchamia trialu ani zakupu.** Grunt hero jest warstwą niezależną: gdy odpadnie w przeglądzie, wraca gradient na tokenach i strona nie traci treści.
+- **Kto:** Karol (oko marki i wykonanie w MCP) z Pawłem (płatnik).
+
+### D37 · Co gra w hero: nagranie narzędzia czy pętla generatywna
+
+- **Pytanie:** co zajmuje **jedyny** slot autoodtwarzanego wideo na `/`?
+- **Opcje:** (a) **nagranie prawdziwego narzędzia** (`ProductionDashboard`, 8 s, jedno odtworzenie, poster = klatka 0 = kadr produktu = LCP, 0 kredytów, deterministyczne); (b) **pętla Higgsfielda pod scrimem**, kadr produktu na wierzchu (pętla jako tekstura, 330–420 kr, LCP nadal na kadrze); (c) pętla Higgsfielda jako jedyny wizual hero, bez kadru produktu.
+- **REKOMENDACJA:** (a). Nagranie jest **jednocześnie ruchem i dowodem**: w tej samej sekundzie mówi „co", „dla kogo" i „to naprawdę liczy", kosztuje 0 kredytów, jest deterministyczne i responsywne, a poster jest jego klatką zero, więc kadr z porannej korekty zostaje bez kompromisu. Pętla abstrakcyjna jest tylko ruchem i przy tej personie („kalkulator, nie wróżka") niesie ryzyko „widać, że to AI" oraz efektu stocku. Wariant (c) wraca dokładnie do tego, co odrzucono rano.
+- **DOMYŚLNY WYBÓR:** (a).
+- **Konsekwencja (a):** `record-demos.mjs` wchodzi do F1; budżet nagrania hero WebM ≤ 1,2 MB / MP4 ≤ 1,4 MB (kadr niesie tekst UI, więc więcej niż tekstura); transfer desktop `/` rośnie z 1,2 MB do ≤ 2,5 MB (mobile bez zmian, ≤ 350 KB i 0 B wideo); bramka LCP staje się **elementowa** (element LCP = kadr produktu).
+- **Konsekwencja (b), gdyby Karol wybrał inaczej:** wchodzi zakup PLUS (bo pętla to finał, a finały tylko na planie płatnym), budżet pętli 720 KB (WebM) / 980 KB (MP4) pod scrimem `.88`, dochodzi pomiar kontrastu na najjaśniejszej klatce (`YMAX` ≤ 105 w polu tekstu), ryzyko „AI-slop" i bandingu na OLED, a nagranie hero schodzi do roli klipu hover. Kontrakt warstw hero i zakaz wideo na telefonie obowiązują **tak samo w obu wariantach**.
+- **Kto:** Karol (oko marki). Kryterium rozstrzygające jest zapisane i mierzone: bramka `strona-v2-plan.md` §7.3a (czytelność po kompresji, test „co widzisz", Lighthouse, realny iPhone).
+
+### D38 · „Chaos w porządek": wideo generatywne czy kod
+
+- **Pytanie:** metaforę „rozsypane dane układają się w wynik" robimy klipem czy kodem?
+- **Opcje:** (a) **kodem** (`ChaosToOrder`, Motion na siatce 96 prostokątów, jako **stan ładowania żywego dema** w S2); (b) klipem z `seedance_2_5` (start = chaos, end = siatka, ≈ 280 kr).
+- **REKOMENDACJA:** (a). Klip byłby **drugim** ruchomym elementem na trasie (łamie `media-one-autoplay-per-route`), kosztuje więcej niż cały pozostały budżet Higgsfielda, ma sztywne proporcje, nie jest deterministyczny i **nie da się go zsynchronizować z faktycznym czasem montażu chunku**. Kod robi ten sam obraz za 0 kredytów i daje ruchowi funkcję, więc przechodzi bramkę `motion-motivated`.
+- **DOMYŚLNY WYBÓR:** (a).
+- **Konsekwencja:** nowy komponent `ChaosToOrder` (wyłącznie `opacity` i `transform`, offsety z `src/data/scatter.ts` wpisane na stałe, kaskada kolumnami 16 ms, `aria-hidden` plus sąsiedni `role="status"`, reduced-motion → siatka od razu w układzie docelowym). Wariant zapasowy, gdyby moment okazał się niewidoczny (dema montują się szybciej niż 900 ms): ten sam komponent jako pas 140 px nad bento w S4, uruchamiany raz. Nie robimy obu naraz.
+- **Kto:** Karol (kompozycja).
+
+---
+
 ## Tabela przejścia numeracji: `synthesis.md` / skill strażnika `D-xx` → ten dokument `Dxx`
 
 > **Dlaczego to tu jest:** ten plik przenumerował decyzje z `D-01…D-23` (numeracja z `synthesis.md` §4) na `D1…D24` i **zmienił mapowanie**, a w gotowym skillu `.claude/skills/klarow-guardian/**` jest ~263 odwołań do starych ID (m.in. `rules/code-build-target-policy.md`, `rules/integ-embed-requires-privacy.md`, `rules/code-no-dead-code.md`). Bez tej tabeli każde odwołanie w regule strażnika wskazuje inną decyzję niż ten dokument. **Zadanie F0 (ten sam commit co `docs/DECISIONS.md`):** `grep -rn "D-[0-9]" .claude/skills/klarow-guardian` → podmiana ID wg tej tabeli → `node .claude/skills/klarow-guardian/scripts/build-index.mjs`.
@@ -285,9 +431,9 @@ Każda decyzja ma: pytanie · opcje · **REKOMENDACJA** · **DOMYŚLNY WYBÓR** 
 | # | Fakt | Kto | Do kiedy | Co odblokowuje |
 |---|---|---|---|---|
 | F1 | Czy repo `github.com/przeczkowskyy/Pawel_Karol_proj` jest prywatne? Jeśli publiczne: `docs/nuconic-ekosystem-referencja.md` i CLAUDE.md łamią zasadę #3 → repo prywatne albo `docs/` do osobnego prywatnego repo | Paweł | przed F0 (2026-09-16) | całą przebudowę bez ryzyka prawnego |
-| F2 | Pełne dane administratora (nazwa JDG, adres, NIP) do `/rodo` | Paweł | 2026-09-16 | publikację F0 i outbound |
+| F2 | **Tożsamość administratora** do `/rodo`: imię i nazwisko + adres do korespondencji **albo** świadomie wybrane zdanie zastępcze (D26). NIP dopiero po rejestracji i nie jest wymagany przez RODO | Paweł | 2026-09-16 | publikację (bramka `SITE_PUBLISHABLE`); komplet art. 14 osobno odblokowuje outbound |
 | F3 | Status rozmów o umowie IP / zgodzie na case z poprzednią firmą | Paweł | informacja do 2026-09-16; podpis: cel 2026-10-15 | D7: „15 narzędzi", karty case, zrzuty |
-| F4 | Portfolio Pawła: **nazwisko** (w całym planie Paweł występuje bez nazwiska, a S8 wymaga „imię i nazwisko 700" dla obu founderów), lista projektów i ról, 1 zdanie bio, zdjęcie | Paweł | 2026-09-19 (koniec F1) | sekcję S8 z dwoma founderami; bez nazwiska karta Pawła może pójść tylko w wariancie D6(b), czyli tym samym, który dziś przewidujemy dla Karola |
+| F4 | **Podniesiona waga 2026-09-12:** jeśli administratorem danych jest Paweł (D25a), jego nazwisko blokuje **publikację całej strony**, nie tylko sekcję o ludziach; termin przesuwa się z końca F1 na **przed F4**. Portfolio Pawła: **nazwisko** (w całym planie Paweł występuje bez nazwiska, a S8 wymaga „imię i nazwisko 700" dla obu founderów), lista projektów i ról, 1 zdanie bio, zdjęcie | Paweł | 2026-09-19 (koniec F1) | sekcję S8 z dwoma founderami; bez nazwiska karta Pawła może pójść tylko w wariancie D6(b), czyli tym samym, który dziś przewidujemy dla Karola |
 | F5 | Potwierdzenie rotacji klucza Anthropic z appki KSeF (poza repo) i przeniesienia plików z kluczami z OneDrive/Desktop do Menedżera poświadczeń | Karol | przed F0 | reguła `secret-rotate-on-exposure` w strażniku |
 | F6 | Potwierdzenie zakresu liczby **„3 dni od pierwszej linii kodu do działającego produktu"**: co dokładnie znaczy „działający produkt" (tryb mock? połączenie z `api-demo.ksef.mf.gov.pl`?). W rejestrze `references/allowed-numbers.md` §1 liczba ma status **DO POTWIERDZENIA**, a mimo to wchodzi na pasek „W liczbach" na `/` | Karol | przed F2 | 4. pozycję paska S5; bez potwierdzenia pasek ma 3 pozycje, nie 4 |
 
@@ -297,10 +443,10 @@ Każda decyzja ma: pytanie · opcje · **REKOMENDACJA** · **DOMYŚLNY WYBÓR** 
 
 | ID | Domyślnie | ID | Domyślnie |
 |---|---|---|---|
-| D1 | pełne V1 w H1, LinkedIn i bocie | D13 | trial Higgsfield bez PLUS → tło = GLSL Hills |
+| D1 | pełne V1 w H1, LinkedIn i bocie | D13 | **nie kupujemy Higgsfielda w v1** (brak podmiotu do faktury; asset przegrywa z kadrem produktu) |
 | D2 | Excel jako symptom; hak zostaje w ofercie i outboundzie | D14 | mailto/tel do czasu konta Cal.com |
 | D3 | „pierwszy działający efekt w dni" + `delivery` per karta | D15 | GSC + CF Web Analytics, zdarzenia po `/rodo` |
-| D4 | „zero chmury dostawcy", bullet AI usunięty | D16 | szkielet `/rodo` od CC, przegląd founderów, radca w 2 tygodnie |
+| D4 | „zero chmury dostawcy", bullet AI usunięty | D16 | szkielet `/rodo` od CC, przegląd founderów, radca w 2 tygodnie; **dwie bramki: `SITE_PUBLISHABLE` i `OUTREACH_READY`** |
 | D5 | KSeF = „Własny produkt" | D17 | „Poza biurem" poza stroną |
 | D6 | Paweł pełnie, Karol imię + rola + inicjał „K" | D18 | Football Intelligence i LootAlert poza stroną |
 | D7 | liczby zamrożone w opisach, home tylko liczby własne, „kilkanaście" | D19 | React 19.3 w fazie 2 |
@@ -308,7 +454,17 @@ Każda decyzja ma: pytanie · opcje · **REKOMENDACJA** · **DOMYŚLNY WYBÓR** 
 | D9 | CTA biały płaski | D21 | hooki blokujące + restrukturyzacja CLAUDE.md |
 | D10 | dark-only, light-ready w tokenach | D22 | `npm run check` jako bramka przed pushem |
 | D11 | zakaz „—", „–" tylko w zakresach liczbowych | D23 | 4 efekty „Co osiągniesz" dosłownie |
-| D12 | GLSL Hills po idle (wideo po trialu i akceptacji) | D24 | `safari13` zostaje w v1 |
+| D12 | **kadr prawdziwego pulpitu w hero** (ani wideo, ani GLSL Hills) | D24 | `safari13` zostaje w v1 |
 | D16-b | `/rodo` z `noindex` i poza sitemapą do przeglądu radcy | | |
+| D25 | Paweł jedynym administratorem danych, Karol upoważniony (art. 29) | D31 | nav „Narzędzia", H2 „Co zbudowaliśmy", H1 hubu „Narzędzia, które zbudowaliśmy" |
+| D26 | zdanie „adres na żądanie" do publikacji, skrytka pocztowa przed outboundem | D32 | hero · demo · ściana · co budujemy · co osiągniesz · ludzie · kalkulator · kroki · zamknięcie |
+| D27 | karta prywatna administratora, faktura na osobę fizyczną, koszt nieodliczalny | D33 | ściana: 1 featured (KSeF) + 12 kafli, kadr dobierany per typ obrazu |
+| D28 | kadr `ProductionDashboard` w hero; zero wideo i zero WebGL w v1 | D34 | mapa integracji jako deklaracja umiejętności |
+| D29 | żywe demo raportu na `/` (S2) z bramką „zero requestów" | D35 | mikro-nagrania: zero w v1, trzy w fazie 2 |
+| D30 | pasek „W liczbach" usunięty; „13" i „12" w podpisie ściany | | |
+| D36 | Higgsfield w v1 **tylko jako statyczna faktura** (grunt hero, master still, tło OG ≈ 56 kr w trialu, 0 USD) plus opcjonalna pętla na LinkedIn poza stroną (49 USD) | D37 | w hero gra **nagranie prawdziwego narzędzia** (8 s, jedno odtworzenie); kadr produktu = klatka 0 = LCP |
+| D38 | „chaos w porządek" **kodem** jako stan ładowania dema, nie klipem | D35 | **cztery klipy hover** pierwszego rzędu ściany w v1 (zmiana z „zero w v1") |
+
+**Próg poza listą decyzji: `CONTRACT_READY`.** Rejestracja działalności, NIP, rachunek, wzór umowy sprintu i porozumienie wspólników są warunkiem **pierwszej faktury**, nie publikacji strony i nie outboundu. Działalność nierejestrowana nie obsłuży pilota za kilkanaście tysięcy (limit przychodu z art. 5 Prawa przedsiębiorców). To pozycja procesowa, nie decyzja o stronie: nikt nie musi na nią odpowiadać do 2026-09-16, ale musi być domknięta przed podpisem pierwszej umowy.
 
 Po spotkaniu: wynik do `docs/DECISIONS.md` (wpis z datą, ID, wyborem i jednym zdaniem uzasadnienia), podmiana starych ID `D-xx` w `.claude/skills/klarow-guardian/**` wg tabeli przejścia numeracji (+ `node .claude/skills/klarow-guardian/scripts/build-index.mjs`), start F0 wg `strona-v2-plan.md` §11.

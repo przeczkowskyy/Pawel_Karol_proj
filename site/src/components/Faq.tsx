@@ -6,7 +6,7 @@ import { FAQ_I18N } from "@/data/faq";
 /* FAQ = typowe obiekcje + nasze kontry (plan strategiczny §2.5), PL/EN.
    Dane w src/data/faq.ts (wspólne z FAQPage JSON-LD i prerenderem).
    Odpowiedź jest ZAWSZE w DOM (FAQPage JSON-LD musi mieć pokrycie w treści
-   strony — warunkowy render zostawiał Google 6 pytań bez odpowiedzi);
+   strony; warunkowy render zostawiał Google 6 pytań bez odpowiedzi);
    zwijanie animuje grid-template-rows (.faq-answer w globals.css),
    z poszanowaniem prefers-reduced-motion. */
 

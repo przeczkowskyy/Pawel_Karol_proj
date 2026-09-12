@@ -2,13 +2,13 @@ import { useMemo, useState } from "react";
 import { Landmark, TriangleAlert, Info } from "lucide-react";
 import { useLang } from "@/i18n";
 
-/* Dashboard „Fakturowanie US (AIA G703)" — LIVE, dane fikcyjne, deterministyczny.
+/* Dashboard „Fakturowanie US (AIA G703)”: LIVE, dane fikcyjne, deterministyczny.
    Odbrandowane odtworzenie silnika propozycji 1:1 z blueprintu:
      earned  = round(D × M)                      [centy, int]
      billed  = Σ dotychczas zafakturowane        [depozyt liczy się jako billed]
      proposal = earned − billed   gdy M > próg depozytu (40%), inaczej 0
      change ordery: ten sam wzór, bez progu depozytu
-     ujemna propozycja = CLAWBACK — celowo NIE przycinana (korekta).
+     ujemna propozycja = CLAWBACK, celowo NIE przycinana (korekta).
    Suwaki % postępu per linia → propozycja przelicza się na żywo. */
 
 const DEPOSIT_PCT = 0.4;
@@ -46,7 +46,7 @@ const usd = (c: number) =>
 
 const T = {
   pl: {
-    intro: "Arkusz wartości (schedule of values) fikcyjnego projektu modułowego w USD. Przesuń % wykonania — silnik liczy „ile fakturować teraz” dokładnie tym samym wzorem, którym rozliczaliśmy realne aplikacje płatnicze.",
+    intro: "Arkusz wartości (schedule of values) fikcyjnego projektu modułowego w USD. Przesuń % wykonania: silnik liczy „ile fakturować teraz” dokładnie tym samym wzorem, którym rozliczaliśmy realne aplikacje płatnicze.",
     formulaTitle: "Wzór (jawny, w centach)",
     formula: "propozycja = wykonanie × wartość − dotychczas zafakturowane · fakturowalne dopiero powyżej progu depozytu 40% · change ordery bez progu · ujemna propozycja = clawback (celowo nie przycinana)",
     thLine: "Linia",
@@ -66,7 +66,7 @@ const T = {
     foot: "Dane fikcyjne · centy (int), zero dryfu · te same dane zawsze dają tę samą propozycję. Otwiera rynek USA (budownictwo modułowe).",
   },
   en: {
-    intro: "The schedule of values of a fictional modular project in USD. Drag the completion % — the engine computes “how much to bill now” with exactly the same formula we used to settle real pay applications.",
+    intro: "The schedule of values of a fictional modular project in USD. Drag the completion %: the engine computes “how much to bill now” with exactly the same formula we used to settle real pay applications.",
     formulaTitle: "Formula (explicit, in cents)",
     formula: "proposal = completion × value − billed to date · billable only above the 40% deposit threshold · change orders skip the threshold · a negative proposal = clawback (deliberately not clamped)",
     thLine: "Line",

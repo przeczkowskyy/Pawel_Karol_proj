@@ -15,7 +15,8 @@ added: 2026-09-12
 4. **Inbound jest bezpieczny.** Formularz i hak „Przyślij nam swój najgorszy Excel", `mailto:`, `tel:` i rezerwacja terminu to kontakt zainicjowany przez użytkownika: art. 398 ust. 2 (udostępnienie adresu **w celu** otrzymania informacji). Warunek: formularz nie dokłada domyślnie zgody na newsletter ani na „informacje o nowościach".
 5. **Newsletter = double opt-in.** Odrębna, niezaznaczona zgoda + mail potwierdzający z linkiem aktywacyjnym; dowód (data, wersja treści zgody, adres) przechowywany; każda wiadomość niesie link rezygnacji działający w jednym kliknięciu. Wycofanie zgody musi być tak łatwe jak jej udzielenie.
 6. **Outbound w dwóch krokach** (playbook): zaproszenie LinkedIn bez oferty, z pytaniem o zgodę na przesłanie materiałów i linkiem do `/rodo` → dopiero po zgodzie mail z ofertą → telefon. Każdy szablon trzyma się jednego źródła i jest zatwierdzany przez founderów; treść pytania o zgodę cytuje administratora i kanał.
-7. **Zakaz dark patterns:** brak „zgadzam się" wpisanego w etykietę przycisku wysyłki, brak zgody zbiorczej („akceptuję regulamin i zgody marketingowe"), brak cookie-walla warunkującego dostęp do treści od zgody marketingowej.
+7. **Brak zarejestrowanej działalności niczego nie zmienia.** Art. 398 PKE dotyczy wysyłającego, nie jego statusu rejestrowego: wiadomość handlowa wysłana przez osobę fizyczną promującą własne usługi jest informacją handlową tak samo jak wysłana przez spółkę. Treść zgody nazywa administratora zgodnie ze stałą `CONTROLLER` w `src/data/rodo.ts` (dziś: imię i nazwisko), a zmiana administratora po rejestracji wymaga podbicia `CONSENT_VERSION` i poinformowania osób już w bazie w kolejnej wiadomości.
+8. **Zakaz dark patterns:** brak „zgadzam się" wpisanego w etykietę przycisku wysyłki, brak zgody zbiorczej („akceptuję regulamin i zgody marketingowe"), brak cookie-walla warunkującego dostęp do treści od zgody marketingowej.
 
 ## Mechanizm awarii (dlaczego)
 

@@ -6,15 +6,25 @@
 > Nowa liczba = decyzja founderów (wpis w `docs/DECISIONS.md`) + wiersz tutaj z datą i źródłem.
 > Statusy: **OK** = wolno używać; **DO POTWIERDZENIA** = wolno dopiero po potwierdzeniu founderów (do tego czasu
 > zostaje dotychczasowe sformułowanie); **ZAMROŻONE** = tylko tam, gdzie już jest, nie na `/`, nie dodawać nowych.
+>
+> **Korekta 2026-09-12 (reframe, D30 i §10 p. 7 planu).** Pasek „W liczbach" na `/` został **usunięty jako sekcja**,
+> więc kolumna „gdzie używana" nie wskazuje już na niego. Na stronie głównej zostają dokładnie trzy pozycje z tego
+> rejestru: **„13"** i **„12"** w podpisie ściany narzędzi oraz **„co do grosza"** w kolumnie ✓ sekcji „Kalkulator,
+> nie wróżka". Wszystko inne żyje na podstronach, na `/oferta`, w FAQ albo nigdzie.
+>
+> **Nowa kategoria zakazu: liczby i pola sugerujące istnienie zarejestrowanego podmiotu** (§4 tego pliku).
+> Dopóki nie ma działalności: zero NIP-u, REGON-u, KRS, roku założenia, liczby pracowników, „od X lat na rynku",
+> „X klientów", „X wdrożeń", „X projektów dla klientów" i pól `legalName`/`vatID`/`taxID`/`duns`/`address`/`foundingDate`
+> w JSON-LD (`brand-honest-labels`, `seo-jsonld-per-kind`).
 
 ## 1. Liczby własne Klarow (dowód z własnych repozytoriów; `portfolio.md` §4)
 
 | Liczba | Sformułowanie (PL) | Źródło (dowód) | Od kiedy | Gdzie używana | Status |
 |---|---|---|---|---|---|
-| 12 | „12 dem liczy na żywo na tej stronie" | `site/src/data/tools.ts`: 12 wpisów `kind: "demo"` (liczone w buildzie) | 2026-07-22 (cz. 5) | pasek „W liczbach" (`/`), `llms.txt`, hub | OK |
-| 13 | „Cztery z trzynastu" / „Wszystkie realizacje i dema (13)" | `tools.ts`: 12 demo + 1 własny produkt (KSeF) | 2026-07-27 | `/` S3 caption, `/narzedzia` | OK (rośnie automatycznie z `tools.ts`) |
+| 12 | „dwanaście liczy na żywo w tej przeglądarce" | `site/src/data/tools.ts`: 12 wpisów `kind: "demo"` (liczone w buildzie) | 2026-07-22 (cz. 5) | **lead i podpis ściany narzędzi na `/`**, `llms.txt`, hub | OK |
+| 13 | „Trzynaście narzędzi" / „Wszystkie narzędzia (13)" | `tools.ts`: 12 demo + 1 własny produkt (KSeF) | 2026-07-27 | `/` lead i link-caption ściany, `/narzedzia` | OK (rośnie automatycznie z `tools.ts`) |
 | 17 → 19 | liczba prerenderowanych plików HTML (techniczna, nie marketingowa): **19 na dysku = 17 tras indeksowanych w sitemapie + `/rodo` (`noindex` do przeglądu radcy, D-21) + `404.html`**; po zdjęciu `noindex` w sitemapie jest 18 (tyle sprawdza `verify-site.mjs`) | `prerenderAll()` w `src/prerender/entry.tsx`; `verify-site.mjs` | 2026-07-23 / 19 od v2 (`/rodo` + `404`) | tylko dokumentacja i DoD, nie na stronie | OK (nie publikować jako „19 stron") |
-| 3 dni | „3 dni od pierwszej linii kodu do działającego produktu" | git własnego produktu KSeF: 33 commity, 2026-06-14 → 2026-06-16 (`portfolio.md` §4 S5) | 2026-09-12 (v2) | pasek „W liczbach" (`/`), `/oferta` (uzasadnienie „dni, nie miesiące") | DO POTWIERDZENIA (K: potwierdzić zakres „działający produkt" = tryb mock) |
+| 3 dni | „3 dni od pierwszej linii kodu do działającego produktu" | git własnego produktu KSeF: 33 commity, 2026-06-14 → 2026-06-16 (`portfolio.md` §4 S5) | 2026-09-12 (v2) | **już nie na `/`** (pasek usunięty, D30); ewentualnie `/oferta` albo podstrona KSeF po potwierdzeniu | DO POTWIERDZENIA (K: potwierdzić zakres „działający produkt" = tryb mock); fakt F6 |
 | 89 | „89 testów automatycznych w jednym produkcie" | `grep def test_` w testach produktu KSeF (`portfolio.md` §4 S7) | 2026-09-12 | tylko podstrona `kontroling-ksef` (nie na `/`: język programisty, `brand-icp.md` §2.2) | DO POTWIERDZENIA |
 | 12 dni | „klarow.com z 12 demami w 12 dni" | git repo strony: 64 commity, 2026-07-21 → 2026-08-02 (`portfolio.md` §4 S5) | 2026-09-12 | `/oferta` lub FAQ („jak szybko?"), nie w hero | DO POTWIERDZENIA (P+K) |
 | ≥ 15 / „kilkanaście" | „kilkanaście integracji: od API Ministerstwa Finansów po płatności i komunikatory" | inwentarz integracji własnych produktów i narzędzi (`portfolio.md` §4 S4); bez nazw serwisów spoza ICP | 2026-09-12 | `/oferta` (typ pracy „Integracje"), `llms.txt` | DO POTWIERDZENIA (founderzy: które nazwy integracji wolno wymienić; do tego czasu „kilkanaście") |
@@ -25,7 +35,7 @@
 | 5–10 dni / „etapami" | pole `delivery` per karta | decyzja D-03 (b) | 2026-09-12 | karty narzędzi, podstrony | OK |
 | 786 296 426 / +48 786 296 426 / kontakt@klarow.com | NAP | `src/data/contact.ts` (jedno źródło) | 2026-07-21 | stopka, JSON-LD, `/rodo`, `llms.txt` | OK |
 | 2026 | rok w stopce © | data | 2026-07-22 | stopka | OK |
-| co do grosza | „kontrola sum co do grosza w każdym imporcie" (nie liczba, ale metryka) | silniki `lib/*.ts` (grosze integer, Σ dowód PASS/FAIL) | 2026-07-22 | pasek „W liczbach", podstrony importów | OK |
+| co do grosza | „te same dane, ten sam wynik, co do grosza" (nie liczba, ale metryka) | silniki `lib/*.ts` (grosze integer, Σ dowód PASS/FAIL) | 2026-07-22 | **kolumna ✓ sekcji „Kalkulator, nie wróżka" na `/`**, podstrony importów, kadr zrzutu z badge PASS | OK |
 
 ## 2. Liczby rynkowe ze źródłem (`peer-legal.md` §1.3; cytować ZAWSZE ze źródłem w tym samym zdaniu lub przypisie)
 
@@ -45,7 +55,7 @@
 
 | Liczba | Sformułowanie | Gdzie jest dziś | Status |
 |---|---|---|---|
-| „kilkanaście" | „kilkanaście narzędzi w jednej firmie produkcyjno-budowlanej" | `App.tsx:240` (pasek), `faq.ts:41` | ZAMROŻONE; „15" dopiero po potwierdzeniu, że liczenie narzędzi jest poza zakazem (D-07) |
+| „kilkanaście" | „kilkanaście narzędzi w jednej firmie produkcyjno-budowlanej" | dziś `App.tsx:240` (pasek, **kasowany razem z paskiem w v2**), `faq.ts:41` | ZAMROŻONE; po v2 zostaje **wyłącznie w `faq.ts`**; „15" dopiero po umowie IP i potwierdzeniu (D7) |
 | ≈ 10 000 wierszy / „~10 tys." | „wierszy kosztów z ERP miesięcznie" | `App.tsx:241`, `entry.tsx:135, 206`, `toolsSeo.ts:474`, `faq.ts:41` | ZAMROŻONE; z `/` usunąć w v2 (pasek liczb = tylko liczby własne) |
 | ~30 | „równoległych projektów" | `entry.tsx:135, 206`, `toolsSeo.ts:36, 60, 86, 110, 136` | ZAMROŻONE (opisy podstron) |
 | „kilkanaście sekund zamiast godzin" (galeria: „z ~6 godz.") | czas raportu zarządczego | `entry.tsx:136, 207`, `toolsSeo.ts:19, 24, 36`, `faq.ts:41` | ZAMROŻONE |
@@ -66,6 +76,9 @@
 | liczby użytkowników / przychodów produktów własnych spoza ICP | decyzja D-22: produkty poza stroną | `portfolio.md` §2.C |
 | „99 %", „50 %", „10×", „∞" i inne fake-perfect | taste §9.D: NO fake-perfect numbers | taste-locks §C |
 | liczby testów, commitów, linii kodu na `/` | język programisty; CFO nie mierzy testami | `brand-icp.md` §2.2 p.4 |
+| NIP, REGON, KRS, rok założenia, liczba pracowników, „od X lat na rynku", „X klientów", „X wdrożeń" | nie ma zarejestrowanej działalności ani żadnego płatnego klienta; każda z tych liczb byłaby oświadczeniem nieprawdy | dyrektywa founderów 2026-09-12, `brand-honest-labels`, plan §10 p. 7 |
+| pola `legalName`, `vatID`, `taxID`, `duns`, `address`, `foundingDate`, `numberOfEmployees` w JSON-LD | j.w., tylko w danych strukturalnych (Google traktuje je jako oświadczenie) | `seo-jsonld-per-kind`, plan §2.5 |
+| „wystawiamy fakturę VAT", „faktura z odroczonym terminem" | do rejestracji nie ma czym wystawić faktury; model rozliczenia opisujemy słowami „stała cena za ustalony zakres" + „Cenę i zakres zapisujemy w umowie przed startem" | plan §10 p. 7, `brand-honest-labels` |
 
 ## 5. Procedura dodania liczby
 

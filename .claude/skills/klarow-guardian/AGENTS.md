@@ -1,7 +1,7 @@
 # KLAROW Guardian: kompilat reguł
 
 > Plik GENEROWANY przez `node .claude/skills/klarow-guardian/scripts/build-index.mjs` z `rules/*.md`. Nie edytuj ręcznie: popraw regułę w `rules/` i uruchom skrypt.
-> Reguł: 144 (BLOCKER 38 · HIGH 74 · MEDIUM 29 · LOW 3). Kolejność: sekcja (rules/_sections.md) → impact → id.
+> Reguł: 145 (BLOCKER 39 · HIGH 74 · MEDIUM 29 · LOW 3). Kolejność: sekcja (rules/_sections.md) → impact → id.
 > Format wpisu: reguła · mechanizm awarii · Niepoprawnie / Poprawnie · Test (grep / skrypt / DevTools / Playwright) · Wyjątki.
 > `SKILL.md` ma tylko tabelę sekcji; pełna tabela reguł jest niżej, w tym pliku.
 
@@ -17,7 +17,7 @@
 - 8. SEO / prerender / GEO (19 plików HTML = 17 tras w sitemapie + `/rodo` z `noindex` + `404.html`, sitemap i llms generowane, meta, JSON-LD, nagłówki) (`seo`, reguł: 12, domyślnie HIGH, tryb marketing, właściciel `seo-auditor`)
 - 9. PL + EN (`{ pl, en }` + `pick()`, kompletność par, limity długości, `lang`) (`i18n`, reguł: 4, domyślnie HIGH, tryb both, właściciel `copy-auditor`)
 - 10. Copy, typografia PL/EN, słowa zakazane, liczby ze źródłem, ton (`copy`, reguł: 10, domyślnie HIGH, tryb marketing, właściciel `copy-auditor`)
-- 11. RODO (`/rodo`, art. 14, prawo sprzeciwu), PKE (zgody, formularze bez domyślnych zgód, double opt-in) (`legal`, reguł: 6, domyślnie BLOCKER, tryb marketing, właściciel `copy-auditor` + `integration-scanner`)
+- 11. RODO (`/rodo`, art. 14, prawo sprzeciwu), PKE (zgody, formularze bez domyślnych zgód, double opt-in) (`legal`, reguł: 7, domyślnie BLOCKER, tryb marketing, właściciel `copy-auditor` + `integration-scanner`)
 - 12. Integracje zewnętrzne: rejestr, zero CDN, zero API modeli w runtime, CSP, zgody (`integ`, reguł: 8, domyślnie BLOCKER, tryb both, właściciel `integration-scanner`)
 - 13. Sekrety: `.env`, klucze, tokeny, prompty do narzędzi zewnętrznych (`secret`, reguł: 5, domyślnie BLOCKER, tryb both, właściciel `brand-leak-auditor` + `integration-scanner`)
 - 14. Determinizm dem i silników (zero `Date.now`/`Math.random`/sieci, golden-testy, grosze, etykieta DEMO) (`demo`, reguł: 6, domyślnie BLOCKER, tryb tool, właściciel `code-auditor`)
@@ -146,11 +146,12 @@
 | 10.9 | `copy-persona-outcomes-section` | HIGH | Sekcja „Co osiągniesz" obowiązkowa na home: 4 efekty w języku persony (kontroler, CFO, właściciel), zero liczb, ikony lucide, 1 zdanie + 1 linia | [rules/copy-persona-outcomes-section.md](rules/copy-persona-outcomes-section.md) |
 | 10.10 | `copy-voice-and-tone` | MEDIUM | Głos i ton: oznajmujące zdania, zero pytań retorycznych, zero „łatwo/prosto/szybko" bez liczby, zero AI-tells (summary transitions, spec-sheet voice, cold-open, personifikacja), strona czynna, druga osoba | [rules/copy-voice-and-tone.md](rules/copy-voice-and-tone.md) |
 | 11.1 | `legal-no-scraped-personal-data-in-repo` | BLOCKER | Dane osobowe z researchu nie trafiają do repo strony, do narzędzi ani do modeli; w leadscout tylko minimum firmowe ze wskazaniem źródła | [rules/legal-no-scraped-personal-data-in-repo.md](rules/legal-no-scraped-personal-data-in-repo.md) |
-| 11.2 | `legal-pke-consent-forms` | BLOCKER | Art. 398 PKE — uprzednia zgoda na informację handlową także wobec osób prawnych; zero domyślnie zaznaczonych zgód, newsletter tylko double opt-in | [rules/legal-pke-consent-forms.md](rules/legal-pke-consent-forms.md) |
-| 11.3 | `legal-rodo-page-required` | BLOCKER | Trasa /rodo istnieje PRZED pierwszym kontaktem handlowym; katalog art. 14 RODO z KONKRETNYMI źródłami danych i prawem sprzeciwu wyróżnionym odrębnie | [rules/legal-rodo-page-required.md](rules/legal-rodo-page-required.md) |
-| 11.4 | `legal-analytics-cookieless-or-consent` | HIGH | Pomiar tylko cookieless i bez identyfikatorów albo z uprzednią zgodą; zero GA4, pikseli i fingerprintingu, zawsze wpis w /rodo | [rules/legal-analytics-cookieless-or-consent.md](rules/legal-analytics-cookieless-or-consent.md) |
-| 11.5 | `legal-privacy-before-embeds` | HIGH | Embed (Cal.com, mapa, wideo, widget) wolno włączyć dopiero po sekcji w /rodo, wpisie w rejestrze integracji i CSP w _headers | [rules/legal-privacy-before-embeds.md](rules/legal-privacy-before-embeds.md) |
-| 11.6 | `legal-sources-for-market-numbers` | HIGH | Każda liczba rynkowa publikowana ze źródłem i rokiem w tym samym zdaniu lub przypisie; zakaz liczb bez osiągalnego źródła | [rules/legal-sources-for-market-numbers.md](rules/legal-sources-for-market-numbers.md) |
+| 11.2 | `legal-outreach-readiness` | BLOCKER | Outbound rusza dopiero po domkniętej checkliście OUTREACH_READY; publikacja strony to osobny, niższy próg | [rules/legal-outreach-readiness.md](rules/legal-outreach-readiness.md) |
+| 11.3 | `legal-pke-consent-forms` | BLOCKER | Art. 398 PKE — uprzednia zgoda na informację handlową także wobec osób prawnych; zero domyślnie zaznaczonych zgód, newsletter tylko double opt-in | [rules/legal-pke-consent-forms.md](rules/legal-pke-consent-forms.md) |
+| 11.4 | `legal-rodo-page-required` | BLOCKER | Trasa /rodo istnieje PRZED pierwszym kontaktem handlowym; katalog art. 14 RODO z KONKRETNYMI źródłami danych i prawem sprzeciwu wyróżnionym odrębnie | [rules/legal-rodo-page-required.md](rules/legal-rodo-page-required.md) |
+| 11.5 | `legal-analytics-cookieless-or-consent` | HIGH | Pomiar tylko cookieless i bez identyfikatorów albo z uprzednią zgodą; zero GA4, pikseli i fingerprintingu, zawsze wpis w /rodo | [rules/legal-analytics-cookieless-or-consent.md](rules/legal-analytics-cookieless-or-consent.md) |
+| 11.6 | `legal-privacy-before-embeds` | HIGH | Embed (Cal.com, mapa, wideo, widget) wolno włączyć dopiero po sekcji w /rodo, wpisie w rejestrze integracji i CSP w _headers | [rules/legal-privacy-before-embeds.md](rules/legal-privacy-before-embeds.md) |
+| 11.7 | `legal-sources-for-market-numbers` | HIGH | Każda liczba rynkowa publikowana ze źródłem i rokiem w tym samym zdaniu lub przypisie; zakaz liczb bez osiągalnego źródła | [rules/legal-sources-for-market-numbers.md](rules/legal-sources-for-market-numbers.md) |
 | 12.1 | `integ-no-external-scripts-on-site` | BLOCKER | Strona klarow.com nie ładuje niczego spoza własnej domeny bez decyzji, rejestru i /rodo | [rules/integ-no-external-scripts-on-site.md](rules/integ-no-external-scripts-on-site.md) |
 | 12.2 | `integ-no-llm-api-in-client-tools` | BLOCKER | Zero chmury dostawcy — narzędzia dla klientów i dema nie wołają API modeli językowych ani serwerów Klarow | [rules/integ-no-llm-api-in-client-tools.md](rules/integ-no-llm-api-in-client-tools.md) |
 | 12.3 | `integ-registry-required` | BLOCKER | Nowe połączenie zewnętrzne = wpis w rejestrze integracji PRZED kodem | [rules/integ-registry-required.md](rules/integ-registry-required.md) |
@@ -266,6 +267,10 @@ dopowiedzenia (dozwolone: „Gotowe do wdrożenia" przy `product`). KSeF = `prod
 klienta lub żywego przebiegu na `api-demo.ksef.mf.gov.pl` (D-10). Etykiety nie są hard-kodowane
 w komponentach; jedno źródło = `messaging.ts`.
 
+**Etykiety podmiotu, nie tylko dowodu (rozszerzenie 2026-09-12: brak zarejestrowanej działalności).** Do czasu rejestracji zakazane są w copy publicznym: „nasza firma", „nasza spółka", „nasz zespół", „nasi eksperci", „nasze biuro", „od X lat na rynku", „lata doświadczenia" (EN: „our company", „our team", „years of experience"), a w danych strukturalnych pola `legalName`, `vatID`, `taxID`, `duns`, `address`, `foundingDate`, `numberOfEmployees`. Zakazane też „wystawiamy fakturę VAT" i „faktura z odroczonym terminem". Dozwolone: „KLAROW", „dwie osoby", „budujemy", `founder` w JSON-LD po D6, oraz opis modelu rozliczenia („stała cena za ustalony zakres", „płatność 50/50"), bo opisuje treść przyszłej umowy, a nie stan dzisiejszy; towarzyszy mu zdanie **„Cenę i zakres zapisujemy w umowie przed startem."** / „We put the price and scope in a contract before we start." Nazwa marki w stopce i w JSON-LD zostaje; nie dopisujemy do niej formy prawnej.
+
+**Lista fraz zakazanych przy pozycjach w `/narzedzia`** (uzupełnienie testu, nie zmiana zasady): „WDROŻONE", „Wdrożone u klienta", „Realizacja u klienta", „u klientów", „nasi klienci", „zaufali nam", „referencje", „case study", „sprawdzone w boju", „produkcyjnie od lat", „Gotowe" bez dopowiedzenia (dozwolone „Gotowe do wdrożenia" przy `product`), „gwarantujemy oszczędność", „zwrot w X miesięcy", „oszczędzisz etat", „nie musisz zatrudniać"; EN: „DEPLOYED", „deployed at a client", „our clients", „trusted by", „customers include", „battle-tested", „in production for years", „guaranteed savings", „ROI in X months", „cut headcount". Zakazana też nazwa własna i domena produktu KSeF (decyzja o odbrandowaniu z 2026-07-27).
+
 #### Mechanizm awarii (dlaczego)
 
 Pierwsza rozmowa z CFO zaczyna się od „u kogo to wdrożyliście?". Etykieta „WDROŻONE" przy produkcie
@@ -304,6 +309,12 @@ const label = MESSAGING.proofLabels[tool.kind];
 grep -rniE "WDROŻONE|Wdrożone u klient|realizacja u klienta|deployed at (a )?client" site/src --include=*.tsx --include=*.ts | grep -v "data/messaging.ts"
 # liczba mnoga klientów: 0 trafień (do 2. klienta)
 grep -rniE "u klientów|nasi klienci|naszych klientów|our clients|customers include" site/src site/public/llms.txt 2>/dev/null
+# etykiety podmiotu przed rejestracją działalności: 0 trafień
+grep -rniE "nasza firma|nasza spółka|nasz zespół|nasi eksperci|od [0-9]+ lat|lata doświadczenia|our company|our team|years of experience" site/src site/dist
+grep -rniE "\"(legalName|vatID|taxID|duns|foundingDate|numberOfEmployees)\"" site/src/components/Seo.tsx site/dist
+grep -rniE "wystawiamy fakturę|faktura VAT" site/src site/dist
+# frazy bez pokrycia przy pozycjach w /narzedzia: 0 trafień
+grep -rniE "case study|sprawdzone w boju|battle-tested|trusted by|zaufali nam|produkcyjnie od lat|gwarantujemy oszczędność|zwrot w [0-9]+ miesi|oszczędzisz etat|nie musisz zatrudniać|cut headcount" site/src site/dist
 # każdy kind: "case" ma wpis w DECISIONS.md
 grep -n 'kind: "case"' site/src/data/tools.ts; grep -niE "zgoda|umowa IP" docs/DECISIONS.md
 ```
@@ -8677,6 +8688,8 @@ Dane osób zebrane w researchu (Lead-Scout, ogłoszenia o pracę, LinkedIn, KRS,
 
 W `leadscout/` obowiązuje minimalizacja (art. 5 ust. 1 lit. c RODO): rekord to **dane firmy**, nie osoby — `nazwa`, `www`, `lokalizacja`, `segment`, `rozmiar`, `ocena`, `sygnal`, `zrodlo_url`, `hook`, `uwagi_weryfikacji`, `status`, `data_dodania`. **Zero imion i nazwisk, zero prywatnych adresów e-mail i telefonów, zero kopii treści ogłoszenia lub profilu w całości.** Pola `zrodlo_url` i `data_dodania` są obowiązkowe i nieusuwalne: to dowód „konkretnego źródła" wymagany przez art. 14 RODO i przez `legal-rodo-page-required` (bez nich nie da się napisać, skąd mamy dane).
 
+**Zegar z art. 14 ust. 3 lit. a (korekta 2026-09-12).** Obowiązek informacyjny trzeba wykonać **w ciągu miesiąca od POZYSKANIA danych**, a nie od wysłania wiadomości. Dopisanie imienia, nazwiska, stanowiska albo imiennego e-maila do `leadscout/leads.json` uruchamia ten zegar niezależnie od tego, czy kiedykolwiek napiszemy, i tworzy dług, którego nie da się spłacić wstecz. Dlatego **do czasu `OUTREACH_READY` baza zawiera wyłącznie dane firmowe i publiczny sygnał zakupowy** (`legal-outreach-readiness`).
+
 Baza leadów jest zbiorem danych osobowych także wtedy, gdy zawiera wyłącznie dane firmowe jednoosobowych działalności; dlatego: plik trzymany lokalnie, przeglądany tylko przez founderów, usuwany po sprzeciwie w 24 h, a **przed upublicznieniem repozytorium, forkiem lub udostępnieniem kodu osobie trzeciej wyprowadzany z gita razem z historią** (`secret-git-history-scan-before-public`). Stan na 2026-09-12: `leadscout/leads.json` jest **śledzony przez gita** (32 rekordy; jeden zawiera adres e-mail, kilka wspomina osobę w polach `hook` i `uwagi_weryfikacji`) — do wyczyszczenia przy najbliższej rundzie i bezwarunkowo przed publikacją repo.
 
 To wymaganie produktowe, nie opinia prawna; kwalifikacja i treść klauzul do przeglądu radcy (D-21).
@@ -8750,7 +8763,89 @@ node ".claude/skills/klarow-guardian/scripts/check-secrets.mjs" --quiet
 
 Dane kontaktowe **własne** (NAP Klarow, `kontakt@klarow.com`, `786 296 426`) i publiczne dane founderów, które sami zdecydowali się opublikować (D-05), nie są objęte zakazem — pochodzą z `src/data/contact.ts` (`code-contact-single-source`). Cytat z publicznego ogłoszenia w wiadomości wysyłanej do tej samej firmy jest dopuszczalny (to element obowiązku z art. 14: wskazanie źródła), ale nie wolno go zapisywać w repozytorium. Dane klientów przekazane w ramach pilota żyją wyłącznie na maszynie klienta i nigdy nie wchodzą do tego repo (`integ-data-egress-review`).
 
-### 11.2 legal-pke-consent-forms
+### 11.2 legal-outreach-readiness
+
+**Outbound rusza dopiero po domkniętej checkliście OUTREACH_READY; publikacja strony to osobny, niższy próg**
+
+Impact: **BLOCKER** · Tagi: legal, outbound, rodo, pke, leadscout, gate, consent · Źródło: peer-legal.md §1.1 (art. 14 RODO, Bisnode 943 470 zł), §1.4 (art. 398 PKE) / art. 14 ust. 3 lit. a RODO (miesiąc od pozyskania danych) / docs/plan/reframe-2026-09-12.md §2 (dwie bramki zamiast jednej) / docs/plan/strona-v2-plan.md §4.6, §10 p. 1 i 7 / decyzje-founderow-v2.md D16, D25, D26 · Dodano: 2026-09-12 · Plik: `rules/legal-outreach-readiness.md`
+
+#### Zasada
+
+Są **dwa niezależne progi**, nie jeden. Mylenie ich kosztuje albo tygodnie zwłoki (blokowanie publikacji do czasu rejestracji firmy), albo karę (wysyłka bez kompletu obowiązków).
+
+**Próg 1, publikacja strony: `SITE_PUBLISHABLE`** (pilnuje go `legal-rodo-page-required`). Wymaga tożsamości administratora i kompletnych sekcji o serwisie. Nie wymaga rejestracji działalności, NIP-u, REGON-u, adresu siedziby ani przeglądu radcy.
+
+**Próg 2, pierwszy kontakt handlowy: `OUTREACH_READY`.** Wolno wysłać pierwszą wiadomość (list, zaproszenie LinkedIn z pytaniem o zgodę, permission-mail, telefon) dopiero wtedy, gdy spełnione są **łącznie**:
+
+1. `SITE_PUBLISHABLE = true` i `/rodo` działa na produkcji;
+2. **adres do korespondencji** wpisany w `CONTROLLER` **albo** świadomie wybrane zdanie zastępcze („Adres do korespondencji podajemy na żądanie…"), z decyzją zapisaną w `docs/DECISIONS.md` (D26);
+3. klauzula art. 14 kompletna: konkretne źródła per rodzaj (bez „ze źródeł publicznie dostępnych"), kategorie danych, podstawa z wyjaśnieniem interesu, **konkretny okres** (12 miesięcy od ostatniego kontaktu), odbiorcy oraz transfer poza EOG z podstawą **rozstrzygniętą per dostawca** (zero „SCC albo DPF" w `dist`), sekcja o profilowaniu (art. 14 ust. 2 lit. g), organ nadzorczy;
+4. treści zgód PKE w jednym źródle: `site/src/data/consent.ts` z `CONSENT_VERSION`, odrębna zgoda na e-mail i na telefon, zero domyślnych zaznaczeń (`legal-pke-consent-forms`);
+5. szablony outboundu w `leadscout/playbook-outbound.md` linkują do `klarow.com/rodo`, a **pierwsza wiadomość nie zawiera oferty** (krok 1 = prośba o zgodę);
+6. **źródło i data per lead** w bazie: pierwsza wiadomość cytuje konkretne ogłoszenie i datę (to jest dokładnie to, czego zabrakło w precedensie Bisnode);
+7. rejestr zgód (data, kanał, wersja treści), rejestr sprzeciwów z terminem 7 dni i właścicielem procesu oraz rejestr czynności przetwarzania (art. 30) istnieją **poza gitem** (`legal-no-scraped-personal-data-in-repo`, `secret-secrets-outside-git`);
+8. datowany wpis `OUTREACH_READY = true` w `docs/DECISIONS.md`, podpisany przez obu founderów (przegląd radcy może być równoległy; start bez niego jest świadomym ryzykiem, D16).
+
+**Zegar art. 14 ust. 3 lit. a.** Obowiązek informacyjny trzeba wykonać w ciągu **miesiąca od pozyskania danych**, nie od wysyłki. Dlatego `leadscout/leads.json` **nie zawiera danych osób fizycznych** (imię, nazwisko, stanowisko, imienny e-mail, telefon) do czasu `OUTREACH_READY`: do tego momentu baza trzyma wyłącznie dane firmowe i publiczny sygnał zakupowy. Dopisanie osoby wcześniej tworzy dług, którego nie da się spłacić wstecz.
+
+**Czego ten próg NIE wymaga:** rejestracji działalności gospodarczej. Rejestracja (`CONTRACT_READY`: NIP, rachunek, wzór umowy, porozumienie wspólników) jest warunkiem **pierwszej faktury**, nie pierwszego maila.
+
+**Zakaz interpretacji „strona żyje, więc można wysyłać".** Publikacja portfolio nie odblokowuje outboundu; `OUTREACH_READY = false` przy działającej stronie jest stanem normalnym i świadomym, a nie przeoczeniem.
+
+#### Mechanizm awarii (dlaczego)
+
+Bisnode pobierał dane z rejestrów publicznych i zapłacił **943 470 zł** wyłącznie za niewykonanie obowiązku z art. 14; decyzję potwierdził NSA. Sankcja UKE za naruszenie art. 398 PKE to **3 % przychodu albo 1 mln zł, wyższa z kwot**, a przy zerowym przychodzie sufitem jest milion. Plan kontroli sektorowych UODO na 2026 obejmuje bazy marketingowe. Ryzyko jest skrajnie asymetryczne: jeden mail wysłany za wcześnie kosztuje więcej niż cały pilot, a jeden tydzień zwłoki w publikacji portfolio nie kosztuje nic. Jednocześnie odwrotny błąd (blokowanie publikacji do czasu rejestracji firmy) opóźnia jedyny kanał, którym w ogóle można dziś pokazać dowód, i nie kupuje żadnej zgodności: strona bez formularzy, bez cookies i bez wysyłki nie robi niczego, co wymagałoby danych rejestrowych przedsiębiorcy.
+
+#### Niepoprawnie
+
+```ts
+// site/src/data/rodo.ts — jedna flaga na dwie różne rzeczy
+export const RODO_READY = true;   // co to znaczy? że wolno publikować, czy że wolno wysyłać?
+```
+```json
+// leadscout/leads.json — osoba dopisana "na zapas", przed domknięciem checklisty
+{ "nazwa": "Firma X", "kontakt_osoba": "Jan Kowalski", "email_osoby": "j.kowalski@firma.pl" }
+// art. 14 ust. 3 lit. a: zegar miesięczny ruszył w dniu zapisu, nie w dniu wysyłki
+```
+
+#### Poprawnie
+
+```ts
+// site/src/data/rodo.ts — dwie flagi, dwa progi, jedno miejsce podmiany tożsamości
+export const CONTROLLER = { kind: "person", name: "…", address: "", taxId: "" } as const;
+export const SITE_PUBLISHABLE = true;   // strona może iść na produkcję
+export const OUTREACH_READY   = false;  // ani jednej wiadomości handlowej
+```
+```json
+// leadscout/leads.json — do czasu OUTREACH_READY wyłącznie warstwa firmowa
+{ "nazwa": "Firma X", "www": "firma.pl", "segment": "produkcja", "sygnal": "ogłoszenie o pracę: kontroler",
+  "zrodlo_url": "https://…", "data_dodania": "2026-09-12" }
+```
+
+#### Test
+
+```bash
+# 1. bramka outboundu (uruchamiana świadomie, nie w codziennym npm run check)
+node ".claude/skills/klarow-guardian/scripts/verify-site.mjs" --outreach --fail-on BLOCKER,HIGH
+# 2. flagi istnieją i są rozłączne
+grep -nE "^export const (SITE_PUBLISHABLE|OUTREACH_READY)" site/src/data/rodo.ts     # 2 wpisy
+# 3. zero danych osób w bazie leadów do czasu OUTREACH_READY
+grep -nE '"(imie|nazwisko|osoba|kontakt_osoba|email_osoby|telefon_osoby)"' leadscout/leads.json   # 0
+# 4. podstawa transferu rozstrzygnięta per dostawca (nie "SCC albo DPF")
+grep -ciE "SCC albo DPF|standardowych klauzul umownych albo" site/dist/rodo.html     # 0
+# 5. jedno źródło treści zgód z wersją
+test -f site/src/data/consent.ts && grep -n "CONSENT_VERSION" site/src/data/consent.ts
+# 6. decyzja o starcie outboundu zapisana i datowana
+grep -nE "OUTREACH_READY" docs/DECISIONS.md                                          # >= 1
+# 7. szablony niosą adres klauzuli, krok 1 bez oferty
+grep -rci "klarow.com/rodo" leadscout/playbook-outbound.md                           # >= 1
+```
+
+#### Wyjątki
+
+Odpowiedź na zapytanie zainicjowane przez odbiorcę (`mailto:`, telefon od klienta, hak „Przyślij nam swój najgorszy Excel", rezerwacja rozmowy) to inbound z art. 398 ust. 2 PKE i **nie** podlega tej regule. Publikacja treści na własnym profilu LinkedIn (posty o własnej pracy, linki do strony) też nie: to publikacja, nie informacja handlowa kierowana do wskazanego odbiorcy. Granica jest ostra w jednym miejscu: zaproszenie albo wiadomość z ofertą wysłana do konkretnej osoby **jest** informacją handlową i wchodzi pod tę regułę. Ta reguła jest wymaganiem produktowym, nie opinią prawną; trzy punkty wymagają potwierdzenia radcy (obowiązkowość adresu w klauzuli, kwalifikacja powtarzalnej bezpłatnej diagnozy, faktyczne współadministrowanie mimo wskazania jednego administratora).
+
+### 11.3 legal-pke-consent-forms
 
 **Art. 398 PKE — uprzednia zgoda na informację handlową także wobec osób prawnych; zero domyślnie zaznaczonych zgód, newsletter tylko double opt-in**
 
@@ -8764,7 +8859,8 @@ Impact: **BLOCKER** · Tagi: legal, pke, consent, forms, outbound, newsletter, u
 4. **Inbound jest bezpieczny.** Formularz i hak „Przyślij nam swój najgorszy Excel", `mailto:`, `tel:` i rezerwacja terminu to kontakt zainicjowany przez użytkownika: art. 398 ust. 2 (udostępnienie adresu **w celu** otrzymania informacji). Warunek: formularz nie dokłada domyślnie zgody na newsletter ani na „informacje o nowościach".
 5. **Newsletter = double opt-in.** Odrębna, niezaznaczona zgoda + mail potwierdzający z linkiem aktywacyjnym; dowód (data, wersja treści zgody, adres) przechowywany; każda wiadomość niesie link rezygnacji działający w jednym kliknięciu. Wycofanie zgody musi być tak łatwe jak jej udzielenie.
 6. **Outbound w dwóch krokach** (playbook): zaproszenie LinkedIn bez oferty, z pytaniem o zgodę na przesłanie materiałów i linkiem do `/rodo` → dopiero po zgodzie mail z ofertą → telefon. Każdy szablon trzyma się jednego źródła i jest zatwierdzany przez founderów; treść pytania o zgodę cytuje administratora i kanał.
-7. **Zakaz dark patterns:** brak „zgadzam się" wpisanego w etykietę przycisku wysyłki, brak zgody zbiorczej („akceptuję regulamin i zgody marketingowe"), brak cookie-walla warunkującego dostęp do treści od zgody marketingowej.
+7. **Brak zarejestrowanej działalności niczego nie zmienia.** Art. 398 PKE dotyczy wysyłającego, nie jego statusu rejestrowego: wiadomość handlowa wysłana przez osobę fizyczną promującą własne usługi jest informacją handlową tak samo jak wysłana przez spółkę. Treść zgody nazywa administratora zgodnie ze stałą `CONTROLLER` w `src/data/rodo.ts` (dziś: imię i nazwisko), a zmiana administratora po rejestracji wymaga podbicia `CONSENT_VERSION` i poinformowania osób już w bazie w kolejnej wiadomości.
+8. **Zakaz dark patterns:** brak „zgadzam się" wpisanego w etykietę przycisku wysyłki, brak zgody zbiorczej („akceptuję regulamin i zgody marketingowe"), brak cookie-walla warunkującego dostęp do treści od zgody marketingowej.
 
 #### Mechanizm awarii (dlaczego)
 
@@ -8843,7 +8939,7 @@ Odpowiedź na zapytanie zainicjowane przez odbiorcę (formularz, `mailto:`, reze
 
 **Spór między organami („paradoks zgody"), nie ustalony stan prawny** (za oknem researchu c1, do rozstrzygnięcia przez radcę): UKE dopuszcza neutralne zapytanie o zgodę na kontakt handlowy jako czynność poprzedzającą marketing, natomiast UOKiK w decyzji DOZIK 3/2019 uznał takie zapytanie za informację handlową samą w sobie. Dopóki radca tego nie rozstrzygnie, pierwsza wiadomość ma być maksymalnie neutralna (prośba o zgodę bez opisu oferty, bez cennika, bez CTA sprzedażowego) i traktowana w audycie jako materiał objęty tą regułą. Komunikacja wewnętrzna (digesty Lead-Scout na Telegram do founderów) nie jest informacją handlową. Kwalifikacja telefonu jako kanału objętego art. 398 (telekomunikacyjne urządzenia końcowe w marketingu bezpośrednim) jest w tej regule przyjęta ostrożnościowo — do potwierdzenia przez radcę przy zatwierdzaniu szablonów; do czasu potwierdzenia obowiązuje wersja ostrożniejsza (pytamy o zgodę także na telefon).
 
-### 11.3 legal-rodo-page-required
+### 11.4 legal-rodo-page-required
 
 **Trasa /rodo istnieje PRZED pierwszym kontaktem handlowym; katalog art. 14 RODO z KONKRETNYMI źródłami danych i prawem sprzeciwu wyróżnionym odrębnie**
 
@@ -8854,16 +8950,18 @@ Impact: **BLOCKER** · Tagi: legal, rodo, gdpr, outbound, prerender, footer, pri
 Trasa `/rodo` (kanoniczna; `/polityka-prywatnosci` = alias 301 w `_redirects`) musi istnieć i być prerenderowana jako `dist/rodo.html`, **zanim wyjdzie pierwszy kontakt handlowy** (list, zaproszenie LinkedIn, permission-mail, telefon, wizytówka z QR). To jeden dokument: klauzula informacyjna z art. 14 RODO + polityka prywatności serwisu.
 
 Obowiązkowy katalog treści (art. 14 ust. 1–2 RODO), każdy punkt jako osobna sekcja z nagłówkiem:
-1. **Administrator i kontakt** — pełna nazwa (dziś: JDG Pawła; po konwersji: sp. z o.o.), adres, `kontakt@klarow.com`, telefon; NAP wyłącznie z `src/data/contact.ts` (`code-contact-single-source`).
+1. **Administrator i kontakt** — tożsamość administratora w jednym z dwóch wariantów: **(a) osoba fizyczna** (imię i nazwisko + adres do korespondencji **albo** zdanie o adresie na żądanie), **(b) zarejestrowany podmiot** (pełna nazwa, adres, NIP). RODO nie wymaga rejestracji działalności ani numeru NIP: wymaga tożsamości i danych kontaktowych (art. 14 ust. 1 lit. a; art. 4 pkt 7 dopuszcza administratora będącego osobą fizyczną). Jedno źródło: stała `CONTROLLER` w `src/data/rodo.ts`; NAP wyłącznie z `src/data/contact.ts` (`code-contact-single-source`). Marker `[DECYZJA FOUNDERÓW: …]` w treści = BLOCKER publikacji. Wskazujemy **jednego** administratora; gdy cele i sposoby ustalają faktycznie obaj founderzy, powstaje współadministrowanie z art. 26 i `/rodo` musi zawierać zasadniczą treść uzgodnień (D25).
 2. **Źródła danych — KONKRETNE, nazwane co do rodzaju i momentu**: „z ogłoszenia o pracę opublikowanego na portalu `<nazwa>` w dniu `<data>`", „z Krajowego Rejestru Sądowego", „z CEIDG", „ze strony internetowej Państwa firmy", „z profilu firmowego na LinkedIn". **Zakazane sformułowanie: „ze źródeł publicznie dostępnych"** i każdy jego wariant („z ogólnodostępnych rejestrów", „z internetu") — to właśnie zakwestionowano u Bisnode.
 3. **Kategorie danych** — wyliczone: nazwa firmy, adres i dane rejestrowe, służbowy adres e-mail, służbowy numer telefonu, imię i nazwisko oraz stanowisko osoby kontaktowej, treść ogłoszenia będącego sygnałem.
 4. **Cel i podstawa prawna** — art. 6 ust. 1 lit. f RODO (uzasadniony interes) **z wyjaśnieniem, na czym ten interes polega** („marketing bezpośredni własnych usług kierowany do firm o profilu odpowiadającym naszej ofercie"; motyw 47 RODO), a przy rezerwacji i korespondencji zainicjowanej przez odbiorcę dodatkowo art. 6 ust. 1 lit. b.
 5. **Odbiorcy danych** — hosting i usługi wymienione z nazwy (Cloudflare, poczta, w przyszłości Cal.com, analityka), spójnie z `references/integrations-registry.md`; transfer poza EOG i jego podstawa.
-6. **Okres przechowywania** — konkretny („do zgłoszenia sprzeciwu, nie dłużej niż 24 miesiące od ostatniego kontaktu"), nigdy „przez okres niezbędny do realizacji celu".
+6. **Okres przechowywania** — konkretny: **„do zgłoszenia sprzeciwu, nie dłużej niż 12 miesięcy od ostatniego kontaktu"** (jedno brzmienie w regule i w planie §4.6 pkt 5; wcześniejszy rozjazd 24 kontra 12 miesięcy usunięty 2026-09-12), nigdy „przez okres niezbędny do realizacji celu".
 7. **Prawa** — dostęp, sprostowanie, usunięcie, ograniczenie, przenoszenie (gdy dotyczy).
 8. **PRAWO SPRZECIWU — WYRÓŻNIONE ODRĘBNIE** od pozostałych informacji: własna sekcja z własnym nagłówkiem (`<section id="sprzeciw">`), wizualnie wyróżniona (obrys `--border`, wyższy stopień pisma), umieszczona **nad** listą pozostałych praw, nigdy jako punkt tej listy. Wymaga tego wprost art. 21 ust. 4 RODO („wyraźnie i odrębnie od wszelkich innych informacji").
 9. **Mechanizm sprzeciwu** — działający `mailto:kontakt@klarow.com?subject=Sprzeciw` z gotowym tematem; żaden backend nie jest potrzebny. Obietnica: usunięcie z bazy kontaktów i potwierdzenie zwrotne.
 10. **Organ nadzorczy** — Prezes Urzędu Ochrony Danych Osobowych, ul. Stawki 2, 00-193 Warszawa.
+
+**Dwa progi, nie jeden (korekta 2026-09-12).** **Publikacja strony** wymaga bramki `SITE_PUBLISHABLE`: trasa istnieje i jest linkowana w stopce, tożsamość administratora wpisana (zero markerów w `dist/rodo.html`), sekcje o serwisie kompletne, strona nic nie zbiera (zero formularzy wysyłających dane, zero cookies, zero analityki wymagającej zgody). **Pierwszy kontakt handlowy** wymaga dodatkowo bramki `OUTREACH_READY` (reguła `legal-outreach-readiness`). Publikacja portfolio **nie** czeka na rejestrację działalności, NIP ani adres siedziby; rejestracja jest warunkiem pierwszej faktury, nie pierwszego maila. **Uwaga na błędny wniosek: „strona żyje, więc można wysyłać" jest fałszem.**
 
 Wymagania techniczne: wpis w `pagesSeo.ts` (klucz `rodo`, title ≤ 60 zn., description 130–165 zn., PL + EN), `RodoPage` w routerze `App.tsx`, `RodoShell` w `prerenderAll()` (`seo-prerender-must-keep`: 19 HTML), **link „RODO i prywatność" w stopce na KAŻDEJ trasie**, alias `/polityka-prywatnosci /rodo 301` w `_redirects` (`seo-redirects-registry`), wpis w `llms.txt` (generowany automatycznie). **Do sitemapy `/rodo` NIE wchodzi**, dopóki ma `noindex` (patrz §Wyjątki i `seo-sitemap-llms-generated`: 17 `<loc>`); wchodzi dopiero po zdjęciu `noindex` (D-21), wtedy z priorytetem 0.3. Treść pisze Claude Code jako szkielet, zatwierdza radca prawny (D-21) — do przeglądu strona ma `noindex`, ale jest publicznie dostępna pod adresem, bo linkują do niej wszystkie szablony outboundu.
 
@@ -8943,7 +9041,10 @@ grep -ciE "ogłoszeni[ae] o prac" site/dist/rodo.html                           
 grep -coE "id=.sprzeciw." site/dist/rodo.html                                        # 1 (odrębna sekcja)
 grep -ciE "mailto:kontakt@klarow.com\?subject=Sprzeciw" site/dist/rodo.html          # >= 1
 grep -ciE "Stawki 2" site/dist/rodo.html                                             # 1 (adres UODO)
-grep -ciE "okres niezbędny" site/dist/rodo.html                                      # 0 (okres musi być konkretny)
+grep -ciE "okres niezbędny" site/dist/rodo.html                                      # 0
+grep -c "DECYZJA FOUNDER" site/dist/rodo.html                                        # 0 (tożsamość administratora wpisana)
+grep -nE "^export const (SITE_PUBLISHABLE|OUTREACH_READY)" site/src/data/rodo.ts     # 2 wpisy
+grep -ciE "12 miesięcy od ostatniego kontaktu" site/dist/rodo.html                   # >= 1 (okres musi być konkretny)
 for f in $(find site/dist -name "*.html" ! -name "404.html"); do grep -q "href=\"/rodo\"" "$f" || echo "FAIL brak linku w stopce: $f"; done
 grep -nE "^/polityka-prywatnosci[[:space:]]+/rodo[[:space:]]+301" site/public/_redirects   # 1
 node ".claude/skills/klarow-guardian/scripts/verify-site.mjs"                        # findings o id legal-rodo-page-required: 0
@@ -8954,7 +9055,7 @@ grep -rciE "klarow.com/rodo" leadscout/playbook-outbound.md                     
 
 Do przeglądu radcy (D-21) `/rodo` ma `<meta name="robots" content="noindex">`: jest publicznie dostępna, ale nie indeksowana, i wtedy nie wchodzi do `sitemap.xml` (tak jak `404.html`), mimo że liczy się do 19 HTML. Wersja EN jest tłumaczeniem informacyjnym z adnotacją „w razie rozbieżności wiążąca jest wersja polska"; `i18n-pl-en-pair-required` obowiązuje dla nawigacji, nagłówków i meta tej trasy, ale nie wymaga tłumaczenia przysięgłego treści prawnej. `verify-site.mjs` zgłasza findings tej reguły pod pełnym id `legal-rodo-page-required` (`scripts/verify-site.mjs:224, 226`); żaden skrót ani alias id nie istnieje.
 
-### 11.4 legal-analytics-cookieless-or-consent
+### 11.5 legal-analytics-cookieless-or-consent
 
 **Pomiar tylko cookieless i bez identyfikatorów albo z uprzednią zgodą; zero GA4, pikseli i fingerprintingu, zawsze wpis w /rodo**
 
@@ -8967,6 +9068,8 @@ Pomiar na `klarow.com` istnieje w dokładnie jednym z dwóch wariantów i nigdy 
 2. **Z uprzednią zgodą**: cokolwiek, co zapisuje lub odczytuje informacje na urządzeniu użytkownika w celu innym niż niezbędny (GA4, Hotjar, Clarity, Meta Pixel, LinkedIn Insight Tag, remarketing). Wymaga: decyzji founderów, wpisu w `references/integrations-registry.md` i w `/rodo`, banera z odrzuceniem równie łatwym jak akceptacja, brakiem domyślnych zaznaczeń, brakiem cookie-walla i **blokadą ładowania skryptu do czasu zgody**. Do czasu takiej decyzji te narzędzia są zakazane (`integ-no-external-scripts-on-site`).
 
 Dodatkowo: `klarow-lang` w `localStorage` to preferencja ustawiana świadomym działaniem użytkownika (przełącznik PL/EN) — pamięć niezbędna, bez zgody, ale nie wolno jej użyć jako identyfikatora ani wysłać do pomiaru. Zdarzenia CTA mają stałą listę nazw (`src/lib/track.ts`), nie niosą PII ani treści wpisanych przez użytkownika, są emitowane wyłącznie w handlerach UI i nigdy w silnikach dem (`demo-events-outside-engines`, `demo-determinism`). `track()` jest no-op przy `navigator.doNotTrack === "1"` i w trybie bez zgody tam, gdzie zgoda jest wymagana. Kolejność wdrożenia jest twarda: `/rodo` → wpis w rejestrze → beacon.
+
+**Właściciel konta = administrator (korekta 2026-09-12).** Administratorem danych z pomiaru i z usług zewnętrznych (Cloudflare, GSC, Cal.com) jest ta sama osoba lub podmiot, który widnieje w `CONTROLLER` w `src/data/rodo.ts`; konto u dostawcy prowadzi ta sama osoba, a `references/integrations-registry.md` ma kolumnę **„właściciel konta"**. Umowę powierzenia (DPA) zawiera administrator; osoba fizyczna może ją zawrzeć bez NIP-u. Żadne zdarzenie nie niesie nazwy ani treści pliku wgranego przez użytkownika (`demo-client-side-only-claim`).
 
 To wymaganie produktowe, nie opinia prawna; kwalifikacja i treść klauzul do przeglądu radcy (D-21).
 
@@ -9032,7 +9135,7 @@ node ".claude/skills/klarow-guardian/scripts/find-integrations.mjs" --dist --str
 
 Google Search Console (weryfikacja właściciela rekordem TXT albo plikiem w `public/`) nie ładuje żadnego skryptu u odwiedzającego i nie wymaga zgody ani banera; wpis w rejestrze integracji jest i tak wymagany. Logi brzegowe Cloudflare powstają po stronie hostingu niezależnie od strony (wariant 1 ich nie zwiększa), ale muszą być opisane w `/rodo` jako dane techniczne hostingu. Pomiar w narzędziach wdrażanych u klienta on-premise podlega decyzji klienta, nie tej regule — z zastrzeżeniem `integ-no-llm-api-in-client-tools`.
 
-### 11.5 legal-privacy-before-embeds
+### 11.6 legal-privacy-before-embeds
 
 **Embed (Cal.com, mapa, wideo, widget) wolno włączyć dopiero po sekcji w /rodo, wpisie w rejestrze integracji i CSP w _headers**
 
@@ -9046,6 +9149,8 @@ Kolejność jest twarda i nie wolno jej odwracać. Zanim na `klarow.com` pojawi 
 3. wpis w `references/integrations-registry.md` ze statusem `aktywna` i wypełnioną kolumną „dane, które wychodzą",
 4. `Content-Security-Policy` w `site/public/_headers` z wymienionymi hostami (`frame-src`, `script-src`, `connect-src`, `img-src`),
 5. jeśli embed zapisuje cookies nieniezbędne albo profiluje: **click-to-load** (iframe montowany dopiero po kliknięciu użytkownika w zastępczy przycisk) albo zgoda zgodna z `legal-analytics-cookieless-or-consent`.
+
+**Właściciel konta u dostawcy = administrator z `CONTROLLER`** (korekta 2026-09-12), także gdy jest osobą fizyczną bez NIP-u; wpis w kolumnie „właściciel konta" w `references/integrations-registry.md` jest częścią punktu 3.
 
 Do czasu spełnienia wszystkich pięciu obowiązuje faza 1 (D-15 a): Cal.com jako **zwykły link zewnętrzny** `target="_blank" rel="noopener noreferrer"`, zero skryptów, zero ramek; `/rodo` i tak opisuje Cal.com jako usługę, na którą użytkownik przechodzi. Ta reguła pilnuje warstwy prawnej (treść `/rodo`, podstawa, transfer, zgoda); `integ-embed-requires-privacy` pilnuje warstwy technicznej (rejestr, CSP, brak skryptów spoza allowlisty). Obie muszą przejść; w raporcie audytu zgłaszaj tę, której brakuje, a przy obu brakach — wersję prawną.
 
@@ -9123,7 +9228,7 @@ grep -rnE "target=\"_blank\"" site/src | grep -v "rel=\"noopener" | head        
 
 Linki wychodzące (`<a href="https://cal.com/…">`, profile LinkedIn founderów) nie ładują niczego na naszej stronie: wystarczy wpis w rejestrze i wzmianka w `/rodo` (usługa docelowa), bez CSP i bez zgody. Osadzenie własnych zasobów (`site/public/media/*.webm`, poster, fonty z `public/fonts`) nie jest embedem zewnętrznym. `mailto:` i `tel:` otwierają aplikację użytkownika i nie wysyłają niczego ze strony, ale jako kanały kontaktu mają sekcję w `/rodo`.
 
-### 11.6 legal-sources-for-market-numbers
+### 11.7 legal-sources-for-market-numbers
 
 **Każda liczba rynkowa publikowana ze źródłem i rokiem w tym samym zdaniu lub przypisie; zakaz liczb bez osiągalnego źródła**
 

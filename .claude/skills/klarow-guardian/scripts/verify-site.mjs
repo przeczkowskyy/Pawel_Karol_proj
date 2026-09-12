@@ -134,9 +134,16 @@ let expectedFromSrc = null;
 if (fs.existsSync(toolsTs) && fs.existsSync(pagesSeoTs)) {
   const slugs = new Set([...fs.readFileSync(toolsTs, "utf8").matchAll(/^\s*slug:\s*["']([a-z0-9-]+)["']/gm)].map((m) => m[1]));
   const pages = fs.readFileSync(pagesSeoTs, "utf8");
-  const keys = pages.match(/Record<\s*([^,>]+),/);
-  const pageKeys = keys ? keys[1].split("|").map((s) => s.replace(/["'\s]/g, "")).filter(Boolean) : [];
-  expectedFromSrc = slugs.size + pageKeys.length;
+  // Klucze bierzemy z CIAŁA obiektu PAGES_SEO, nie z parametru Record<…>: parametr bywa aliasem
+  // typu (`Record<PageKey, PageSeo>`) i wtedy liczyłby się jako jedna „trasa" (fałszywy HIGH, F0).
+  // Bierzemy WYŁĄCZNIE ciało literału PAGES_SEO (do pierwszego "\n};"), bo dalej w pliku
+  // stoją inne obiekty z kluczami na tym samym wcięciu (h1, line, toHome dla 404).
+  const start = pages.indexOf("PAGES_SEO");
+  const body = start < 0 ? "" : pages.slice(start, pages.indexOf("\n};", start) + 1);
+  const pageKeys = new Set([...body.matchAll(/^\s{2}([a-zA-Z][a-zA-Z0-9]*)\s*:\s*\{/gm)].map((m) => m[1]));
+  // 404.html liczy się osobno (has404), więc klucz notFound wypada z porównania z htmlFiles.
+  const pageRoutes = [...pageKeys].filter((k) => k !== "notFound" && k !== "404");
+  expectedFromSrc = slugs.size + pageRoutes.length;
 }
 const counted = expectedSource === "sitemap.xml" ? indexableRoutes.length : htmlFiles.length;
 if (counted !== expected) {

@@ -1,9 +1,9 @@
-/* Company UI kit — visual language: DARK by default, polished-steel accent
+/* Company UI kit, visual language: DARK by default, polished-steel accent
    #A8B4C2 (chromatic cool gray, prestige metal), calm/static motion.
-   No mask/backdrop-filter tricks (they caused hover flicker on some GPUs) —
+   No mask/backdrop-filter tricks (they caused hover flicker on some GPUs):
    hovers use borders/shadows only. Placeholder brand: KLAROW. */
 
-/* ─── brand font: Nunito Sans (variable 200–1000), self-hosted — never hotlink on-prem ─── */
+/* ─── brand font: Nunito Sans (variable 200–1000), self-hosted; never hotlink on-prem ─── */
 @font-face{
   font-family:"Nunito Sans";font-style:normal;font-weight:200 1000;font-stretch:100%;font-display:swap;
   src:url(/fonts/NunitoSans-var-latin.woff2) format("woff2");
@@ -38,7 +38,7 @@
   --warning:#fbbf24;
   --chart-1:#bfc9d6; --chart-2:#8895a6; --chart-3:#42526e; --chart-neutral:#8b93a3;
   --radius:12px; --radius-sm:8px;
-  /* type scale (standard) — every font-size migrates to these tokens */
+  /* type scale (standard): every font-size migrates to these tokens */
   --fs-2xs:10px; --fs-xs:11px; --fs-sm:12.5px; --fs-base:13.5px; --fs-md:14.5px;
   --fs-lg:16px; --fs-xl:20px; --fs-2xl:23px; --fs-3xl:28px;
   --scrim:rgba(18,18,18,.72);
@@ -54,7 +54,7 @@
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
 
-/* ─── layout utilities — the standard; NEVER re-create these as inline styles ─── */
+/* ─── layout utilities, the standard; NEVER re-create these as inline styles ─── */
 .nowrap{white-space:nowrap}
 .row{display:flex;align-items:center;gap:10px}
 .row-wrap{display:flex;align-items:center;gap:10px 14px;flex-wrap:wrap}
@@ -75,15 +75,15 @@ a{color:inherit;text-decoration:none}
 .small{font-size:13px}
 ::selection{background:rgba(168,180,194,.35)}
 
-/* ─── ambient background — WebGL smoke, ONE GPU layer ───
-   (Background Paths retired 2026-07-08 — SVG compositor layers caused
+/* ─── ambient background: WebGL smoke, ONE GPU layer ───
+   (Background Paths retired 2026-07-08; SVG compositor layers caused
    navigation lag. The shader runs entirely on the GPU: zero main-thread
    work per frame, zero layer explosions. Perf knob: SCALE in bg_smoke.html.)
-   Dark theme only — light theme hides it and keeps the clean gradient. */
+   Dark theme only: light theme hides it and keeps the clean gradient. */
 .bg-smoke{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;background:var(--body-bg)}
 html[data-theme="light"] .bg-smoke{display:none}
 
-/* brand particle mark (auth pages) — canvas sized by CSS, 960×190 internal */
+/* brand particle mark (auth pages): canvas sized by CSS, 960×190 internal */
 .brand-canvas{width:min(92vw,880px);height:auto;display:block;position:relative;z-index:2}
 
 @media (prefers-reduced-motion: reduce){
@@ -93,7 +93,7 @@ html[data-theme="light"] .bg-smoke{display:none}
 /* ─── app shell ─── */
 .app{display:grid;grid-template-columns:var(--sidebar-w) 1fr;grid-template-rows:var(--header-h) 1fr;
   height:100vh;grid-template-areas:"brand top" "side main";position:relative;z-index:1}
-  /* height (nie min-height): shell zamrożony — scrolluje .main i .sidebar, nigdy body */
+  /* height (nie min-height): shell zamrożony, scrolluje .main i .sidebar, nigdy body */
 .brand{grid-area:brand;background:var(--sidebar);display:flex;align-items:center;gap:10px;
   padding:0 18px;border-right:1px solid var(--sidebar-border);border-bottom:1px solid var(--sidebar-border)}
 .brand .p{font-weight:800;color:var(--primary);font-size:9.5px;text-transform:uppercase;letter-spacing:.14em;
@@ -119,7 +119,7 @@ html[data-theme="light"] .brand-word{color:#42526e}
   border-right:1px solid var(--sidebar-border);position:relative;overflow-y:auto;min-height:0}
 .main{grid-area:main;padding:26px 30px;overflow:auto;background:transparent}
 
-/* nav — sliding indicator */
+/* nav: sliding indicator */
 .navwrap{position:relative;display:flex;flex-direction:column;gap:2px}
 .nav-indicator{position:absolute;left:0;right:0;height:40px;border-radius:10px;
   background:rgba(168,180,194,.10);border:1px solid rgba(168,180,194,.25);opacity:0;
@@ -145,12 +145,12 @@ html[data-theme="light"] .brand-word{color:#42526e}
 .avatar{width:31px;height:31px;border-radius:999px;background:var(--primary);color:var(--primary-fg);
   display:grid;place-items:center;font-weight:800;font-size:12.5px}
 
-/* ─── page enter — THE standard motion (goes into SKILL.md) ───
+/* ─── page enter: THE standard motion (goes into SKILL.md) ───
    Every navigation: top-level blocks fade in and rise 10px with a soft
    cascade (60ms steps). One-shot, opacity+transform only. No pop-in ever. */
 @keyframes riseIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 /* backwards (nie both): filled transform w Chromium robi z dziecka containing block
-   dla position:fixed — modale legacy wewnątrz .main lądowały poza viewportem */
+   dla position:fixed, a modale legacy wewnątrz .main lądowały poza viewportem */
 .main > *{animation:riseIn .35s var(--ease-out) backwards}
 .main > *:nth-child(2){animation-delay:.04s}
 .main > *:nth-child(3){animation-delay:.08s}
@@ -158,7 +158,7 @@ html[data-theme="light"] .brand-word{color:#42526e}
 .main > *:nth-child(5){animation-delay:.16s}
 .main > *:nth-child(n+6){animation-delay:.2s}
 
-/* theme switch — a temporary class (see base.html toggleTheme) cross-fades all
+/* theme switch: a temporary class (see base.html toggleTheme) cross-fades all
    surface colours instead of the hard instant flip */
 html.theme-fade body, html.theme-fade body *{
   transition:background-color .3s ease,color .3s ease,border-color .3s ease,
@@ -166,7 +166,7 @@ html.theme-fade body, html.theme-fade body *{
 
 /* ─── page scaffolding ───
    SCRIM RULE: content that sits DIRECTLY on the ambient background (page heads,
-   section titles, legends, ghost buttons) gets a translucent frame — it must
+   section titles, legends, ghost buttons) gets a translucent frame; it must
    never blend into the smoke. Cards/tables are already opaque. */
 .page-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px;gap:14px;
   background:var(--scrim);border:1px solid var(--border);border-radius:var(--radius);padding:14px 18px}
@@ -182,7 +182,7 @@ html.theme-fade body, html.theme-fade body *{
 /* ─── cards / bento ─── */
 .bento{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
 /* OVERFLOW RULE: grid/flex children default to min-width:auto and blow out of
-   their tracks when content is long — every grid container gets this guard */
+   their tracks when content is long, so every grid container gets this guard */
 .bento > *,.req-grid > *,.proj-grid > *,.page-head > div{min-width:0}
 .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
   box-shadow:var(--shadow-sm);padding:20px;position:relative;
@@ -195,7 +195,7 @@ html.theme-fade body, html.theme-fade body *{
   box-shadow:0 0 0 1px rgba(168,180,194,.25),0 10px 34px -14px rgba(168,180,194,.28)}
 
 .stat .lbl{font-size:11.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-foreground);font-weight:700}
-/* OVERFLOW RULE: KPI amounts never break mid-number — the font scales down
+/* OVERFLOW RULE: KPI amounts never break mid-number; the font scales down
    (clamp) instead of wrapping or spilling out of the tile */
 .stat .val{font-weight:800;font-size:clamp(20px,1.1vw + 13px,28px);margin-top:8px;
   letter-spacing:-.02em;color:var(--heading);white-space:nowrap}
@@ -230,8 +230,8 @@ html.theme-fade body, html.theme-fade body *{
 .btn:disabled{opacity:.5;cursor:not-allowed}
 .btn .navitem-ico{width:15px;height:15px}
 
-/* ─── status chips — THE canonical status block ───
-   Frame: our own pill (radius 999, translucent tint + coloured border) — the
+/* ─── status chips: THE canonical status block ───
+   Frame: our own pill (radius 999, translucent tint + coloured border), the
    earlier badge frame, kept by decision 2026-07-08; Protocol Manager will be
    adapted to THIS style later, not the other way round.
    Always colour + icon + label, never colour alone. 6 semantic colours:
@@ -252,7 +252,7 @@ html.theme-fade body, html.theme-fade body *{
 html[data-theme="light"] .st-accent  {color:#42526e;background:#eff3f7;border-color:#c8d2dd}
 html[data-theme="light"] .st-blue  {color:#1d4ed8;background:#eff6ff;border-color:#bfdbfe}
 html[data-theme="light"] .st-violet{color:#6d28d9;background:#f5f3ff;border-color:#ddd6fe}
-/* neutral mini-chip (category tags, counters — NOT a status) */
+/* neutral mini-chip (category tags, counters; NOT a status) */
 .chip{display:inline-flex;align-items:center;font-size:10.5px;font-weight:700;color:var(--secondary-foreground);
   background:var(--secondary);border:1px solid var(--border);border-radius:999px;padding:1.5px 8px}
 
@@ -314,11 +314,11 @@ table.matrix td.cat-indent{padding-left:28px;font-weight:500;white-space:nowrap;
 table.matrix thead th.today{background:#161b22;color:var(--accent-foreground);box-shadow:inset 0 -3px 0 var(--primary)}
 table.matrix td.today{background:rgba(168,180,194,.07)}
 table.matrix tbody tr:hover td.today{background:rgba(168,180,194,.14)}
-/* STICKY RULE: sticky cells (header/footer/frozen columns) need OPAQUE backgrounds —
+/* STICKY RULE: sticky cells (header/footer/frozen columns) need OPAQUE backgrounds:
    translucent rgba lets scrolling content bleed through the layer */
 table.matrix tfoot td.today{background:#232b36}
 .today-tag{display:block;font-size:9px;font-weight:800;color:var(--primary);letter-spacing:.08em;text-transform:uppercase}
-/* clickable matrix cell — the WHOLE cell is the target and highlights on hover */
+/* clickable matrix cell: the WHOLE cell is the target and highlights on hover */
 .cellbtn{position:absolute;inset:0;background:none;border:none;cursor:pointer;font:inherit;
   display:flex;align-items:center;justify-content:flex-end;padding:0 12px;border-radius:0;
   transition:background var(--motion),box-shadow var(--motion)}
@@ -348,7 +348,7 @@ table.matrix tfoot td.today{background:#232b36}
 .data-table td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:650}
 .data-table th.num{text-align:right}
 .data-table tfoot td{background:var(--muted)}
-/* v1.1: scrollbox dużych tabel — nagłówek (i filtry w th) sticky, obie osie przewijane */
+/* v1.1: scrollbox dużych tabel, nagłówek (i filtry w th) sticky, obie osie przewijane */
 .table-wrapper{overflow:auto;margin-top:8px;cursor:grab;overscroll-behavior-x:contain;
   max-height:calc(100vh - 230px);-webkit-overflow-scrolling:touch;
   scrollbar-width:thin;scrollbar-color:var(--input) var(--muted)}
@@ -356,7 +356,7 @@ table.matrix tfoot td.today{background:#232b36}
 .table-wrapper::-webkit-scrollbar{width:11px;height:11px}
 .table-wrapper::-webkit-scrollbar-track{background:var(--muted)}
 .table-wrapper::-webkit-scrollbar-thumb{background:var(--input);border-radius:10px}
-/* overflow:visible — .data-table ma overflow:hidden (klip rogów), a przodek ze
+/* overflow:visible, bo .data-table ma overflow:hidden (klip rogów), a przodek ze
    scrollem/klipem między th a wrapperem unieważnia sticky; rogi klipuje wrapper */
 .table-wrapper{border-radius:var(--radius)}
 .table-wrapper table{overflow:visible}
@@ -384,7 +384,7 @@ tr.rowlink:hover td{background:rgba(168,180,194,.08)}
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.6em}
 .rc-meta{display:flex;align-items:center;justify-content:space-between;gap:6px 8px;flex-wrap:wrap;
   font-size:11.5px;color:var(--muted-foreground);border-top:1px dashed #3f3f42;padding-top:10px}
-/* OVERFLOW RULE: text-overflow needs a BLOCK formatting context — never rely on
+/* OVERFLOW RULE: text-overflow needs a BLOCK formatting context; never rely on
    ellipsis inside inline-flex. The category chip is inline-block for that reason. */
 .rc-cat{display:inline-block;max-width:100%;flex:0 1 auto;min-width:0;
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.7}
@@ -467,7 +467,7 @@ span[data-tip],span[data-tip-html]{cursor:help}
 .modal-overlay-c{position:fixed;inset:0;background:rgba(0,0,0,.62);
   display:none;align-items:flex-start;justify-content:center;z-index:1000;padding:6vh 20px}
 /* SSR (Jinja) trzyma overlay w DOM i przełącza display JS-em; w React/warunkowym
-   renderze overlay pojawia się już otwarty — wtedy dodaj modyfikator .open. */
+   renderze overlay pojawia się już otwarty, wtedy dodaj modyfikator .open. */
 .modal-overlay-c.open{display:flex}
 .modal-c{background:var(--card);border-radius:16px;max-width:680px;width:100%;max-height:82vh;overflow:auto;
   padding:26px;box-shadow:var(--shadow-lg);position:relative;border:1px solid var(--border);
@@ -501,13 +501,13 @@ span[data-tip],span[data-tip-html]{cursor:help}
 .chart-svg .dot-annex{fill:var(--funded)}  /* zielony marker zdarzenia (np. aneks) */
 .chart-svg .stop-neutral{stop-color:var(--chart-neutral)}
 .chart-svg .stop-accent{stop-color:var(--primary)}
-/* chart entrance — STATIC by default (rebrand): charts render instantly and get
+/* chart entrance: STATIC by default (rebrand): charts render instantly and get
    only a short fade after the page cascade. No draw-in theatrics, no per-point
-   choreography — data first, motion minimal. */
+   choreography. Data first, motion minimal. */
 @keyframes chartFadeIn{from{opacity:0}}
 .chart-reveal{animation:chartFadeIn .4s ease-out .15s both}
 .chart-late{animation:chartFadeIn .35s ease-out .5s both}
-/* period step (segmented control — port of controlling's Weekly/Bi-weekly/Monthly) */
+/* period step (segmented control, port of controlling's Weekly/Bi-weekly/Monthly) */
 .seg{display:inline-flex;background:var(--muted);border:1px solid var(--border);border-radius:8px;padding:2px;gap:2px}
 .seg a{padding:3px 10px;border-radius:6px;font-size:11.5px;font-weight:700;color:var(--muted-foreground);
   line-height:1.4;transition:color var(--motion),background var(--motion)}
@@ -525,7 +525,7 @@ span[data-tip],span[data-tip-html]{cursor:help}
 .chart-svg .chipbg{fill:var(--chip-bg);stroke:var(--chip-border)}
 .chart-svg .chiptext{fill:var(--chip-fg);font-weight:700}
 .chart-svg .dot-ring{stroke:var(--card);stroke-width:2}
-/* RESPONSIVE RULE: KPI blocks wrap as whole units instead of squeezing —
+/* RESPONSIVE RULE: KPI blocks wrap as whole units instead of squeezing:
    labels and amounts never break internally */
 .chart-kpi{display:flex;gap:10px 26px;align-items:baseline;margin-bottom:8px;flex-wrap:wrap}
 .chart-kpi .lbl-sm{display:block;margin-bottom:2px;white-space:nowrap}
@@ -600,7 +600,7 @@ html[data-theme="light"] tr.rowlink:hover td{background:#eef2f6}
 html[data-theme="light"] .btn-primary:hover{box-shadow:0 6px 18px -6px rgba(107,120,140,.35)}
 
 /* ─── responsive ───
-   Breakpoints: 1500 (laptop — KPI tiles 2×2), 1250 (charts stack full-width),
+   Breakpoints: 1500 (laptop, KPI tiles 2×2), 1250 (charts stack full-width),
    900 (shell collapses to top nav), 560 (phone compaction). */
 @media (max-width:1500px){
   .col-3{grid-column:span 6}
@@ -616,7 +616,7 @@ html[data-theme="light"] .btn-primary:hover{box-shadow:0 6px 18px -6px rgba(107,
   .topbar .saldo-pill .lbl{display:none}
   .sidebar{flex-direction:row;align-items:center;gap:4px;padding:8px 10px;overflow-x:auto;overflow-y:hidden;
     -webkit-overflow-scrolling:touch;border-right:none;border-bottom:1px solid var(--sidebar-border)}
-  /* flex:none — bez tego navwrap jest ściskany i jego nie-kurczliwe pozycje
+  /* flex:none, bo bez tego navwrap jest ściskany i jego nie-kurczliwe pozycje
      nakładają się na elementy za nim (Menu aplikacji) */
   .navwrap{flex:0 0 auto;flex-direction:row;align-items:center}
   .nav-indicator{display:none}
@@ -679,7 +679,7 @@ input.pct-input:focus-visible,select.bsel:focus-visible{outline:2px solid var(--
 table.matrix thead th.bill-app{cursor:pointer}
 table.matrix thead th.bill-app:hover{background:#161b22}
 table.matrix thead th .app-total{display:block;font-size:10px;color:#8b8b90;font-weight:700;margin-top:2px}
-/* 'To bill now' — frozen at the right edge while payment columns scroll under it
+/* 'To bill now': frozen at the right edge while payment columns scroll under it
    (mirror of the sticky category column on the left; backgrounds must be OPAQUE) */
 table.matrix th.bill-proposal,table.matrix td.bill-proposal{position:sticky;right:0}
 table.matrix td.bill-proposal{background:#191f28;z-index:2;
@@ -691,7 +691,7 @@ table.matrix tfoot td.bill-proposal{background:#202834;z-index:4}
 html[data-theme="light"] table.matrix td.bill-proposal{background:#f0f3f7}
 html[data-theme="light"] table.matrix tbody tr:hover td.bill-proposal{background:#e2e8ef}
 html[data-theme="light"] table.matrix tfoot td.bill-proposal{background:#e6ebf1}
-/* the PM's main input column — visibly highlighted */
+/* the PM's main input column: visibly highlighted */
 table.matrix th.pm-col{background:#1a212b;box-shadow:inset 0 -3px 0 var(--primary)}
 table.matrix td.pm-col{background:rgba(168,180,194,.10)}
 table.matrix tbody tr:hover td.pm-col{background:rgba(168,180,194,.18)}
@@ -726,30 +726,30 @@ table.matrix tbody tr:hover td.pm-col{background:rgba(168,180,194,.18)}
   .st{border:1px solid #999;color:#111;background:#fff}
   .st .st-ico{display:none}
 }
-/* ═══ EXTRA COMPONENTS — standard library ═══
+/* ═══ EXTRA COMPONENTS: standard library ═══
    Part of the canonical Company UI kit (.claude/skills/company-ui). Not every
    app uses every block, but they ship in EVERY app.css so all tools stay
    identical and a single edit here propagates everywhere. */
 
-/* attention dot — "needs your action" marker on any element (position:relative host) */
+/* attention dot: "needs your action" marker on any element (position:relative host) */
 .attn{position:relative}
 .attn::after{content:"";position:absolute;top:-3px;right:-3px;width:8px;height:8px;background:var(--destructive);
   border-radius:999px;border:2px solid var(--card);animation:attnPulse 1.6s ease-in-out infinite}
 @keyframes attnPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.25);opacity:.85}}
-/* v1.1.4: kropka powiadomień na zakładce sidebara — standard „uwaga na tej zakładce"
+/* v1.1.4: kropka powiadomień na zakładce sidebara, standard „uwaga na tej zakładce”
    (nadaje logika aplikacji). Kropka siedzi INLINE tuż za etykietą (flex item),
    nie w rogu elementu. */
 .navitem.nav-attn::after{content:"";width:8px;height:8px;flex:0 0 auto;margin-left:-3px;
   background:var(--destructive);border-radius:999px;
   animation:attnPulse 1.6s ease-in-out infinite}
 
-/* progress bar — one standard (replaces ad-hoc coverage/proj bars in new apps) */
+/* progress bar: one standard (replaces ad-hoc coverage/proj bars in new apps) */
 .bar{height:8px;border-radius:999px;background:var(--secondary);overflow:hidden}
 .bar > i{display:block;height:100%;border-radius:999px;background:var(--primary);transition:width .4s var(--ease-out)}
 .bar.grad > i{background:linear-gradient(90deg,var(--chart-1),var(--chart-2))}
 .bar.ok > i{background:var(--funded)} .bar.bad > i{background:var(--rejected)}
 
-/* toast notifications — bottom-right stack; add .ok/.bad for semantic edge */
+/* toast notifications: bottom-right stack; add .ok/.bad for semantic edge */
 .toast-wrap{position:fixed;bottom:18px;right:18px;display:flex;flex-direction:column;gap:8px;z-index:1100}
 .toast{background:var(--card);border:1px solid rgba(168,180,194,.45);border-radius:10px;
   padding:11px 14px;box-shadow:var(--shadow-md);font-size:13px;max-width:360px;
@@ -757,12 +757,12 @@ table.matrix tbody tr:hover td.pm-col{background:rgba(168,180,194,.18)}
 .toast.ok{border-color:var(--funded-border)} .toast.bad{border-color:var(--rejected-border)}
 .toast .navitem-ico{width:15px;height:15px;flex:0 0 auto;margin-top:1px}
 
-/* skeleton loading shimmer — set width/height per placeholder */
+/* skeleton loading shimmer: set width/height per placeholder */
 .skel{background:linear-gradient(90deg,var(--secondary) 25%,var(--muted) 50%,var(--secondary) 75%);
   background-size:200% 100%;animation:skelWave 1.3s linear infinite;border-radius:8px;min-height:14px}
 @keyframes skelWave{from{background-position:200% 0}to{background-position:-200% 0}}
 
-/* timeline — vertical activity feed (li.done = green, li.bad = brick) */
+/* timeline: vertical activity feed (li.done = green, li.bad = brick) */
 .tl{list-style:none;margin:0;padding:0;position:relative}
 .tl::before{content:"";position:absolute;left:7px;top:4px;bottom:4px;width:2px;background:var(--border)}
 .tl li{position:relative;padding:0 0 16px 26px}
@@ -772,7 +772,7 @@ table.matrix tbody tr:hover td.pm-col{background:rgba(168,180,194,.18)}
 .tl li.bad::before{border-color:var(--rejected);background:var(--rejected-bg)}
 .tl .tl-time{font-size:11px;color:var(--muted-foreground);display:block}
 
-/* step indicator (wizard) — .step.active / .step.done, .step-line.done between */
+/* step indicator (wizard): .step.active / .step.done, .step-line.done between */
 .steps{display:flex;align-items:center}
 .step{display:flex;align-items:center;gap:8px}
 .step-dot{width:30px;height:30px;border-radius:999px;border:2px solid var(--border);background:var(--card);
@@ -785,7 +785,7 @@ table.matrix tbody tr:hover td.pm-col{background:rgba(168,180,194,.18)}
 .step-line{flex:1;height:2px;background:var(--border);margin:0 10px;min-width:24px}
 .step-line.done{background:var(--funded)}
 
-/* dropdown menu — <details class="menu"><summary class="btn ...">…</summary><div class="menu-list">…</div></details> */
+/* dropdown menu: <details class="menu"><summary class="btn ...">…</summary><div class="menu-list">…</div></details> */
 .menu{position:relative;display:inline-block}
 .menu > summary{list-style:none;cursor:pointer}
 .menu > summary::-webkit-details-marker{display:none}
@@ -797,7 +797,7 @@ table.matrix tbody tr:hover td.pm-col{background:rgba(168,180,194,.18)}
 .menu-list a:hover,.menu-list button:hover{background:var(--secondary)}
 .menu-list .navitem-ico{width:15px;height:15px}
 
-/* tabs — underline style, gold active */
+/* tabs: underline style, gold active */
 .tabs{display:flex;gap:2px;border-bottom:1px solid var(--border);margin-bottom:16px}
 .tab{padding:9px 16px;font-size:13.5px;font-weight:700;color:var(--muted-foreground);border:none;background:none;
   cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;
@@ -805,7 +805,7 @@ table.matrix tbody tr:hover td.pm-col{background:rgba(168,180,194,.18)}
 .tab:hover{color:var(--foreground)}
 .tab.active{color:var(--accent-foreground);border-bottom-color:var(--primary)}
 
-/* trend delta — ▲/▼ value change */
+/* trend delta: ▲/▼ value change */
 .delta{display:inline-flex;align-items:center;gap:3px;font-size:11.5px;font-weight:800;font-variant-numeric:tabular-nums}
 .delta.up{color:var(--funded)} .delta.down{color:var(--rejected)}
 
@@ -816,7 +816,7 @@ table.matrix tbody tr:hover td.pm-col{background:rgba(168,180,194,.18)}
 .pager a:hover{background:var(--secondary);color:var(--foreground)}
 .pager .cur{background:rgba(168,180,194,.13);color:var(--accent-foreground);border-color:rgba(168,180,194,.35)}
 
-/* calendar — month grid; .is-today (gold ring), .is-sel (gold fill), .has-dot (event), .is-out (other month) */
+/* calendar: month grid; .is-today (gold ring), .is-sel (gold fill), .has-dot (event), .is-out (other month) */
 .cal{max-width:320px;padding:14px}
 .cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 .cal-head strong{font-size:13.5px;color:var(--heading)}
@@ -849,7 +849,7 @@ html[data-theme="light"] .cal-day.is-out{color:#b6b9bf}
 /* ═══ Donut / pierścień (v1.2) ═══
    JEDEN łuk wartości na neutralnym torze (--secondary); akcent domyślnie złoty
    (--primary), warianty ok=--funded, bad=--rejected. Round linecap, animowany
-   draw-in (stroke-dashoffset .9s ease-out — motion kitu). W środku duża liczba
+   draw-in (stroke-dashoffset .9s ease-out, motion kitu). W środku duża liczba
    (tabular-nums, 800) + sufiks; etykieta .lbl-sm pod spodem. Zero wielobarwnych
    pierścieni: jeden łuk, jeden akcent. Kolory WYŁĄCZNIE tokenami (przełącza się
    z motywem). Aplikacja ustawia inline --nc-donut-ring = średnica SVG (px). */
@@ -870,13 +870,13 @@ html[data-theme="light"] .cal-day.is-out{color:#b6b9bf}
 
 /* ═══ Zwijany panel zakładek (v1.2) ═══
    Strzałka .nav-toggle na środku prawej krawędzi sidebara płynnie zasuwa
-   kolumnę nav (brand+side) i powiększa .main — więcej pola manewru. Stan
+   kolumnę nav (brand+side) i powiększa .main, czyli więcej pola manewru. Stan
    persistuje aplikacja (localStorage) dodając klasę .nav-collapsed na .app.
-   ≤900px shell i tak składa się do poziomego paska — toggle wyłączony. */
+   ≤900px shell i tak składa się do poziomego paska, więc toggle jest wyłączony. */
 .app{transition:grid-template-columns .2s cubic-bezier(.4,0,.2,1)}
 .app.nav-collapsed{grid-template-columns:0 1fr}
 /* contain:paint izoluje repaint zwijanej kolumny (mniej pracy kompozytora
-   podczas animacji szerokości — płynniej na słabszych GPU). UWAGA: sidebar
+   podczas animacji szerokości, płynniej na słabszych GPU). UWAGA: sidebar
    MUSI zachować overflow-y:auto (długa nawigacja + dolny slot scrolluje),
    więc overflow:hidden dostaje tylko .brand. */
 .app .brand{overflow:hidden;contain:paint}
@@ -900,10 +900,10 @@ html[data-theme="light"] .cal-day.is-out{color:#b6b9bf}
 @media (prefers-reduced-motion: reduce){.app,.nav-toggle,.nav-toggle-ico{transition:none}}
 
 /* ═══ Płynne przejścia danych / zakładek (v1.2) ═══
-   .nc-swap  — wrapper wykresu z key=aktywna-zmienna (Labour↔Material, %↔zł):
+   .nc-swap: wrapper wykresu z key=aktywna-zmienna (Labour↔Material, %↔zł):
                miękki fade-in zamiast twardego przeskoku (tylko opacity+transform).
-   .nc-tab-swap — wrapper zawartości zakładki z key=aktywna-zakładka: cały panel
-               „budzi się" jednym fade-in zamiast błysku/pop-in. NIE animować
+   .nc-tab-swap: wrapper zawartości zakładki z key=aktywna-zakładka: cały panel
+               „budzi się” jednym fade-in zamiast błysku/pop-in. NIE animować
                layoutu (Recharts ResponsiveContainer re-measure per klatkę = lag). */
 @keyframes ncSwapIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 .nc-swap{animation:ncSwapIn .28s var(--ease-out) backwards}
@@ -915,8 +915,8 @@ html[data-theme="light"] .cal-day.is-out{color:#b6b9bf}
 .nc-tab-swap > *:nth-child(n+4){animation-delay:.14s}
 @media (prefers-reduced-motion: reduce){.nc-swap,.nc-tab-swap,.nc-tab-swap > *{animation:none}}
 
-/* ═══ Budowanie wykresu — reveal (v1.2) ═══
-   „Wstawanie" wykresu robimy GPU clip-wipe L→R (jedna właściwość CSS na jednym
+/* ═══ Budowanie wykresu: reveal (v1.2) ═══
+   „Wstawanie” wykresu robimy GPU clip-wipe L→R (jedna właściwość CSS na jednym
    elemencie), NIGDY animacją JS bibliotek wykresowych (Recharts `isAnimationActive`
    przelicza słupki + custom labele co klatkę na main-thread → lag przy gęstych
    danych). Wykres renderuje się instant (isAnimationActive=false), a wrapper
@@ -924,8 +924,8 @@ html[data-theme="light"] .cal-day.is-out{color:#b6b9bf}
    płynnie. Ten sam efekt co reveal SVG na Main Page (`.chart-reveal`). */
 /* Overlay-slide (transform GPU): kafel w kolorze karty zsuwa się w prawo,
    odsłaniając wykres L→R. Działa niezależnie od tego KIEDY biblioteka wykresu
-   się narysuje (Recharts renderuje async przez ResizeObserver — clip-path na
-   pustym kontenerze „przejeżdżał" zanim wykres powstał). Wrapper z key=dane
+   się narysuje (Recharts renderuje async przez ResizeObserver, więc clip-path na
+   pustym kontenerze „przejeżdżał” zanim wykres powstał). Wrapper z key=dane
    (toggle + zakres tygodni) powtarza reveal przy KAŻDEJ zmianie danych. */
 .nc-reveal{position:relative;overflow:hidden}
 .nc-reveal::after{content:"";position:absolute;inset:0;background:var(--card);
@@ -933,15 +933,15 @@ html[data-theme="light"] .cal-day.is-out{color:#b6b9bf}
 @keyframes ncRevealSlide{from{transform:translateX(0)}to{transform:translateX(101%)}}
 @media (prefers-reduced-motion: reduce){.nc-reveal::after{animation:none;opacity:0}}
 
-/* Synchroniczny „build" wykresu Recharts — clip-wipe L→R na kontenerze NcResponsive.
+/* Synchroniczny „build” wykresu Recharts: clip-wipe L→R na kontenerze NcResponsive.
    Działa DOPIERO gdy wykres renderuje się synchronicznie: NcResponsive mierzy
    szerokość w useLayoutEffect PRZED paintem, więc clip odsłania GOTOWY wykres
    (jak chartReveal na Main Page), a nie pusty kontener. `backwards` (nie `both`):
-   stan „schowany" obowiązuje w trakcie delaya, a PO animacji clip-path znika —
-   brak trwałego przycięcia dymków przy krawędzi. Gra raz przy montażu (wejście w
+   stan „schowany” obowiązuje w trakcie delaya, a PO animacji clip-path znika,
+   więc nie ma trwałego przycięcia dymków przy krawędzi. Gra raz przy montażu (wejście w
    zakładkę); zmiana danych nie remontuje wykresu = brak powtórki i migania. */
 @keyframes ncChartBuild{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
 .nc-chart-build{animation:ncChartBuild .45s var(--ease-soft) .05s backwards;will-change:clip-path}
 @media (prefers-reduced-motion: reduce){.nc-chart-build{animation:none}}
 
-/* ═══ APP-SPECIFIC (poniżej tej linii — nie ruszać przy aktualizacji kitu company-ui) ═══ */
+/* ═══ APP-SPECIFIC (poniżej tej linii: nie ruszać przy aktualizacji kitu company-ui) ═══ */

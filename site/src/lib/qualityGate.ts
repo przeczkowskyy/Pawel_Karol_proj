@@ -1,12 +1,12 @@
-/* Silnik „Audytu jakości danych" — odbrandowane, deterministyczne odtworzenie
+/* Silnik „Audytu jakości danych”: odbrandowane, deterministyczne odtworzenie
    bramki jakości plików budżetowych (read-only). 1:1 co do reguł, ale na
    danych fikcyjnych i bez marki źródłowej (zasada #3). Zero sieci/losowości.
 
-   Reguły (z blueprintu „Globalna Formuła Sprawdzająca"):
-   - estymacja PM < 0            → BŁĄD  (PM_MINUS)      — PM estymuje na minusie
-   - „w tym tygodniu" < 0        → UWAGA (NEG)           — ujemna kwota tygodnia
-   - saldo kontrolne (E) ≠ 0     → BŁĄD  (E_NONZERO)     — rozjazd salda
-   - data wpisu poza tygodniem   → BŁĄD  (BAD_DATE)      — zły stempel daty
+   Reguły (z blueprintu „Globalna Formuła Sprawdzająca”):
+   - estymacja PM < 0            → BŁĄD  (PM_MINUS)      PM estymuje na minusie
+   - „w tym tygodniu” < 0        → UWAGA (NEG)           ujemna kwota tygodnia
+   - saldo kontrolne (E) ≠ 0     → BŁĄD  (E_NONZERO)     rozjazd salda
+   - data wpisu poza tygodniem   → BŁĄD  (BAD_DATE)      zły stempel daty
    Wynik: znaleziska + macierz pewności OK / UWAGA / BŁĄD per inwestycja. */
 
 export type Severity = "error" | "warn";
@@ -119,7 +119,7 @@ export function isoWeekMonday(year: number, week: number): Date {
 }
 
 export function fmtDate(d: Date | null): string {
-  if (!d) return "—";
+  if (!d) return ""; /* brak daty: pusta komórka, gałąź obronna (dane dema zawsze mają datę) */
   const p = (n: number) => String(n).padStart(2, "0");
   return `${p(d.getUTCDate())}.${p(d.getUTCMonth() + 1)}.${d.getUTCFullYear()}`;
 }

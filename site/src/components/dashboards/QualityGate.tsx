@@ -13,7 +13,7 @@ import {
 import { auditRows, fmtDate, isoWeekMonday, type InvStatus, type Severity } from "@/lib/qualityGate";
 import { useLang, pick } from "@/i18n";
 
-/* Dashboard „Audyt jakości danych" — LIVE, read-only, dane fikcyjne.
+/* Dashboard „Audyt jakości danych”: LIVE, read-only, dane fikcyjne.
    Bramka jakości: OK / UWAGA / BŁĄD per inwestycja + lista znalezisk.
    Odbrandowane odtworzenie (zasada #3). */
 
@@ -42,14 +42,14 @@ const T = {
     close: "Zamknij",
     compute: "Sprawdź",
     formatHint:
-      "Format: Inwestycja; Etap; Estymacja PM; W tym tygodniu; Saldo (E); Data — separator „;”, przecinek lub tabulator. Tydzień raportu: 30 / 2026.",
+      "Format: Inwestycja; Etap; Estymacja PM; W tym tygodniu; Saldo (E); Data. Separator „;”, przecinek lub tabulator. Tydzień raportu: 30 / 2026.",
     pastePh: "Inwestycja;Etap;Estymacja PM;W tym tygodniu;Saldo (E);Data\nHala A;Montaż;120000;35000;0;22.07.2026",
     emptyTitle: "Bramka jakości zbuduje się tutaj",
-    emptyBody: "Załaduj przykład albo wklej własną tabelę — narzędzie tylko czyta, niczego nie nadpisuje.",
+    emptyBody: "Załaduj przykład albo wklej własną tabelę. Narzędzie tylko czyta, niczego nie nadpisuje.",
     srcExample: "dane przykładowe (fikcyjne)",
     srcPaste: "dane wklejone",
-    verdictClean: "PORTFEL CZYSTY — można publikować",
-    verdictDirty: "WYKRYTO BŁĘDY — nie publikuj przed poprawą",
+    verdictClean: "PORTFEL CZYSTY: można publikować",
+    verdictDirty: "WYKRYTO BŁĘDY: nie publikuj przed poprawą",
     week: "Tydzień raportu",
     kInv: "Inwestycje",
     kErr: "Błędy",
@@ -65,17 +65,17 @@ const T = {
     stOk: "OK",
     stWarn: "UWAGA",
     stErr: "BŁĄD",
-    noFind: "Brak znalezisk — wszystkie reguły przeszły.",
-    ruleTitle: "Reguły audytu (jawne — deterministyczne)",
+    noFind: "Brak znalezisk: wszystkie reguły przeszły.",
+    ruleTitle: "Reguły audytu (jawne, deterministyczne)",
     rules: [
       "Estymacja PM < 0 → BŁĄD (PM nie może estymować na minusie)",
       "„W tym tygodniu” < 0 → UWAGA (do weryfikacji)",
       "Saldo kontrolne (E) ≠ 0 → BŁĄD (rozjazd salda)",
       "Data wpisu poza tygodniem raportu → BŁĄD (zły stempel)",
     ],
-    footFake: "Dane fikcyjne. Read-only — narzędzie nic nie zapisuje w Twoich plikach.",
+    footFake: "Dane fikcyjne. Read-only: narzędzie nic nie zapisuje w Twoich plikach.",
     footLocal: "100% w przeglądarce, bez wysyłki danych. Te same dane zawsze dają ten sam werdykt.",
-    errTitle: "Wejście — pominięte wiersze:",
+    errTitle: "Wejście, pominięte wiersze:",
     errLine: "wiersz",
   },
   en: {
@@ -85,14 +85,14 @@ const T = {
     close: "Close",
     compute: "Check",
     formatHint:
-      "Format: Investment; Stage; PM estimate; This week; Balance (E); Date — separator “;”, comma or tab. Report week: 30 / 2026.",
+      "Format: Investment; Stage; PM estimate; This week; Balance (E); Date. Separator “;”, comma or tab. Report week: 30 / 2026.",
     pastePh: "Investment;Stage;PM estimate;This week;Balance (E);Date\nHall A;Assembly;120000;35000;0;2026-07-22",
     emptyTitle: "The quality gate builds itself here",
-    emptyBody: "Load the example or paste your own table — the tool only reads, it never overwrites.",
+    emptyBody: "Load the example or paste your own table. The tool only reads, it never overwrites.",
     srcExample: "example data (fictional)",
     srcPaste: "pasted data",
-    verdictClean: "PORTFOLIO CLEAN — ready to publish",
-    verdictDirty: "ERRORS FOUND — do not publish before fixing",
+    verdictClean: "PORTFOLIO CLEAN: ready to publish",
+    verdictDirty: "ERRORS FOUND: do not publish before fixing",
     week: "Report week",
     kInv: "Investments",
     kErr: "Errors",
@@ -108,17 +108,17 @@ const T = {
     stOk: "OK",
     stWarn: "WATCH",
     stErr: "ERROR",
-    noFind: "No findings — all rules passed.",
-    ruleTitle: "Audit rules (explicit — deterministic)",
+    noFind: "No findings: all rules passed.",
+    ruleTitle: "Audit rules (explicit, deterministic)",
     rules: [
       "PM estimate < 0 → ERROR (PM can't estimate negative)",
       "“This week” < 0 → WATCH (to verify)",
       "Control balance (E) ≠ 0 → ERROR (balance mismatch)",
       "Entry date outside the report week → ERROR (bad stamp)",
     ],
-    footFake: "Fictional data. Read-only — the tool writes nothing to your files.",
+    footFake: "Fictional data. Read-only: the tool writes nothing to your files.",
     footLocal: "100% in the browser, no data upload. The same data always gives the same verdict.",
-    errTitle: "Input — skipped rows:",
+    errTitle: "Input, skipped rows:",
     errLine: "line",
   },
 };

@@ -1,29 +1,37 @@
 @import "tailwindcss";
+@import "./tokens.css";
 
-/* Landing Klarow — Tailwind tylko do layoutu/utility; komponenty i tokeny
-   daje company-ui.css (kit). Landing jest dark-only. Strona to zwykłe
-   podstrony ze standardowym scrollem (routing react-router): /, /narzedzia,
-   /oferta, /faq oraz /narzedzia/:slug. (Dawny „deck" ze slajdami usunięty
-   2026-07-26 — teraz każda sekcja to osobna trasa pod SEO.) */
+/* Kolejność importów jest wiążąca:
+   1. `tailwindcss` MUSI być pierwszy, bo dopiero po jego domyślnym motywie
+      działa wyzerowanie palet w `@theme inline` z tokens.css (`--color-*: initial`
+      przed definicjami domyślnymi nie zerowałoby niczego),
+   2. `tokens.css` jest pierwszym NASZYM arkuszem: wchodzi przed kitem
+      (`company-ui.css` importuje main.tsx po tym pliku), więc kit nadpisuje
+      tylko to, co musi, a nie odwrotnie.
+
+   Landing Klarow: Tailwind daje layout i utility, wygląd dają tokeny i kit.
+   Strona jest ciemna na całej długości (bez przełącznika motywu), a trasy to
+   zwykłe podstrony ze standardowym scrollem (react-router): /, /narzedzia,
+   /oferta, /faq oraz /narzedzia/:slug. */
 
 /* ── Szkielet strony BEZ zależności od Tailwinda ────────────────────────
    Warstwa tła i warstwa treści na czystym CSS: na starych WebKitach
    (iPhone bez świeżego iOS) nowoczesne konstrukcje Tailwinda v4 potrafią
-   wypaść w całości — szkielet musi stać niezależnie. */
+   wypaść w całości, a szkielet musi stać niezależnie. */
 .bg-layer {
   position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
-  /* z-index UJEMNY — tło zawsze POD treścią (kanoniczny „fixed background").
+  /* z-index UJEMNY: tło zawsze POD treścią (kanoniczny „fixed background").
      Dzięki temu .content-layer NIE musi być kontekstem stackingu (z-index:10),
      który uwięziłby ewentualne elementy fixed pod `overflow:hidden` i psuł
-     malowanie na iOS (nawracający bug „samo tło na telefonie" — patrz historia
+     malowanie na iOS (nawracający bug „samo tło na telefonie”, patrz historia
      w CLAUDE.md). Treść (normalny flow podstron) i tak jest nad tłem. */
   z-index: -1;
   pointer-events: none;
-  /* statyczny „awaryjny pejzaż": delikatna stalowa łuna od dołu — widoczna,
+  /* statyczny „awaryjny pejzaż": delikatna stalowa łuna od dołu, widoczna wtedy,
      gdy WebGL padnie (Lockdown Mode / limit kontekstów / bloker) i canvas
      się nie narysuje; z canvasem siedzi pod nim i nie przeszkadza */
   background:
@@ -61,7 +69,7 @@
 .faq-answer {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows 0.3s cubic-bezier(0.05, 0.7, 0.1, 1);
+  transition: grid-template-rows var(--duration-base) var(--ease-soft);
 }
 .faq-answer[data-open="true"] {
   grid-template-rows: 1fr;
@@ -74,6 +82,12 @@
   .faq-answer {
     transition: none;
   }
+  /* Szkielet ładowania z kitu ma nieskończony shimmer. Przy reduced-motion
+     zostaje sam spokojny wypełniacz. Selektor podwojony celowo: company-ui.css
+     nie jest w warstwie i przy równej specyficzności wygrałby kolejnością. */
+  .skel.skel {
+    animation: none;
+  }
 }
 
 /* ── Pas kolumn działów (sekcja Narzędzia, poziom 1) ────────────────────
@@ -84,10 +98,10 @@
 .tools-col {
   background: transparent;
   border: none;
-  transition: background var(--motion);
+  transition: background var(--duration-quick) var(--ease-out);
 }
 .tools-col:hover {
-  background: rgba(168, 180, 194, 0.07);
+  background: var(--accent-a8);
 }
 .tools-strip > .tools-col:not(:first-child) {
   border-top: 1px solid var(--border);
@@ -110,16 +124,25 @@
   }
 }
 
-/* ── Lekkie przeskalowanie strony na dużych ekranach ────────────────────
-   Treść była za drobna na monitorach 1440p/4K — skalujemy cały dokument
-   (dokumenty PDF generuje pdfmake, więc zoom nie dotyka wydruków). */
-@media (min-width: 1500px) {
-  :root {
-    zoom: 1.08;
-  }
+/* ── Poprawki kontrastu w kicie (WCAG 2.2 AA) ───────────────────────────
+   Dwa odziedziczone błędy `company-ui.css` łamały próg AA:
+   · `.input::placeholder` miał #6F6F73 na tle pola, czyli 3,29:1,
+   · `.e-ico` (ikona pustego stanu) miała #5B5B60 na karcie, czyli 2,24:1
+     przy progu 3:1 dla elementu UI niosącego informację.
+   Kit ładuje się PO tym arkuszu, więc nadpisanie wymaga wyższej
+   specyficzności: stąd prefiks `:root`. Docelowo obie wartości wracają do
+   tokenów przy cięciu `company-ui.css` (plan §5.5) i ten blok znika. */
+:root .input::placeholder,
+:root .textarea::placeholder {
+  color: var(--foreground-faint); /* 4,99:1 na tle pola (--surface-muted) */
 }
-@media (min-width: 1900px) {
-  :root {
-    zoom: 1.18;
-  }
+:root .e-ico {
+  color: var(--foreground-faint); /* 4,59:1 na karcie (--surface) */
 }
+
+/* Skalowanie dużych ekranów NIE idzie już przez powiększanie całego dokumentu
+   (dawne 1,08 od 1500 px i 1,18 od 1900 px na :root, usunięte 2026-09-12,
+   reguła `perf-no-zoom-root`): ta właściwość zmieniała geometrię pomiarów
+   (getBoundingClientRect, clientWidth osi czasu, IntersectionObserver) i liczyła
+   się różnie w Safari, Firefoksie i Chrome. Rolę skalowania przejęły `clamp()`
+   na stopniach `--text-*` oraz `--container` w tokens.css. */

@@ -2,13 +2,13 @@ import { useMemo, useState } from "react";
 import { Check, Clock, TriangleAlert, Factory } from "lucide-react";
 import { useLang } from "@/i18n";
 
-/* Dashboard produkcji — LIVE, read-only, dane fikcyjne, w pełni deterministyczne
+/* Dashboard produkcji: LIVE, read-only, dane fikcyjne, w pełni deterministyczne
    (zero losowości / dat systemowych). Odtworzony od zera na wzór wewnętrznego
-   „Production Dashboard" — bez marki i liczb źródłowych (zasada #3). Siatka
+   „Production Dashboard”: bez marki i liczb źródłowych (zasada #3). Siatka
    kafli per hala + wspólny suwak tygodnia; klik w kafel → rozbicie na etapy. */
 
 const WEEKS = 12;
-const WEEK_START = 27; // etykieta „T27..T38" — czysto kosmetyczna, fikcyjna
+const WEEK_START = 27; // etykieta „T27..T38”, czysto kosmetyczna, fikcyjna
 
 interface Hall {
   name: string;
@@ -93,7 +93,7 @@ const T = {
     completion: "wykonanie",
     labour: "robocizna (RBH)",
     hall: "Hala / projekt",
-    portfolio: "Portfel — tydzień",
+    portfolio: "Portfel: tydzień",
     kAvg: "Średnie wykonanie",
     kRisk: "Hale w ryzyku",
     kLabour: "Robocizna w tygodniu",
@@ -112,7 +112,7 @@ const T = {
     completion: "completion",
     labour: "labour (h)",
     hall: "Hall / project",
-    portfolio: "Portfolio — week",
+    portfolio: "Portfolio: week",
     kAvg: "Average completion",
     kRisk: "Halls at risk",
     kLabour: "Labour this week",
@@ -270,7 +270,7 @@ export default function ProductionDashboard() {
           <div className="flex items-center gap-2" style={{ marginBottom: 12 }}>
             <Factory size={16} style={{ color: "var(--primary)" }} />
             <strong style={{ color: "var(--heading)" }}>
-              {halls[openHall!].name} — {t.breakdown} (T{WEEK_START + week})
+              {halls[openHall!].name}: {t.breakdown} (T{WEEK_START + week})
             </strong>
           </div>
           <div className="flex flex-col gap-3">

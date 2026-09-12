@@ -1,8 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 /* Lekki i18n PL/EN (v0.3): przełącznik w navbarze, wybór w localStorage.
-   Teksty żyją przy komponentach (obiekt { pl, en } + pick()). Docelowo —
-   przy przejściu na content-driven YAML — trasy /pl/ i /en/ build-time
+   Teksty żyją przy komponentach (obiekt { pl, en } + pick()). Docelowo,
+   przy przejściu na content-driven YAML, trasy /pl/ i /en/ build-time
    (zgodnie z planem strategicznym §4.2). */
 
 export type Lang = "pl" | "en";

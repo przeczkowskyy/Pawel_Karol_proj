@@ -6,3 +6,6 @@ dist-ssr/
 # Lead-Scout — sekrety lokalne (token bota Telegram + wykryty chat_id)
 leadscout/.env
 leadscout/.chat_id
+
+# Artefakty audytu (zrzuty, raporty) — regenerowalne, poza gitem
+.claude/work/audit/

@@ -1,0 +1,395 @@
+/* ══ KLAROW · tokens.css ═══════════════════════════════════════════════════
+   JEDYNE miejsce w repo, w którym wolno napisać wartość koloru, promienia,
+   czasu, krzywej i stopnia pisma (reguła `design-tokens-only`). Komponenty
+   czytają wyłącznie aliasy semantyczne albo utility Tailwinda z warstwy 3.
+
+   Trzy warstwy:
+     1. PRYMITYWY   skale `--steel-*`, `--gray-*`, statusy. NIGDY w komponencie.
+     2. ALIASY      API komponentów (`--background`, `--surface`, `--accent`…),
+                    komplet dla `:root` (ciemny) i `[data-theme="light"]`.
+                    Dark-first, light-ready: strona nie ma przełącznika motywu
+                    (`design-page-theme-lock`), jasny zestaw żyje dla narzędzi
+                    on-premise, podglądu PDF i zrzutów na jasne tło.
+     3. @theme inline  mapowanie aliasów na utility Tailwinda v4 PO wyzerowaniu
+                    jego domyślnych palet: `bg-blue-500` przestaje istnieć.
+
+   Zasady zapisu:
+   · kolory w hex albo rgba, zero `oklch` i zero `color-mix` (vite.config ma
+     `cssTarget: safari13`; przezroczystości mają własne tokeny `--accent-a*`),
+   · zero czystej czerni `#000` i czystej bieli `#fff` w motywie ciemnym,
+   · stal `#A8B4C2` jest JEDYNYM akcentem marki, złota starej marki tu nie ma,
+   · kontrasty liczone wzorem WCAG 2.x (luminancja względna); wartości par
+     krytycznych stoją w komentarzach przy tokenach, pełna tabela w
+     `.claude/skills/klarow-guardian/references/design-tokens.md`.
+
+   Skalowanie dużych ekranów idzie przez `clamp()` na stopniach `--text-*`
+   i przez `--container`, NIE przez powiększanie całego dokumentu na `:root`
+   (`perf-no-zoom-root`: psuło `getBoundingClientRect` i pomiary osi czasu).
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── WARSTWA 1 + 2: prymitywy i aliasy semantyczne (motyw ciemny) ──────── */
+:root {
+  color-scheme: dark;
+
+  /* ── 1. PRYMITYWY: stal (akcent marki, 300 = akcent) ──────────────────
+     Nie używaj ich w komponentach: komponent, który sięgnie po prymityw,
+     zostanie ciemny w motywie jasnym (`design-light-ready-tokens`). */
+  --steel-50: #eff3f7;
+  --steel-100: #e2e8ef;
+  --steel-200: #c8d2dd;
+  --steel-300: #a8b4c2; /* akcent marki */
+  --steel-400: #8895a6;
+  --steel-500: #69788c;
+  --steel-600: #55677c;
+  --steel-700: #42526e; /* akcent motywu jasnego (stal na bieli ma 2,11:1) */
+  --steel-800: #2c3947;
+  --steel-900: #1a212b;
+
+  /* PRYMITYWY: szarości. 0 = off-white, 975 = off-black. Czysta czerń
+     i czysta biel nie istnieją w tej skali (decyzja marki). */
+  --gray-0: #fafafa;
+  --gray-100: #e5e5e5;
+  --gray-300: #b4b4b9;
+  --gray-500: #8d8d93; /* podbite z #8B8B90: placeholder na --surface ma 4,59:1 (AA) */
+  --gray-700: #404040;
+  --gray-800: #3a3a3a;
+  --gray-850: #2e2e2e;
+  --gray-900: #262626;
+  --gray-925: #1f1f1f;
+  --gray-950: #171717;
+  --gray-975: #121212;
+
+  /* PRYMITYWY: statusy. Wyłącznie dashboardy (`design-status-semantics`:
+     status zawsze ikona + tekst + kolor, nigdy sam kolor). */
+  --green-400: #34d399;
+  --red-400: #f87171;
+  --red-500: #ef4444;
+  --amber-400: #fbbf24;
+  --blue-300: #93c5fd;
+
+  /* PRYMITYWY: trójki kanałów do składania przezroczystości w tym pliku.
+     Nie używaj ich w komponentach, gotowe tinty stoją niżej (`--accent-a*`). */
+  --steel-300-rgb: 168, 180, 194;
+  --gray-975-rgb: 18, 18, 18;
+
+  /* ── 2. ALIASY SEMANTYCZNE: powierzchnie ───────────────────────────── */
+  --background: var(--gray-975); /* #121212, to samo co meta theme-color */
+  --surface: var(--gray-900); /* panel, karta narzędzia */
+  --surface-muted: var(--gray-925); /* pasek, wiersz naprzemienny, pole formularza */
+  --surface-raised: var(--gray-850); /* hover panelu, komórka bento */
+  --surface-overlay: var(--gray-950); /* nav, dialog, menu; zawsze nieprzezroczyste */
+  --scrim: rgba(var(--gray-975-rgb), 0.72); /* przyciemnienie pod dialogiem i tekstem na mediach */
+
+  /* ALIASY: tekst. Kontrast na --background / --surface: */
+  --foreground: var(--gray-100); /* 14,87 / 12,01 */
+  --foreground-strong: var(--gray-0); /* 17,95 / 14,50, nagłówki */
+  --foreground-muted: var(--gray-300); /* 9,07 / 7,33, lead i opis */
+  --foreground-faint: var(--gray-500); /* 5,68 / 4,59, placeholder i meta.
+     NIE na --surface-raised (4,12 < 4,5): tam idzie --foreground-muted. */
+
+  /* ALIASY: linie. Hairline jest DEKORACJĄ kompozycji (1,3 do 1,8:1, poniżej
+     3:1 świadomie); granica, która niesie znaczenie, bierze --accent. */
+  --border: var(--gray-800);
+  --border-strong: var(--gray-700); /* obrys kontrolki */
+  --border-subtle: var(--gray-850); /* separator wewnątrz panelu */
+
+  /* ALIASY: akcent. Stal jest jedynym akcentem marki. */
+  --accent: var(--steel-300); /* 8,90 na --background, 7,19 na --surface */
+  --accent-strong: var(--steel-200); /* 12,24 na --background, stan hover */
+  --accent-deep: var(--steel-800); /* wypełnienie chipa, tło pod jasnym tekstem */
+  --accent-text: #d9e0e8; /* 14,08 na --background, akcent jako TEKST */
+  --on-accent: var(--gray-950); /* 8,51 na --accent (AAA) */
+  --ring: var(--accent); /* wskaźnik fokusu, 8,90 na --background */
+
+  /* ALIASY: tinty akcentu zamiast rozsypanych rgba(168,180,194,…).
+     Jawne wartości, nie color-mix (cssTarget safari13). */
+  --accent-a8: rgba(var(--steel-300-rgb), 0.08); /* hover powierzchni */
+  --accent-a12: rgba(var(--steel-300-rgb), 0.12); /* tło chipa, notatki */
+  --accent-a16: rgba(var(--steel-300-rgb), 0.16); /* poświata fokusu */
+  --accent-a35: rgba(var(--steel-300-rgb), 0.35); /* obrys chipa, zaznaczenie */
+  --accent-a45: rgba(var(--steel-300-rgb), 0.45); /* obrys aktywny */
+
+  /* ALIASY: primary CTA. Płaska biel na czerni, zero gradientu (decyzja D9). */
+  --cta: var(--gray-0); /* #FAFAFA */
+  --on-cta: var(--gray-975); /* #121212 na --cta = 17,95 (AAA) */
+  --cta-hover: var(--steel-100); /* stal #E2E8EF; --on-cta na tym = 15,19 */
+
+  /* ALIASY: statusy (tylko dashboardy) z tłem i obrysem.
+     Kontrast koloru na --background / --surface: */
+  --ok: var(--green-400); /* 9,74 / 7,87 */
+  --ok-bg: rgba(52, 211, 153, 0.13);
+  --ok-border: rgba(52, 211, 153, 0.4);
+  --warn: var(--amber-400); /* 11,22 / 9,07 */
+  --warn-bg: rgba(251, 191, 36, 0.13);
+  --warn-border: rgba(251, 191, 36, 0.4);
+  --bad: var(--red-400); /* 6,77 / 5,47 */
+  --bad-bg: rgba(239, 68, 68, 0.12);
+  --bad-border: rgba(239, 68, 68, 0.4);
+  --info: var(--blue-300); /* 10,39 / 8,39 */
+  --info-bg: rgba(147, 197, 253, 0.12);
+  --info-border: rgba(147, 197, 253, 0.4);
+
+  /* ALIASY: wykresy. Jedna rodzina stali, bo akcent jest jeden; każda seria
+     ma na --surface co najmniej 3:1 (linia niosąca dane, WCAG 1.4.11). */
+  --chart-1: var(--steel-100); /* 12,03 na --surface */
+  --chart-2: var(--steel-200); /* 9,89 */
+  --chart-3: var(--steel-300); /* 7,19 */
+  --chart-4: var(--steel-400); /* 4,97 */
+  --chart-5: var(--steel-500); /* 3,36 */
+  --chart-grid: var(--gray-850); /* siatka = dekoracja, próg 3:1 jej nie dotyczy */
+  --chart-axis: var(--gray-800);
+  --chart-ref: var(--gray-500); /* linia odniesienia, 4,59 na --surface */
+  --chart-label: var(--foreground-muted); /* etykiety osi, 7,33 na --surface */
+
+  /* ALIASY: cienie. Wyłącznie dialog i menu; marketing idzie na liniach. */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 6px 16px -4px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 24px 50px -12px rgba(0, 0, 0, 0.65);
+}
+
+/* ── WARSTWA 2b: motyw jasny, komplet aliasów ──────────────────────────────
+   Strona marketingowa NIGDY nie ustawia `data-theme` (`design-page-theme-lock`).
+   Ten zestaw obsługuje narzędzia u klienta, podgląd dokumentu PDF i brandkit.
+   Biel jest tu powierzchnią (nie kolorem marki), więc `#FFFFFF` jest dozwolona.
+   Kontrasty policzone na najciemniejszym jasnym tle (`--surface-raised`). */
+[data-theme="light"] {
+  color-scheme: light;
+
+  --background: #f4f5f7;
+  --surface: #ffffff;
+  --surface-muted: #f9fafb;
+  --surface-raised: #f3f4f6;
+  --surface-overlay: #ffffff;
+  --scrim: rgba(255, 255, 255, 0.8);
+
+  --foreground: var(--gray-900); /* 13,75 do 15,13 */
+  --foreground-strong: #111827; /* 16,12 do 17,74 */
+  --foreground-muted: #5b6472; /* 5,44 do 5,98 (#6B7280 dawał 4,39, poniżej AA) */
+  --foreground-faint: #67707e; /* 4,55 do 5,01 */
+
+  --border: #e6e8ec;
+  --border-strong: var(--steel-200);
+  --border-subtle: #eef0f3;
+
+  --accent: var(--steel-700); /* 7,16 do 7,88; stal 300 na bieli ma 2,11 */
+  --accent-strong: var(--steel-800); /* 10,70 do 11,78 */
+  --accent-deep: var(--steel-900);
+  --accent-text: var(--steel-700);
+  --on-accent: #ffffff; /* 7,88 na --accent */
+  --ring: var(--accent);
+
+  --accent-a8: rgba(66, 82, 110, 0.08);
+  --accent-a12: rgba(66, 82, 110, 0.12);
+  --accent-a16: rgba(66, 82, 110, 0.16);
+  --accent-a35: rgba(66, 82, 110, 0.35);
+  --accent-a45: rgba(66, 82, 110, 0.45);
+
+  --cta: #111827;
+  --on-cta: #ffffff; /* 17,74 na --cta */
+  --cta-hover: #1f2937; /* --on-cta na tym = 14,68 */
+
+  --ok: #047857; /* 4,98 do 5,48 */
+  --ok-bg: rgba(4, 120, 87, 0.1);
+  --ok-border: rgba(4, 120, 87, 0.35);
+  --warn: #b45309; /* 4,56 do 5,02 */
+  --warn-bg: rgba(180, 83, 9, 0.1);
+  --warn-border: rgba(180, 83, 9, 0.35);
+  --bad: #b91c1c; /* 5,88 do 6,47 */
+  --bad-bg: rgba(185, 28, 28, 0.1);
+  --bad-border: rgba(185, 28, 28, 0.35);
+  --info: #1d4ed8; /* 6,09 do 6,70 */
+  --info-bg: rgba(29, 78, 216, 0.1);
+  --info-border: rgba(29, 78, 216, 0.35);
+
+  --chart-1: var(--steel-800); /* 11,78 na --surface */
+  --chart-2: var(--steel-700); /* 7,88 */
+  --chart-3: var(--steel-600); /* 5,81 */
+  --chart-4: var(--steel-500); /* 4,50 */
+  --chart-5: var(--steel-400); /* 3,05 */
+  --chart-grid: #e6e8ec;
+  --chart-axis: var(--steel-200);
+  --chart-ref: #64748b; /* 4,76 na --surface */
+  --chart-label: var(--foreground-muted);
+
+  --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.06);
+  --shadow-md: 0 6px 16px -4px rgba(16, 24, 40, 0.1);
+  --shadow-lg: 0 24px 50px -12px rgba(16, 24, 40, 0.16);
+}
+
+/* ── WARSTWA 2c: skala wspólna dla obu motywów ─────────────────────────────
+   Typografia, geometria, ruch i layout nie zależą od motywu, więc nie mają
+   (i nie potrzebują) pary w `[data-theme="light"]`. */
+:root {
+  /* Krój: Nunito Sans solo (self-hosted, `@font-face` w company-ui.css).
+     `--font-display` jest ALIASEM `--font-sans`: zmiana kroju nagłówków
+     to jedna linia, bez ruszania komponentów (decyzja D-06). */
+  --font-sans: "Nunito Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-display: var(--font-sans);
+
+  /* Skala pisma w rem: 7 stopni + display. Minimum w UI to 0.75rem (12 px);
+     --text-2xs (10 px) jest wyjątkiem WYŁĄCZNIE dla osi wykresów.
+     clamp() zastępuje zdjęty `zoom` na :root: tekst rośnie z szerokością
+     okna, a pomiary (getBoundingClientRect, IntersectionObserver) zostają
+     w prawdziwych pikselach CSS. */
+  --text-2xs: 0.625rem;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: clamp(1rem, 0.95rem + 0.2vw, 1.125rem);
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: clamp(1.375rem, 1.2rem + 0.8vw, 1.75rem);
+  --text-3xl: clamp(1.75rem, 1.4rem + 1.6vw, 2.5rem);
+  --text-display: clamp(2.25rem, 5.2vw, 4.25rem);
+
+  /* Shape Lock: promienie tylko ze zbioru {0, 8, 10, 12, 9999}.
+     Marketing używa {0, 8, 9999}, powierzchnia narzędzi {8, 10, 12, 9999}. */
+  --radius-0: 0px;
+  --radius-sm: 8px; /* przyciski, pola formularza */
+  --radius-md: 10px; /* przyciski w narzędziach */
+  --radius-lg: 12px; /* karty i panele w narzędziach */
+  --radius-pill: 9999px; /* wyłącznie chipy */
+
+  /* Ruch: te same wartości co `src/motion/tokens.ts` (DUR i EASE_*).
+     Nazwy: quick / base / reveal / media. */
+  --duration-quick: 160ms;
+  --duration-base: 240ms;
+  --duration-reveal: 420ms;
+  --duration-media: 600ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1); /* wejścia i interakcje */
+  --ease-soft: cubic-bezier(0.3, 0.7, 0.3, 1); /* odsłona danych */
+  --ease-std: cubic-bezier(0.4, 0, 0.2, 1); /* trasy, crossfade */
+
+  /* Layout */
+  --container: 72rem;
+  --gutter: clamp(16px, 4vw, 40px);
+  --section-y: clamp(64px, 9vw, 120px);
+}
+
+/* Zamiast powiększania dokumentu na 4K: szerszy kontener, a typografia rośnie
+   clampem (reguła `perf-no-zoom-root`). */
+@media (min-width: 1900px) {
+  :root {
+    --container: 80rem;
+  }
+}
+
+/* ── WARSTWA 3: Tailwind v4 ────────────────────────────────────────────────
+   Najpierw zerujemy domyślne przestrzenie nazw (po tym `bg-blue-500`,
+   `shadow-md`, `font-mono` i `rounded-xl` nie generują nic), potem mapujemy
+   wyłącznie nasze aliasy. `inline` jest konieczne: utility mają wskazywać na
+   `var(--surface)`, żeby `[data-theme]` przełączał je bez rekompilacji.
+   Tailwind zostaje warstwą layoutu (grid, gap, max-w), tokeny są wyglądem.
+   Cieni NIE mapujemy celowo: `--shadow-*` czyta się przez `var()` w dialogu
+   i menu, utility `shadow-*` mają pozostać martwe. */
+@theme inline {
+  --color-*: initial;
+  --shadow-*: initial;
+  --font-*: initial;
+  --radius-*: initial;
+  --ease-*: initial;
+  --animate-*: initial;
+
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-overlay: var(--surface-overlay);
+  --color-scrim: var(--scrim);
+
+  --color-foreground: var(--foreground);
+  --color-foreground-strong: var(--foreground-strong);
+  --color-foreground-muted: var(--foreground-muted);
+  --color-foreground-faint: var(--foreground-faint);
+
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-border-subtle: var(--border-subtle);
+
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-deep: var(--accent-deep);
+  --color-accent-text: var(--accent-text);
+  --color-on-accent: var(--on-accent);
+  --color-ring: var(--ring);
+  --color-accent-a8: var(--accent-a8);
+  --color-accent-a12: var(--accent-a12);
+  --color-accent-a16: var(--accent-a16);
+  --color-accent-a35: var(--accent-a35);
+  --color-accent-a45: var(--accent-a45);
+
+  --color-cta: var(--cta);
+  --color-on-cta: var(--on-cta);
+  --color-cta-hover: var(--cta-hover);
+
+  --color-ok: var(--ok);
+  --color-ok-bg: var(--ok-bg);
+  --color-ok-border: var(--ok-border);
+  --color-warn: var(--warn);
+  --color-warn-bg: var(--warn-bg);
+  --color-warn-border: var(--warn-border);
+  --color-bad: var(--bad);
+  --color-bad-bg: var(--bad-bg);
+  --color-bad-border: var(--bad-border);
+  --color-info: var(--info);
+  --color-info-bg: var(--info-bg);
+  --color-info-border: var(--info-border);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-chart-grid: var(--chart-grid);
+  --color-chart-axis: var(--chart-axis);
+  --color-chart-ref: var(--chart-ref);
+  --color-chart-label: var(--chart-label);
+
+  /* Aliasy w konwencji shadcn: komponent z rejestru (`bg-card`,
+     `text-muted-foreground`, `bg-primary`) działa bez adaptera i bez
+     drugiego zestawu kolorów. */
+  --color-card: var(--surface);
+  --color-card-foreground: var(--foreground);
+  --color-popover: var(--surface-overlay);
+  --color-popover-foreground: var(--foreground);
+  --color-primary: var(--accent);
+  --color-primary-foreground: var(--on-accent);
+  --color-secondary: var(--surface-raised);
+  --color-secondary-foreground: var(--foreground);
+  --color-muted: var(--surface-muted);
+  --color-muted-foreground: var(--foreground-muted);
+  --color-input: var(--border-strong);
+  --color-destructive: var(--bad);
+  --color-destructive-foreground: var(--foreground-strong);
+
+  --font-sans: var(--font-sans);
+  --font-display: var(--font-display);
+
+  --text-2xs: var(--text-2xs);
+  --text-xs: var(--text-xs);
+  --text-sm: var(--text-sm);
+  --text-base: var(--text-base);
+  --text-lg: var(--text-lg);
+  --text-xl: var(--text-xl);
+  --text-2xl: var(--text-2xl);
+  --text-2xl--line-height: 1.2;
+  --text-3xl: var(--text-3xl);
+  --text-3xl--line-height: 1.15;
+  --text-display: var(--text-display);
+  --text-display--line-height: 1.05;
+
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-pill: var(--radius-pill);
+
+  --ease-out: var(--ease-out);
+  --ease-soft: var(--ease-soft);
+  --ease-std: var(--ease-std);
+}
+
+/* Warianty: `tool:` dla powierzchni narzędzi (inne promienie i elewacja),
+   `coarse:` dla dotyku (bez hoverów i bez WebGL), `motion-ok:` dla ruchu
+   opcjonalnego (domyślnie zakładamy brak ruchu, nie odwrotnie). */
+@custom-variant tool (&:where([data-surface="tool"], [data-surface="tool"] *));
+@custom-variant coarse (@media (pointer: coarse));
+@custom-variant motion-ok (@media (prefers-reduced-motion: no-preference));

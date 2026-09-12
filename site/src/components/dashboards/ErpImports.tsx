@@ -3,12 +3,12 @@ import { Check, Copy, Eye, ShieldCheck, TriangleAlert, Play } from "lucide-react
 import PdfButton from "./PdfButton";
 import { useLang } from "@/i18n";
 
-/* Dashboard „Importy ERP → Excel" — LIVE, dane DEMO, tryb TEST.
+/* Dashboard „Importy ERP → Excel”: LIVE, dane DEMO, tryb TEST.
    Odbrandowane odtworzenie rodziny importów: klasyfikacja wierszy słownikiem
    (TAK / NIE / MAT / TRANS / DIETY), deduplikacja (tylko NOWE wiersze wobec
    poprzedniego importu), sanity-check sum GREEN/YELLOW/RED co do grosza.
    W przeglądarce pokazujemy pełny TEST (podgląd zmian); u klienta zapis PROD
-   robi się w Excelu — z backupem i logiem. Wydruk raportu importu. */
+   robi się w Excelu, z backupem i logiem. Wydruk raportu importu. */
 
 interface ErpRow {
   doc: string;
@@ -17,7 +17,7 @@ interface ErpRow {
   amountGr: number;
 }
 
-/* „eksport z ERP" — częściowo pokrywa się z poprzednim importem (dedup) */
+/* „eksport z ERP”: częściowo pokrywa się z poprzednim importem (dedup) */
 const ERP_EXPORT: ErpRow[] = [
   { doc: "FV/2026/0711", vendor: "Stal-Bud", desc: { pl: "Profile stalowe HEB", en: "HEB steel profiles" }, amountGr: 4235000 },
   { doc: "FV/2026/0712", vendor: "TransLog", desc: { pl: "Transport modułów", en: "Module transport" }, amountGr: 890000 },
@@ -57,45 +57,45 @@ const fmt = (gr: number, lang: "pl" | "en") =>
 const T = {
   pl: {
     run: "Uruchom import (tryb TEST)",
-    intro: "Eksport z ERP wjeżdża do narzędzia: każdy wiersz dostaje klasę ze Słownika (MAT / TRANS / DIETY / NIE), duplikaty z poprzedniego importu są pomijane, a sumy przechodzą sanity-check co do grosza. To tryb TEST — w Twoich plikach nic się nie dzieje.",
-    sanityPass: "SANITY-CHECK: GREEN — suma nowych wierszy zgadza się co do grosza",
+    intro: "Eksport z ERP wjeżdża do narzędzia: każdy wiersz dostaje klasę ze Słownika (MAT / TRANS / DIETY / NIE), duplikaty z poprzedniego importu są pomijane, a sumy przechodzą sanity-check co do grosza. To tryb TEST: w Twoich plikach nic się nie dzieje.",
+    sanityPass: "SANITY-CHECK: GREEN, suma nowych wierszy zgadza się co do grosza",
     thDoc: "Dokument",
     thVendor: "Dostawca",
     thDesc: "Opis",
     thAmount: "Kwota",
     thClass: "Klasa",
     thState: "Stan",
-    stNew: "NOWY — do dopisania",
-    stDup: "duplikat — pominięty",
+    stNew: "NOWY do dopisania",
+    stDup: "duplikat pominięty",
     kNew: "Nowe wiersze",
     kDup: "Duplikaty",
     kSum: "Σ do dopisania",
     dict: "Słownik klasyfikacji (fragment)",
-    dictNote: "U klienta Słownik jest plikiem konfiguracyjnym — zmiana klasyfikacji nie wymaga programisty.",
-    prodNote: "Zapis PROD odbywa się u klienta, w Excelu — z automatycznym backupiem przed zapisem i logiem każdej operacji. Tu oglądasz dokładnie ten podgląd, który poprzedza zapis.",
-    printTitle: "RAPORT IMPORTU — TRYB TEST",
+    dictNote: "U klienta Słownik jest plikiem konfiguracyjnym: zmiana klasyfikacji nie wymaga programisty.",
+    prodNote: "Zapis PROD odbywa się u klienta, w Excelu, z automatycznym backupiem przed zapisem i logiem każdej operacji. Tu oglądasz dokładnie ten podgląd, który poprzedza zapis.",
+    printTitle: "RAPORT IMPORTU: TRYB TEST",
     printBtn: "Pobierz raport (PDF)",
     foot: "Dane fikcyjne · klasyfikacja i dedup w pełni deterministyczne.",
   },
   en: {
     run: "Run import (TEST mode)",
-    intro: "An ERP export enters the tool: every row gets a class from the Dictionary (MAT / TRANS / DIETY / NIE), duplicates from the previous import are skipped, and totals pass a sanity check to the cent. This is TEST mode — nothing happens in your files.",
-    sanityPass: "SANITY CHECK: GREEN — the new-row total reconciles to the cent",
+    intro: "An ERP export enters the tool: every row gets a class from the Dictionary (MAT / TRANS / DIETY / NIE), duplicates from the previous import are skipped, and totals pass a sanity check to the cent. This is TEST mode: nothing happens in your files.",
+    sanityPass: "SANITY CHECK: GREEN, the new-row total reconciles to the cent",
     thDoc: "Document",
     thVendor: "Vendor",
     thDesc: "Description",
     thAmount: "Amount",
     thClass: "Class",
     thState: "State",
-    stNew: "NEW — to append",
-    stDup: "duplicate — skipped",
+    stNew: "NEW to append",
+    stDup: "duplicate, skipped",
     kNew: "New rows",
     kDup: "Duplicates",
     kSum: "Σ to append",
     dict: "Classification dictionary (excerpt)",
-    dictNote: "At the client the Dictionary is a config file — changing classification needs no programmer.",
-    prodNote: "The PROD write happens at the client, in Excel — with an automatic backup before every write and a log of every operation. What you see here is exactly the preview that precedes the write.",
-    printTitle: "IMPORT REPORT — TEST MODE",
+    dictNote: "At the client the Dictionary is a config file: changing classification needs no programmer.",
+    prodNote: "The PROD write happens at the client, in Excel, with an automatic backup before every write and a log of every operation. What you see here is exactly the preview that precedes the write.",
+    printTitle: "IMPORT REPORT: TEST MODE",
     printBtn: "Download report (PDF)",
     foot: "Fictional data · classification and dedup fully deterministic.",
   },

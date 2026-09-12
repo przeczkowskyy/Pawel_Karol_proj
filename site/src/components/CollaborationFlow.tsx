@@ -1,6 +1,6 @@
 import { useLang, pick } from "@/i18n";
 
-/* Schemat blokowy współpracy Klarow ↔ klient — klasyczna notacja z podstaw
+/* Schemat blokowy współpracy Klarow ↔ klient. Klasyczna notacja z podstaw
    logiki: owal = start/stop, prostokąt = proces, romb = decyzja, strzałki
    z grotami, pętle powrotne (poprawki, kolejny moduł). Czysty SVG na
    tokenach kitu; na mobile scroll poziomy (reguła kitu dla szerokiej treści). */

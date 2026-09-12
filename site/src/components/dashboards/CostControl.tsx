@@ -3,12 +3,12 @@ import { Check, TriangleAlert, Lock } from "lucide-react";
 import PdfButton from "./PdfButton";
 import { useLang } from "@/i18n";
 
-/* Dashboard „Kontroling kosztów projektu" (widok PM) — LIVE, dane DEMO.
+/* Dashboard „Kontroling kosztów projektu” (widok PM): LIVE, dane DEMO.
    Odbrandowane odtworzenie rdzenia Cost Tracking: paski budżet/wydatek/
    przekroczenie per etap, edytowalne estymaty do końca (ETC), prognoza
-   marży NA ŻYWO (EAC = koszt dotychczas + ETC), bramka „zatwierdź tydzień"
-   z walidacją (ujemne ETC blokują zatwierdzenie — jak PM_MINUS w audycie).
-   Kwoty w tys. zł (int) — deterministycznie. Wydruk podsumowania tygodnia. */
+   marży NA ŻYWO (EAC = koszt dotychczas + ETC), bramka „zatwierdź tydzień”
+   z walidacją (ujemne ETC blokują zatwierdzenie, jak PM_MINUS w audycie).
+   Kwoty w tys. zł (int), deterministycznie. Wydruk podsumowania tygodnia. */
 
 const CONTRACT = 9600; // wartość kontraktu, tys. zł
 
@@ -32,7 +32,7 @@ const fmtK = (v: number, lang: "pl" | "en") =>
 
 const T = {
   pl: {
-    intro: "Widok kontrolera/PM dla jednego projektu (tydzień 30). Popraw estymaty „do końca” (ETC) — prognoza marży przelicza się na żywo. Tydzień zatwierdzisz dopiero, gdy dane przejdą walidację.",
+    intro: "Widok kontrolera/PM dla jednego projektu (tydzień 30). Popraw estymaty „do końca” (ETC): prognoza marży przelicza się na żywo. Tydzień zatwierdzisz dopiero, gdy dane przejdą walidację.",
     kMargin: "Prognoza marży (EAC)",
     kEac: "Koszt końcowy (EAC)",
     kContract: "Wartość kontraktu",
@@ -46,12 +46,12 @@ const T = {
     approved: "Tydzień 30 zatwierdzony",
     blocked: "Ujemne ETC blokują zatwierdzenie (walidacja jak w Audycie: PM nie może estymować na minusie).",
     over: "przekroczenie",
-    printTitle: "PODSUMOWANIE TYGODNIA 30 — KONTROLING PROJEKTU",
+    printTitle: "PODSUMOWANIE TYGODNIA 30: KONTROLING PROJEKTU",
     printBtn: "Pobierz podsumowanie (PDF)",
     foot: "Dane fikcyjne · zmiany trzymane lokalnie (bez chmury) · te same dane zawsze dają tę samą prognozę.",
   },
   en: {
-    intro: "The controller/PM view of one project (week 30). Adjust the estimates-to-complete (ETC) — the margin forecast recomputes live. You can approve the week only when data passes validation.",
+    intro: "The controller/PM view of one project (week 30). Adjust the estimates-to-complete (ETC): the margin forecast recomputes live. You can approve the week only when data passes validation.",
     kMargin: "Margin forecast (EAC)",
     kEac: "Final cost (EAC)",
     kContract: "Contract value",
@@ -65,7 +65,7 @@ const T = {
     approved: "Week 30 approved",
     blocked: "Negative ETC blocks approval (the same validation as the Audit: a PM can't estimate negative).",
     over: "overrun",
-    printTitle: "WEEK 30 SUMMARY — PROJECT CONTROLLING",
+    printTitle: "WEEK 30 SUMMARY: PROJECT CONTROLLING",
     printBtn: "Download summary (PDF)",
     foot: "Fictional data · changes kept locally (no cloud) · the same data always yields the same forecast.",
   },

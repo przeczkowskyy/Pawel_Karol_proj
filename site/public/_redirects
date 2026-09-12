@@ -1,1 +1,10 @@
-/* /index.html 200
+# Cloudflare Pages, przekierowania. Kolejność ma znaczenie: konkretne reguły przed fallbackiem.
+# Lustrzana tabela: .claude/skills/klarow-guardian/references/redirects-registry.md
+
+/realizacje             /narzedzia                 301
+/realizacje/*           /narzedzia/:splat          301
+/polityka-prywatnosci   /rodo                      301
+/start                  /oferta?utm_source=qr      302
+
+# SPA fallback: nieznana ścieżka dostaje index.html (React Router rozstrzyga trasę).
+/*                      /index.html                200

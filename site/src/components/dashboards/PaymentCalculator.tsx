@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { Calculator, Plus, Trash2, ArrowRightLeft, CheckCircle2 } from "lucide-react";
 import { useLang } from "@/i18n";
 
-/* Dashboard „Kalkulator transz i walut" — LIVE, deterministyczny, dane fikcyjne.
+/* Dashboard „Kalkulator transz i walut”: LIVE, deterministyczny, dane fikcyjne.
    Odbrandowane odtworzenie (zasada #3). Kluczowa zasada 1:1 z blueprintu:
    transza rozdzielana PROPORCJONALNIE do rozpiski, reszta zaokrągleń zawsze
    na OSTATNIEJ pozycji → Σ == kwota transzy CO DO GROSZA (liczymy w groszach). */
@@ -17,7 +17,7 @@ const BREAKDOWN = [
 ];
 const TOTAL_NET = BREAKDOWN.reduce((s, b) => s + b.net, 0);
 
-/* alokacja proporcjonalna w GROSZACH — reszta na ostatniej pozycji (Σ == target) */
+/* alokacja proporcjonalna w GROSZACH: reszta na ostatniej pozycji (Σ == target) */
 function allocateGrosze(weights: number[], targetGr: number): number[] {
   const s = weights.reduce((a, b) => a + b, 0);
   const out: number[] = [];
@@ -49,12 +49,12 @@ const fmtZl = (gr: number, lang: "pl" | "en") => {
     : `PLN ${v.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 };
 
-/* fikcyjne kursy (zamiast EBC) — deterministyczne */
+/* fikcyjne kursy (zamiast EBC), deterministyczne */
 const FX: Record<string, number> = { PLN: 1, EUR: 4.31, USD: 3.97 };
 
 const T = {
   pl: {
-    docLbl: "Dokument (fikcyjny) — rozpiska netto",
+    docLbl: "Dokument (fikcyjny): rozpiska netto",
     total: "Total netto",
     add: "Dodaj transzę",
     amount: "Kwota transzy (netto, zł)",
@@ -73,11 +73,11 @@ const T = {
     fxTitle: "Kalkulator walutowy",
     fxAmount: "Kwota",
     fxResult: "Wynik",
-    foot: "Dane i kursy fikcyjne. Alokacja proporcjonalna, reszta na ostatniej pozycji — Σ zawsze co do grosza. Liczone w groszach, zero dryfu.",
+    foot: "Dane i kursy fikcyjne. Alokacja proporcjonalna, reszta na ostatniej pozycji, Σ zawsze co do grosza. Liczone w groszach, zero dryfu.",
     empty: "Dodaj pierwszą transzę, aby zobaczyć rozdział na inwestycje.",
   },
   en: {
-    docLbl: "Document (fictional) — net breakdown",
+    docLbl: "Document (fictional): net breakdown",
     total: "Net total",
     add: "Add tranche",
     amount: "Tranche amount (net, PLN)",
@@ -96,7 +96,7 @@ const T = {
     fxTitle: "Currency calculator",
     fxAmount: "Amount",
     fxResult: "Result",
-    foot: "Fictional data and rates. Proportional allocation, remainder on the last line — Σ always to the cent. Computed in cents, zero drift.",
+    foot: "Fictional data and rates. Proportional allocation, remainder on the last line, Σ always to the cent. Computed in cents, zero drift.",
     empty: "Add the first tranche to see the split across investments.",
   },
 };
@@ -118,7 +118,7 @@ export default function PaymentCalculator() {
   const remainingGr = Math.max(0, totalGr - paidGr);
   const pct = totalGr > 0 ? Math.min(100, (paidGr / totalGr) * 100) : 0;
 
-  /* rozdział sumy zapłaconej na inwestycje (podgląd „bazowo per inwestycja") */
+  /* rozdział sumy zapłaconej na inwestycje (podgląd „bazowo per inwestycja”) */
   const alloc = useMemo(() => allocateGrosze(weights, paidGr), [paidGr]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const addTranche = () => {

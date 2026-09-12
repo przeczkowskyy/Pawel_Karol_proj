@@ -14,9 +14,9 @@ import {
 import { getTools, DEPTS, type Dept, type ToolKind } from "@/data/tools";
 import { useLang, pick } from "@/i18n";
 
-/* Sekcja „Narzędzia" = PRZYKŁADY REALIZACJI (reframe 2026-07-27): dowody tego,
-   co już zbudowaliśmy — nie zamknięte menu. DRILL-DOWN: poziom 1 = pas kolumn
-   działów (jeden panel na scrimie, kolumny rozdzielone liniami 1px — celowo NIE
+/* Sekcja „Narzędzia” = PRZYKŁADY REALIZACJI (reframe 2026-07-27): dowody tego,
+   co już zbudowaliśmy: nie zamknięte menu. DRILL-DOWN: poziom 1 = pas kolumn
+   działów (jeden panel na scrimie, kolumny rozdzielone liniami 1px, celowo NIE
    boxy), poziom 2 = siatka kart. Karta = ikona + nazwa + krótki HOOK + badge
    (DEMO = klikalne / WDROŻONE = realizacja u klienta). Mniej tekstu, więcej ikon. */
 
@@ -36,7 +36,7 @@ const T = {
     openCase: "Zobacz realizację",
     demo: "DEMO",
     live: "WDROŻONE",
-    note: "DEMO = klikasz i korzystasz tu, na danych przykładowych (bez logowania). WDROŻONE = realizacja u klienta. To próbki — Twoje narzędzie budujemy pod Twój proces.",
+    note: "DEMO = klikasz i korzystasz tu, na danych przykładowych (bez logowania). WDROŻONE = realizacja u klienta. To próbki: Twoje narzędzie budujemy pod Twój proces.",
   },
   en: {
     tools: (n: number) => `${n} ${n === 1 ? "example" : "examples"}`,
@@ -45,7 +45,7 @@ const T = {
     openCase: "See the build",
     demo: "DEMO",
     live: "DELIVERED",
-    note: "DEMO = click and use it here on sample data (no sign-up). DELIVERED = a real client build. These are samples — we build your tool around your process.",
+    note: "DEMO = click and use it here on sample data (no sign-up). DELIVERED = a real client build. These are samples: we build your tool around your process.",
   },
 };
 
@@ -69,7 +69,7 @@ export default function ToolsGrid() {
   const tools = getTools(lang);
 
   if (openDept === null) {
-    /* poziom 1: pas kolumn działów — jeden panel, kolumny rozdzielone liniami */
+    /* poziom 1: pas kolumn działów: jeden panel, kolumny rozdzielone liniami */
     return (
       <div className="nc-tab-swap" key="depts">
         <div

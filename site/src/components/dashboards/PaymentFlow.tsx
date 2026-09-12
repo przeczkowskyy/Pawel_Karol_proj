@@ -3,10 +3,10 @@ import { Check, X as XIcon, Clock, ArrowRight, Users } from "lucide-react";
 import PdfButton from "./PdfButton";
 import { useLang } from "@/i18n";
 
-/* Dashboard „Obieg akceptacji przelewów" — LIVE, dane DEMO, deterministyczny.
+/* Dashboard „Obieg akceptacji przelewów”: LIVE, dane DEMO, deterministyczny.
    Odbrandowane odtworzenie rdzenia obiegu: wnioski o wydatek → macierz planu
    14-dniowego (derywowana z wniosków) → decyzja per pozycja (całość / część
-   z przeniesieniem / odmowa) → statusy. Zasada „na cztery oczy" pokazana
+   z przeniesieniem / odmowa) → statusy. Zasada „na cztery oczy” pokazana
    jako reguła (wnioskodawca ≠ akceptujący). Kwoty w groszach. Wydruk planu. */
 
 const DAYS = 14;
@@ -49,7 +49,7 @@ const T = {
     kSum: "Suma wniosków",
     kApproved: "Zaakceptowane",
     kPending: "Oczekujące",
-    matrix: "Plan płatności — 14 dni",
+    matrix: "Plan płatności: 14 dni",
     requests: "Wnioski do decyzji",
     full: "Całość",
     partial: "Połowa (+7 dni)",
@@ -64,8 +64,8 @@ const T = {
     thAmount: "Kwota",
     thDay: "Termin",
     thDecision: "Decyzja",
-    fourEyes: "Cztery oczy: akceptuje inna osoba niż wnioskodawca — tu demonstracyjnie Ty (KONTROLER), wnioski złożyli PM-owie.",
-    printTitle: "PLAN PŁATNOŚCI — 14 DNI",
+    fourEyes: "Cztery oczy: akceptuje inna osoba niż wnioskodawca; tu demonstracyjnie Ty (KONTROLER), wnioski złożyli PM-owie.",
+    printTitle: "PLAN PŁATNOŚCI: 14 DNI",
     printBtn: "Pobierz plan (PDF)",
     pdfDay: "Data",
     pdfSum: "Kwota planowana",
@@ -78,7 +78,7 @@ const T = {
     kSum: "Requests total",
     kApproved: "Approved",
     kPending: "Pending",
-    matrix: "Payment plan — 14 days",
+    matrix: "Payment plan: 14 days",
     requests: "Requests to decide",
     full: "Full",
     partial: "Half (+7 days)",
@@ -93,8 +93,8 @@ const T = {
     thAmount: "Amount",
     thDay: "Due",
     thDecision: "Decision",
-    fourEyes: "Four-eyes: a different person approves than requested — here you (CONTROLLER), the requests came from PMs.",
-    printTitle: "PAYMENT PLAN — 14 DAYS",
+    fourEyes: "Four-eyes: a different person approves than requested; here you (CONTROLLER), the requests came from PMs.",
+    printTitle: "PAYMENT PLAN: 14 DAYS",
     printBtn: "Download plan (PDF)",
     pdfDay: "Date",
     pdfSum: "Planned amount",
@@ -113,7 +113,7 @@ export default function PaymentFlow() {
 
   const decide = (id: string, d: Decision) => setDecisions((prev) => ({ ...prev, [id]: d }));
 
-  /* plan: kwoty per dzień — full → dzień wniosku; partial → połowa w dniu, połowa +7; rejected → 0 */
+  /* plan: kwoty per dzień: full → dzień wniosku; partial → połowa w dniu, połowa +7; rejected → 0 */
   const plan = useMemo(() => {
     const days = Array.from({ length: DAYS }, () => ({ sumGr: 0, carriedGr: 0 }));
     for (const r of REQS) {
@@ -235,8 +235,8 @@ export default function PaymentFlow() {
                 alignRight: [1, 2],
                 body: plan.map((p, i) => [
                   dayLabel(i),
-                  p.sumGr > 0 ? fmt(p.sumGr, lang) : "—",
-                  p.carriedGr > 0 ? fmt(p.carriedGr, lang) : "—",
+                  p.sumGr > 0 ? fmt(p.sumGr, lang) : "",
+                  p.carriedGr > 0 ? fmt(p.carriedGr, lang) : "",
                 ]),
                 foot: [
                   "Σ",
@@ -273,7 +273,7 @@ export default function PaymentFlow() {
                       }}
                     />
                     <span className="tnum" style={{ fontSize: 10, color: p.sumGr > 0 ? "var(--foreground)" : "var(--muted-foreground)" }}>
-                      {p.sumGr > 0 ? (p.sumGr / 100000).toFixed(0) + (lang === "pl" ? " tys." : "k") : "—"}
+                      {p.sumGr > 0 ? (p.sumGr / 100000).toFixed(0) + (lang === "pl" ? " tys." : "k") : ""}
                     </span>
                   </td>
                 ))}

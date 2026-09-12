@@ -2,12 +2,12 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { CalendarClock } from "lucide-react";
 import { useLang } from "@/i18n";
 
-/* Dashboard „Oś czasu zadań / Gantt" — LIVE, read-only, dane fikcyjne,
+/* Dashboard „Oś czasu zadań / Gantt”: LIVE, read-only, dane fikcyjne,
    deterministyczne. Compare-mode: każdy task = dwa pasy (poprzedni snapshot
-   „Old" muted + bieżący „New" saturated) z etykietą dryfu +Nd/−Nd; zielony
+   „Old” muted + bieżący „New” saturated) z etykietą dryfu +Nd/−Nd; zielony
    słupek start→min(plan,teraz) + czerwony ogon przy obsuwie. Oś o stałej
-   gęstości px/dobę (scroll poziomy), suwak daty + „Dziś". Odbrandowane
-   odtworzenie na wzór (zasada #3). „Dziś" = stała referencyjna, nie Date.now(). */
+   gęstości px/dobę (scroll poziomy), suwak daty + „Dziś”. Odbrandowane
+   odtworzenie na wzór (zasada #3). „Dziś” = stała referencyjna, nie Date.now(). */
 
 const TODAY = "2026-07-22"; // stała referencyjna (determinizm)
 
@@ -211,14 +211,14 @@ export default function TaskTimeline() {
         />
       </div>
 
-      {/* oś czasu — scroll poziomy, stała gęstość px/dobę */}
+      {/* oś czasu: scroll poziomy, stała gęstość px/dobę */}
       <div className="card" style={{ padding: 0, overflow: "hidden" }}>
         <div ref={scrollRef} style={{ overflowX: "auto", overflowY: "hidden" }}>
           <svg
             width={LABEL_W + plotW}
             height={height}
             role="img"
-            aria-label={lang === "pl" ? "Oś czasu zadań — porównanie snapshotów" : "Task timeline — snapshot comparison"}
+            aria-label={lang === "pl" ? "Oś czasu zadań: porównanie snapshotów" : "Task timeline: snapshot comparison"}
             style={{ display: "block", fontFamily: "var(--font-sans)" }}
           >
             {/* siatka miesięcy */}
@@ -231,7 +231,7 @@ export default function TaskTimeline() {
               </g>
             ))}
 
-            {/* linia „dziś" */}
+            {/* linia „dziś” */}
             <line x1={LABEL_W + xDay(dayNum(TODAY))} y1={TOP - 8} x2={LABEL_W + xDay(dayNum(TODAY))} y2={height} stroke="var(--chart-neutral)" strokeWidth={1} strokeDasharray="2 3" />
 
             {/* wybrana data (akcent) */}

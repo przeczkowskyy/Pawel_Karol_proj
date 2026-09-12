@@ -15,6 +15,8 @@ Pomiar na `klarow.com` istnieje w dokładnie jednym z dwóch wariantów i nigdy 
 
 Dodatkowo: `klarow-lang` w `localStorage` to preferencja ustawiana świadomym działaniem użytkownika (przełącznik PL/EN) — pamięć niezbędna, bez zgody, ale nie wolno jej użyć jako identyfikatora ani wysłać do pomiaru. Zdarzenia CTA mają stałą listę nazw (`src/lib/track.ts`), nie niosą PII ani treści wpisanych przez użytkownika, są emitowane wyłącznie w handlerach UI i nigdy w silnikach dem (`demo-events-outside-engines`, `demo-determinism`). `track()` jest no-op przy `navigator.doNotTrack === "1"` i w trybie bez zgody tam, gdzie zgoda jest wymagana. Kolejność wdrożenia jest twarda: `/rodo` → wpis w rejestrze → beacon.
 
+**Właściciel konta = administrator (korekta 2026-09-12).** Administratorem danych z pomiaru i z usług zewnętrznych (Cloudflare, GSC, Cal.com) jest ta sama osoba lub podmiot, który widnieje w `CONTROLLER` w `src/data/rodo.ts`; konto u dostawcy prowadzi ta sama osoba, a `references/integrations-registry.md` ma kolumnę **„właściciel konta"**. Umowę powierzenia (DPA) zawiera administrator; osoba fizyczna może ją zawrzeć bez NIP-u. Żadne zdarzenie nie niesie nazwy ani treści pliku wgranego przez użytkownika (`demo-client-side-only-claim`).
+
 To wymaganie produktowe, nie opinia prawna; kwalifikacja i treść klauzul do przeglądu radcy (D-21).
 
 ## Mechanizm awarii (dlaczego)

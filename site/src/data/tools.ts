@@ -15,13 +15,12 @@ import {
 } from "lucide-react";
 import type { ComponentType } from "react";
 import type { Lang } from "@/i18n";
-import { TOOLS_SEO } from "./toolsSeo";
 
-/* Katalog NARZĘDZI Klarow — dashboardy odtworzone OD ZERA na wzór wewnętrznych
+/* Katalog NARZĘDZI Klarow: dashboardy odtworzone OD ZERA na wzór wewnętrznych
    narzędzi kontrolingu/produkcji/finansów firmy produkcyjno-budowlanej.
-   Twarda zasada #3 CLAUDE.md: zero marki i liczb źródłowych — nazwy generyczne,
-   dane fikcyjne, opis neutralny („firma produkcyjno-budowlana").
-   KAŻDE narzędzie DZIAŁA NA ŻYWO na danych DEMO (decyzja 2026-07-22 — bez
+   Twarda zasada #3 CLAUDE.md: zero marki i liczb źródłowych, więc nazwy generyczne,
+   dane fikcyjne, opis neutralny („firma produkcyjno-budowlana”).
+   KAŻDE narzędzie DZIAŁA NA ŻYWO na danych DEMO (decyzja 2026-07-22, bez
    statusów live/preview). Na zakładce Narzędzia użytkownik widzi najpierw
    BOXY DZIAŁÓW (dept), narzędzia dopiero w środku. Docelowo YAML. */
 
@@ -92,7 +91,7 @@ export interface ToolText {
   bullets: string[]; // 3–4 konkrety
   /* SEO long-tail per podstrona: title <=62 zn., description 130–165 zn. */
   seo?: { title: string; description: string };
-  /* 4 pary Q&A — sekcja „Częste pytania" + FAQPage JSON-LD (GEO) */
+  /* 4 pary Q&A: sekcja „Częste pytania” + FAQPage JSON-LD (GEO) */
   faq?: { q: string; a: string }[];
 }
 
@@ -147,7 +146,7 @@ export const CATEGORY_LABEL: Record<ToolCategory, { pl: string; en: string }> = 
   kontroling: { pl: "Kontroling kosztów", en: "Cost controlling" },
 };
 
-/* krótkie chwyty na karty/kafle — mniej tekstu, więcej przekazu (PL/EN po slugu).
+/* krótkie chwyty na karty/kafle: mniej tekstu, więcej przekazu (PL/EN po slugu).
    Długi opis (tagline) zostaje na podstronie narzędzia. */
 export const HOOKS: Record<string, { pl: string; en: string }> = {
   "raport-zarzadczy": { pl: "Raport zarządu w sekundy", en: "The board report in seconds" },
@@ -177,28 +176,28 @@ const BASE: ToolBase[] = [
       pl: {
         name: "Raport zarządczy",
         tagline:
-          "Panel dla zarządu składany z dziesiątek plików jednym przebiegiem: 3 KPI, wykres kosztu vs zaawansowania per etap i tabela projektów z komentarzami — deterministycznie, bez wysyłania danych do sieci.",
+          "Panel dla zarządu składany z dziesiątek plików jednym przebiegiem: 3 KPI, wykres kosztu vs zaawansowania per etap i tabela projektów z komentarzami. Deterministycznie, bez wysyłania danych do sieci.",
         replaces:
-          "Ręczne składanie raportu w Excelu: PowerQuery, przeklejanie, formatowanie, eksport PDF i rozsyłkę — co tydzień od nowa.",
+          "Ręczne składanie raportu w Excelu: PowerQuery, przeklejanie, formatowanie, eksport PDF i rozsyłkę, co tydzień od nowa.",
         io: "Tabela CSV/Excel (projekt, etap, budżet, koszt, zaawansowanie, komentarz) → 3 KPI + wykres per-etap + tabela + eksport CSV.",
         bullets: [
           "Wklej tabelę wprost z Excela, wgraj plik lub załaduj przykład",
           "Wykrywa etapy, na których wycieka marża (koszt wyprzedza postęp)",
-          "Jawna „ścieżka wyliczenia” — każdą liczbę sprawdzisz ręcznie",
+          "Jawna „ścieżka wyliczenia”: każdą liczbę sprawdzisz ręcznie",
           "100% w Twojej przeglądarce: zero serwera, zero wysyłki danych",
         ],
       },
       en: {
         name: "Board report",
         tagline:
-          "A management panel assembled from dozens of files in one pass: 3 KPIs, a cost-vs-progress chart per stage and a project table with comments — deterministically, with no data leaving for the network.",
+          "A management panel assembled from dozens of files in one pass: 3 KPIs, a cost-vs-progress chart per stage and a project table with comments. Deterministic, with no data leaving for the network.",
         replaces:
-          "Hand-assembling the report in Excel: PowerQuery, copy-pasting, formatting, PDF export and mailing — every week from scratch.",
+          "Hand-assembling the report in Excel: PowerQuery, copy-pasting, formatting, PDF export and mailing, every week from scratch.",
         io: "A CSV/Excel table (project, stage, budget, cost, progress, comment) → 3 KPIs + per-stage chart + table + CSV export.",
         bullets: [
           "Paste a table straight from Excel, upload a file or load the example",
           "Spots the stages where margin leaks (cost ahead of progress)",
-          "An explicit “calculation path” — verify every number by hand",
+          "An explicit “calculation path”: verify every number by hand",
           "100% in your browser: no server, no data upload",
         ],
       },
@@ -215,29 +214,29 @@ const BASE: ToolBase[] = [
       pl: {
         name: "Dashboard produkcji",
         tagline:
-          "Siatka kafli per hala/projekt z wykonaniem procentowym, robocizną i statusem — jeden wspólny suwak tygodnia, klik w kafel pokazuje rozbicie na etapy.",
+          "Siatka kafli per hala/projekt z wykonaniem procentowym, robocizną i statusem. Jeden wspólny suwak tygodnia, klik w kafel pokazuje rozbicie na etapy.",
         replaces:
           "Przeglądanie plików produkcyjnych hala po hali i sklejanie obrazka „gdzie jesteśmy” ręcznie.",
         io: "Dane wykonania per hala/etap/tydzień → interaktywna siatka kafli + rozbicie etapowe (read-only).",
         bullets: [
-          "Wspólny suwak tygodnia — cały portfel w jednym kadrze",
+          "Wspólny suwak tygodnia: cały portfel w jednym kadrze",
           "Kafel = hala: wykonanie %, robocizna, status OK/obserwuj/ryzyko",
           "Klik w kafel → rozbicie na etapy z paskami postępu",
-          "Tylko odczyt — narzędzie niczego nie nadpisuje",
+          "Tylko odczyt: narzędzie niczego nie nadpisuje",
         ],
       },
       en: {
         name: "Production dashboard",
         tagline:
-          "A grid of tiles per hall/project with completion %, labour and status — one shared week slider; click a tile for the stage breakdown.",
+          "A grid of tiles per hall/project with completion %, labour and status. One shared week slider; click a tile for the stage breakdown.",
         replaces:
           "Browsing production files hall by hall and assembling the “where are we” picture by hand.",
         io: "Completion data per hall/stage/week → an interactive tile grid + stage breakdown (read-only).",
         bullets: [
-          "One shared week slider — the whole portfolio in a single frame",
+          "One shared week slider: the whole portfolio in a single frame",
           "Tile = hall: completion %, labour, OK/watch/risk status",
           "Click a tile → stage breakdown with progress bars",
-          "Read-only — the tool never overwrites anything",
+          "Read-only: the tool never overwrites anything",
         ],
       },
     },
@@ -258,7 +257,7 @@ const BASE: ToolBase[] = [
           "Ręczne oglądanie „na oko” czerwonych komórek w każdym pliku przed raportem lub zamknięciem.",
         io: "Pliki budżetowe/operacyjne → raport błędów + macierz pewności per projekt.",
         bullets: [
-          "Tylko czyta — zero ryzyka dla plików",
+          "Tylko czyta: zero ryzyka dla plików",
           "Reguły dopasowane do Twoich danych, nie ogólny linter",
           "Macierz OK/UWAGA/BŁĄD dla całego portfela naraz",
           "Tryb „strażnik”: kontrola przed każdym raportem",
@@ -272,7 +271,7 @@ const BASE: ToolBase[] = [
           "Eyeballing red cells in every file before a report or a close.",
         io: "Budget/operational files → an error report + a confidence matrix per project.",
         bullets: [
-          "Read-only — zero risk to your files",
+          "Read-only: zero risk to your files",
           "Rules tailored to your data, not a generic linter",
           "OK/WATCH/ERROR matrix for the whole portfolio at once",
           "“Guardian” mode: a check before every report",
@@ -296,10 +295,10 @@ const BASE: ToolBase[] = [
           "Odświeżanie zapytań i „wiarę na słowo”, że przy imporcie nic nie zginęło.",
         io: "Surowe eksporty (godziny, materiał, koszty) → podgląd + diff + rekoncyliacja → zatwierdzona wersja.",
         bullets: [
-          "Diff wobec poprzedniej wersji — widzisz każdą zmianę",
+          "Diff wobec poprzedniej wersji: widzisz każdą zmianę",
           "Rekoncyliacja sum co do grosza: PASS/FAIL",
           "Tryb podglądu (TEST) zanim cokolwiek trafi do plików",
-          "Cała ingestia w przeglądarce — zero serwera",
+          "Cała ingestia w przeglądarce: zero serwera",
         ],
       },
       en: {
@@ -310,10 +309,10 @@ const BASE: ToolBase[] = [
           "Refreshing queries and taking it “on faith” that nothing was lost on import.",
         io: "Raw exports (hours, material, costs) → preview + diff + reconciliation → an approved version.",
         bullets: [
-          "Diff against the previous version — see every change",
+          "Diff against the previous version: see every change",
           "Totals reconciled to the cent: PASS/FAIL",
           "A preview (TEST) mode before anything touches your files",
-          "All ingestion in the browser — no server",
+          "All ingestion in the browser: no server",
         ],
       },
     },
@@ -329,7 +328,7 @@ const BASE: ToolBase[] = [
       pl: {
         name: "Oś czasu zadań (Gantt)",
         tagline:
-          "Każde zadanie jako dwa pasy — poprzedni i bieżący snapshot — z etykietami obsuwy (+/− dni) na przewijanej osi: od razu widać, co się przesunęło od zeszłego tygodnia.",
+          "Każde zadanie jako dwa pasy (poprzedni i bieżący snapshot) z etykietami obsuwy (+/− dni) na przewijanej osi: od razu widać, co się przesunęło od zeszłego tygodnia.",
         replaces:
           "Ręczne porównywanie dwóch wersji harmonogramu „na oko”.",
         io: "Tygodniowe snapshoty harmonogramu → interaktywna oś czasu + eksport.",
@@ -337,13 +336,13 @@ const BASE: ToolBase[] = [
           "Dwa pasy: plan poprzedni vs bieżący",
           "Etykiety dryfu +Nd / −Nd na każdym zadaniu",
           "Znacznik „dziś” i suwak daty",
-          "Czysty render — bez zewnętrznych bibliotek",
+          "Czysty render: bez zewnętrznych bibliotek",
         ],
       },
       en: {
         name: "Task timeline (Gantt)",
         tagline:
-          "Every task as two bars — previous and current snapshot — with drift labels (+/− days) on a scrollable axis: instantly see what slipped since last week.",
+          "Every task as two bars (previous and current snapshot) with drift labels (+/− days) on a scrollable axis: instantly see what slipped since last week.",
         replaces:
           "Comparing two schedule versions by eye.",
         io: "Weekly schedule snapshots → an interactive timeline + export.",
@@ -351,7 +350,7 @@ const BASE: ToolBase[] = [
           "Two bars: previous plan vs current",
           "Drift labels +Nd / −Nd on each task",
           "A “today” marker and a date slider",
-          "Clean rendering — no external libraries",
+          "Clean rendering: no external libraries",
         ],
       },
     },
@@ -374,7 +373,7 @@ const BASE: ToolBase[] = [
         bullets: [
           "Alokacja proporcjonalna z „resztą” na ostatniej pozycji",
           "VAT liczony deterministycznie, bez dryfu groszy",
-          "Saldo: zapłacono / zostało — zawsze się spina",
+          "Saldo (zapłacono / zostało) zawsze się spina",
           "Przelicznik walut po zadanym kursie",
         ],
       },
@@ -388,7 +387,7 @@ const BASE: ToolBase[] = [
         bullets: [
           "Proportional allocation with the remainder on the last line",
           "VAT computed deterministically, no cent drift",
-          "Balance: paid / remaining — always reconciles",
+          "Balance (paid / remaining) always reconciles",
           "Currency conversion at a given rate",
         ],
       },
@@ -595,7 +594,7 @@ const BASE: ToolBase[] = [
       pl: {
         name: "Rejestr umów",
         tagline:
-          "Elektroniczny rejestr umów ze skanami i dwukierunkową wymianą z Excelem — koniec pliku z psującymi się linkami i duplikatami.",
+          "Elektroniczny rejestr umów ze skanami i dwukierunkową wymianą z Excelem. Koniec pliku z psującymi się linkami i duplikatami.",
         replaces:
           "Ręcznie prowadzony plik Excel z bezwzględnymi linkami do skanów, które ciągle się psują.",
         io: "Formularz / plik Excel / ZIP → rejestr + drzewo skanów; eksport z linkami względnymi.",
@@ -609,7 +608,7 @@ const BASE: ToolBase[] = [
       en: {
         name: "Contract register",
         tagline:
-          "An electronic contract register with scans and two-way Excel exchange — no more file with breaking links and duplicates.",
+          "An electronic contract register with scans and two-way Excel exchange. No more file with breaking links and duplicates.",
         replaces:
           "A hand-kept Excel file with absolute links to scans that keep breaking.",
         io: "Form / Excel file / ZIP → register + a scan tree; export with relative links.",
@@ -633,40 +632,41 @@ const BASE: ToolBase[] = [
       pl: {
         name: "Kontroling na danych z KSeF",
         tagline:
-          "Read-only warstwa kontrolingu nad Krajowym Systemem e-Faktur: integruje się z oficjalnym API Ministerstwa Finansów, pobiera faktury sprzedaży i zakupu i liczy budżet vs wykonanie oraz prognozę płynności — u Ciebie na serwerze, bez wysyłania danych w chmurę.",
+          "Read-only warstwa kontrolingu nad Krajowym Systemem e-Faktur: integruje się z oficjalnym API Ministerstwa Finansów, pobiera faktury sprzedaży i zakupu i liczy budżet vs wykonanie oraz prognozę płynności. Wszystko u Ciebie na serwerze, bez wysyłania danych w chmurę.",
         replaces:
-          "Ręczne zestawianie faktur z KSeF w Excelu i zgadywanie płynności — KSeF jest tylko archiwum, nie odpowiada „czy projekt zarabia” ani „czy starczy gotówki”.",
+          "Ręczne zestawianie faktur z KSeF w Excelu i zgadywanie płynności. KSeF jest tylko archiwum, nie odpowiada „czy projekt zarabia” ani „czy starczy gotówki”.",
         io: "Faktury z KSeF (API MF) + budżet i mapa kategorii (CSV) → pulpity Budżet vs Wykonanie i Prognoza Cashflow (13 tyg.) + raporty XLSX.",
         bullets: [
           "Integracja z oficjalnym API KSeF 2.0: autoryzacja tokenem, szyfrowanie RSA-OAEP, parser FA(3)",
           "Pulpit Budżet vs Wykonanie i rolująca prognoza cashflow na 13 tygodni",
-          "Read-only: żadnej faktury nie wysyła — tylko czyta i liczy; dane zostają na Twoim serwerze",
-          "Aging należności, alerty „czerwonej lampki” i raporty XLSX; opcjonalny asystent AI (tylko agregaty)",
+          "Read-only: żadnej faktury nie wysyła, tylko czyta i liczy; dane zostają na Twoim serwerze",
+          "Aging należności, alerty „czerwonej lampki” i raporty XLSX z pełną ścieżką wyliczenia",
         ],
       },
       en: {
         name: "Controlling on KSeF data",
         tagline:
-          "A read-only controlling layer over Poland's national e-invoicing system (KSeF): it integrates with the official Ministry of Finance API, pulls sales and purchase invoices and computes budget-vs-actual and a liquidity forecast — on your own server, with no data sent to the cloud.",
+          "A read-only controlling layer over Poland's national e-invoicing system (KSeF): it integrates with the official Ministry of Finance API, pulls sales and purchase invoices and computes budget-vs-actual and a liquidity forecast. All on your own server, with no data sent to the cloud.",
         replaces:
-          "Hand-assembling KSeF invoices in Excel and guessing at liquidity — KSeF is just an archive; it doesn't answer “is the project profitable” or “will there be enough cash”.",
+          "Hand-assembling KSeF invoices in Excel and guessing at liquidity. KSeF is just an archive; it doesn't answer “is the project profitable” or “will there be enough cash”.",
         io: "KSeF invoices (MF API) + a budget and category map (CSV) → Budget-vs-Actual and Cash-flow forecast (13 wks) dashboards + XLSX reports.",
         bullets: [
           "Integration with the official KSeF 2.0 API: token auth, RSA-OAEP encryption, FA(3) parser",
           "A Budget-vs-Actual dashboard and a rolling 13-week cash-flow forecast",
-          "Read-only: it never sends an invoice — only reads and computes; data stays on your server",
-          "Receivables aging, “red-light” alerts and XLSX reports; optional AI assistant (aggregates only)",
+          "Read-only: it never sends an invoice, only reads and computes; data stays on your server",
+          "Receivables aging, “red-light” alerts and XLSX reports with a full calculation trail",
         ],
       },
     },
   },
 ];
 
+/* Katalog BEZ long-tail meta i BEZ FAQ: te dane ważą kilkanaście kilobajtów gz
+   i są potrzebne wyłącznie podstronie narzędzia oraz prerenderowi, więc chunk
+   krytyczny strony głównej za nie nie płaci (reguła perf-js-budget-home).
+   Wersja z SEO: getToolsWithSeo / findToolWithSeo w ./toolsSeo. */
 export function getTools(lang: Lang): ToolItem[] {
   return BASE.map((b) => {
-    /* long-tail meta + FAQ dolatują z generowanego pliku toolsSeo.ts —
-       merge po slugu; brak wpisu = strona działa jak dotąd (fallbacki) */
-    const extra = TOOLS_SEO[b.slug]?.[lang];
     return {
       id: b.id,
       slug: b.slug,
@@ -677,11 +677,9 @@ export function getTools(lang: Lang): ToolItem[] {
       dashboard: b.dashboard,
       ...b.i18n[lang],
       hook: HOOKS[b.slug]?.[lang] ?? b.i18n[lang].name,
-      seo: extra?.seo,
-      faq: extra?.faq,
     };
   });
 }
 
-export const findTool = (slug: string, lang: Lang): ToolItem | undefined =>
-  getTools(lang).find((t) => t.slug === slug);
+/* wyszukanie po slugu żyje w ./toolsSeo jako findToolWithSeo: jedyny konsument
+   (podstrona narzędzia) potrzebuje wersji z meta i FAQ */
