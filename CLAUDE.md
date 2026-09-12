@@ -13,15 +13,22 @@
 | `ui-kit/` | **Company UI kit (marka KLAROW)** — obowiązkowy design-system wszystkich narzędzi i stron: `ui-kit/skills/company-ui/` (SKILL.md + app.css + fonty + komponenty React) |
 | `site/` | **Landing klarow.com** — Vite + React 19 + TS + Tailwind (tylko layout), dwujęzyczny PL/EN |
 | `demo/` | Statyczna prezentacja modułu M2 (Raport zarządczy) — pokaz kitu, dane fikcyjne |
-| `.claude/skills/` | Skille projektu: `auto-animate` (animacje list/akordeonów), `aceternity-ui`, `motion-design` (animacje/przejścia), `lead-scout` (agent researchu leadów) |
+| `.claude/skills/klarow-guardian/` | **STRAŻNIK ZASAD (nadrzędny nad wszystkimi skillami wizualnymi)** — 144 reguły z ID/severity/testem mechanicznym (`rules/`), `AGENTS.md` generowany, rejestry (dozwolone liczby, integracje, przekierowania, tokeny), zwendorowane wytyczne (WIG, writing, locki taste), checklisty, 8 skryptów bramek (`node`, nigdy `npx`), baseline długu. Wejście: `SKILL.md` (115 linii) |
+| `.claude/agents/`, `.claude/workflows/`, `.claude/skills/ui-audit/` | **Audyt automatyczny** — 7 audytorów read-only + orkiestrator, workflow `/ui-audit` (bramki → audytorzy → weryfikacja adwersaryjna → naprawy mechaniczne → re-audyt → `INDEX.md`) |
+| `.claude/skills/` (reszta) | `motion` (Motion AI Kit), `design-taste-frontend` + `minimalist-ui`/`high-end-visual-design`/`redesign-existing-projects`/`brandkit`/`imagegen-frontend-web`/`full-output-enforcement` (pakiet taste-skill), `react-best-practices`/`composition-patterns`/`react-view-transitions`/`web-design-guidelines`/`writing-guidelines` (Vercel), `bklit-ui`, `auto-animate`, `aceternity-ui`, `motion-design`, `lead-scout` |
 | `leadscout/` | **Agent pozyskiwania leadów** — baza `leads.json`, digesty na Telegram (@Klarow_BOT przez `notify.mjs`; token w `.env` POZA gitem), przewodnik źródeł `zrodla.md`, playbook outboundu, ranking kanałów marketingowych, kolejka rund `nastepne-rundy.md`. Uruchamianie: `/lead-scout` |
 
 ## Twarde zasady (obowiązują każdą sesję)
 
-1. **UI wyłącznie wg skilla `company-ui`** (`ui-kit/skills/company-ui/SKILL.md`) — zero
-   własnych wariantów przycisków/chipów/kolorów. Akcent: polerowana stal `#A8B4C2`
-   (klasy `*-accent`); **zero złota `#FFA914`** (stara marka Nuconic) i zero logo graficznego —
-   znak marki to tekstowy wordmark `KLAROW` (klasa `.brand-word`, komponent `BrandMark`).
+1. **Każda zmiana w `site/`, `ui-kit/`, `demo/`, copy i assetach idzie przez skill
+   `klarow-guardian`** (`.claude/skills/klarow-guardian/SKILL.md`) — ładuj PRZED pierwszą edycją
+   i przed commitem; on ma precedencję nad wszystkimi skillami wizualnymi (taste, high-end,
+   minimalist, bklit, motion AI Kit = inspiracja, nie prawo). `company-ui` (`ui-kit/`) jest
+   ŹRÓDŁEM HISTORYCZNYM: dobre nawyki przepisane do reguł strażnika, kit schodzi po migracji na
+   `tokens.css`. Akcent: polerowana stal `#A8B4C2` jako JEDYNY akcent; primary CTA = płaska biel
+   na czerni; **zero złota `#FFA914`** (stara marka Nuconic) i zero logo graficznego — znak marki
+   to tekstowy wordmark `KLAROW` (klasa `.brand-word`, komponent `BrandMark`).
+   Audyt: `/ui-audit` albo skrypty `node .claude/skills/klarow-guardian/scripts/*.mjs`.
 2. **Wykresy statyczne** — bez teatralnego „rysowania"; krótki fade, kropki tylko informacyjne.
    Wszystkie animacje szanują `prefers-reduced-motion`; tła animowane tylko na GPU
    (canvas/WebGL), z pauzą przy `document.hidden` i sprzątaniem rAF.
@@ -31,7 +38,11 @@
    Komunikaty po polsku, stopka `Co-Authored-By: Claude ...`. Tożsamość gita ustawiona per-repo.
 5. Teksty strony dwujęzycznie **PL + EN** (wzorzec: obiekt `{ pl, en }` + `pick()` z `src/i18n.tsx`).
 6. Środowisko: Windows 11, PowerShell; Node 24, npm 11, Python 3. **Nauczki środowiskowe:**
-   - **`npx` nie działa w tym repo** — znak `&` w ścieżce katalogu łamie shimy cmd. Wywołuj
+   - **`npx` nie działa w tym repo, ale DZIAŁA ze scratchpada** — znak `&` w ścieżce katalogu
+     łamie shimy cmd; katalog scratchpada sesji (`%LOCALAPPDATA%\Temp\claude\...`) go nie ma.
+     Instalatory (`npx skills add …`, `npx motion-ai`, `npm i playwright-core`) uruchamiaj tam,
+     a wynik kopiuj do repo. Workflow `resumeFromRunId` też przyjmuje `scriptPath` tylko
+     z katalogu roboczego albo scratchpada. Wywołuj
      binarki wprost: `node node_modules/typescript/bin/tsc --noEmit`,
      `node node_modules/vite/bin/vite.js build`. Dotyczy też **npm-skryptów** wołających
      binarki z `node_modules/.bin` („'Pawe' is not recognized...") — dlatego package.json
@@ -141,6 +152,71 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
 - Docelowo (plan §4.2): treść do YAML w `site/content/` + trasy `/pl/` `/en/` build-time.
 
 ## Stan operacyjny (aktualizuj przy zmianach!)
+
+- **2026-09-11/12 (sesja „strona = CV firmy" + strażnik) — PLAN v2, STRAŻNIK I AUDYT GOTOWE; KOD `site/` NIETKNIĘTY:**
+  - **Zakres sesji:** deep research (17 agentów: audyt strony, kit, bklit-ui, motion.dev, Manus,
+    taste-skill, skille Vercel, Higgsfield, portfolio founderów, strategia → 3 koncepcje strony →
+    3 sędziów → synteza) + budowa dokumentów decyzyjnych i warstwy kontroli (15 agentów: autorzy →
+    krytycy adwersarialni → poprawki → integracja). Nic w `site/src` nie zostało zmienione.
+  - **Wygrała koncepcja „editorial" (23,5 pkt vs proof 21,5, showreel 16)** — strona jak monografia
+    studia: hairlines zamiast boxów, 9 sekcji, 0 eyebrow, hero 4 elementy, JEDNO wideo na witrynę,
+    zero pinowania/parallaxu/decka. Do niej 21 przeszczepów z przegranych koncepcji (m.in. podstrona
+    narzędzia dashboard-first, subtext hero z enumeracją typów pracy, `KsefFlow`, biały płaski CTA,
+    5 kroków z „Zakres zamrożony", `WipeCompare` w fazie 2) + OBOWIĄZKOWA sekcja **„Co osiągniesz"**
+    (czego nie miała żadna koncepcja: brief mówi „co firma klienta osiągnie").
+  - **Dokumenty dla founderów:** `docs/plan/strażnik-i-audyt-README.md` (mapa, czytać pierwsze),
+    `docs/plan/strona-v2-plan.md` (112 KB: trasy, copy PL+EN sekcja po sekcji, design system v3,
+    system motion, assety, refaktor, SEO, prawo, fazy F0–F5, ryzyka, KPI),
+    `docs/plan/decyzje-founderow-v2.md` (24 decyzje z rekomendacją i wyborem domyślnym + fakty
+    blokujące). **Estymata 15–18 dni roboczych**, ścieżka krytyczna = decyzje, dane administratora
+    do `/rodo`, portrety i bio, przegląd assetów po trialu, umowa IP.
+  - **Strażnik `klarow-guardian`** (`.claude/skills/klarow-guardian/`): **144 reguły** (38 BLOCKER,
+    74 HIGH, 29 MEDIUM, 3 LOW) w 14 sekcjach, każda z ID, mechanizmem awarii, przykładami
+    Niepoprawnie/Poprawnie i **testem mechanicznym**; `SKILL.md` 115 linii (progressive disclosure),
+    `AGENTS.md` generowany przez `build-index.mjs`; rejestry: dozwolonych liczb (każda liczba
+    publiczna ma źródło), integracji zewnętrznych, przekierowań, tokenów; zwendorowane WIG i writing
+    guidelines Vercela + dosłowne locki z taste-skill; `pain-tested.md` (nauczki sprawdzone bólem).
+  - **Audyt automatyczny:** 7 audytorów read-only + orkiestrator w `.claude/agents/`, workflow
+    `.claude/workflows/ui-audit.js` i skill **`/ui-audit`** (bramki skryptowe → audytorzy równolegle →
+    weryfikacja adwersaryjna HIGH/BLOCKER → naprawy WYŁĄCZNIE mechaniczne → re-audyt → `INDEX.md`).
+    8 skryptów bramek (`node`, nigdy `npx`): `audit-static`, `verify-site`, `find-integrations`,
+    `check-secrets`, `screenshots`, `build-index`, `hook-pre-tool` (+`--selftest` 21/21),
+    `hook-post-edit`. **Hooki NIE są zarejestrowane** — `settings.json` celowo nietknięty (decyzja D-24).
+  - **Baseline długu 2026-09-12:** 767 findings wyciszonych jako znany dług, ale **6 BLOCKER nigdy
+    nie jest wyciszanych**: 2× `performance.now` w `DemoReport.tsx:259,262` (do oznaczenia
+    `// determ-exempt` albo usunięcia) i 4× słowo „AI" w copy sprzedażowym (`tools.ts:644,658`,
+    `toolsSeo.ts:628,652` — bullet „opcjonalny asystent AI" przy KSeF, schodzi w F3, decyzja D-04).
+  - **Nowe skille zainstalowane:** pakiet **taste-skill** (`design-taste-frontend` i 6 innych —
+    instalacja `npx skills add Leonxlnx/taste-skill` uruchomiona ZE SCRATCHPADA, bo `&` w ścieżce),
+    **skille Vercel** (`react-best-practices`, `composition-patterns`, `react-view-transitions`,
+    `web-design-guidelines`, `writing-guidelines`; `vercel-optimize` USUNIĘTY jako nieprzydatny —
+    wymaga Vercel CLI, a hostujemy na Cloudflare), **bklit-ui** (wzorzec formatu skilla),
+    **Motion AI Kit** (`/motion` + agent `motion-reviewer` + `mcp.example.json`).
+  - **Fakty zweryfikowane w tej sesji (nie z pamięci):** `motion` = 13.2.0 (npm, import `motion/react`);
+    **React 19.3.0 stable eksportuje `ViewTransition`, `addTransitionType`, `Activity`** (sprawdzone
+    w `node_modules` — canary NIE jest potrzebne, ale upgrade zostaje na fazę 2); `react-router-dom`
+    7.18.3; MCP „claude.ai creative engine" **jest bramką do Higgsfield** (konto free, 0 kredytów;
+    plan: trial 100 kr za $0 → PLUS $49 na jeden miesiąc, ULTRA niepotrzebne).
+  - **Koordynacja z drugim oknem Claude Code (`karol-pawe-app-c1`, research prawno-rynkowy):**
+    (1) **Trasa `/rodo` jest twardym blokerem prawnym** (art. 14 RODO, precedens Bisnode 943 470 zł
+    potwierdzony przez NSA, plan kontroli UODO 2026) — bez niej nie wolno wysłać ani jednego
+    kontaktu handlowego; wchodzi do F0 jako 18. plik HTML (`noindex`, poza sitemapą do przeglądu
+    radcy), `/polityka-prywatnosci` = 301 na `/rodo`; treść musi podawać KONKRETNE źródła danych
+    i wyróżniać prawo sprzeciwu ODRĘBNIE (art. 21 ust. 4). (2) **Refaktor `site/src/lib/pdf.ts` →
+    `pdfDoc.mjs` robi okno c1 PIERWSZE** — my nie dotykamy `pdf.ts`, `PdfButton.tsx` ani
+    `dashboards/*.tsx` w fazie 1 (tylko `React.lazy` z zewnątrz). (3) **PDF zostaje na Roboto**
+    (decyzja B; parametr `PdfDoc.font`); ewentualny krój UI w PDF = TRZY statyczne TTF
+    (Regular 400 + Bold 700 + Italic 400, kursywa używana w bloku `quote`); pdfmake nie czyta
+    WOFF2 ani fontów variable. (4) **Ograniczenia copy:** zakaz „raportu Deloitte/IDC" (liczba bez
+    źródła), zakaz framingu odejmowania etatu, zero „AI" w sprzedaży, formularze bez domyślnych
+    zgód, newsletter tylko double opt-in; liczby dozwolone (Sedlak 2026, Panko 88 %, McKinsey 2012)
+    zapisane w `references/allowed-numbers.md`.
+  - **DO ZROBIENIA NAJPIERW (blokuje F0):** spotkanie decyzyjne nad 24 decyzjami (domyślne wybory
+    obowiązują przy braku odpowiedzi); dane administratora JDG do `/rodo`; **sprawdzić, czy repo
+    GitHub jest publiczne** (jeśli tak, `docs/nuconic-ekosystem-referencja.md` i ten plik łamią
+    zasadę #3 niezależnie od strony); **`leadscout/leads.json` jest śledzony przez gita i zawiera
+    adres e-mail oraz wzmianki o osobach** — wyczyścić przed upublicznieniem; rotacja klucza
+    Anthropic z appki KSeF; portfolio i zdjęcie Pawła.
 
 - **2026-07-27 (sesja reframe „szeroki wachlarz" + KSeF + redesign) — POZYCJONOWANIE ZMIENIONE:**
   - **Reframe z „12 gotowych narzędzi (menu)" na „budujemy custom pod proces — oto DOWODY"**
