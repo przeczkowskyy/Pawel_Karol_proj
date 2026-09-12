@@ -25,11 +25,12 @@ function wantsVideo(): boolean {
 
 Cykl życia po przejściu bramek:
 
-1. **Ładowanie po `window.load`**: `useEffect` → jeśli `document.readyState === "complete"` → `setEnabled(wantsVideo())`, inaczej listener `load` (z cleanupem). Do tego czasu w DOM jest tylko poster `<img>` (LCP).
+1. **Ładowanie po `window.load` ORAZ po `requestIdleCallback`** (fallback `setTimeout 200`): `useEffect` → jeśli `document.readyState === "complete"` → `rIC(() => setEnabled(wantsVideo()))`, inaczej listener `load` (z cleanupem), a w nim to samo `rIC`. Do tego czasu w DOM jest tylko poster `<img>` (LCP). Samo „po `load`" nie wystarcza: okno, w którym przeglądarka jeszcze aktualizuje kandydata LCP, sięga poza `load`, a pierwsza klatka wideo malowana na całej szerokości hero potrafi ten tytuł przejąć (R-M2).
+   **Bezpiecznik 4 s:** jeśli od montażu nie przyjdzie `canplay` w 4 s, `setEnabled(false)` i zostaje poster. Bez tego crossfade wchodzi przy zapchanym łączu po kilkunastu sekundach, gdy użytkownik czyta już następną sekcję, i czyta się jako usterka.
 2. **Odtwarzanie sterowane widocznością**: `IntersectionObserver` (`threshold: 0.25`) → `play()` gdy ≥ 25 % w viewporcie, `pause()` poza; `document.addEventListener("visibilitychange")` → `pause()` gdy `document.hidden`, `play()` po powrocie tylko jeśli nadal w viewporcie.
 3. **iOS Low Power Mode i blokady autoplay**: podstawowymi detektorami awarii są `play().catch(() => setEnabled(false))` (NotAllowedError → poster, zero przycisku „Odtwórz") i `onError` → `setEnabled(false)`.
    `onSuspend` jest detektorem POMOCNICZYM i wolno go użyć wyłącznie z dwoma zabezpieczeniami: (a) tylko PO pierwszej próbie odtworzenia (`tried.current === true`), (b) z opóźnieniem ≥ 1000 ms i ponownym sprawdzeniem stanu (`paused && !ended && inView && !document.hidden && !paused-użytkownika`). Powód w „Mechanizmie awarii": `suspend` to normalne zdarzenie (koniec pobierania `preload="metadata"`, pełny bufor), a `play()` jest asynchroniczne — bez tych warunków zdrowe wideo gaśnie losowo. Timer czyścimy w cleanupie (`motion-cleanup-required`).
-4. **Crossfade**: `onCanPlay` → `setReady(true)` → `opacity` 0 → 1 (600 ms). Poster zostaje pod spodem (nie usuwać `<img>`).
+4. **Crossfade**: `onCanPlay` → `setReady(true)` → `opacity` 0 → 1 (600 ms). Poster zostaje pod spodem (nie usuwać `<img>`). Nagranie hero gra **raz, bez `loop`**, i zatrzymuje się na ostatniej klatce: `onEnded` nie wywołuje `play()` i **nie pokazuje przycisku „Odtwórz ponownie"**.
 5. **Zmiana warunków w locie**: listener `matchMedia("(prefers-reduced-motion: reduce)").addEventListener("change")` → `setEnabled(false)` gdy `matches`; cleanup w `useEffect`.
 6. **Cleanup** (`motion-cleanup-required`): `io.disconnect()`, `removeEventListener` ×3, `clearTimeout` timera `onSuspend`, `pause()`; `removeAttribute("src")` na `<source>` nie jest potrzebne, wystarczy odmontowanie elementu.
 7. **Pauza użytkownika (WCAG 2.2.2, wymagana)**: stan `paused` sterowany przyciskiem `hero-media-toggle` (`media-video-embed-spec`, p. „kontrola pauzy"). Odczyt `sessionStorage.getItem("klarow:media:paused") === "1"` w inicjalizatorze stanu (w `try/catch`, PRZED pierwszym `play()`), zapis przy każdym kliknięciu. `paused === true` blokuje `play()` we WSZYSTKICH ścieżkach (IO, `visibilitychange`, `onCanPlay`) i wywołuje `el.pause()`; `paused === false` wznawia tylko wtedy, gdy element jest w viewporcie i karta widoczna. Pauza NIE odmontowuje `<video>` (użytkownik może wrócić) — w odróżnieniu od bramek z `wantsVideo()`, które element usuwają.
@@ -131,6 +132,8 @@ const onSuspend = () => {                           // 3) detektor pomocniczy: t
 F=site/src/components/HeroMedia.tsx
 grep -cE 'prefers-reduced-motion: reduce' $F; grep -cE '\(pointer: fine\)' $F; grep -cE 'saveData' $F; grep -cE 'slow-2g\|2g\|3g|effectiveType' $F
 grep -cE 'readyState === "complete"' $F; grep -cE 'IntersectionObserver' $F; grep -cE 'visibilitychange' $F
+grep -cE 'requestIdleCallback' $F    # ≥ 1 (montaż poza oknem aktualizacji LCP)
+grep -cE '4000|FOUR_SEC|CANPLAY_TIMEOUT' $F   # ≥ 1 (bezpiecznik 4 s: brak canplay → poster)
 grep -cE '\.play\(\)\.catch|\.play\(\)\.then\([^)]*\)\.catch' $F; grep -cE 'onSuspend' $F; grep -cE 'MEDIA_ENABLED' $F
 grep -nE 'autoPlay' $F   # = 0
 # p.3: onSuspend z zabezpieczeniami (oczekiwane: po ≥ 1 trafieniu)
@@ -144,8 +147,10 @@ grep -cE 'try \{[^}]*sessionStorage' $F   # ≥ 1 (odczyt/zapis w try/catch)
 #   c) desktop + emulacja connection.saveData=true (CDP Network.emulateNetworkConditions / override navigator.connection): video === null
 #   d) desktop, warunki normalne: po load ≤ 2 s video.paused === false; przewinięcie poza hero → paused === true; document.hidden (page.evaluate visibility) → paused
 #   e) desktop, play() mock → reject(NotAllowedError): video znika, poster zostaje, brak przycisku „Odtwórz"
-#   f) desktop: klik „Zatrzymaj tło" → video.paused === true, aria-pressed="true", sessionStorage klarow:media:paused === "1";
-#      nawigacja na /oferta i powrót na / → wideo NIE startuje; klik „Odtwórz tło" → paused === false
+#   f) desktop: klik „Zatrzymaj podgląd" → video.paused === true, aria-pressed="true", sessionStorage klarow:media:paused === "1";
+#      nawigacja na /oferta i powrót na / → wideo NIE startuje; klik „Odtwórz podgląd" → paused === false
+#   h) desktop: montaż wideo dopiero PO window.load i requestIdleCallback; brak canplay w 4 s → poster i zero <video> w DOM
+#   i) desktop: element LCP (PerformanceObserver) = img.hero-shot, nie <video> (perf-lcp-poster-preload)
 #   g) desktop: sztuczne `dispatchEvent(new Event("suspend"))` na grającym wideo → po 1,5 s video nadal gra (brak fałszywego wygaszenia)
 # realny iPhone Karola w Low Power Mode: hero = poster, brak białego przycisku play.
 ```
@@ -154,5 +159,5 @@ Docelowo `scripts/verify-site.mjs` krok `video-gating` (a, b, d) w fazie 3.
 
 ## Wyjątki
 
-- Hover-klipy (faza 2): bramki identyczne (`wantsVideo()`), plus start dopiero po `mouseenter`/`focus`; `preload="none"`.
-- W trybie `MOTION_TIER = "calm"` `wantsVideo()` zwraca `false` z pierwszej linii (patrz `motion-tier-flag`).
+- **Klipy hover ściany S3 (v1, dokładnie 4).** Te same bramki `wantsVideo()` plus: `preload="none"`, start dopiero po `mouseenter` z **progiem intencji 120 ms** (kursor przejeżdżający przez kafel nic nie uruchamia) albo po `focus-visible`; `mouseleave`/`blur` → `pause()` + `currentTime = 0`; **singleton modułowy** (nowy start zatrzymuje poprzedni klip); `pointer-events: none` na elemencie, żeby kafel pozostał jednym `<a>`; twarde `pointer: fine` (na dotyku hover nie istnieje, a tap ma otwierać podstronę). Klipy nie mają własnego przycisku pauzy (ruch nie jest automatyczny w rozumieniu WCAG 2.2.2), ale honorują wspólny stan `klarow:media:paused`.
+- W trybach `MOTION_TIER = "still"` i `"calm"` `wantsVideo()` zwraca `false` z pierwszej linii (patrz `motion-tier-flag`).

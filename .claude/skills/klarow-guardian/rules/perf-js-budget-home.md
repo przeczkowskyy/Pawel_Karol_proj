@@ -13,6 +13,8 @@ Po `npm run build` suma gzip chunków JS ładowanych STATYCZNIE z `dist/index.ht
 
 Podstrona narzędzia (`/narzedzia/<slug>`): chunki dociągane po nawigacji (`ToolPage` + jeden dashboard + `lib/*`) ≤ **61 440 B (60 KB)** gz ponad wspólne. `pdfmake` (~830 KB gz z fontem) tylko po kliknięciu „Pobierz PDF", nigdy w modulepreload.
 
+Warstwa mediów (`HeroMedia`, `MediaBoundary`, klipy hover w `ToolWall`) to ≈ 1,5 KB gz logiki i **zero nowych zależności**: budżet 140 KB gz nie rośnie z powodu powrotu wideo (rosną wyłącznie budżety TRANSFERU, patrz `media-video-budgets`).
+
 Zakazane w chunku krytycznym: `three`, `@react-three/fiber`, `pdfmake`, 12 dashboardów, `ToolPage`, `BookingDialog` (lazy przy otwarciu), `toolsSeo.ts` w całości (dane per slug ładowane z podstroną albo hub importuje tylko `getTools()` bez FAQ), `radial-orbital-timeline`, `canvas-reveal-effect`.
 
 Baseline w `site/scripts/verify-site.baseline.json` (`homeGz`, `toolGz`), aktualizowany tylko commitem `Perf: nowy baseline (powód)`. Plik tworzy `verify-site.mjs --write-baseline` po pierwszym zielonym buildzie v2; do tego czasu budżet to stałe 140 KB gz z `--budget`.

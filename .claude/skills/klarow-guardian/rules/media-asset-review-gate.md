@@ -28,6 +28,20 @@ added: 2026-09-12
 
 Wynik: `PASS` (12/12) albo `FAIL` z numerami pozycji i decyzją (dogrywka / postprodukcja / odrzucenie). Asset `FAIL` nie wchodzi do `public/`. Przegląd powtarza się przy każdej nowej wersji (`-v2`).
 
+**Druga ścieżka bramki: NAGRANIA NARZĘDZI** (`record-demos.mjs`, v1: nagranie hero i cztery klipy hover). Materiał nie jest generatywny, więc pozycje 1, 8 i 11 nie mają zastosowania, ale dochodzą własne, twarde:
+
+| # | Pytanie | Jak sprawdzić |
+|---|---|---|
+| N1 | Czy cyfry KPI, etykiety osi i hairline 1 px są czytelne **po enkodowaniu**? | stop-klatka z gotowego `.webm` w 100 % skali, oglądana na OLED i na 1440p: zero artefaktów wokół cyfr, hairline nie faluje. FAIL = ciaśniejszy kadr albo wyższy budżet, **nigdy niższy `crf` kosztem limitu** |
+| N2 | Czy w kadrze nie ma realnych danych, nazwy produktu, domeny ani marki firmy źródłowej? | `SRC_BRAND_RE` na DOM przed nagraniem (jak przy zrzutach) plus oględziny stop-klatek z `--contact-sheet`; dane wyłącznie demo |
+| N3 | Czy ruch czyta się jako **praca narzędzia**, a nie jako reklama? | dwie osoby oglądają bez kontekstu i mówią, co widzą; oczekiwana odpowiedź zawiera „liczy", „przelicza", „zmienia się" |
+| N4 | Czy dwa klipy nie są bliźniacze? | arkusz stop-klatek obok siebie; bliźniacze = zmiana sceny, nigdy filtr graficzny (ta sama zasada co przy 13 zrzutach, R-T1) |
+| N5 | Czy klatka 0 zgadza się z posterem (kadr produktu albo kafel)? | PSNR ≥ 45 dB po przeskalowaniu obu do wspólnego rozmiaru (`media-poster-first-frame`) |
+| N6 | Czy manifest i determinizm się zgadzają? | `record-demos.mjs --verify` zielone (`media-recorded-demo-determinism`) |
+| N7 | Budżety spełnione? | `media-video-budgets`: hero ≤ 1,2 / 1,4 MB, klip ≤ 320 KB, 24 fps CFR, `-an` |
+
+Werdykt zapisujemy tak samo (`WYNIK: PASS 7/7` dla nagrania, `PASS 12/12` dla materiału generatywnego), bo bramka `verify-site.mjs` czyta linię `WYNIK:` z `SOURCES.md`.
+
 ## Mechanizm awarii (dlaczego)
 
 - Persona (CFO firmy produkcyjnej, „kalkulator, nie wróżka") czyta rozpoznawalne AI-wideo jako brak powagi; jedna „hollywoodzka" pętla podważa cały argument „dane zostają u Ciebie" (higgsfield §6.2, §8 „AI-slop: strona traci powagę").
@@ -77,4 +91,5 @@ Docelowo `scripts/verify-site.mjs` krok `media-asset-review-gate` (obecność `P
 ## Wyjątki
 
 - Zrzuty dem z `shoot-tools.mjs` (nie AI) przechodzą skróconą bramkę: pozycje 4 (paleta kitu z automatu), 5, 10 oraz „brak nazwy firmy źródłowej/produktu w UI" (grep w DOM przed zrzutem).
+- Nagrania narzędzi z `record-demos.mjs` przechodzą **ścieżkę N1–N7** powyżej zamiast pozycji 1, 8 i 11 (nie są materiałem generatywnym, nie mają spawu pętli w przypadku hero i nie porównują się do master stilla).
 - Portrety founderów: pozycje 4 (duotone stal), 7, 10 i zgoda obu founderów na publikację (D-05).

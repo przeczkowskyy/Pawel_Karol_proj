@@ -1,6 +1,6 @@
 ---
 id: motion-tier-flag
-title: Jeden kill-switch ruchu i mediów (MOTION_TIER w tokens.ts, z którego wynika MEDIA_ENABLED); nigdy druga ścieżka renderu
+title: Jeden kill-switch ruchu i mediów: MOTION_TIER full/still/calm w tokens.ts, z którego wynika MEDIA_ENABLED; nigdy druga ścieżka renderu
 impact: MEDIUM
 tags: [motion, media, kill-switch, flags]
 source: synthesis §1.4 (kill-switch → MEDIA_ENABLED) i §1.6 (MOTION_TIER jako druga ścieżka: odrzucone) · showreel §5.9 „Tryb awaryjny" · feasibility-perf §4.3 p.6
@@ -12,19 +12,21 @@ added: 2026-09-12
 W `site/src/motion/tokens.ts` istnieje dokładnie jedna stała trybu i jedna pochodna:
 
 ```ts
-export const MOTION_TIER: "full" | "calm" = "full";      // "calm" = tryb awaryjny (decyzja founderów lub incydent perf/iOS)
-export const MEDIA_ENABLED = MOTION_TIER === "full";      // media OPCJONALNE: hero-wideo, hover-klipy (faza 2), GLSL Hills (plan B)
+export const MOTION_TIER: "full" | "still" | "calm" = "full";   // "still" = media off; "calm" = tryb awaryjny całego ruchu
+export const MEDIA_ENABLED = MOTION_TIER === "full";             // wideo hero, klipy hover ściany, GLSL Hills (plan B)
 ```
 
-Semantyka `calm`:
+Semantyka trzech wartości:
 
-1. `MEDIA_ENABLED = false` → `HeroMedia` renderuje wyłącznie poster `<img>`; hover-klipy i tło three.js nie montują się,
-2. `MotionProvider` przekazuje `reducedMotion="always"` zamiast `"user"` → wszystkie `m.*` tracą transformy/layout, zostaje `opacity` (identycznie jak przy systemowym reduced-motion),
-3. `Counter` i `ChartReveal` czytają `useReducedMotion()` (który przy `"always"` zwraca `true`) → `jump`/`initial={false}`.
+1. **`full`**: wszystko działa.
+2. **`still` (kill-switch mediów, od 2026-09-12)**: `MEDIA_ENABLED = false` → `HeroMedia` renderuje wyłącznie poster `<img>` (kadr produktu), klipy hover w `ToolWall` i tło three.js nie montują się. **`MotionProvider` zostaje na `reducedMotion="user"`**: reveale, `PageFade`, dialog i `ChaosToOrder` działają bez zmian.
+3. **`calm` (tryb awaryjny)**: `still` plus `MotionProvider` przekazuje `reducedMotion="always"` → wszystkie `m.*` tracą transformy, zostaje `opacity` (identycznie jak przy systemowym reduced-motion); `ChartReveal` i `ChaosToOrder` czytają `useReducedMotion()` → `initial={false}`.
 
-Konsekwencja: `calm` NIE dodaje żadnego `if` do komponentów. Stała jest czytana w DOKŁADNIE trzech miejscach: `provider.tsx` (reducedMotion), `HeroMedia.tsx` (`wantsVideo()` przez `MEDIA_ENABLED`) i `App.tsx`/`useAnimatedBg` (plan B GLSL). Każde inne odwołanie do `MOTION_TIER`/`MEDIA_ENABLED` w `site/src` = fail. Zakazane: warianty renderu `tier === "calm" ? <A/> : <B/>`, osobne komponenty `*Calm`, drugi zestaw presetów, flagi per sekcja.
+Po co trzecia wartość: wycofanie wideo ma być wykonane **w minutę, pod presją** (`docs/plan/warstwa-wrazenia.md` §8, poziom W0). Dopóki jedyną drogą do wyłączenia mediów było `calm`, gaszenie jednego `<video>` spłaszczało całą stronę, więc founder się wahał i awaria trwała dłużej. `still` nie dokłada ani jednego `if` w komponentach.
 
-Zmiana wartości = commit z komunikatem `Motion: tryb calm (powód: …)` i wpis w „Stanie operacyjnym" CLAUDE.md.
+Konsekwencja: żadna wartość NIE dodaje wariantu renderu. Stała jest czytana w DOKŁADNIE czterech miejscach: `provider.tsx` (reducedMotion), `HeroMedia.tsx` (`wantsVideo()` przez `MEDIA_ENABLED`), `ToolWall.tsx` (klipy hover przez `MEDIA_ENABLED`) i `App.tsx`/`useAnimatedBg` (plan B GLSL). Każde inne odwołanie do `MOTION_TIER`/`MEDIA_ENABLED` w `site/src` = fail. Zakazane: warianty renderu `tier === "calm" ? <A/> : <B/>`, osobne komponenty `*Calm`, drugi zestaw presetów, flagi per sekcja.
+
+Zmiana wartości = commit z komunikatem `Motion: tryb still (powód: …)` albo `Motion: tryb calm (powód: …)` i wpis w „Stanie operacyjnym" CLAUDE.md.
 
 ## Mechanizm awarii (dlaczego)
 
@@ -49,14 +51,15 @@ export const fadeUp = MOTION_TIER === "calm" ? fadeCalm : fadeFull;   // drugi z
 
 ```tsx
 // src/motion/tokens.ts
-export const MOTION_TIER: "full" | "calm" = "full";
+export const MOTION_TIER: "full" | "still" | "calm" = "full";
 export const MEDIA_ENABLED = MOTION_TIER === "full";
 
 // src/motion/provider.tsx
 import { MOTION_TIER, DUR, EASE_OUT } from "./tokens";
 <MotionConfig reducedMotion={MOTION_TIER === "calm" ? "always" : "user"} transition={{ duration: DUR.base, ease: EASE_OUT }}>
+// „still" świadomie NIE przełącza reducedMotion: gasi wyłącznie media
 
-// src/components/HeroMedia.tsx
+// src/components/HeroMedia.tsx i src/components/ToolWall.tsx (klipy hover)
 import { MEDIA_ENABLED } from "@/motion/tokens";
 function wantsVideo() { if (typeof window === "undefined" || !MEDIA_ENABLED) return false; /* …reduced/coarse/saveData… */ }
 
@@ -71,11 +74,13 @@ const animatedBg = useAnimatedBg() && MEDIA_ENABLED;
 grep -rnE 'export const MOTION_TIER' site/src | wc -l          # = 1 (site/src/motion/tokens.ts)
 grep -rnE 'export const MEDIA_ENABLED' site/src | wc -l        # = 1 (site/src/motion/tokens.ts)
 # odwołania tylko w trzech dozwolonych plikach
-grep -rlE 'MOTION_TIER|MEDIA_ENABLED' site/src | grep -vE 'motion/tokens\.ts|motion/provider\.tsx|components/HeroMedia\.tsx|App\.tsx'   # = 0
+grep -rlE 'MOTION_TIER|MEDIA_ENABLED' site/src | grep -vE 'motion/tokens\.ts|motion/provider\.tsx|components/HeroMedia\.tsx|components/ToolWall\.tsx|App\.tsx'   # = 0
+grep -nE 'MOTION_TIER: "full" \| "still" \| "calm"' site/src/motion/tokens.ts   # = 1 (trzy wartości)
 # brak drugiej ścieżki renderu i env
 grep -rnE 'Calm\b|calm\s*\?|=== "calm" \?' site/src --include=*.tsx | grep -v provider.tsx   # = 0
 grep -rnE 'VITE_MOTION|VITE_MEDIA' site/ .env* 2>/dev/null                                    # = 0
-# smoke: ustawić "calm", build, WebKit desktop: brak <video>, reveale = fade, liczniki = wartość końcowa; wrócić do "full".
+# smoke W0: ustawić "still", build, WebKit desktop: brak <video> i brak klipów hover, ale reveale i PageFade DZIAŁAJĄ; wrócić do "full".
+# smoke tryb awaryjny: ustawić "calm": brak <video> ORAZ reveale spłaszczone do opacity; wrócić do "full".
 ```
 
 ## Wyjątki

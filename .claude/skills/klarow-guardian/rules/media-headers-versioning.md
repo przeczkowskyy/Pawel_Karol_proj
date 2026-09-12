@@ -11,7 +11,7 @@ added: 2026-09-12
 
 Pliki w `site/public/` nie dostają hasha Vite (kopiowane 1:1 do `dist/`), więc:
 
-1. **Nazwa z wersją**: `public/media/<name>-v<N>[.warstwa].<ext>` dla mediów i `<name>-v<N>-<szerokość>.<ext>` dla zrzutów (np. `hero-v1.webm`, `hero-v1.poster.webp`, `tools/raport-zarzadczy-v2-1280.webp`, `thumbs/raport-zarzadczy-v2-640.webp`). Jeden wzorzec obejmujący oba kształty:
+1. **Nazwa z wersją**: `public/media/<name>-v<N>[.warstwa].<ext>` dla mediów i `<name>-v<N>-<szerokość>.<ext>` dla zrzutów. Rodziny plików w v1: **`hero-production-v<N>.{webm,mp4,av1.mp4}`** (nagranie hero), **`hero-production-v<N>.webp`** (kadr produktu = poster = LCP; wariant `-800`), **`hero-ground-v<N>.webp`** (grunt stalowy, wariant `-800`), **`tools/<slug>-v<N>.webm`** (klip hover), `tools/<slug>-v<N>-1280.webp`, `thumbs/<slug>-v<N>-640.webp`. Jeden wzorzec obejmujący oba kształty:
 
    ```
    ^[a-z0-9-]+-v[0-9]+(-[0-9]{2,4})?(\.[a-z0-9]+)*\.(webm|mp4|webp|avif|png|svg)$
@@ -27,7 +27,7 @@ Pliki w `site/public/` nie dostają hasha Vite (kopiowane 1:1 do `dist/`), więc
      Cache-Control: public, max-age=31536000, immutable
    ```
    obok istniejących `/*` `no-cache` (HTML), `/assets/*` i `/fonts/*` immutable.
-4. Wszystkie odwołania w kodzie idą przez stałe w jednym module (`src/data/media.ts`: `HERO_POSTER`, `HERO_SOURCES`, `toolMedia(slug)`), nie przez literały rozsiane po komponentach; `tools.ts` `media.thumb/wide` wskazują na wersjonowane nazwy.
+4. Wszystkie odwołania w kodzie idą przez stałe w jednym module (`src/data/media.ts`: `HERO_POSTER`, `HERO_SOURCES`, `HERO_GROUND`, `toolMedia(slug)`, `clipFor(slug)`), nie przez literały rozsiane po komponentach; `tools.ts` `media.thumb/wide` wskazują na wersjonowane nazwy. Manifesty: `site/media/SHOTS.json` (zrzuty) i `site/media/CLIPS.json` (nagrania, `media-recorded-demo-determinism`), oba bez dat.
 5. Preload postera w `index.html` i w shellach prerenderu używa tej samej stałej (skrypt `prerender.mjs` czyta ją z `data/media.ts`, nie z literału).
 
 ## Mechanizm awarii (dlaczego)
@@ -52,10 +52,12 @@ public/_headers                         # brak reguły /media/*
 ## Poprawnie
 
 ```
-public/media/hero-v1.webm
-public/media/hero-v1.mp4
-public/media/hero-v1.poster.webp
-public/media/hero-v1.lqip.webp
+public/media/hero-production-v1.webm
+public/media/hero-production-v1.mp4
+public/media/hero-production-v1.webp          # kadr produktu = poster = LCP (klatka 0 nagrania)
+public/media/hero-production-v1-800.webp
+public/media/hero-ground-v1.webp              # grunt stalowy (Higgsfield, still)
+public/media/tools/kontroling-kosztow-v1.webm # klip hover
 public/media/tools/raport-zarzadczy-v1-1280.webp
 public/thumbs/raport-zarzadczy-v1-640.webp
 ```
@@ -63,12 +65,14 @@ public/thumbs/raport-zarzadczy-v1-640.webp
 ```ts
 // src/data/media.ts (jedyne źródło ścieżek mediów)
 export const HERO_VERSION = 1;
-export const HERO_POSTER = `/media/hero-v${HERO_VERSION}.poster.webp`;
+export const HERO_POSTER = `/media/hero-production-v${HERO_VERSION}.webp`;   // kadr produktu = klatka 0 = LCP
+export const HERO_GROUND = `/media/hero-ground-v${HERO_VERSION}.webp`;       // still Higgsfield, lazy
 export const HERO_SOURCES = [
-  { src: `/media/hero-v${HERO_VERSION}.webm`, type: 'video/webm; codecs="vp9"' },
-  { src: `/media/hero-v${HERO_VERSION}.mp4`,  type: 'video/mp4; codecs="avc1.640028"' },
+  { src: `/media/hero-production-v${HERO_VERSION}.webm`, type: 'video/webm; codecs="vp9"' },
+  { src: `/media/hero-production-v${HERO_VERSION}.mp4`,  type: 'video/mp4; codecs="avc1.640028"' },
 ] as const;
 export const toolMedia = (slug: string, v = 1) => ({ wide: `/media/tools/${slug}-v${v}-1280.webp`, thumb: `/thumbs/${slug}-v${v}-640.webp` });
+export const clipFor = (slug: string, v = 1) => `/media/tools/${slug}-v${v}.webm`;   // klipy hover: tylko 4 slugi
 ```
 
 ```
@@ -95,9 +99,9 @@ grep -A1 -E '^/media/\*' site/public/_headers | grep -q immutable || echo "BRAK 
 grep -A1 -E '^/thumbs/\*' site/public/_headers | grep -q immutable || echo "BRAK /thumbs/* immutable"
 # literały ścieżek poza data/media.ts (oczekiwane: 0)
 grep -rnE '"/media/|"/thumbs/|/media/hero' site/src --include=*.tsx --include=*.ts | grep -v 'data/media.ts'
-grep -nE '/media/' site/index.html | grep -vE 'hero-v[0-9]+\.poster\.webp'   # preload musi wskazywać wersjonowany poster
+grep -nE '/media/' site/index.html | grep -vE 'hero-production-v[0-9]+\.webp'   # preload musi wskazywać wersjonowany kadr produktu
 # po deployu (curl produkcji): nagłówek immutable na /media/hero-v1.poster.webp
-curl -sI https://klarow.com/media/hero-v1.poster.webp | grep -i cache-control   # public, max-age=31536000, immutable
+curl -sI https://klarow.com/media/hero-production-v1.webp | grep -i cache-control   # public, max-age=31536000, immutable
 ```
 
 Docelowo `scripts/verify-site.mjs` krok `media-headers-versioning`.

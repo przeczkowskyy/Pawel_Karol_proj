@@ -459,7 +459,7 @@ Każda decyzja ma: pytanie · opcje · **REKOMENDACJA** · **DOMYŚLNY WYBÓR** 
 | D25 | Paweł jedynym administratorem danych, Karol upoważniony (art. 29) | D31 | nav „Narzędzia", H2 „Co zbudowaliśmy", H1 hubu „Narzędzia, które zbudowaliśmy" |
 | D26 | zdanie „adres na żądanie" do publikacji, skrytka pocztowa przed outboundem | D32 | hero · demo · ściana · co budujemy · co osiągniesz · ludzie · kalkulator · kroki · zamknięcie |
 | D27 | karta prywatna administratora, faktura na osobę fizyczną, koszt nieodliczalny | D33 | ściana: 1 featured (KSeF) + 12 kafli, kadr dobierany per typ obrazu |
-| D28 | kadr `ProductionDashboard` w hero; zero wideo i zero WebGL w v1 | D34 | mapa integracji jako deklaracja umiejętności |
+| D28 | kadr `ProductionDashboard` w hero (zero WebGL); **po D37 kadr jest klatką zero nagrania tego dashboardu** | D34 | mapa integracji jako deklaracja umiejętności |
 | D29 | żywe demo raportu na `/` (S2) z bramką „zero requestów" | D35 | mikro-nagrania: zero w v1, trzy w fazie 2 |
 | D30 | pasek „W liczbach" usunięty; „13" i „12" w podpisie ściany | | |
 | D36 | Higgsfield w v1 **tylko jako statyczna faktura** (grunt hero, master still, tło OG ≈ 56 kr w trialu, 0 USD) plus opcjonalna pętla na LinkedIn poza stroną (49 USD) | D37 | w hero gra **nagranie prawdziwego narzędzia** (8 s, jedno odtworzenie); kadr produktu = klatka 0 = LCP |

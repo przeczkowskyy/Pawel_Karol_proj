@@ -12,7 +12,7 @@ added: 2026-09-12
 Na urządzeniach z `matchMedia("(pointer: coarse)").matches === true` (iPhone, iPad, Android; także laptopy z dotykiem, gdy główne urządzenie wskazujące jest dotykowe):
 
 1. Nie montuje się żaden `<canvas>` (WebGL ani 2D) poza ewentualnymi statycznymi SVG (`KsefFlow`, mini-wykresy) i wykresami dashboardów (SVG, nie canvas).
-2. Nie montuje się żaden `<video>` z automatycznym odtwarzaniem; hero = poster `<img>` (`media-video-gating`).
+2. Nie montuje się **żaden `<video>`**: ani autoodtwarzane nagranie hero, ani klipy hover ściany (na dotyku hover nie istnieje, a tap ma otwierać podstronę). Hero = kadr produktu `<img>` (`media-video-gating`). Bramka jest **liczbą bajtów, nie tylko liczbą elementów**: transfer do `/media/*.webm|mp4` na `pointer: coarse` = **0 B** (0 requestów).
 3. Tło = `.bg-layer` ze statycznym gradientem stalowym (`globals.css:13-38`), bez żadnych dzieci.
 4. Elementy `position: fixed`: tylko `Navbar` (i natywny `<dialog>`); nic nowego.
 5. Reveale (`whileInView`, fadeUp 12 px), liczniki, `PageFade`, menu mobilne w `AnimatePresence` zostają (tanie, na kompozytorze).

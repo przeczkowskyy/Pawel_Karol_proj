@@ -16,7 +16,22 @@ Każdy ruch na stronie (Motion, CSS transition/keyframes, wideo, crossfade) ma z
 
 Dozwolone kategorie motywacji (taste §7.1): **hierarchia** (kieruje wzrok), **storytelling** (sekwencja odpowiada narracji, np. kierunek danych w `KsefFlow`), **feedback** (potwierdza akcję: hover, tap, otwarcie), **stan** (pokazuje, że coś się zmieniło: swap zakładki, nowy wynik). Niedozwolone: „wygląda premium", „strona musi się ruszać", „bo mamy Motion".
 
-Rejestr home w v2 (zamknięty): S1 crossfade poster→wideo; S2 komórki fadeUp + 3 mini-komponenty fade/sekwencja; S3 ramy fadeUp + hover `scale(1.02)`; S4 fadeUp; S5 liczniki; S6 hairline `scaleX` + kroki; S7 wiersze + still; S8 portrety fade; S9 fadeUp; nav menu mobilne; dialog; `PageFade`; dashboard skeleton + `.chart-reveal`. Nowa animacja = nowy wiersz w rejestrze w tym samym PR.
+Rejestr home w v2 (zamknięty; kolejność sekcji po reframe z 2026-09-12 i po decyzjach D35/D37/D38):
+
+| Sekcja | Ruch | Motywacja (kategoria) |
+|---|---|---|
+| S1 hero | crossfade poster → **nagranie narzędzia** (600 ms), stop na ostatniej klatce | stan: kadr pokazuje, że liczby nie są obrazkiem, tylko wynikiem |
+| S2 żywe demo | `ChaosToOrder` (stan ładowania) → `ChartReveal` raz | storytelling + stan: rozsypane dane układają się w wynik, dokładnie to, co firma sprzedaje |
+| S3 ściana 13 | `RevealGroup` fadeUp + hover hairline + **klip hover na 4 kaflach pierwszego rzędu** | feedback + stan: odkrycie, że każdy prostokąt jest działającym narzędziem |
+| S4 bento | fadeUp, hover tła | hierarchia |
+| S5 efekty | hairline `scaleX`, potem pozycje | hierarchia |
+| S6 ludzie | portrety fade (bez ruchu twarzy) | hierarchia |
+| S7 kalkulator | wiersze ✕/✓ kaskadą, kadr fade | hierarchia |
+| S8 kroki | hairline łącznika `scaleX` → kroki | storytelling: linia rysuje kierunek procesu |
+| S9 zamknięcie | fadeUp | hierarchia |
+| globalne | nav menu mobilne, dialog, `PageFade`, skeleton dashboardu + `.chart-reveal` | feedback / stan |
+
+Wiersz „S5 liczniki" **usunięty**: pasek „W liczbach" nie istnieje (D30), a `Counter` nie ma konsumenta. Nowa animacja = nowy wiersz w rejestrze w tym samym PR.
 
 ## Mechanizm awarii (dlaczego)
 

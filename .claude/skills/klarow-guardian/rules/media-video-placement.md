@@ -16,8 +16,9 @@ Szkielet strony jest zamrożony (`site/src/styles/globals.css:13-54`):
 
 Media ruchome mają DOKŁADNIE dwa dozwolone miejsca:
 
-1. **Kontener hero**: `.hero { position: relative; overflow: hidden }` + `.hero-media { position: absolute; inset: 0; overflow: hidden }` z `<img>` posterem i `<video>` (`object-fit: cover`); overlay gradientu jako `::after` w tym samym kontenerze. To wybór v2 (synthesis S1).
-2. **`.bg-layer`** (tylko plan B: `GLSLHills` canvas na desktopie, jak dziś).
+1. **Kontener hero**: `.hero { position: relative; overflow: hidden }` + `.hero-media { position: absolute; inset: 0; overflow: hidden }` z `<img>` posterem (kadr produktu), opcjonalnym `<img>` gruntu i `<video>` (`object-fit: cover`); ewentualny overlay jako `::after` w tym samym kontenerze. Kolejność malowania wynika z **kolejności w DOM**, nie z `z-index`: grunt → poster → wideo → `::after` → `.hero-content` (`position: relative`, bez `z-index`); przycisk pauzy stoi PO `.hero-media`, więc maluje się wyżej bez `z-index`.
+2. **Kafel ściany S3** dla klipów hover: `.tool-tile { position: relative; overflow: hidden }` + `<video>` `position: absolute` z longhandami, `pointer-events: none`. Nigdy `fixed`, nigdy poza kafel.
+3. **`.bg-layer`** (tylko plan B: `GLSLHills` canvas na desktopie; w v1 nieaktywny, bo `three` jest poza `dependencies`).
 
 Zakazane w `.content-layer` i jego potomkach: nowe `position: fixed` (poza `Navbar` i `<dialog>` natywnym), `z-index` na wrapperach sekcji, `transform`/`filter`/`backdrop-filter`/`perspective`/`will-change` na przodkach elementów `fixed`/`sticky`, `mix-blend-mode` na elemencie zawierającym treść, nieprzezroczyste tło na wrapperze roota (`#121212` na `.content-layer` zasłoniło tło w commicie 640a6f9: „Fix: tło znów widoczne").
 
@@ -66,8 +67,10 @@ grep -nE '^\.bg-layer' -A 25 site/src/styles/globals.css | grep -qE 'z-index:\s*
 # nowe fixed/z-index w komponentach (oczekiwane: tylko Navbar, dialog)
 grep -rnE 'position:\s*fixed|className="[^"]*\bfixed\b' site/src --include=*.tsx --include=*.css | grep -vE 'Navbar|BookingDialog|BookingModal|bg-layer|globals\.css'
 grep -rnE 'z-index|\bz-\[?[0-9]' site/src --include=*.tsx --include=*.css | grep -vE 'Navbar|BookingDialog|BookingModal|bg-layer|company-ui\.css|thead|sticky'
-# wideo tylko w .hero-media
+# wideo tylko w .hero-media (hero) i .tool-tile (klipy hover)
 grep -rnE '<video' -B 3 site/src/components/HeroMedia.tsx | grep -q 'hero-media' || echo "video poza .hero-media"
+grep -rnE '<video' -B 3 site/src/components/ToolWall.tsx | grep -q 'tool-tile' || echo "klip poza .tool-tile"
+grep -rlE '<video' site/src | grep -vE 'HeroMedia\.tsx|ToolWall\.tsx'   # = 0
 # transform/filter na przodkach fixed (ocena: DevTools → Navbar → Computed → sprawdzić przodków)
 # realny iPhone Karola po każdej zmianie w hero/globals: pełna treść widoczna; ?debug=1 zrzut w razie wątpliwości.
 ```

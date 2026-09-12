@@ -10,7 +10,7 @@ added: 2026-09-12
 ## Zasada
 
 1. Hover animuje wyłącznie `color`, `background-color`, `border-color`, `opacity` (CSS, `--duration-fast`, `--ease-out`). `transform` w hover dozwolony tylko na `<img>`/`<video>` wewnątrz kontenera `overflow: hidden` (rama S3: `scale(1.02)`, 240 ms) i na kartach w gridzie (`translateY(-2px)`), nigdy na elementach inline w tekście, nigdy `box-shadow`, `filter`, `backdrop-filter`, `mask`.
-2. Żadna informacja ani akcja nie jest dostępna WYŁĄCZNIE przez hover: przyciski akcji karty (np. „Otwórz", „Pobierz PDF"), hover-klipy (faza 2), tooltipy mają odpowiednik dla `(pointer: coarse)` i `:focus-visible`. Wzorzec: `showActions = reducedMotion || coarsePointer || hoverFine || focused`.
+2. Żadna informacja ani akcja nie jest dostępna WYŁĄCZNIE przez hover: przyciski akcji karty (np. „Otwórz", „Pobierz PDF"), klipy hover ściany S3 (v1, cztery kafle pierwszego rzędu; na dotyku NIE powstają, a tap otwiera podstronę z żywym dashboardem), tooltipy mają odpowiednik dla `(pointer: coarse)` i `:focus-visible`. Wzorzec: `showActions = reducedMotion || coarsePointer || hoverFine || focused`.
 3. `whileHover`/`whileTap` z Motion tylko na natywnie fokusowalnych elementach (`button`, `a`); Motion dodaje `tabindex` do `whileTap`, ale semantykę daje HTML. `whileTap={{ scale: 0.98 }}` jest zbędne, bo kit ma `.btn:active { transform: scale(.98) }`.
 4. Hover-klipy (faza 2): start na `mouseenter`/`focus`, pauza na `mouseleave`/`blur`, max 1 aktywny klip, tylko `pointer: fine`, reduced-motion → poster; na `pointer: coarse` element pokazuje poster i link „Odtwórz podgląd" (nie autoplay).
 

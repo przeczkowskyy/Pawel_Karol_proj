@@ -11,11 +11,13 @@ added: 2026-09-12
 
 | Obraz | Format | Wymiary | Limit | Atrybuty |
 |---|---|---|---|---|
-| Poster hero | WebP | 1920×820 | ≤ 60 KB | `fetchPriority="high"`, bez lazy (`perf-lcp-poster-preload`) |
+| **Kadr produktu w hero** (= poster nagrania = element LCP) | WebP | 1600×1000 (+ 800×500 w `srcset`) | ≤ 110 KB / ≤ 55 KB | `fetchPriority="high"`, bez lazy, klasa `hero-shot` (`perf-lcp-poster-preload`) |
+| **Grunt stalowy hero** (tekstura, still Higgsfield) | WebP | 1600 px (+ 800 px) | ≤ 70 KB / ≤ 30 KB | `loading="lazy"`, `decoding="async"`, `aria-hidden`, **nigdy preload, nigdy `fetchpriority`**; wypada bez wpływu na treść |
+| **Kafel ściany narzędzi** | WebP | 480×300 (+ 320×200) | ≤ 30 KB / ≤ 16 KB | `loading="lazy"`, `decoding="async"`, `alt=""` (nazwa stoi obok w DOM) |
 | Zrzut demo w ramie S3 / hub | WebP | 1280×800 (+ 640×400 w `srcset`) | ≤ 120 KB / ≤ 40 KB | `loading="lazy"` poza pierwszą ramą, `decoding="async"`, `sizes="(min-width: 1024px) 50vw, 100vw"` |
 | Miniatura karty | WebP | 640×400 | ≤ 40 KB | `loading="lazy"` |
 | Portret foundera | WebP | 960×1200 (+ 480×600) | ≤ 90 KB | `loading="lazy"`, `srcset`, duotone w Photoshop lokalnie |
-| Still S7 (macro steel) | WebP | 1200×1500 (4:5) | ≤ 120 KB | `loading="lazy"` |
+| Kadr „ścieżki wyliczenia" w S7 | WebP | 1200×1500 (4:5) | ≤ 120 KB | `loading="lazy"` (still generatywny macro **wypadł**: sekcja o determinizmie ma być ilustrowana dowodem determinizmu) |
 | OG per trasa | PNG (wymóg crawlerów social) | 1200×630 | ≤ 200 KB | generowany `og.mjs` (faza 3), deterministyczny |
 | Ikony | SVG inline (lucide) | 20/24 px | n/d | `aria-hidden` gdy dekoracyjne |
 | Schematy (`KsefFlow`, `CollaborationFlow`) | SVG inline | `viewBox` | ≤ 12 KB | tokeny kolorów, statyczne |
@@ -33,6 +35,7 @@ Reguły:
 - Obraz bez wymiarów = layout shift przy dociągnięciu (CLS), a przy `whileInView` błędne offsety IO (motion-dev §8.8); na podstronie narzędzia persona z Google widzi skaczący układ.
 - JPG 300 KB zrzutu × 4 ramy na home = 1,2 MB transferu na 4G; budżet mobile `/` ≤ 350 KB bez wideo.
 - `loading="lazy"` nad foldem opóźnia LCP; brak lazy poniżej folda ładuje 13 obrazów huba naraz (13 = KARTY narzędzi w `tools.ts`: 12 dem + KSeF; dashboardów jest 12).
+- Grunt hero jest **dekoracją**: gdyby dostał `fetchpriority` albo preload, konkurowałby z kadrem produktu o LCP i odbierał budżet ścieżce krytycznej, a to jedyna warstwa hero, którą wolno zdjąć bez straty treści.
 - Niedeterministyczne zrzuty (data w UI, losowe ID) zmieniają się przy każdym buildzie → cache immutable nie działa, git puchnie. Ten sam skutek ma zrzut zrobiony za wcześnie: `data-ready` ustawione przed dociągnięciem chunku = wyścig sieci ze zrzutem.
 
 ## Niepoprawnie

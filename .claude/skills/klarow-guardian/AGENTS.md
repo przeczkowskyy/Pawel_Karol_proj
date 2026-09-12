@@ -1,7 +1,7 @@
 # KLAROW Guardian: kompilat reguł
 
 > Plik GENEROWANY przez `node .claude/skills/klarow-guardian/scripts/build-index.mjs` z `rules/*.md`. Nie edytuj ręcznie: popraw regułę w `rules/` i uruchom skrypt.
-> Reguł: 145 (BLOCKER 39 · HIGH 74 · MEDIUM 29 · LOW 3). Kolejność: sekcja (rules/_sections.md) → impact → id.
+> Reguł: 146 (BLOCKER 39 · HIGH 75 · MEDIUM 29 · LOW 3). Kolejność: sekcja (rules/_sections.md) → impact → id.
 > Format wpisu: reguła · mechanizm awarii · Niepoprawnie / Poprawnie · Test (grep / skrypt / DevTools / Playwright) · Wyjątki.
 > `SKILL.md` ma tylko tabelę sekcji; pełna tabela reguł jest niżej, w tym pliku.
 
@@ -10,7 +10,7 @@
 - 1. Marka i przekaz (nazwa poprzedniej firmy, złoto, wordmark, jeden akcent, etykiety dowodu, liczby, „AI") (`brand`, reguł: 7, domyślnie BLOCKER, tryb both, właściciel `brand-leak-auditor` (copy: `copy-auditor`, dist: `seo-auditor`))
 - 2. Design locks i kit (tokeny, `@theme`, kształt, motyw, CTA, hero, eyebrow, karty, glass, ikony, statusy, overflow, sticky, kontrast, typografia, fill-mode, PDF, light) (`design`, reguł: 18, domyślnie MEDIUM, tryb marketing (kit: both), właściciel `ui-auditor`)
 - 3. Ruch, wideo, tła, reduced-motion, budżet Motion (`motion`, reguł: 17, domyślnie BLOCKER, tryb both, właściciel `motion-auditor`)
-- 4. Assety: obrazy, poster, wideo, zrzuty, budżety plików, metadane (`media`, reguł: 9, domyślnie HIGH, tryb marketing, właściciel `ui-auditor`)
+- 4. Assety: obrazy, poster, wideo, zrzuty, budżety plików, metadane (`media`, reguł: 10, domyślnie HIGH, tryb marketing, właściciel `ui-auditor`)
 - 5. Budżety wydajności (LCP/CLS/INP, chunki, fonty, transfer, lazy, build target) (`perf`, reguł: 10, domyślnie HIGH, tryb both, właściciel `code-auditor`)
 - 6. React / Vite / TS / git / plan (bez `npx`, `npm run check`, kompozycja, React 19) (`code`, reguł: 17, domyślnie MEDIUM, tryb both, właściciel `code-auditor`)
 - 7. Dostępność (landmarki, dialog, fokus, semantyka, formularze, touch, lang) (`a11y`, reguł: 15, domyślnie HIGH, tryb both, właściciel `ui-auditor`)
@@ -65,18 +65,19 @@
 | 3.12 | `motion-counters-pattern` | MEDIUM | Liczniki: useMotionValue(to) + animate jako dziecko m.span, useInView once, brak animacji gdy element widoczny od pierwszej klatki, jump przy reduced, liczba w shellu na stałe | [rules/motion-counters-pattern.md](rules/motion-counters-pattern.md) |
 | 3.13 | `motion-hover-fallback` | MEDIUM | Hover bez layout shift i z fallbackiem dla pointer: coarse i fokusu; hover animuje kolor/border/opacity, transform tylko na obrazie w overflow:hidden | [rules/motion-hover-fallback.md](rules/motion-hover-fallback.md) |
 | 3.14 | `motion-motivated` | MEDIUM | Każda animacja ma motywację w jednym zdaniu; brak zdania = brak animacji | [rules/motion-motivated.md](rules/motion-motivated.md) |
-| 3.15 | `motion-tier-flag` | MEDIUM | Jeden kill-switch ruchu i mediów (MOTION_TIER w tokens.ts, z którego wynika MEDIA_ENABLED); nigdy druga ścieżka renderu | [rules/motion-tier-flag.md](rules/motion-tier-flag.md) |
+| 3.15 | `motion-tier-flag` | MEDIUM | Jeden kill-switch ruchu i mediów: MOTION_TIER full/still/calm w tokens.ts, z którego wynika MEDIA_ENABLED; nigdy druga ścieżka renderu | [rules/motion-tier-flag.md](rules/motion-tier-flag.md) |
 | 3.16 | `motion-tokens-only` | MEDIUM | Czasy, krzywe, stagger i przesunięcia wyłącznie z src/motion/tokens.ts i zmiennych CSS | [rules/motion-tokens-only.md](rules/motion-tokens-only.md) |
 | 3.17 | `motion-stagger-caps` | LOW | Kaskada ≤ 12 dzieci, odstęp 40–60 ms, przesunięcie wejścia ≤ 12 px; duże powierzchnie tylko opacity | [rules/motion-stagger-caps.md](rules/motion-stagger-caps.md) |
-| 4.1 | `media-higgsfield-inputs-policy` | BLOCKER | Higgsfield: do modelu trafiają wyłącznie abstrakcje i własne stille; zero zrzutów narzędzi, danych, twarzy i materiałów firmy źródłowej; log SOURCES.md; finały tylko na planie płatnym; usuwać generacje po sprincie | [rules/media-higgsfield-inputs-policy.md](rules/media-higgsfield-inputs-policy.md) |
+| 4.1 | `media-higgsfield-inputs-policy` | BLOCKER | Higgsfield: do modelu trafiają wyłącznie abstrakcje i własne stille; zero zrzutów I NAGRAŃ narzędzi, danych, twarzy i materiałów firmy źródłowej; log SOURCES.md; zakres v1 mieści się w trialu; usuwać generacje po sprincie | [rules/media-higgsfield-inputs-policy.md](rules/media-higgsfield-inputs-policy.md) |
 | 4.2 | `media-one-autoplay-per-route` | BLOCKER | Najwyżej jedno automatycznie odtwarzane wideo i jedno ruchome tło na trasę; nigdy oba naraz | [rules/media-one-autoplay-per-route.md](rules/media-one-autoplay-per-route.md) |
 | 4.3 | `media-video-gating` | BLOCKER | Wideo tylko po bramkach: pointer fine, brak reduced-motion, brak saveData/2g-3g, po window.load, IO play/pause, visibilitychange, pauza użytkownika w sessionStorage, iOS Low Power Mode → poster | [rules/media-video-gating.md](rules/media-video-gating.md) |
 | 4.4 | `media-video-placement` | BLOCKER | Wideo i tło wyłącznie w kontenerze hero (absolute + overflow:hidden) albo w .bg-layer; nigdy nowy position:fixed ani kontekst stackingu w .content-layer | [rules/media-video-placement.md](rules/media-video-placement.md) |
 | 4.5 | `media-asset-review-gate` | HIGH | Bramka przeglądu assetu: „nie widać, że AI", brak ludzi/tekstu/ciepłej barwy, zdejmowalne bez straty treści, banding na OLED, budżet | [rules/media-asset-review-gate.md](rules/media-asset-review-gate.md) |
 | 4.6 | `media-headers-versioning` | HIGH | Pliki w public/media i public/thumbs mają wersję w nazwie i nagłówek immutable; zmiana treści = nowa wersja, nigdy nadpisanie | [rules/media-headers-versioning.md](rules/media-headers-versioning.md) |
-| 4.7 | `media-video-budgets` | HIGH | Budżety wideo: ≤ 1,5 MB na format, poster ≤ 60 KB WebP, pętla 6–10 s, 24 fps, bez audio, LQIP ≤ 2 KB | [rules/media-video-budgets.md](rules/media-video-budgets.md) |
-| 4.8 | `media-video-embed-spec` | HIGH | Specyfikacja elementu <video>: muted playsInline loop preload=metadata poster, źródła AV1→VP9→H.264, aria-hidden, disablePictureInPicture, MediaBoundary, przycisk pauzy tła (WCAG 2.2.2) | [rules/media-video-embed-spec.md](rules/media-video-embed-spec.md) |
-| 4.9 | `media-poster-first-frame` | MEDIUM | Poster to pierwsza klatka pętli (identyczna z ostatnią), ten sam plik w <img>, <video poster> i preload | [rules/media-poster-first-frame.md](rules/media-poster-first-frame.md) |
+| 4.7 | `media-recorded-demo-determinism` | HIGH | Nagrania narzędzi wchodzą do repo wyłącznie jako re-enkod z wyodrębnionych klatek 24 fps CFR; manifest CLIPS.json trzyma hashe klatek, nie kontenera; rozjazd z UI = czerwony build | [rules/media-recorded-demo-determinism.md](rules/media-recorded-demo-determinism.md) |
+| 4.8 | `media-video-budgets` | HIGH | Budżety wideo: nagranie hero ≤ 1,2 MB WebM / ≤ 1,4 MB H.264, klip hover ≤ 320 KB, poster = kadr produktu ≤ 110 KB, 6–10 s, 24 fps CFR, bez audio | [rules/media-video-budgets.md](rules/media-video-budgets.md) |
+| 4.9 | `media-video-embed-spec` | HIGH | Specyfikacja elementu <video>: muted playsInline loop preload=metadata poster, źródła AV1→VP9→H.264, aria-hidden, disablePictureInPicture, MediaBoundary, przycisk pauzy tła (WCAG 2.2.2) | [rules/media-video-embed-spec.md](rules/media-video-embed-spec.md) |
+| 4.10 | `media-poster-first-frame` | MEDIUM | Poster to klatka 0 pliku wideo (przy pętli także identyczna z ostatnią), wyciągana z gotowego wideo, ten sam plik w <img>, <video poster> i preload | [rules/media-poster-first-frame.md](rules/media-poster-first-frame.md) |
 | 5.1 | `perf-no-webgl-on-coarse` | BLOCKER | Na pointer: coarse (telefony, tablety) zero canvasu WebGL, zero wideo autoplay, zero elementów fixed poza navem; tło = statyczny gradient .bg-layer | [rules/perf-no-webgl-on-coarse.md](rules/perf-no-webgl-on-coarse.md) |
 | 5.2 | `perf-build-target` | HIGH | Kod zgodny z build.target es2019/safari13: bez toSorted/at/structuredClone/Array.findLast/Object.hasOwn/oklch/color-mix bez fallbacku; komentarz w vite.config prawdziwy | [rules/perf-build-target.md](rules/perf-build-target.md) |
 | 5.3 | `perf-chunk-size-gate` | HIGH | verify-site.mjs porównuje rozmiary chunków z baseline: wzrost > 5 % lub nowy chunk krytyczny = fail; baseline zmienia tylko świadomy commit | [rules/perf-chunk-size-gate.md](rules/perf-chunk-size-gate.md) |
@@ -84,7 +85,7 @@
 | 5.5 | `perf-fonts-budget` | HIGH | Fonty self-hosted w public/fonts, zero CDN, ≤ 100 KB w fazie 1 (Nunito Sans solo) / ≤ 150 KB po ewentualnym drugim kroju, preload latin, font-display swap + size-adjust | [rules/perf-fonts-budget.md](rules/perf-fonts-budget.md) |
 | 5.6 | `perf-images-policy` | HIGH | Obrazy: WebP (AVIF opcjonalnie), srcset dla ram i portretów, jawne width/height (CLS 0), loading lazy poniżej folda, limity rozmiarów, zero PNG/JPG w treści | [rules/perf-images-policy.md](rules/perf-images-policy.md) |
 | 5.7 | `perf-js-budget-home` | HIGH | JS krytyczny na / ≤ 140 KB gz (react-dom ~58 + router ~15 + motion ~34 + app ~25); podstrona narzędzia ≤ +60 KB gz lazy | [rules/perf-js-budget-home.md](rules/perf-js-budget-home.md) |
-| 5.8 | `perf-lcp-poster-preload` | HIGH | LCP = poster hero: preload z fetchpriority high w każdym z 19 HTML, H1 w shellu, wideo dopiero po load; bramki CWV: LCP mobile < 2,5 s / desktop < 1,8 s, CLS < 0,05 na / i < 0,1 na podstronach, INP < 200 ms | [rules/perf-lcp-poster-preload.md](rules/perf-lcp-poster-preload.md) |
+| 5.8 | `perf-lcp-poster-preload` | HIGH | LCP = kadr produktu w hero (bramka ELEMENTOWA, nie tylko czasowa): preload z fetchpriority high, H1 w shellu, wideo nigdy preloadowane i montowane dopiero po load i rIC; bramki CWV: LCP mobile < 2,5 s / desktop < 1,8 s, CLS < 0,05 na / i < 0,1 na podstronach, INP < 200 ms | [rules/perf-lcp-poster-preload.md](rules/perf-lcp-poster-preload.md) |
 | 5.9 | `perf-three-js-policy` | HIGH | three.js (GLSL Hills) tylko jako plan B: desktop pointer fine, montaż po idle po load, saveData gate, poza pierwszym JS, nigdy z wideo; usunąć z dependencies, gdy hero-loop przejdzie | [rules/perf-three-js-policy.md](rules/perf-three-js-policy.md) |
 | 5.10 | `perf-no-zoom-root` | MEDIUM | Zakaz zoom na :root; skalowanie dużych ekranów przez clamp() w tokenach typografii i kontenerze | [rules/perf-no-zoom-root.md](rules/perf-no-zoom-root.md) |
 | 6.1 | `code-lint-and-tests-gate` | BLOCKER | Bramka przed pushem: tsc, ESLint (react-hooks, jsx-a11y), node --test golden, build, verify, audit | [rules/code-lint-and-tests-gate.md](rules/code-lint-and-tests-gate.md) |
@@ -3133,7 +3134,7 @@ Impact: **MEDIUM** · Tagi: motion, hover, a11y, touch, kit · Źródło: ui-kit
 #### Zasada
 
 1. Hover animuje wyłącznie `color`, `background-color`, `border-color`, `opacity` (CSS, `--duration-fast`, `--ease-out`). `transform` w hover dozwolony tylko na `<img>`/`<video>` wewnątrz kontenera `overflow: hidden` (rama S3: `scale(1.02)`, 240 ms) i na kartach w gridzie (`translateY(-2px)`), nigdy na elementach inline w tekście, nigdy `box-shadow`, `filter`, `backdrop-filter`, `mask`.
-2. Żadna informacja ani akcja nie jest dostępna WYŁĄCZNIE przez hover: przyciski akcji karty (np. „Otwórz", „Pobierz PDF"), hover-klipy (faza 2), tooltipy mają odpowiednik dla `(pointer: coarse)` i `:focus-visible`. Wzorzec: `showActions = reducedMotion || coarsePointer || hoverFine || focused`.
+2. Żadna informacja ani akcja nie jest dostępna WYŁĄCZNIE przez hover: przyciski akcji karty (np. „Otwórz", „Pobierz PDF"), klipy hover ściany S3 (v1, cztery kafle pierwszego rzędu; na dotyku NIE powstają, a tap otwiera podstronę z żywym dashboardem), tooltipy mają odpowiednik dla `(pointer: coarse)` i `:focus-visible`. Wzorzec: `showActions = reducedMotion || coarsePointer || hoverFine || focused`.
 3. `whileHover`/`whileTap` z Motion tylko na natywnie fokusowalnych elementach (`button`, `a`); Motion dodaje `tabindex` do `whileTap`, ale semantykę daje HTML. `whileTap={{ scale: 0.98 }}` jest zbędne, bo kit ma `.btn:active { transform: scale(.98) }`.
 4. Hover-klipy (faza 2): start na `mouseenter`/`focus`, pauza na `mouseleave`/`blur`, max 1 aktywny klip, tylko `pointer: fine`, reduced-motion → poster; na `pointer: coarse` element pokazuje poster i link „Odtwórz podgląd" (nie autoplay).
 
@@ -3205,7 +3206,22 @@ Każdy ruch na stronie (Motion, CSS transition/keyframes, wideo, crossfade) ma z
 
 Dozwolone kategorie motywacji (taste §7.1): **hierarchia** (kieruje wzrok), **storytelling** (sekwencja odpowiada narracji, np. kierunek danych w `KsefFlow`), **feedback** (potwierdza akcję: hover, tap, otwarcie), **stan** (pokazuje, że coś się zmieniło: swap zakładki, nowy wynik). Niedozwolone: „wygląda premium", „strona musi się ruszać", „bo mamy Motion".
 
-Rejestr home w v2 (zamknięty): S1 crossfade poster→wideo; S2 komórki fadeUp + 3 mini-komponenty fade/sekwencja; S3 ramy fadeUp + hover `scale(1.02)`; S4 fadeUp; S5 liczniki; S6 hairline `scaleX` + kroki; S7 wiersze + still; S8 portrety fade; S9 fadeUp; nav menu mobilne; dialog; `PageFade`; dashboard skeleton + `.chart-reveal`. Nowa animacja = nowy wiersz w rejestrze w tym samym PR.
+Rejestr home w v2 (zamknięty; kolejność sekcji po reframe z 2026-09-12 i po decyzjach D35/D37/D38):
+
+| Sekcja | Ruch | Motywacja (kategoria) |
+|---|---|---|
+| S1 hero | crossfade poster → **nagranie narzędzia** (600 ms), stop na ostatniej klatce | stan: kadr pokazuje, że liczby nie są obrazkiem, tylko wynikiem |
+| S2 żywe demo | `ChaosToOrder` (stan ładowania) → `ChartReveal` raz | storytelling + stan: rozsypane dane układają się w wynik, dokładnie to, co firma sprzedaje |
+| S3 ściana 13 | `RevealGroup` fadeUp + hover hairline + **klip hover na 4 kaflach pierwszego rzędu** | feedback + stan: odkrycie, że każdy prostokąt jest działającym narzędziem |
+| S4 bento | fadeUp, hover tła | hierarchia |
+| S5 efekty | hairline `scaleX`, potem pozycje | hierarchia |
+| S6 ludzie | portrety fade (bez ruchu twarzy) | hierarchia |
+| S7 kalkulator | wiersze ✕/✓ kaskadą, kadr fade | hierarchia |
+| S8 kroki | hairline łącznika `scaleX` → kroki | storytelling: linia rysuje kierunek procesu |
+| S9 zamknięcie | fadeUp | hierarchia |
+| globalne | nav menu mobilne, dialog, `PageFade`, skeleton dashboardu + `.chart-reveal` | feedback / stan |
+
+Wiersz „S5 liczniki" **usunięty**: pasek „W liczbach" nie istnieje (D30), a `Counter` nie ma konsumenta. Nowa animacja = nowy wiersz w rejestrze w tym samym PR.
 
 #### Mechanizm awarii (dlaczego)
 
@@ -3248,7 +3264,7 @@ grep -rnE 'repeat:\s*Infinity|infinite' site/src | grep -vE 'skel|company-ui\.cs
 
 ### 3.15 motion-tier-flag
 
-**Jeden kill-switch ruchu i mediów (MOTION_TIER w tokens.ts, z którego wynika MEDIA_ENABLED); nigdy druga ścieżka renderu**
+**Jeden kill-switch ruchu i mediów: MOTION_TIER full/still/calm w tokens.ts, z którego wynika MEDIA_ENABLED; nigdy druga ścieżka renderu**
 
 Impact: **MEDIUM** · Tagi: motion, media, kill-switch, flags · Źródło: synthesis §1.4 (kill-switch → MEDIA_ENABLED) i §1.6 (MOTION_TIER jako druga ścieżka: odrzucone) · showreel §5.9 „Tryb awaryjny" · feasibility-perf §4.3 p.6 · Dodano: 2026-09-12 · Plik: `rules/motion-tier-flag.md`
 
@@ -3257,19 +3273,21 @@ Impact: **MEDIUM** · Tagi: motion, media, kill-switch, flags · Źródło: synt
 W `site/src/motion/tokens.ts` istnieje dokładnie jedna stała trybu i jedna pochodna:
 
 ```ts
-export const MOTION_TIER: "full" | "calm" = "full";      // "calm" = tryb awaryjny (decyzja founderów lub incydent perf/iOS)
-export const MEDIA_ENABLED = MOTION_TIER === "full";      // media OPCJONALNE: hero-wideo, hover-klipy (faza 2), GLSL Hills (plan B)
+export const MOTION_TIER: "full" | "still" | "calm" = "full";   // "still" = media off; "calm" = tryb awaryjny całego ruchu
+export const MEDIA_ENABLED = MOTION_TIER === "full";             // wideo hero, klipy hover ściany, GLSL Hills (plan B)
 ```
 
-Semantyka `calm`:
+Semantyka trzech wartości:
 
-1. `MEDIA_ENABLED = false` → `HeroMedia` renderuje wyłącznie poster `<img>`; hover-klipy i tło three.js nie montują się,
-2. `MotionProvider` przekazuje `reducedMotion="always"` zamiast `"user"` → wszystkie `m.*` tracą transformy/layout, zostaje `opacity` (identycznie jak przy systemowym reduced-motion),
-3. `Counter` i `ChartReveal` czytają `useReducedMotion()` (który przy `"always"` zwraca `true`) → `jump`/`initial={false}`.
+1. **`full`**: wszystko działa.
+2. **`still` (kill-switch mediów, od 2026-09-12)**: `MEDIA_ENABLED = false` → `HeroMedia` renderuje wyłącznie poster `<img>` (kadr produktu), klipy hover w `ToolWall` i tło three.js nie montują się. **`MotionProvider` zostaje na `reducedMotion="user"`**: reveale, `PageFade`, dialog i `ChaosToOrder` działają bez zmian.
+3. **`calm` (tryb awaryjny)**: `still` plus `MotionProvider` przekazuje `reducedMotion="always"` → wszystkie `m.*` tracą transformy, zostaje `opacity` (identycznie jak przy systemowym reduced-motion); `ChartReveal` i `ChaosToOrder` czytają `useReducedMotion()` → `initial={false}`.
 
-Konsekwencja: `calm` NIE dodaje żadnego `if` do komponentów. Stała jest czytana w DOKŁADNIE trzech miejscach: `provider.tsx` (reducedMotion), `HeroMedia.tsx` (`wantsVideo()` przez `MEDIA_ENABLED`) i `App.tsx`/`useAnimatedBg` (plan B GLSL). Każde inne odwołanie do `MOTION_TIER`/`MEDIA_ENABLED` w `site/src` = fail. Zakazane: warianty renderu `tier === "calm" ? <A/> : <B/>`, osobne komponenty `*Calm`, drugi zestaw presetów, flagi per sekcja.
+Po co trzecia wartość: wycofanie wideo ma być wykonane **w minutę, pod presją** (`docs/plan/warstwa-wrazenia.md` §8, poziom W0). Dopóki jedyną drogą do wyłączenia mediów było `calm`, gaszenie jednego `<video>` spłaszczało całą stronę, więc founder się wahał i awaria trwała dłużej. `still` nie dokłada ani jednego `if` w komponentach.
 
-Zmiana wartości = commit z komunikatem `Motion: tryb calm (powód: …)` i wpis w „Stanie operacyjnym" CLAUDE.md.
+Konsekwencja: żadna wartość NIE dodaje wariantu renderu. Stała jest czytana w DOKŁADNIE czterech miejscach: `provider.tsx` (reducedMotion), `HeroMedia.tsx` (`wantsVideo()` przez `MEDIA_ENABLED`), `ToolWall.tsx` (klipy hover przez `MEDIA_ENABLED`) i `App.tsx`/`useAnimatedBg` (plan B GLSL). Każde inne odwołanie do `MOTION_TIER`/`MEDIA_ENABLED` w `site/src` = fail. Zakazane: warianty renderu `tier === "calm" ? <A/> : <B/>`, osobne komponenty `*Calm`, drugi zestaw presetów, flagi per sekcja.
+
+Zmiana wartości = commit z komunikatem `Motion: tryb still (powód: …)` albo `Motion: tryb calm (powód: …)` i wpis w „Stanie operacyjnym" CLAUDE.md.
 
 #### Mechanizm awarii (dlaczego)
 
@@ -3294,14 +3312,15 @@ export const fadeUp = MOTION_TIER === "calm" ? fadeCalm : fadeFull;   // drugi z
 
 ```tsx
 // src/motion/tokens.ts
-export const MOTION_TIER: "full" | "calm" = "full";
+export const MOTION_TIER: "full" | "still" | "calm" = "full";
 export const MEDIA_ENABLED = MOTION_TIER === "full";
 
 // src/motion/provider.tsx
 import { MOTION_TIER, DUR, EASE_OUT } from "./tokens";
 <MotionConfig reducedMotion={MOTION_TIER === "calm" ? "always" : "user"} transition={{ duration: DUR.base, ease: EASE_OUT }}>
+// „still" świadomie NIE przełącza reducedMotion: gasi wyłącznie media
 
-// src/components/HeroMedia.tsx
+// src/components/HeroMedia.tsx i src/components/ToolWall.tsx (klipy hover)
 import { MEDIA_ENABLED } from "@/motion/tokens";
 function wantsVideo() { if (typeof window === "undefined" || !MEDIA_ENABLED) return false; /* …reduced/coarse/saveData… */ }
 
@@ -3316,11 +3335,13 @@ const animatedBg = useAnimatedBg() && MEDIA_ENABLED;
 grep -rnE 'export const MOTION_TIER' site/src | wc -l          # = 1 (site/src/motion/tokens.ts)
 grep -rnE 'export const MEDIA_ENABLED' site/src | wc -l        # = 1 (site/src/motion/tokens.ts)
 # odwołania tylko w trzech dozwolonych plikach
-grep -rlE 'MOTION_TIER|MEDIA_ENABLED' site/src | grep -vE 'motion/tokens\.ts|motion/provider\.tsx|components/HeroMedia\.tsx|App\.tsx'   # = 0
+grep -rlE 'MOTION_TIER|MEDIA_ENABLED' site/src | grep -vE 'motion/tokens\.ts|motion/provider\.tsx|components/HeroMedia\.tsx|components/ToolWall\.tsx|App\.tsx'   # = 0
+grep -nE 'MOTION_TIER: "full" \| "still" \| "calm"' site/src/motion/tokens.ts   # = 1 (trzy wartości)
 # brak drugiej ścieżki renderu i env
 grep -rnE 'Calm\b|calm\s*\?|=== "calm" \?' site/src --include=*.tsx | grep -v provider.tsx   # = 0
 grep -rnE 'VITE_MOTION|VITE_MEDIA' site/ .env* 2>/dev/null                                    # = 0
-# smoke: ustawić "calm", build, WebKit desktop: brak <video>, reveale = fade, liczniki = wartość końcowa; wrócić do "full".
+# smoke W0: ustawić "still", build, WebKit desktop: brak <video> i brak klipów hover, ale reveale i PageFade DZIAŁAJĄ; wrócić do "full".
+# smoke tryb awaryjny: ustawić "calm": brak <video> ORAZ reveale spłaszczone do opacity; wrócić do "full".
 ```
 
 #### Wyjątki
@@ -3490,17 +3511,17 @@ Domyślny impact: **HIGH** · tryb: marketing · właściciel audytu: `ui-audito
 
 ### 4.1 media-higgsfield-inputs-policy
 
-**Higgsfield: do modelu trafiają wyłącznie abstrakcje i własne stille; zero zrzutów narzędzi, danych, twarzy i materiałów firmy źródłowej; log SOURCES.md; finały tylko na planie płatnym; usuwać generacje po sprincie**
+**Higgsfield: do modelu trafiają wyłącznie abstrakcje i własne stille; zero zrzutów I NAGRAŃ narzędzi, danych, twarzy i materiałów firmy źródłowej; log SOURCES.md; zakres v1 mieści się w trialu; usuwać generacje po sprincie**
 
 Impact: **BLOCKER** · Tagi: media, higgsfield, licensing, privacy, brand · Źródło: higgsfield §0 p.8/§8 (ToU 26.07.2026: licencja treningowa, brak gwarancji IP, znak wodny Free) · synthesis §2.6.1 · CLAUDE.md zasada #3 (marka firmy źródłowej nie publicznie) · peer-legal · Dodano: 2026-09-12 · Plik: `rules/media-higgsfield-inputs-policy.md`
 
 #### Zasada
 
-Higgsfield (przez MCP „creative engine" w Claude Code) jest narzędziem do 2–3 assetów, które są nieopłacalne ręcznie (hero-loop, master still, OG). Obowiązuje:
+Higgsfield (przez MCP „creative engine" w Claude Code) jest narzędziem do 2–3 assetów, których nie zrobi ani kod, ani nagranie ekranu. **Zakres v1 po decyzji D36 (2026-09-12 wieczór): wyłącznie STATYCZNE stille na stronę** (H1 grunt hero 24 kr, H2 master still 15 kr, H3 tło OG 10 kr, rezerwa 7 kr = **≈ 56 kr, czyli 0 USD w trialu**) plus opcjonalna **pętla na LinkedIn, która nie trafia na stronę** (H4 ≈ 166 kr, jeden miesiąc PLUS 49 USD + VAT). **W `site/public/` nie ma ani jednego pliku wideo z Higgsfielda**: jedyne wideo na stronie to nagrania prawdziwych narzędzi (D37). Obowiązuje:
 
-1. **Wejścia (prompt, `image_references`, `start_image`, `end_image`, `video_references`)**: wyłącznie (a) tekst z szablonów T-IMG/T-VID (`references/higgsfield-pipeline.md`), (b) stille wygenerowane w tym samym pipeline, (c) własne abstrakcyjne rendery (Blender/three.js) — w tym izolowany render canvasu GLSL z osobnej strony testowej `?bg-only=1` (zero UI, zero tekstu, zero danych dem), nagrany lokalnie do `site/media/src/`. ZAKAZ wgrywania: zrzutów ekranu narzędzi (własnych i cudzych), plików Excel/CSV/PDF, danych klientów lub leadów, dokumentów, zdjęć founderów i jakichkolwiek twarzy, zdjęć hal/biur/placów budowy, logotypów, materiałów z okresu pracy dla firmy źródłowej (obowiązuje umowa IP), nagrań ekranu strony z danymi dem (nawet fikcyjnymi: model uczy się layoutu naszych narzędzi).
+1. **Wejścia (prompt, `image_references`, `start_image`, `end_image`, `video_references`)**: wyłącznie (a) tekst z szablonów T-IMG/T-VID (`references/higgsfield-pipeline.md`), (b) stille wygenerowane w tym samym pipeline, (c) własne abstrakcyjne rendery (Blender/three.js) — w tym izolowany render canvasu GLSL z osobnej strony testowej `?bg-only=1` (zero UI, zero tekstu, zero danych dem), nagrany lokalnie do `site/media/src/`. ZAKAZ wgrywania: zrzutów ekranu narzędzi (własnych i cudzych), **nagrań ekranu narzędzi z `scripts/record-demos.mjs` (nagranie hero i klipy hover: to layout naszego produktu, model nie ma go widzieć, nawet na danych fikcyjnych)**, plików Excel/CSV/PDF, danych klientów lub leadów, dokumentów, zdjęć founderów i jakichkolwiek twarzy, zdjęć hal/biur/placów budowy, logotypów, materiałów z okresu pracy dla firmy źródłowej (obowiązuje umowa IP), nagrań ekranu strony z danymi dem.
 2. **Wyjścia**: żadnego tekstu, cyfr, logo, ludzi, rąk, UI w kadrze (negatywy w każdym prompcie; przegląd w `media-asset-review-gate`). Output nie jest używany do trenowania własnych modeli (zakaz ToU).
-3. **Plan**: dowód stylu na trialu (100 kr, $0, `cancel_trial_auto_renewal` + `confirm_trial_cancel` w dniu 3), finały WYŁĄCZNIE na planie płatnym — **PLUS $49/mies. (1 000 kr) wystarcza dla ZAKRESU v1** (1 pętla hero + 3 stille ≈ 200–395 kr; rozpiska w `references/higgsfield-pipeline.md` §2). `research/higgsfield.md` §3.2 rekomenduje ULTRA ($129, 3 000 kr) i ta rekomendacja obowiązuje, gdy wróci PEŁNA lista assetów (przejścia, tła sekcyjne, mikro-animacje ikon: ≈ 1 300–2 200 kr) — wtedy plan zakupu przelicza się od nowa. Free = znak wodny + brak prawa użytku komercyjnego. Konto i faktura: JDG Pawła (D-17). Bez API `cloud.higgsfield.ai`, bez planu rocznego bez decyzji o stałej produkcji treści.
+3. **Plan i dwie rozłączne decyzje finansowe**: **zakres strony (H1–H3, ≈ 56 kr) mieści się w trialu 3-dniowym** (100 kr, **0 USD**, karta wymagana, **auto-odnowienie na PLUS 49 USD**; `cancel_trial_auto_renewal` + `confirm_trial_cancel` w dniu ≤ 3, dwa przypomnienia w kalendarzu ustawione PRZED klikiem). Stille to obrazy, nie wideo, więc na trialu nie ma znaku wodnego blokującego użytek na stronie; **przed użyciem finału potwierdzamy prawa komercyjne planu, z którego powstał** (`strona-v2-plan.md` §7.2 p.4) i zapisujemy plan w `SOURCES.md`. **Zakres social (H4, pętla na LinkedIn poza stroną) wymaga planu płatnego: PLUS 49 USD/mies. (1 000 kr)** i jest osobną decyzją, która nie blokuje publikacji. ULTRA ($129) **nie jest potrzebne**: rekomendacja z `research/higgsfield.md` §3.2 dotyczy PEŁNEJ listy assetów (przejścia, tła sekcyjne, mikro-animacje ikon ≈ 1 300–2 200 kr), której w v1 nie ma. Free = znak wodny i brak prawa użytku komercyjnego. **Konto i karta: administrator danych, faktura na osobę fizyczną, koszt nieodliczalny (D25, D27; nieaktualne „JDG Pawła" z D-17).** Bez API `cloud.higgsfield.ai`, bez planu rocznego. **Agent nie uruchamia trialu ani zakupu**: przygotowuje krok, pokazuje `get_cost` i czeka na świadomą akcję foundera.
 4. **Log**: każda generacja użyta (i każda odrzucona seria) ma wpis w `site/media/SOURCES.md`: data, model (`id` MCP), parametry, prompt (pełny), `image_references` (nazwa naszego pliku), ID generacji, koszt w kredytach, decyzja (użyty/odrzucony + powód), ścieżka pliku wynikowego z wersją. Bez sekretów, bez URL-i CDN po 7 dniach (wygasają).
 5. **Sprzątanie**: po zakończeniu sprintu assetów wszystkie generacje są usuwane z konta Higgsfield (kończy licencję treningową ToU), pliki źródłowe zostają lokalnie w `site/media/src/` (poza `public/`, w gicie tylko finały ≤ 1,5 MB; źródła > 5 MB w `.gitignore`).
 6. **Higiena kredytów**: `get_cost: true` przed serią, `sound: off`/`generate_audio: false` zawsze, 480p/720p do selekcji, 1080p tylko finał, `generate_video_batch` + `jobs_wait` dla równoległych podejść, `mode: std` → `pro` tylko dla 2 finałów.
@@ -3553,6 +3574,9 @@ site/media/src/*.mov
 # log istnieje i ma wpis dla każdego pliku w public/media
 [ -f site/media/SOURCES.md ] || echo "BRAK SOURCES.md"
 for f in $(ls site/public/media/*.{webm,mp4} 2>/dev/null); do b=$(basename "$f" | sed -E 's/\.(webm|mp4)$//'); grep -q "$b" site/media/SOURCES.md || echo "BRAK wpisu dla $b"; done
+# zero NAGRAŃ narzędzi wśród wejść: w SOURCES.md żaden wpis start_image/end_image/image_references
+# nie może wskazywać na media/tools/*, public/media/* ani na plik z record-demos (oczekiwane: 0)
+grep -nE '(start_image|end_image|image_references).*(tools/|public/media|record-demos|hero-production)' site/media/SOURCES.md
 # zero sekretów/skryptów Higgsfield w repo (oczekiwane: 0)
 grep -rniE 'higgsfield' site/src site/scripts site/package.json .env* 2>/dev/null
 grep -rnE 'HIGGSFIELD|hf_[a-z0-9]{20,}|Authorization: Key' . --include=*.{ts,tsx,mjs,js,json,md} -l 2>/dev/null | grep -v klarow-guardian
@@ -3568,27 +3592,28 @@ grep -rnE 'HIGGSFIELD|hf_[a-z0-9]{20,}|Authorization: Key' . --include=*.{ts,tsx
 
 **Najwyżej jedno automatycznie odtwarzane wideo i jedno ruchome tło na trasę; nigdy oba naraz**
 
-Impact: **BLOCKER** · Tagi: media, video, autoplay, background, performance · Źródło: synthesis §0 p.7/§2.4.4/§2.6.3 („nigdy dwa ruchome tła na trasie") · showreel M7 · higgsfield §6.1 A · WIG (vercel.md §6.4) · CLAUDE.md #2 · Dodano: 2026-09-12 · Plik: `rules/media-one-autoplay-per-route.md`
+Impact: **BLOCKER** · Tagi: media, video, autoplay, background, performance · Źródło: synthesis §0 p.7/§2.4.4/§2.6.3 („nigdy dwa ruchome tła na trasie") · showreel M7 · higgsfield §6.1 A · WIG (vercel.md §6.4) · CLAUDE.md #2 · decyzje D35/D36/D37 (2026-09-12 wieczór) · docs/plan/warstwa-wrazenia.md · Dodano: 2026-09-12 · Plik: `rules/media-one-autoplay-per-route.md`
 
 #### Zasada
 
 Na każdej trasie (`/`, `/narzedzia`, `/narzedzia/:slug`, `/oferta`, `/faq`, `/rodo`, `404`) w DOM po starcie Reacta jest:
 
-- ≤ 1 element `<video>` z automatycznym odtwarzaniem (`HeroMedia` na `/`; pozostałe trasy: 0),
-- ≤ 1 ruchome tło łącznie (wideo LUB canvas WebGL `GLSLHills` LUB nic); wideo hero i GLSL Hills nigdy razem, także w planie B (decyzja D-08 wybiera JEDNO),
-- hover-klipy (faza 2) nie liczą się jako autoplay, ale max 1 odtwarzany jednocześnie i tylko po `mouseenter`/`focus`,
+- **≤ 1 element `<video>` z automatycznym odtwarzaniem, i to wyłącznie na trasie `/`** (`HeroMedia`), wyłącznie przy `pointer: fine` i wyłącznie po `window.load`; na **18 pozostałych trasach twarde 0** (samo „≤ 1 na trasę" formalnie dopuszczałoby klip na `/oferta`),
+- **treścią tego jedynego autoodtwarzania jest NAGRANIE PRAWDZIWEGO NARZĘDZIA** (`record-demos.mjs`), nie pętla generatywna (D37): pętla zajęłaby slot dowodu i zostawiła hero bez treści. Nagranie hero gra **raz**, bez `loop`, i zatrzymuje się na ostatniej klatce,
+- ≤ 1 ruchome tło łącznie (wideo LUB canvas WebGL `GLSLHills` LUB nic); wideo hero i GLSL Hills nigdy razem. W v1 `three` jest poza `dependencies`, więc realnie: tylko wideo,
+- **klipy hover ściany S3 (v1: dokładnie cztery, pierwszy rząd po featured) nie liczą się jako autoplay**, bo startują wyłącznie z intencji użytkownika (`mouseenter` z progiem 120 ms albo `focus-visible`), ale **maksimum jeden gra jednocześnie** (singleton modułowy), a hero jest w tym czasie **zapauzowane** przez `IntersectionObserver`: nigdy dwa dekodery naraz,
 - pętle sekcyjne, tła podstron („tło-pętla /oferta", „/narzedzia") NIE POWSTAJĄ (synthesis §2.6.1 „Co NIE powstaje generatywnie").
 
 Wideo nie jest treścią: `aria-hidden="true"`, `tabIndex={-1}`, zero NATYWNYCH kontrolek (`controls`), zero dźwięku, a strona bez niego niczego nie traci (test: zdejmij `<video>` → treść i CTA identyczne).
 
-Jedyny element sterujący, jaki przy wideo MUSI istnieć, to przycisk pauzy tła (`hero-media-toggle`) renderowany POZA kontenerem `aria-hidden` — wymóg WCAG 2.2.2 (Pause, Stop, Hide) dla pętli > 5 s i zapis planu (`docs/plan/strona-v2-plan.md:384`); pełna specyfikacja w `media-video-embed-spec` (p. „kontrola pauzy"). Przycisk nie jest kontrolką odtwarzacza (zero `controls`, zero paska postępu, zero dźwięku) i nie liczy się jako „druga kontrolka".
+Jedyny element sterujący, jaki przy wideo MUSI istnieć, to przycisk pauzy (`hero-media-toggle`, etykieta „Zatrzymaj podgląd / Pause preview": wideo hero nie jest tłem, tylko podglądem narzędzia) renderowany POZA kontenerem `aria-hidden` — wymóg WCAG 2.2.2 (Pause, Stop, Hide) dla pętli > 5 s i zapis planu (`docs/plan/strona-v2-plan.md:384`); pełna specyfikacja w `media-video-embed-spec` (p. „kontrola pauzy"). Przycisk nie jest kontrolką odtwarzacza (zero `controls`, zero paska postępu, zero dźwięku) i nie liczy się jako „druga kontrolka".
 
 #### Mechanizm awarii (dlaczego)
 
 - Dwa dekodery wideo lub wideo + WebGL na laptopie zintegrowanym = spadek fps całej strony i grzanie; na iOS drugi kontekst GPU zwiększa ryzyko powrotu buga „samo tło" (2026-07-24: kompozycja `fixed` canvasu nad treścią).
 - WCAG 2.2.2 / WIG: pętla > 5 s obok treści wymaga mechanizmu pauzy — BEZ wyjątku dla dekoracji. `aria-hidden` chowa wideo przed czytnikiem ekranu, ale nie przed osobą z zaburzeniami uwagi/przedsionkowymi, która NIE ma włączonego `prefers-reduced-motion` (norma zna tylko wyjątek „essential", a tło nim nie jest). Pętla hero ma 6–10 s (`media-video-budgets`), więc kryterium stosuje się wprost.
 - Dwa autoplay czynią stronę „reklamą", nie wizytówką wykonawcy narzędzi.
-- Budżet transferu `/` desktop ≤ 2,5 MB z wideo; drugi klip ≤ 1,5 MB wysadza budżet.
+- Budżet transferu `/` desktop ≤ 2,5 MB z nagraniem hero (`media-video-budgets`); drugie autoodtwarzane wideo wysadza budżet i podwaja ryzyko kompozycji na iOS.
 - Higgsfield: każdy dodatkowy klip to 70–280 kr i osobna spójność stylu; synteza zamroziła komplet v1 na 1 klip.
 
 #### Niepoprawnie
@@ -3618,7 +3643,7 @@ const bg = useAnimatedBg() && MEDIA_ENABLED;   // pointer: fine, po idle po load
 
 ```bash
 # kod: <video> wyłącznie w HeroMedia (faza 1) i ewentualnie CaseFrame (hover-klipy, faza 2)
-grep -rlE '<video' site/src | grep -vE 'components/HeroMedia\.tsx|components/CaseFrame\.tsx'     # = 0
+grep -rlE '<video' site/src | grep -vE 'components/HeroMedia\.tsx|components/ToolWall\.tsx'     # = 0 (v1: hero + klipy hover ściany)
 grep -rnE 'autoPlay' site/src | grep -v 'HeroMedia.tsx'                                          # = 0 (HeroMedia i tak używa play() po gate, nie autoPlay)
 # dwa ruchome tła: GLSLHills i HeroMedia z wideo nie mogą być jednocześnie aktywne
 grep -nE 'GLSLHills' site/src/App.tsx && grep -nE 'videoAllowed=\{false\}|MEDIA_ENABLED' site/src/App.tsx   # jeśli GLSL jest, HeroMedia bez wideo
@@ -3634,7 +3659,7 @@ Docelowo `scripts/verify-site.mjs` krok `media-one-autoplay-per-route` (WebKit z
 
 #### Wyjątki
 
-- Hover-klipy S3 (faza 2): ≤ 4 elementy `<video preload="none">` w DOM, żaden nie odtwarza się bez `mouseenter`/`focus`; test liczy tylko `!paused`.
+- Klipy hover S3 (v1, D35): ≤ 4 elementy `<video preload="none">` w DOM, żaden nie odtwarza się bez `mouseenter` (próg intencji 120 ms) ani `focus-visible`; test liczy tylko `!paused`. Wymagane dodatkowo: `pointer-events: none` na elemencie (kafel zostaje jednym `<a>`: `seo-links-in-dom`) i `pointer: fine` (na dotyku hover nie istnieje, a tap ma otwierać podstronę).
 
 ### 4.3 media-video-gating
 
@@ -3660,11 +3685,12 @@ function wantsVideo(): boolean {
 
 Cykl życia po przejściu bramek:
 
-1. **Ładowanie po `window.load`**: `useEffect` → jeśli `document.readyState === "complete"` → `setEnabled(wantsVideo())`, inaczej listener `load` (z cleanupem). Do tego czasu w DOM jest tylko poster `<img>` (LCP).
+1. **Ładowanie po `window.load` ORAZ po `requestIdleCallback`** (fallback `setTimeout 200`): `useEffect` → jeśli `document.readyState === "complete"` → `rIC(() => setEnabled(wantsVideo()))`, inaczej listener `load` (z cleanupem), a w nim to samo `rIC`. Do tego czasu w DOM jest tylko poster `<img>` (LCP). Samo „po `load`" nie wystarcza: okno, w którym przeglądarka jeszcze aktualizuje kandydata LCP, sięga poza `load`, a pierwsza klatka wideo malowana na całej szerokości hero potrafi ten tytuł przejąć (R-M2).
+   **Bezpiecznik 4 s:** jeśli od montażu nie przyjdzie `canplay` w 4 s, `setEnabled(false)` i zostaje poster. Bez tego crossfade wchodzi przy zapchanym łączu po kilkunastu sekundach, gdy użytkownik czyta już następną sekcję, i czyta się jako usterka.
 2. **Odtwarzanie sterowane widocznością**: `IntersectionObserver` (`threshold: 0.25`) → `play()` gdy ≥ 25 % w viewporcie, `pause()` poza; `document.addEventListener("visibilitychange")` → `pause()` gdy `document.hidden`, `play()` po powrocie tylko jeśli nadal w viewporcie.
 3. **iOS Low Power Mode i blokady autoplay**: podstawowymi detektorami awarii są `play().catch(() => setEnabled(false))` (NotAllowedError → poster, zero przycisku „Odtwórz") i `onError` → `setEnabled(false)`.
    `onSuspend` jest detektorem POMOCNICZYM i wolno go użyć wyłącznie z dwoma zabezpieczeniami: (a) tylko PO pierwszej próbie odtworzenia (`tried.current === true`), (b) z opóźnieniem ≥ 1000 ms i ponownym sprawdzeniem stanu (`paused && !ended && inView && !document.hidden && !paused-użytkownika`). Powód w „Mechanizmie awarii": `suspend` to normalne zdarzenie (koniec pobierania `preload="metadata"`, pełny bufor), a `play()` jest asynchroniczne — bez tych warunków zdrowe wideo gaśnie losowo. Timer czyścimy w cleanupie (`motion-cleanup-required`).
-4. **Crossfade**: `onCanPlay` → `setReady(true)` → `opacity` 0 → 1 (600 ms). Poster zostaje pod spodem (nie usuwać `<img>`).
+4. **Crossfade**: `onCanPlay` → `setReady(true)` → `opacity` 0 → 1 (600 ms). Poster zostaje pod spodem (nie usuwać `<img>`). Nagranie hero gra **raz, bez `loop`**, i zatrzymuje się na ostatniej klatce: `onEnded` nie wywołuje `play()` i **nie pokazuje przycisku „Odtwórz ponownie"**.
 5. **Zmiana warunków w locie**: listener `matchMedia("(prefers-reduced-motion: reduce)").addEventListener("change")` → `setEnabled(false)` gdy `matches`; cleanup w `useEffect`.
 6. **Cleanup** (`motion-cleanup-required`): `io.disconnect()`, `removeEventListener` ×3, `clearTimeout` timera `onSuspend`, `pause()`; `removeAttribute("src")` na `<source>` nie jest potrzebne, wystarczy odmontowanie elementu.
 7. **Pauza użytkownika (WCAG 2.2.2, wymagana)**: stan `paused` sterowany przyciskiem `hero-media-toggle` (`media-video-embed-spec`, p. „kontrola pauzy"). Odczyt `sessionStorage.getItem("klarow:media:paused") === "1"` w inicjalizatorze stanu (w `try/catch`, PRZED pierwszym `play()`), zapis przy każdym kliknięciu. `paused === true` blokuje `play()` we WSZYSTKICH ścieżkach (IO, `visibilitychange`, `onCanPlay`) i wywołuje `el.pause()`; `paused === false` wznawia tylko wtedy, gdy element jest w viewporcie i karta widoczna. Pauza NIE odmontowuje `<video>` (użytkownik może wrócić) — w odróżnieniu od bramek z `wantsVideo()`, które element usuwają.
@@ -3766,6 +3792,8 @@ const onSuspend = () => {                           // 3) detektor pomocniczy: t
 F=site/src/components/HeroMedia.tsx
 grep -cE 'prefers-reduced-motion: reduce' $F; grep -cE '\(pointer: fine\)' $F; grep -cE 'saveData' $F; grep -cE 'slow-2g\|2g\|3g|effectiveType' $F
 grep -cE 'readyState === "complete"' $F; grep -cE 'IntersectionObserver' $F; grep -cE 'visibilitychange' $F
+grep -cE 'requestIdleCallback' $F    # ≥ 1 (montaż poza oknem aktualizacji LCP)
+grep -cE '4000|FOUR_SEC|CANPLAY_TIMEOUT' $F   # ≥ 1 (bezpiecznik 4 s: brak canplay → poster)
 grep -cE '\.play\(\)\.catch|\.play\(\)\.then\([^)]*\)\.catch' $F; grep -cE 'onSuspend' $F; grep -cE 'MEDIA_ENABLED' $F
 grep -nE 'autoPlay' $F   # = 0
 # p.3: onSuspend z zabezpieczeniami (oczekiwane: po ≥ 1 trafieniu)
@@ -3779,8 +3807,10 @@ grep -cE 'try \{[^}]*sessionStorage' $F   # ≥ 1 (odczyt/zapis w try/catch)
 #   c) desktop + emulacja connection.saveData=true (CDP Network.emulateNetworkConditions / override navigator.connection): video === null
 #   d) desktop, warunki normalne: po load ≤ 2 s video.paused === false; przewinięcie poza hero → paused === true; document.hidden (page.evaluate visibility) → paused
 #   e) desktop, play() mock → reject(NotAllowedError): video znika, poster zostaje, brak przycisku „Odtwórz"
-#   f) desktop: klik „Zatrzymaj tło" → video.paused === true, aria-pressed="true", sessionStorage klarow:media:paused === "1";
-#      nawigacja na /oferta i powrót na / → wideo NIE startuje; klik „Odtwórz tło" → paused === false
+#   f) desktop: klik „Zatrzymaj podgląd" → video.paused === true, aria-pressed="true", sessionStorage klarow:media:paused === "1";
+#      nawigacja na /oferta i powrót na / → wideo NIE startuje; klik „Odtwórz podgląd" → paused === false
+#   h) desktop: montaż wideo dopiero PO window.load i requestIdleCallback; brak canplay w 4 s → poster i zero <video> w DOM
+#   i) desktop: element LCP (PerformanceObserver) = img.hero-shot, nie <video> (perf-lcp-poster-preload)
 #   g) desktop: sztuczne `dispatchEvent(new Event("suspend"))` na grającym wideo → po 1,5 s video nadal gra (brak fałszywego wygaszenia)
 # realny iPhone Karola w Low Power Mode: hero = poster, brak białego przycisku play.
 ```
@@ -3789,8 +3819,8 @@ Docelowo `scripts/verify-site.mjs` krok `video-gating` (a, b, d) w fazie 3.
 
 #### Wyjątki
 
-- Hover-klipy (faza 2): bramki identyczne (`wantsVideo()`), plus start dopiero po `mouseenter`/`focus`; `preload="none"`.
-- W trybie `MOTION_TIER = "calm"` `wantsVideo()` zwraca `false` z pierwszej linii (patrz `motion-tier-flag`).
+- **Klipy hover ściany S3 (v1, dokładnie 4).** Te same bramki `wantsVideo()` plus: `preload="none"`, start dopiero po `mouseenter` z **progiem intencji 120 ms** (kursor przejeżdżający przez kafel nic nie uruchamia) albo po `focus-visible`; `mouseleave`/`blur` → `pause()` + `currentTime = 0`; **singleton modułowy** (nowy start zatrzymuje poprzedni klip); `pointer-events: none` na elemencie, żeby kafel pozostał jednym `<a>`; twarde `pointer: fine` (na dotyku hover nie istnieje, a tap ma otwierać podstronę). Klipy nie mają własnego przycisku pauzy (ruch nie jest automatyczny w rozumieniu WCAG 2.2.2), ale honorują wspólny stan `klarow:media:paused`.
+- W trybach `MOTION_TIER = "still"` i `"calm"` `wantsVideo()` zwraca `false` z pierwszej linii (patrz `motion-tier-flag`).
 
 ### 4.4 media-video-placement
 
@@ -3807,8 +3837,9 @@ Szkielet strony jest zamrożony (`site/src/styles/globals.css:13-54`):
 
 Media ruchome mają DOKŁADNIE dwa dozwolone miejsca:
 
-1. **Kontener hero**: `.hero { position: relative; overflow: hidden }` + `.hero-media { position: absolute; inset: 0; overflow: hidden }` z `<img>` posterem i `<video>` (`object-fit: cover`); overlay gradientu jako `::after` w tym samym kontenerze. To wybór v2 (synthesis S1).
-2. **`.bg-layer`** (tylko plan B: `GLSLHills` canvas na desktopie, jak dziś).
+1. **Kontener hero**: `.hero { position: relative; overflow: hidden }` + `.hero-media { position: absolute; inset: 0; overflow: hidden }` z `<img>` posterem (kadr produktu), opcjonalnym `<img>` gruntu i `<video>` (`object-fit: cover`); ewentualny overlay jako `::after` w tym samym kontenerze. Kolejność malowania wynika z **kolejności w DOM**, nie z `z-index`: grunt → poster → wideo → `::after` → `.hero-content` (`position: relative`, bez `z-index`); przycisk pauzy stoi PO `.hero-media`, więc maluje się wyżej bez `z-index`.
+2. **Kafel ściany S3** dla klipów hover: `.tool-tile { position: relative; overflow: hidden }` + `<video>` `position: absolute` z longhandami, `pointer-events: none`. Nigdy `fixed`, nigdy poza kafel.
+3. **`.bg-layer`** (tylko plan B: `GLSLHills` canvas na desktopie; w v1 nieaktywny, bo `three` jest poza `dependencies`).
 
 Zakazane w `.content-layer` i jego potomkach: nowe `position: fixed` (poza `Navbar` i `<dialog>` natywnym), `z-index` na wrapperach sekcji, `transform`/`filter`/`backdrop-filter`/`perspective`/`will-change` na przodkach elementów `fixed`/`sticky`, `mix-blend-mode` na elemencie zawierającym treść, nieprzezroczyste tło na wrapperze roota (`#121212` na `.content-layer` zasłoniło tło w commicie 640a6f9: „Fix: tło znów widoczne").
 
@@ -3857,8 +3888,10 @@ grep -nE '^\.bg-layer' -A 25 site/src/styles/globals.css | grep -qE 'z-index:\s*
 # nowe fixed/z-index w komponentach (oczekiwane: tylko Navbar, dialog)
 grep -rnE 'position:\s*fixed|className="[^"]*\bfixed\b' site/src --include=*.tsx --include=*.css | grep -vE 'Navbar|BookingDialog|BookingModal|bg-layer|globals\.css'
 grep -rnE 'z-index|\bz-\[?[0-9]' site/src --include=*.tsx --include=*.css | grep -vE 'Navbar|BookingDialog|BookingModal|bg-layer|company-ui\.css|thead|sticky'
-# wideo tylko w .hero-media
+# wideo tylko w .hero-media (hero) i .tool-tile (klipy hover)
 grep -rnE '<video' -B 3 site/src/components/HeroMedia.tsx | grep -q 'hero-media' || echo "video poza .hero-media"
+grep -rnE '<video' -B 3 site/src/components/ToolWall.tsx | grep -q 'tool-tile' || echo "klip poza .tool-tile"
+grep -rlE '<video' site/src | grep -vE 'HeroMedia\.tsx|ToolWall\.tsx'   # = 0
 # transform/filter na przodkach fixed (ocena: DevTools → Navbar → Computed → sprawdzić przodków)
 # realny iPhone Karola po każdej zmianie w hero/globals: pełna treść widoczna; ?debug=1 zrzut w razie wątpliwości.
 ```
@@ -3896,6 +3929,20 @@ Impact: **HIGH** · Tagi: media, review, brand, quality · Źródło: higgsfield
 | 12 | Wejścia zgodne z `media-higgsfield-inputs-policy`? | lista `image_references` we wpisie SOURCES.md |
 
 Wynik: `PASS` (12/12) albo `FAIL` z numerami pozycji i decyzją (dogrywka / postprodukcja / odrzucenie). Asset `FAIL` nie wchodzi do `public/`. Przegląd powtarza się przy każdej nowej wersji (`-v2`).
+
+**Druga ścieżka bramki: NAGRANIA NARZĘDZI** (`record-demos.mjs`, v1: nagranie hero i cztery klipy hover). Materiał nie jest generatywny, więc pozycje 1, 8 i 11 nie mają zastosowania, ale dochodzą własne, twarde:
+
+| # | Pytanie | Jak sprawdzić |
+|---|---|---|
+| N1 | Czy cyfry KPI, etykiety osi i hairline 1 px są czytelne **po enkodowaniu**? | stop-klatka z gotowego `.webm` w 100 % skali, oglądana na OLED i na 1440p: zero artefaktów wokół cyfr, hairline nie faluje. FAIL = ciaśniejszy kadr albo wyższy budżet, **nigdy niższy `crf` kosztem limitu** |
+| N2 | Czy w kadrze nie ma realnych danych, nazwy produktu, domeny ani marki firmy źródłowej? | `SRC_BRAND_RE` na DOM przed nagraniem (jak przy zrzutach) plus oględziny stop-klatek z `--contact-sheet`; dane wyłącznie demo |
+| N3 | Czy ruch czyta się jako **praca narzędzia**, a nie jako reklama? | dwie osoby oglądają bez kontekstu i mówią, co widzą; oczekiwana odpowiedź zawiera „liczy", „przelicza", „zmienia się" |
+| N4 | Czy dwa klipy nie są bliźniacze? | arkusz stop-klatek obok siebie; bliźniacze = zmiana sceny, nigdy filtr graficzny (ta sama zasada co przy 13 zrzutach, R-T1) |
+| N5 | Czy klatka 0 zgadza się z posterem (kadr produktu albo kafel)? | PSNR ≥ 45 dB po przeskalowaniu obu do wspólnego rozmiaru (`media-poster-first-frame`) |
+| N6 | Czy manifest i determinizm się zgadzają? | `record-demos.mjs --verify` zielone (`media-recorded-demo-determinism`) |
+| N7 | Budżety spełnione? | `media-video-budgets`: hero ≤ 1,2 / 1,4 MB, klip ≤ 320 KB, 24 fps CFR, `-an` |
+
+Werdykt zapisujemy tak samo (`WYNIK: PASS 7/7` dla nagrania, `PASS 12/12` dla materiału generatywnego), bo bramka `verify-site.mjs` czyta linię `WYNIK:` z `SOURCES.md`.
 
 #### Mechanizm awarii (dlaczego)
 
@@ -3946,6 +3993,7 @@ Docelowo `scripts/verify-site.mjs` krok `media-asset-review-gate` (obecność `P
 #### Wyjątki
 
 - Zrzuty dem z `shoot-tools.mjs` (nie AI) przechodzą skróconą bramkę: pozycje 4 (paleta kitu z automatu), 5, 10 oraz „brak nazwy firmy źródłowej/produktu w UI" (grep w DOM przed zrzutem).
+- Nagrania narzędzi z `record-demos.mjs` przechodzą **ścieżkę N1–N7** powyżej zamiast pozycji 1, 8 i 11 (nie są materiałem generatywnym, nie mają spawu pętli w przypadku hero i nie porównują się do master stilla).
 - Portrety founderów: pozycje 4 (duotone stal), 7, 10 i zgoda obu founderów na publikację (D-05).
 
 ### 4.6 media-headers-versioning
@@ -3958,7 +4006,7 @@ Impact: **HIGH** · Tagi: media, cache, cloudflare, headers, versioning · Źró
 
 Pliki w `site/public/` nie dostają hasha Vite (kopiowane 1:1 do `dist/`), więc:
 
-1. **Nazwa z wersją**: `public/media/<name>-v<N>[.warstwa].<ext>` dla mediów i `<name>-v<N>-<szerokość>.<ext>` dla zrzutów (np. `hero-v1.webm`, `hero-v1.poster.webp`, `tools/raport-zarzadczy-v2-1280.webp`, `thumbs/raport-zarzadczy-v2-640.webp`). Jeden wzorzec obejmujący oba kształty:
+1. **Nazwa z wersją**: `public/media/<name>-v<N>[.warstwa].<ext>` dla mediów i `<name>-v<N>-<szerokość>.<ext>` dla zrzutów. Rodziny plików w v1: **`hero-production-v<N>.{webm,mp4,av1.mp4}`** (nagranie hero), **`hero-production-v<N>.webp`** (kadr produktu = poster = LCP; wariant `-800`), **`hero-ground-v<N>.webp`** (grunt stalowy, wariant `-800`), **`tools/<slug>-v<N>.webm`** (klip hover), `tools/<slug>-v<N>-1280.webp`, `thumbs/<slug>-v<N>-640.webp`. Jeden wzorzec obejmujący oba kształty:
 
    ```
    ^[a-z0-9-]+-v[0-9]+(-[0-9]{2,4})?(\.[a-z0-9]+)*\.(webm|mp4|webp|avif|png|svg)$
@@ -3974,7 +4022,7 @@ Pliki w `site/public/` nie dostają hasha Vite (kopiowane 1:1 do `dist/`), więc
      Cache-Control: public, max-age=31536000, immutable
    ```
    obok istniejących `/*` `no-cache` (HTML), `/assets/*` i `/fonts/*` immutable.
-4. Wszystkie odwołania w kodzie idą przez stałe w jednym module (`src/data/media.ts`: `HERO_POSTER`, `HERO_SOURCES`, `toolMedia(slug)`), nie przez literały rozsiane po komponentach; `tools.ts` `media.thumb/wide` wskazują na wersjonowane nazwy.
+4. Wszystkie odwołania w kodzie idą przez stałe w jednym module (`src/data/media.ts`: `HERO_POSTER`, `HERO_SOURCES`, `HERO_GROUND`, `toolMedia(slug)`, `clipFor(slug)`), nie przez literały rozsiane po komponentach; `tools.ts` `media.thumb/wide` wskazują na wersjonowane nazwy. Manifesty: `site/media/SHOTS.json` (zrzuty) i `site/media/CLIPS.json` (nagrania, `media-recorded-demo-determinism`), oba bez dat.
 5. Preload postera w `index.html` i w shellach prerenderu używa tej samej stałej (skrypt `prerender.mjs` czyta ją z `data/media.ts`, nie z literału).
 
 #### Mechanizm awarii (dlaczego)
@@ -3999,10 +4047,12 @@ public/_headers                         # brak reguły /media/*
 #### Poprawnie
 
 ```
-public/media/hero-v1.webm
-public/media/hero-v1.mp4
-public/media/hero-v1.poster.webp
-public/media/hero-v1.lqip.webp
+public/media/hero-production-v1.webm
+public/media/hero-production-v1.mp4
+public/media/hero-production-v1.webp          # kadr produktu = poster = LCP (klatka 0 nagrania)
+public/media/hero-production-v1-800.webp
+public/media/hero-ground-v1.webp              # grunt stalowy (Higgsfield, still)
+public/media/tools/kontroling-kosztow-v1.webm # klip hover
 public/media/tools/raport-zarzadczy-v1-1280.webp
 public/thumbs/raport-zarzadczy-v1-640.webp
 ```
@@ -4010,12 +4060,14 @@ public/thumbs/raport-zarzadczy-v1-640.webp
 ```ts
 // src/data/media.ts (jedyne źródło ścieżek mediów)
 export const HERO_VERSION = 1;
-export const HERO_POSTER = `/media/hero-v${HERO_VERSION}.poster.webp`;
+export const HERO_POSTER = `/media/hero-production-v${HERO_VERSION}.webp`;   // kadr produktu = klatka 0 = LCP
+export const HERO_GROUND = `/media/hero-ground-v${HERO_VERSION}.webp`;       // still Higgsfield, lazy
 export const HERO_SOURCES = [
-  { src: `/media/hero-v${HERO_VERSION}.webm`, type: 'video/webm; codecs="vp9"' },
-  { src: `/media/hero-v${HERO_VERSION}.mp4`,  type: 'video/mp4; codecs="avc1.640028"' },
+  { src: `/media/hero-production-v${HERO_VERSION}.webm`, type: 'video/webm; codecs="vp9"' },
+  { src: `/media/hero-production-v${HERO_VERSION}.mp4`,  type: 'video/mp4; codecs="avc1.640028"' },
 ] as const;
 export const toolMedia = (slug: string, v = 1) => ({ wide: `/media/tools/${slug}-v${v}-1280.webp`, thumb: `/thumbs/${slug}-v${v}-640.webp` });
+export const clipFor = (slug: string, v = 1) => `/media/tools/${slug}-v${v}.webm`;   // klipy hover: tylko 4 slugi
 ```
 
 ```
@@ -4042,9 +4094,9 @@ grep -A1 -E '^/media/\*' site/public/_headers | grep -q immutable || echo "BRAK 
 grep -A1 -E '^/thumbs/\*' site/public/_headers | grep -q immutable || echo "BRAK /thumbs/* immutable"
 # literały ścieżek poza data/media.ts (oczekiwane: 0)
 grep -rnE '"/media/|"/thumbs/|/media/hero' site/src --include=*.tsx --include=*.ts | grep -v 'data/media.ts'
-grep -nE '/media/' site/index.html | grep -vE 'hero-v[0-9]+\.poster\.webp'   # preload musi wskazywać wersjonowany poster
+grep -nE '/media/' site/index.html | grep -vE 'hero-production-v[0-9]+\.webp'   # preload musi wskazywać wersjonowany kadr produktu
 # po deployu (curl produkcji): nagłówek immutable na /media/hero-v1.poster.webp
-curl -sI https://klarow.com/media/hero-v1.poster.webp | grep -i cache-control   # public, max-age=31536000, immutable
+curl -sI https://klarow.com/media/hero-production-v1.webp | grep -i cache-control   # public, max-age=31536000, immutable
 ```
 
 Docelowo `scripts/verify-site.mjs` krok `media-headers-versioning`.
@@ -4054,11 +4106,113 @@ Docelowo `scripts/verify-site.mjs` krok `media-headers-versioning`.
 - `favicon.ico`, `apple-touch-icon.png`, `klarow-logo-512.png`, `robots.txt`, `google<token>.html` w korzeniu `public/` nie podlegają wersjonowaniu (stałe nazwy wymagane przez przeglądarki/GSC).
 - `public/screens/` (istniejące zrzuty z sesji lipcowych) do migracji do `media/tools/*-v1-1280.webp` w fazie 1; do tego czasu nieużywane.
 
-### 4.7 media-video-budgets
+### 4.7 media-recorded-demo-determinism
 
-**Budżety wideo: ≤ 1,5 MB na format, poster ≤ 60 KB WebP, pętla 6–10 s, 24 fps, bez audio, LQIP ≤ 2 KB**
+**Nagrania narzędzi wchodzą do repo wyłącznie jako re-enkod z wyodrębnionych klatek 24 fps CFR; manifest CLIPS.json trzyma hashe klatek, nie kontenera; rozjazd z UI = czerwony build**
 
-Impact: **HIGH** · Tagi: media, video, budget, performance, lcp · Źródło: higgsfield §4.4 (pipeline ffmpeg, bramka rozmiaru) · synthesis §2.4.9/§2.6.1 · showreel §5.9 · feasibility-perf §9 p.5 · Dodano: 2026-09-12 · Plik: `rules/media-video-budgets.md`
+Impact: **HIGH** · Tagi: media, video, determinism, playwright, ffmpeg · Źródło: docs/plan/strona-v2-plan.md §7.5a i §7.4 M9 (2026-09-12 wieczór, D35/D37) · docs/plan/warstwa-wrazenia.md §9 · perf-images-policy p.5 (determinizm zrzutów) · CLAUDE.md zasada #6 (determinizm jako obietnica produktowa) · Dodano: 2026-09-12 · Plik: `rules/media-recorded-demo-determinism.md`
+
+#### Zasada
+
+Nagrania z `site/scripts/record-demos.mjs` (v1: `hero-production-v<N>.*` plus cztery klipy hover `tools/<slug>-v<N>.webm`) powstają **dwuetapowo** i nigdy nie trafiają do `public/` prosto z Playwrighta:
+
+1. **Nagraj** w kontekście deterministycznym identycznym ze `shoot-tools.mjs` (zamrożony `Date` na `2026-07-22T09:00:00.000Z`, `Math.random` = `mulberry32(0xC10A12)`, `localStorage.clear()`, `colorScheme: "dark"`, `locale: "pl-PL"`, `timezoneId: "Europe/Warsaw"`, `hasTouch: false`, `addStyleTag` gaszący karetkę, scrollbar i pierścień fokusu), z jedną różnicą: **`reducedMotion: "no-preference"`**, bo treścią nagrania są własne reveale dashboardu.
+2. **Wyodrębnij klatki** (`ffmpeg -vf fps=24` → PNG), policz `sha256` każdej klatki, zapisz **digest listy klatek** do manifestu.
+3. **Re-enkoduj z klatek** na stałych 24 fps CFR (VP9 plus H.264 dla hero). Do repo wchodzi wyłącznie ten plik.
+
+**Manifest `site/media/CLIPS.json`** (commitowany, stabilny JSON: klucze posortowane, wcięcie 2, **bez dat**, tak jak `SHOTS.json`): po jednym wpisie na nagranie z polami `file`, `slug`, `scene`, `w`, `h`, `fps`, `durationMs`, `bytes`, `crf`, `framesSha256` (digest listy hashy klatek), `posterPsnrDb`, `engine`.
+
+**Bramka `check:clips`** w `npm run check` (lokalnie, nie na CI: CI nie ma przeglądarki):
+- `--verify` powtarza nagranie i potok klatkowy i porównuje `framesSha256`: **różnica = wyjście 1 z nazwą sluga**,
+- zawsze, także bez przeglądarki: `bytes` w budżecie (`media-video-budgets`), `durationMs` w tolerancji ±200 ms, `fps` = 24, 0 strumieni audio, **PSNR klatki 0 wobec zrzutu tego samego narzędzia ≥ 45 dB** (po przeskalowaniu obu do wspólnego rozmiaru: nagranie powstaje w skali 1×, zrzut w 2×).
+
+**Scenariusze wyłącznie na rolach i widocznym tekście** (`getByRole`, `getByText`): `components/dashboards/**` i `DemoReport.tsx` są w v1 zamrożone (`strona-v2-plan.md` §12.1), więc **nie wolno dokładać w nich `data-shot`**. Dozwolone są tylko `data-dashboard` i `data-ready` z `DashboardMount`. Scenariusz cytuje etykietę i numer linii źródła w komentarzu; **brak trafienia = twardy błąd z nazwą sluga, nigdy puste nagranie**.
+
+**ffmpeg**: wymagana pełna instalacja (`winget install Gyan.FFmpeg`). Build `ffmpeg-1011` dostarczany z Playwrightem ma wyłącznie `libvpx_vp8` (bez VP9, x264, WebP i AV1) i nie nadaje się do produkcji plików. **Build strony nigdy nie woła ffmpeg**: do gita wchodzą gotowe pliki, więc brak ffmpeg u kogokolwiek nie psuje `npm run build` ani CI. Wersja ffmpeg i pełne komendy idą do wpisu w `site/media/SOURCES.md`.
+
+#### Mechanizm awarii (dlaczego)
+
+- **Kontener z `recordVideo` nie jest bajtowo powtarzalny**: timing klatek VP8 zależy od obciążenia maszyny, więc bramka licząca `sha256` pliku byłaby czerwona losowo i po tygodniu ktoś by ją wyłączył. Klatki PNG są powtarzalne, bo pochodzą z deterministycznego renderu; dopiero one są przedmiotem porównania.
+- Bez re-enkodu z klatek plik ma zmienną klatkę (VFR), co psuje zapętlenie klipów hover (skok na spawie) i utrudnia trafienie w budżet.
+- **Nagranie rozjeżdża się z UI dokładnie tak samo jak zrzut** (R18): po zmianie dashboardu strona zaczyna pokazywać ruch, którego już nie ma w produkcie. Różnica jest taka, że w nagraniu widać to później niż w zrzucie, bo nikt nie ogląda ośmiu sekund przy każdym buildzie.
+- Determinizm dem jest w tym projekcie **obietnicą produktową** („kalkulator, nie wróżka", CLAUDE.md zasada #6): materiał marketingowy, który przy dwóch przebiegach pokazuje inne liczby, podważa dokładnie to zdanie, które sprzedajemy.
+- `reducedMotion: "reduce"` w kontekście nagrania daje klip bez ruchu interfejsu, czyli nagranie, w którym „nic się nie dzieje" mimo poprawnych danych.
+
+#### Niepoprawnie
+
+```js
+// plik prosto z Playwrighta do public/ (VP8, VFR, rozmiar zależny od maszyny)
+const raw = await page.video().path();
+fs.copyFileSync(raw, "public/media/tools/kontroling-kosztow-v1.webm");
+```
+
+```js
+// bramka na hashu kontenera: czerwona losowo
+if (sha256(fs.readFileSync(out)) !== manifest.sha256) throw new Error("rozjazd");
+```
+
+```js
+// selektor po klasie CSS zamiast po roli i tekście: milczący FAIL po zmianie kitu
+await page.locator(".etc-input").fill("180000");
+```
+
+#### Poprawnie
+
+```js
+// 1) nagraj  2) klatki + hash  3) re-enkod z klatek (24 fps CFR)
+await scene.steps(page);
+await context.close();                                  // dopiero teraz plik jest kompletny
+const raw = await page.video().path();
+
+run(`ffmpeg -y -i "${raw}" -vf fps=24 "${FRAMES}/f_%04d.png"`);
+const framesSha256 = sha256(fs.readdirSync(FRAMES).sort().map((f) => sha256(fs.readFileSync(path.join(FRAMES, f)))).join("\n"));
+
+run(`ffmpeg -y -framerate 24 -i "${FRAMES}/f_%04d.png" -r 24 -an -c:v libvpx-vp9 -b:v 0 -crf ${crf} ` +
+    `-row-mt 1 -deadline good -cpu-used 2 -g 192 -pix_fmt yuv420p "${out}"`);
+
+// scena: wyłącznie role i widoczny tekst (CostControl.tsx: „Zatwierdź tydzień")
+await p.getByRole("spinbutton").first().fill("180000");
+await p.getByRole("button", { name: /Zatwierdź tydzień/i }).hover();
+```
+
+```json
+// site/media/CLIPS.json (fragment; bez dat, klucze posortowane)
+{ "tools/kontroling-kosztow-v1.webm": { "slug": "kontroling-kosztow", "scene": "etc-eac-marza",
+  "w": 960, "h": 600, "fps": 24, "durationMs": 6500, "bytes": 298112, "crf": 36,
+  "framesSha256": "…", "posterPsnrDb": 47.1, "engine": "webkit-2311" } }
+```
+
+#### Test
+
+```bash
+# manifest istnieje, nie ma w nim dat i pokrywa każdy plik wideo z public/media
+[ -f site/media/CLIPS.json ] || echo "BRAK CLIPS.json"
+grep -nE '"(date|generatedAt|createdAt)"' site/media/CLIPS.json   # = 0 (data zmieniałaby plik przy każdym przebiegu)
+for f in site/public/media/tools/*.webm site/public/media/hero-production-v*.webm; do
+  [ -f "$f" ] || continue; b=$(basename "$f"); grep -q "$b" site/media/CLIPS.json || echo "BRAK wpisu dla $b"; done
+# parametry pliku: 24 fps CFR, zero audio
+ffprobe -v error -show_entries stream=codec_type,r_frame_rate,nb_frames -of default=nw=1 site/public/media/hero-production-v1.webm
+ffprobe -v error -select_streams a -show_entries stream=codec_type -of csv=p=0 site/public/media/hero-production-v1.webm | wc -l   # = 0
+# pełna bramka (lokalnie, wymaga WebKita i ffmpeg): dwa przebiegi = identyczny framesSha256
+cd site && node scripts/record-demos.mjs --verify && echo OK
+# klatka 0 zgadza się ze zrzutem tego samego narzędzia (≥ 45 dB)
+ffmpeg -y -i site/public/media/tools/kontroling-kosztow-v1.webm -frames:v 1 c0.png
+ffmpeg -i c0.png -i site/public/media/tools/kontroling-kosztow-v1-1280.webp -lavfi "scale=960:600,psnr" -f null - 2>&1 | grep -oE 'average:[0-9.]+'
+# scenariusze bez data-shot w plikach zamrożonych (oczekiwane: 0)
+grep -rnE 'data-shot' site/src/components/dashboards site/src/components/DemoReport.tsx
+```
+
+Docelowo `npm run check` krok `check:clips` (lokalny, obok `check:shots`).
+
+#### Wyjątki
+
+- Brak. Jeśli nagranie nie da się odtworzyć dwa razy z tym samym `framesSha256`, wchodzi wariant bez nagrania (statyczny kadr produktu, `strona-v2-plan.md` §7.1 wariant B), a nie „nagranie bez bramki".
+
+### 4.8 media-video-budgets
+
+**Budżety wideo: nagranie hero ≤ 1,2 MB WebM / ≤ 1,4 MB H.264, klip hover ≤ 320 KB, poster = kadr produktu ≤ 110 KB, 6–10 s, 24 fps CFR, bez audio**
+
+Impact: **HIGH** · Tagi: media, video, budget, performance, lcp · Źródło: higgsfield §4.4 (pipeline ffmpeg, bramka rozmiaru) · synthesis §2.4.9/§2.6.1 · showreel §5.9 · feasibility-perf §9 p.5 · docs/plan/strona-v2-plan.md §6.7 i §7 (2026-09-12 wieczór, D37) · docs/plan/warstwa-wrazenia.md §5 · Dodano: 2026-09-12 · Plik: `rules/media-video-budgets.md`
 
 #### Zasada
 
@@ -4066,23 +4220,27 @@ Każdy plik w `site/public/media/` spełnia:
 
 | Plik | Limit | Parametry |
 |---|---|---|
-| `hero-v<N>.webm` (VP9) | ≤ 1 572 864 B (1,5 MB) | 1920×820, 24 fps CFR, `-an`, `yuv420p`, GOP 240, `crf` dobrany do limitu |
-| `hero-v<N>.mp4` (H.264) | ≤ 1 572 864 B | `profile high`, `level 4.1`, `+faststart`, `-an`, `yuv420p` |
-| `hero-v<N>.av1.mp4` (opcjonalny) | ≤ 1 572 864 B | `libsvtav1`, `+faststart`, `-an` |
-| `hero-v<N>.poster.webp` | ≤ 61 440 B (60 KB) | 1920×820, q ≈ 80, PIERWSZA klatka pętli |
-| `hero-v<N>.lqip.webp` (opcjonalny) | ≤ 2 048 B | 48 px szerokości |
-| hover-klipy `tools/<slug>-v<N>.webm` (faza 2) | ≤ 614 400 B (600 KB) | 1280×800, 6 s, 24 fps, `-an`, `preload="none"` |
-| zrzuty dem `tools/<slug>-1280.webp` | ≤ 122 880 B (120 KB) | 1280×800, q 80 (patrz `perf-images-policy`) |
-| miniatury `thumbs/<slug>-640.webp` | ≤ 40 960 B (40 KB) | 640×400 |
+| `hero-production-v<N>.webm` (VP9): **nagranie narzędzia, niesie tekst UI** | ≤ 1 258 291 B (1,2 MB) | 1600×1000, 8 s, 24 fps CFR, `-an`, `yuv420p`, GOP 192, **bez `loop`** |
+| `hero-production-v<N>.mp4` (H.264) | ≤ 1 468 006 B (1,4 MB) | `profile high`, `level 4.1`, `+faststart`, `-an`, `yuv420p` |
+| `hero-production-v<N>.av1.mp4` (opcjonalny) | ≤ 943 718 B (0,9 MB) | `libsvtav1`, `+faststart`, `-an` |
+| **poster hero** `hero-production-v<N>.webp` (kadr produktu, **element LCP**) | ≤ 112 640 B (110 KB); wariant 800×500 ≤ 56 320 B | 1600×1000, q ≈ 80, **KLATKA 0 pliku wideo**; osobnego „postera pętli" NIE MA |
+| `hero-ground-v<N>.webp` (grunt, still Higgsfield) | ≤ 71 680 B (70 KB); wariant 800 px ≤ 30 720 B | `loading="lazy"`, nigdy preload (`perf-images-policy`) |
+| `hero-production-v<N>.lqip.webp` (opcjonalny) | ≤ 2 048 B | 48 px szerokości |
+| klipy hover `tools/<slug>-v<N>.webm` (**v1, dokładnie 4**) | ≤ 327 680 B (320 KB) | 960×600, 6–7 s, 24 fps, `-an`, `loop`, `preload="none"`; suma na trasie ≤ 1 331 200 B |
+| zrzuty dem `tools/<slug>-v<N>-1280.webp` | ≤ 122 880 B (120 KB) | 1280×800, q 80 (patrz `perf-images-policy`) |
+| miniatury `thumbs/<slug>-v<N>-640.webp` | ≤ 40 960 B (40 KB) | 640×400 |
 
-Długość pętli hero: 6–10 s (Kling 3.0 `duration 8–10`; po odcięciu zdublowanej klatki). Zawsze stałe 24 fps (`-r 24`), zawsze bez ścieżki audio, zawsze dithering `noise=alls=3:allf=t+u` na ciemnych gradientach (anty-banding na OLED). Transfer `/` desktop z wideo ≤ 2,5 MB; mobile (bez wideo) ≤ 350 KB.
+Długość: nagranie hero 8 s (dopuszczalne 6–10 s), klip hover 6–7 s. Zawsze stałe 24 fps (`-r 24`), zawsze bez ścieżki audio, zawsze dithering `noise=alls=3:allf=t+u` na ciemnych gradientach (anty-banding na OLED). **Transfer `/` desktop: ≤ 716 800 B (700 KB) do zdarzenia `load`** (bramka przeciw przemyceniu wideo przed LCP) **i ≤ 2 621 440 B (2,5 MB) na pełną wizytę bez klipów hover**; mobile ≤ 358 400 B (350 KB), w tym **0 B** mediów wideo.
+
+**Gdyby wrócił wariant D37(b)** (pętla generatywna jako tekstura pod scrimem `.88` zamiast nagrania): obowiązuje inny zestaw, bo pod scrimem nie widać szczegółu: WebM ≤ 737 280 B, MP4 ≤ 1 003 520 B, AV1 ≤ 573 440 B, kadr 1440×616, plus osobny poster pętli ≤ 46 080 B, który **nigdy nie jest preloadowany**. Zestawów nie wolno mieszać: obowiązuje ten zgodny z wybranym wariantem D37.
 
 Bramka: `scripts/verify-site.mjs` krok `media-video-budgets` liczy rozmiary w `dist/media` i `dist/thumbs` i porównuje z tabelą; przekroczenie = fail buildu.
 
 #### Mechanizm awarii (dlaczego)
 
-- 1,5 MB na 4G (≈ 5–8 Mb/s realnie) to 2–3 s pobierania po `window.load`; większy plik opóźnia crossfade poza „pierwsze wrażenie" i zjada budżet transferu 2,5 MB.
-- Poster jest LCP: 60 KB WebP ładuje się w < 200 ms na 4G; JPG 300 KB przesuwa LCP mobile poza 2,5 s (Lighthouse mobile ≥ 90 nie przejdzie).
+- 1,2 MB na 4G (≈ 5–8 Mb/s realnie) to 1,5–2 s pobierania po `window.load`; większy plik opóźnia crossfade poza „pierwsze wrażenie" i zjada budżet transferu 2,5 MB.
+- Poster jest LCP: 110 KB WebP ładuje się w < 250 ms na 4G; JPG 300 KB przesuwa LCP mobile poza 2,5 s (Lighthouse mobile ≥ 90 nie przejdzie).
+- Budżet nagrania hero jest zaostrzony także **od dołu**: poniżej ok. 1 MB VP9 rozkłada cyfry KPI i hairline 1 px (artefakty wokół tekstu), a to jest treść kadru. Gdy plik nie mieści się w 1,2 MB przy `crf 34`, **skracamy scenę albo zawężamy kadr, nigdy nie rozmywamy obrazu**.
 - Audio w pliku blokuje autoplay na iOS nawet przy `muted` w niektórych wersjach i dodaje ~100–200 KB.
 - 30/60 fps podnoszą rozmiar o 25–100 % bez zysku na „extremely slow motion"; zmienna klatka (VFR z generatorów) psuje pętlę (skok na spawie).
 - Banding: 8-bit VP9/H.264 na stalowych gradientach robi pasy widoczne na OLED (iPhone Karola); `noise=3` + niższy CRF w ciemnych scenach to jedyne tanie remedium (higgsfield §8).
@@ -4098,59 +4256,69 @@ public/media/hero-poster.jpg       318 902 B
 
 ```powershell
 # pipeline (scratchpad, bez `&` w ścieżce; ffmpeg z `winget install Gyan.FFmpeg`)
-ffmpeg -y -i src.mp4 -r 24 -an -vf "noise=alls=3:allf=t+u" -c:v libx264 -crf 14 -pix_fmt yuv420p cfr.mp4
-ffmpeg -y -i cfr.mp4 -vf "trim=end_frame=N-1,setpts=PTS-STARTPTS" -c:v libx264 -crf 14 loop.mp4        # N z ffprobe -count_frames
-ffmpeg -y -i loop.mp4 -vf "scale=1920:-2:flags=lanczos,crop=1920:820" -c:v libx264 -crf 14 hero_master.mp4
-ffmpeg -y -i hero_master.mp4 -c:v libvpx-vp9 -b:v 0 -crf 33 -row-mt 1 -deadline good -cpu-used 2 -g 240 -pix_fmt yuv420p -an hero-v1.webm
-ffmpeg -y -i hero_master.mp4 -c:v libx264 -profile:v high -level 4.1 -preset slow -tune film -crf 24 -g 240 -pix_fmt yuv420p -an -movflags +faststart hero-v1.mp4
-ffmpeg -y -i hero_master.mp4 -frames:v 1 -vf "scale=1920:-2" -c:v libwebp -quality 80 hero-v1.poster.webp
-ffmpeg -y -i hero_master.mp4 -frames:v 1 -vf "scale=48:-2" -c:v libwebp -quality 50 hero-v1.lqip.webp
-Get-ChildItem hero-v1.* | Select-Object Name, Length      # bramka ręczna przed kopiowaniem do site/public/media
+# nagranie narzędzia: klatki PNG z record-demos.mjs -> re-enkod 24 fps CFR (media-recorded-demo-determinism)
+ffmpeg -y -framerate 24 -i frames\f_%04d.png -r 24 -an -vf "scale=1600:-2:flags=lanczos,crop=1600:1000" `
+  -c:v libvpx-vp9 -b:v 0 -crf 34 -row-mt 1 -deadline good -cpu-used 2 -g 192 -pix_fmt yuv420p hero-production-v1.webm
+ffmpeg -y -framerate 24 -i frames\f_%04d.png -r 24 -an -vf "scale=1600:-2:flags=lanczos,crop=1600:1000" `
+  -c:v libx264 -profile:v high -level 4.1 -preset slow -tune film -crf 24 -g 192 -pix_fmt yuv420p -movflags +faststart hero-production-v1.mp4
+ffmpeg -y -i hero-production-v1.webm -frames:v 1 -c:v libwebp -quality 80 hero-production-v1.webp      # poster = klatka 0 = LCP
+ffmpeg -y -i hero-production-v1.webm -frames:v 1 -vf "scale=800:-2" -c:v libwebp -quality 80 hero-production-v1-800.webp
+Get-ChildItem hero-production-v1.* | Select-Object Name, Length   # bramka ręczna przed kopiowaniem do site/public/media
 ```
 
 #### Test
 
 ```bash
 # rozmiary (Git Bash; oczekiwane: brak wierszy „PRZEKROCZENIE")
-cd site/public/media 2>/dev/null && for f in *.webm *.mp4; do [ -f "$f" ] && [ $(stat -c%s "$f") -gt 1572864 ] && echo "PRZEKROCZENIE $f"; done
-for f in *.poster.webp; do [ -f "$f" ] && [ $(stat -c%s "$f") -gt 61440 ] && echo "PRZEKROCZENIE $f"; done
-for f in *.lqip.webp; do [ -f "$f" ] && [ $(stat -c%s "$f") -gt 2048 ] && echo "PRZEKROCZENIE $f"; done
+cd site/public/media 2>/dev/null || exit 0
+for f in hero-production-v*.webm; do [ -f "$f" ] && [ $(stat -c%s "$f") -gt 1258291 ] && echo "PRZEKROCZENIE $f"; done
+for f in hero-production-v*.mp4;  do [ -f "$f" ] && [ $(stat -c%s "$f") -gt 1468006 ] && echo "PRZEKROCZENIE $f"; done
+for f in hero-production-v*.webp; do [ -f "$f" ] && [ $(stat -c%s "$f") -gt 112640 ] && echo "PRZEKROCZENIE $f"; done
+for f in hero-ground-v*.webp;     do [ -f "$f" ] && [ $(stat -c%s "$f") -gt 71680 ]  && echo "PRZEKROCZENIE $f"; done
+for f in tools/*-v*.webm;         do [ -f "$f" ] && [ $(stat -c%s "$f") -gt 327680 ] && echo "PRZEKROCZENIE $f"; done
+for f in *.lqip.webp;             do [ -f "$f" ] && [ $(stat -c%s "$f") -gt 2048 ]   && echo "PRZEKROCZENIE $f"; done
+# suma klipów hover na trasie ≤ 1,3 MB (oczekiwane: SUMA OK)
+S=$(stat -c%s tools/*-v*.webm 2>/dev/null | awk '{n+=$1} END {print n+0}'); [ "$S" -le 1331200 ] && echo "SUMA OK ($S)" || echo "SUMA PRZEKROCZONA ($S)"
 # parametry (ffprobe ze scratchpadu)
-ffprobe -v error -show_entries stream=codec_type,width,height,r_frame_rate,pix_fmt:format=duration -of default=nw=1 hero-v1.mp4
-#   oczekiwane: 1 strumień video (0 audio), 1920×820, 24/1, yuv420p, duration 6–10
-# transfer strony (Lighthouse desktop na dist przez `node node_modules/vite/bin/vite.js preview`): Total byte weight ≤ 2,5 MB z wideo; mobile ≤ 350 KB
+ffprobe -v error -show_entries stream=codec_type,width,height,r_frame_rate,pix_fmt:format=duration -of default=nw=1 hero-production-v1.mp4
+#   oczekiwane: 1 strumień video (0 audio), 1600×1000, 24/1, yuv420p, duration 6–10
+# transfer strony (Lighthouse desktop na dist przez `node node_modules/vite/bin/vite.js preview`):
+#   Total byte weight ≤ 2,5 MB z nagraniem hero; do zdarzenia `load` ≤ 700 KB (bramka runtime sumuje content-length przed `load`);
+#   mobile ≤ 350 KB i ZERO requestów do /media/*.webm|mp4
 ```
 
 Docelowo `scripts/verify-site.mjs` krok `media-video-budgets` (rozmiary) + Lighthouse w fazie 4.
 
 #### Wyjątki
 
-- AV1 jest opcjonalny; brak pliku `.av1.mp4` nie jest błędem. Jeśli jest, obowiązuje ten sam limit.
+- AV1 jest opcjonalny; brak pliku `.av1.mp4` nie jest błędem. Jeśli jest, obowiązuje limit z tabeli.
+- Klipy hover nie wliczają się do budżetu „pełnej wizyty" (startują wyłącznie z intencji użytkownika), ale mają własny limit sumy 1,3 MB na trasę.
 - Portrety founderów (`public/media/founders/*.webp` ≤ 90 KB przy 960×1200) i OG (`≤ 200 KB`) mają osobne limity w `perf-images-policy`.
 
-### 4.8 media-video-embed-spec
+### 4.9 media-video-embed-spec
 
 **Specyfikacja elementu <video>: muted playsInline loop preload=metadata poster, źródła AV1→VP9→H.264, aria-hidden, disablePictureInPicture, MediaBoundary, przycisk pauzy tła (WCAG 2.2.2)**
 
-Impact: **HIGH** · Tagi: media, video, a11y, ios, lcp · Źródło: higgsfield §4.5 (szkic HeroVideo, wymagania 1–9) · synthesis §2.4.4 HeroMedia · showreel §5.4 · WebKit „New video policies for iOS" · WIG · WCAG 2.2.2 (Pause, Stop, Hide) · docs/plan/strona-v2-plan.md:384 (przycisk „Zatrzymaj tło" + sessionStorage) · Dodano: 2026-09-12 · Plik: `rules/media-video-embed-spec.md`
+Impact: **HIGH** · Tagi: media, video, a11y, ios, lcp · Źródło: higgsfield §4.5 (szkic HeroVideo, wymagania 1–9) · synthesis §2.4.4 HeroMedia · showreel §5.4 · WebKit „New video policies for iOS" · WIG · WCAG 2.2.2 (Pause, Stop, Hide) · docs/plan/strona-v2-plan.md §3 S1 (przycisk pauzy + sessionStorage; etykieta „Zatrzymaj podgląd / Pause preview" po D37) · Dodano: 2026-09-12 · Plik: `rules/media-video-embed-spec.md`
 
 #### Zasada
 
-Każdy `<video>` na stronie (dziś: wyłącznie `HeroMedia`; faza 2: hover-klipy `CaseFrame`) ma DOKŁADNIE ten zestaw atrybutów:
+Każdy `<video>` na stronie (v1: `HeroMedia` na `/` i klipy hover w `ToolWall`) ma DOKŁADNIE ten zestaw atrybutów:
 
 ```tsx
 <video
-  muted playsInline loop
-  preload="metadata"                       // hover-klipy: "none"
-  poster={POSTER}                          // ten sam plik co <img> LCP; pierwsza klatka pętli
+  muted playsInline
+  // loop: TAK dla klipów hover (pętla 6–7 s); NIE dla nagrania hero (jedno odtworzenie, stop na ostatniej klatce)
+  preload="metadata"                       // klipy hover: "none"
+  poster={POSTER}                          // ten sam plik co <img> LCP; KLATKA 0 pliku wideo
   disablePictureInPicture disableRemotePlayback
   aria-hidden="true" tabIndex={-1}
-  width={1920} height={820}                // wymiary jawne = CLS 0
+  width={1600} height={1000}               // wymiary jawne = CLS 0 (klipy hover: 960×600)
   onCanPlay / onSuspend / onError          // obsługa w media-video-gating
 >
-  <source src="/media/hero-v1.av1.mp4" type='video/mp4; codecs="av01.0.05M.08"' />   {/* opcjonalny, najmniejszy */}
-  <source src="/media/hero-v1.webm"    type='video/webm; codecs="vp9"' />
-  <source src="/media/hero-v1.mp4"     type='video/mp4; codecs="avc1.640028"' />     {/* fallback Safari/iOS, stare Androidy */}
+  <source src="/media/hero-production-v1.av1.mp4" type='video/mp4; codecs="av01.0.05M.08"' />   {/* opcjonalny, najmniejszy */}
+  <source src="/media/hero-production-v1.webm"    type='video/webm; codecs="vp9"' />
+  <source src="/media/hero-production-v1.mp4"     type='video/mp4; codecs="avc1.640028"' />     {/* fallback Safari/iOS */}
 </video>
 ```
 
@@ -4162,7 +4330,8 @@ Dodatkowo:
 - zawsze obok: `<img src={POSTER} alt="" width height fetchPriority="high" decoding="async">` renderowany PRZED wideo (także w shellu prerenderu; `<video>` nigdy w shellu),
 - nazwy plików z wersją (`hero-v1.*`, `media-headers-versioning`),
 - **kontrola pauzy (WYMAGANA, WCAG 2.2.2 Pause, Stop, Hide)**: obok kontenera — POZA `aria-hidden` — renderowany jest przycisk
-  `<button type="button" className="btn btn-secondary btn-sm hero-media-toggle" aria-pressed={paused}>Zatrzymaj tło / Odtwórz tło</button>`
+  `<button type="button" className="btn btn-secondary btn-sm hero-media-toggle" aria-pressed={paused}>Zatrzymaj podgląd / Pause preview</button>`
+  (etykieta mówi prawdę: w v1 hero nie jest tłem, tylko **podglądem prawdziwego narzędzia**; „Zatrzymaj tło" byłoby nieprawdziwe i łamałoby `brand-honest-labels`)
   (PL/EN przez `pick()`), widoczny stale (nie tylko na hover), z widocznym `:focus-visible`, polem klikalnym ≥ 44×44 px
   (`a11y-touch-targets-44`) i scrimem pod spodem dla kontrastu AA na najjaśniejszej klatce. Przycisk istnieje TYLKO wtedy,
   gdy `<video>` jest zamontowane (poster sam z siebie się nie rusza, więc nie ma czego pauzować). Wybór użytkownika jest
@@ -4192,17 +4361,18 @@ Dodatkowo:
 // src/components/HeroMedia.tsx (render; logika w media-video-gating)
 import { HERO_POSTER, HERO_SOURCES } from "@/data/media";   // media-headers-versioning (zero literalow sciezek)
 const TOGGLE = {
-  pause: { pl: "Zatrzymaj tło", en: "Pause background" },
-  play:  { pl: "Odtwórz tło",   en: "Play background" },
+  pause: { pl: "Zatrzymaj podgląd", en: "Pause preview" },
+  play:  { pl: "Odtwórz podgląd",   en: "Play preview" },
 } as const;
 
 return (
   <>
     <div className="hero-media" aria-hidden="true">
-      <img src={HERO_POSTER} alt="" width={1920} height={820} fetchPriority="high" decoding="async" />
+      <img className="hero-shot" src={HERO_POSTER} alt="Pulpit produkcji: kafle hal i suwak tygodnia, dane przykładowe"
+           width={1600} height={1000} fetchPriority="high" decoding="async" />
       {enabled ? (
-        <video ref={ref} muted playsInline loop preload="metadata" poster={HERO_POSTER}
-               disablePictureInPicture disableRemotePlayback tabIndex={-1} width={1920} height={820}
+        <video ref={ref} muted playsInline preload="metadata" poster={HERO_POSTER}
+               disablePictureInPicture disableRemotePlayback tabIndex={-1} width={1600} height={1000}
                onCanPlay={onCanPlay} onSuspend={onSuspend} onError={() => setEnabled(false)}
                style={{ opacity: ready ? 1 : 0, transition: "opacity var(--duration-media) var(--ease-out)" }}>
           {HERO_SOURCES.map((s) => <source key={s.src} src={s.src} type={s.type} />)}
@@ -4230,7 +4400,7 @@ return (
 
 ```tsx
 // App.tsx
-<MediaBoundary fallback={<img src={POSTER} alt="" width={1920} height={820} />}><HeroMedia /></MediaBoundary>
+<MediaBoundary fallback={<img className="hero-shot" src={HERO_POSTER} alt="…" width={1600} height={1000} />}><HeroMedia /></MediaBoundary>
 ```
 
 #### Test
@@ -4249,7 +4419,8 @@ const els = (src, tag) => { const out = [], re = new RegExp("<" + tag + "\\b", "
     for (; i < src.length; i++) { const c = src[i]; if (c === "{") d++; else if (c === "}") d--; else if (c === ">" && d === 0) break; }
     out.push(src.slice(m.index, i + 1)); }
   return out; };
-const REQ = ["\\bmuted\\b", "\\bplaysInline\\b", "\\bloop\\b", "preload=\"(metadata|none)\"", "poster=", "disablePictureInPicture", "disableRemotePlayback", "tabIndex=\\{-1\\}", "width=", "height="];
+const REQ = ["\\bmuted\\b", "\\bplaysInline\\b", "preload=\"(metadata|none)\"", "poster=", "disablePictureInPicture", "disableRemotePlayback", "tabIndex=\\{-1\\}", "width=", "height="];
+// `loop` sprawdzamy warunkowo: WYMAGANY w ToolWall.tsx (klipy hover), ZAKAZANY w HeroMedia.tsx (jedno odtworzenie)
 const BAD = ["\\bautoPlay\\b", "\\bcontrols\\b(?=[\\s/>=])", "preload=\"auto\"", "\\bsrc="];
 let bad = 0;
 for (const f of walk("site/src").filter((x) => x.endsWith(".tsx"))) {
@@ -4257,11 +4428,15 @@ for (const f of walk("site/src").filter((x) => x.endsWith(".tsx"))) {
   for (const el of els(src, "video")) {
     for (const a of REQ) if (!new RegExp(a).test(el)) { console.log(f + ": BRAK " + a); bad++; }
     for (const a of BAD) if (new RegExp(a).test(el)) { console.log(f + ": ZAKAZANY " + a); bad++; }
+    const hero = /HeroMedia\.tsx$/.test(f.replace(/\\/g, "/"));
+    if (hero && /\bloop\b/.test(el)) { console.log(f + ": ZAKAZANY loop (hero gra raz)"); bad++; }
+    if (!hero && !/\bloop\b/.test(el)) { console.log(f + ": BRAK loop (klip hover jest pętlą)"); bad++; }
   }
 }
 console.log(bad === 0 ? "video-attrs OK" : "video-attrs: " + bad + " naruszen");'
 # zrodla, boundary i kontrola pauzy
 F=site/src/components/HeroMedia.tsx
+grep -cE 'pointer-events:\s*none' site/src/components/ToolWall.tsx site/src/styles/globals.css   # ≥ 1 (klip nie przechwytuje kliknięcia)
 grep -cE '<source[^>]*type=.video/webm; codecs="vp9"' $F       # ≥ 1
 grep -cE '<source[^>]*type=.video/mp4; codecs="avc1' $F         # ≥ 1
 grep -cE 'MediaBoundary' site/src/App.tsx                       # ≥ 1
@@ -4270,7 +4445,7 @@ grep -cE 'aria-pressed' $F                                      # = 1
 grep -cE 'klarow:media:paused' $F                               # = 1 (sessionStorage, plan:384)
 grep -nE 'hero-media-toggle[^>]*aria-hidden|aria-hidden[^>]*hero-media-toggle' $F   # = 0 (przycisk POZA aria-hidden)
 # plik: brak ścieżki audio (wymaga ffprobe ze scratchpadu)
-ffprobe -v error -select_streams a -show_entries stream=codec_type -of csv=p=0 site/public/media/hero-v1.mp4 | wc -l   # = 0
+ffprobe -v error -select_streams a -show_entries stream=codec_type -of csv=p=0 site/public/media/hero-production-v1.mp4 | wc -l   # = 0
 # CSS pas bezpieczeństwa
 grep -nE 'prefers-reduced-motion[^}]*\.hero-media video[^}]*display:\s*none' -z site/src/styles/globals.css | wc -c   # > 0
 ```
@@ -4279,20 +4454,26 @@ Docelowo `node scripts/check-motion.mjs` sekcja `video-attrs`.
 
 #### Wyjątki
 
-- Hover-klipy (faza 2): `preload="none"`, bez `poster` w atrybucie (poster to `<img>` karty), `loop` tak, `muted playsInline` tak; wymiary 1280×800. Nie wymagają własnego przycisku pauzy (ruch startuje wyłącznie po `mouseenter`/`focus`, więc nie jest automatyczny w rozumieniu WCAG 2.2.2), ale honorują globalny stan `klarow:media:paused`.
+- Klipy hover (v1, `ToolWall`): `preload="none"`, bez `poster` w atrybucie (poster to `<img>` kafla), `loop` **wymagany**, `muted playsInline` tak; wymiary 960×600; `pointer-events: none`. Nie wymagają własnego przycisku pauzy (ruch startuje wyłącznie po `mouseenter`/`focus`, więc nie jest automatyczny w rozumieniu WCAG 2.2.2), ale honorują globalny stan `klarow:media:paused`.
+- Nagranie hero (`HeroMedia`): `loop` **zakazany** (jedno odtworzenie, stop na ostatniej klatce). Przycisk pauzy jest mimo to wymagany: ruch trwa 8 s, czyli powyżej progu 5 s z WCAG 2.2.2.
 
-### 4.9 media-poster-first-frame
+### 4.10 media-poster-first-frame
 
-**Poster to pierwsza klatka pętli (identyczna z ostatnią), ten sam plik w <img>, <video poster> i preload**
+**Poster to klatka 0 pliku wideo (przy pętli także identyczna z ostatnią), wyciągana z gotowego wideo, ten sam plik w <img>, <video poster> i preload**
 
 Impact: **MEDIUM** · Tagi: media, video, poster, lcp, loop · Źródło: higgsfield §7 wskazówka (2) · synthesis §2.4.4 (POSTER = pierwsza klatka) · showreel §5.4 · media-asset-review-gate p.8–9 · Dodano: 2026-09-12 · Plik: `rules/media-poster-first-frame.md`
 
 #### Zasada
 
-- Pętla generowana ze `start_image = end_image` ma po odcięciu zdublowanej ostatniej klatki właściwość: klatka 0 ≈ klatka N−1 (PSNR ≥ 45 dB).
-- Poster (`hero-v<N>.poster.webp`) jest wyekstrahowany z KLATKI 0 pliku finalnego (`-frames:v 1` bez `-ss`), nie z master stilla z generatora obrazów (inne kadrowanie/kolor po ffmpeg) ani z „najładniejszej" klatki ze środka.
-- Ten sam plik postera jest użyty w trzech miejscach: `<img>` LCP w `HeroMedia` i w shellu prerenderu, atrybut `poster` na `<video>`, `<link rel="preload" as="image">` w `index.html`. Jedna stała `HERO_POSTER` (`media-headers-versioning`).
-- Crossfade `poster → video` (600 ms) startuje po `canplay`; pierwsza klatka wideo == poster, więc przejście jest niewidoczne; `<img>` zostaje pod wideo (fallback przy pauzie/awarii).
+Dwa przypadki, jedna zasada („poster = klatka 0 gotowego pliku wideo"):
+
+1. **Jedno odtworzenie (v1, hero: nagranie narzędzia).** Poster = klatka 0, plik kończy się na ostatniej klatce i tam zostaje. Klatka N−1 **nie musi** być równa klatce 0; wymóg PSNR dotyczy wyłącznie pary poster/klatka 0.
+2. **Pętla (klipy hover ściany, ewentualna pętla generatywna w wariancie D37(b)).** Dodatkowo klatka 0 ≈ klatka N−1 (PSNR ≥ 45 dB), inaczej spaw widać co obrót.
+
+- Poster hero (`hero-production-v<N>.webp`) jest **wyciągany z gotowego pliku wideo** (`ffmpeg -frames:v 1` bez `-ss`), **nigdy nie jest robiony osobnym screenshotem** i nigdy nie pochodzi z master stilla generatora. Powód jest mechaniczny: dwa różne przebiegi renderowania (screenshot Playwright 2× i nagranie 1× po VP9) dają inny antyaliasing i inny kolor, więc crossfade pokazuje przeskok. Ten sam plik jest **kadrem produktu i elementem LCP** (`perf-lcp-poster-preload`).
+- Ten sam plik postera jest użyty w trzech miejscach: `<img>` LCP w `HeroMedia` i w shellu prerenderu, atrybut `poster` na `<video>`, `<link rel="preload" as="image">` w `index.html`. Jedna stała `HERO_POSTER` (`media-headers-versioning`). **Osobnego „postera pętli" w v1 nie ma**; gdyby wrócił wariant D37(b), poster pętli jest odrębnym plikiem, który **nigdy nie jest preloadowany** i nie stoi w shellu (inaczej staje się kandydatem LCP).
+- Poster klipu hover = zrzut tego samego narzędzia w rozmiarze kafla (`tools/<slug>-v<N>-1280.webp` skalowany do 480×300); klip musi zaczynać się dokładnie od tego stanu (PSNR ≥ 45 dB po przeskalowaniu obu do 960×600: nagranie powstaje w skali 1×, zrzut w 2×).
+- Crossfade `poster → video` (600 ms) startuje po `canplay`; pierwsza klatka wideo == poster, więc przejście jest niewidoczne; `<img>` zostaje pod wideo (fallback przy pauzie, awarii i po zakończeniu nagrania).
 
 #### Mechanizm awarii (dlaczego)
 
@@ -4306,6 +4487,12 @@ Impact: **MEDIUM** · Tagi: media, video, poster, lcp, loop · Źródło: higgsf
 ffmpeg -y -ss 00:00:04.200 -i hero_master.mp4 -frames:v 1 hero-v1.poster.webp     # klatka ze środka
 ```
 
+```js
+// shoot-tools.mjs robi osobny screenshot hero, a record-demos.mjs osobne nagranie:
+// dwa przebiegi renderowania = inny antyaliasing = widoczny przeskok przy crossfade
+await page.locator("[data-dashboard]").screenshot({ path: "public/media/hero-production-v1.webp" });
+```
+
 ```tsx
 <img src="/media/master-still-v1.webp" />            // inny plik niż poster wideo
 <video poster="/media/hero-v1.poster.webp">            // a preload w index.html wskazuje hero-v1.png
@@ -4314,31 +4501,33 @@ ffmpeg -y -ss 00:00:04.200 -i hero_master.mp4 -frames:v 1 hero-v1.poster.webp   
 #### Poprawnie
 
 ```powershell
-ffmpeg -y -i hero_master.mp4 -frames:v 1 -vf "scale=1920:-2" -c:v libwebp -quality 80 hero-v1.poster.webp   # klatka 0 finału
+ffmpeg -y -i hero-production-v1.webm -frames:v 1 -c:v libwebp -quality 80 hero-production-v1.webp   # klatka 0 gotowego pliku = kadr produktu = LCP
 ```
 
 ```tsx
 import { HERO_POSTER, HERO_SOURCES } from "@/data/media";
-<img src={HERO_POSTER} alt="" width={1920} height={820} fetchPriority="high" decoding="async" />
-<video … poster={HERO_POSTER}>{HERO_SOURCES.map(…)}</video>
+<img className="hero-shot" src={HERO_POSTER} alt="Pulpit produkcji: kafle hal i suwak tygodnia, dane przykładowe"
+     width={1600} height={1000} fetchPriority="high" decoding="async" />
+<video … poster={HERO_POSTER}>{HERO_SOURCES.map(…)}</video>   {/* bez `loop`: nagranie hero gra raz */}
 ```
 
 ```html
 <!-- index.html (prerender.mjs wstawia w każdy z 19 HTML tę samą stałą) -->
-<link rel="preload" as="image" href="/media/hero-v1.poster.webp" fetchpriority="high">
+<link rel="preload" as="image" href="/media/hero-production-v1.webp" fetchpriority="high">
 ```
 
 #### Test
 
 ```bash
 # klatka 0 vs poster (scratchpad)
-ffmpeg -y -i site/public/media/hero-v1.mp4 -vf "select=eq(n\,0)" -frames:v 1 f0.png
-ffmpeg -i f0.png -i site/public/media/hero-v1.poster.webp -lavfi psnr -f null - 2>&1 | grep -oE 'average:[0-9.]+'   # ≥ 45
-# klatka 0 vs ostatnia
-ffmpeg -y -sseof -0.05 -i site/public/media/hero-v1.mp4 -frames:v 1 fl.png
+ffmpeg -y -i site/public/media/hero-production-v1.webm -vf "select=eq(n\,0)" -frames:v 1 f0.png
+ffmpeg -i f0.png -i site/public/media/hero-production-v1.webp -lavfi psnr -f null - 2>&1 | grep -oE 'average:[0-9.]+'   # ≥ 45
+# klatka 0 vs ostatnia: TYLKO dla plików zapętlonych (klipy hover, ewentualna pętla D37(b)).
+# Dla nagrania hero (jedno odtworzenie, bez `loop`) ten test NIE obowiązuje.
+ffmpeg -y -sseof -0.05 -i site/public/media/tools/kontroling-kosztow-v1.webm -frames:v 1 fl.png
 ffmpeg -i f0.png -i fl.png -lavfi psnr -f null - 2>&1 | grep -oE 'average:[0-9.]+'   # ≥ 45
 # jeden plik postera w trzech miejscach
-P=$(grep -oE '/media/hero-v[0-9]+\.poster\.webp' site/index.html | head -1)
+P=$(grep -oE '/media/hero-production-v[0-9]+\.webp' site/index.html | head -1)
 grep -c "$P" site/src/data/media.ts site/dist/index.html     # ≥ 1 każdy; poster w dist/index.html występuje w <link rel=preload> i w <img>
 # UWAGA: w buildzie Vite/React atrybuty JSX kompilują się do WŁAŚCIWOŚCI OBIEKTU (`poster:"…"`, `"aria-label":u.close`),
 # nie do składni `attr="wartość"` — `grep 'poster="…"' dist/assets/*.js` zawsze da 0 (fałszywy FAIL albo fałszywe „przechodzi").
@@ -4351,7 +4540,7 @@ grep -c "$P" site/dist/assets/*.js | awk -F: '$2 > 0 {n++} END {print n " chunk(
 
 #### Wyjątki
 
-- Hover-klipy (faza 2): poster = zrzut dashboardu (`tools/<slug>-v1-1280.webp`), a klip startuje z tej samej klatki (nagranie `record-demos.mjs` zaczyna od stanu po „Załaduj przykład", identycznego ze zrzutem).
+- Klipy hover (v1): poster = zrzut dashboardu (`tools/<slug>-v1-1280.webp`), a klip startuje z tej samej klatki (nagranie `record-demos.mjs` zaczyna od stanu po „Załaduj przykład", identycznego ze zrzutem). PSNR liczony po przeskalowaniu obu do 960×600.
 
 ## 5. Budżety wydajności (LCP/CLS/INP, chunki, fonty, transfer, lazy, build target) (`perf`)
 
@@ -4368,7 +4557,7 @@ Impact: **BLOCKER** · Tagi: perf, mobile, ios, webgl, video · Źródło: CLAUD
 Na urządzeniach z `matchMedia("(pointer: coarse)").matches === true` (iPhone, iPad, Android; także laptopy z dotykiem, gdy główne urządzenie wskazujące jest dotykowe):
 
 1. Nie montuje się żaden `<canvas>` (WebGL ani 2D) poza ewentualnymi statycznymi SVG (`KsefFlow`, mini-wykresy) i wykresami dashboardów (SVG, nie canvas).
-2. Nie montuje się żaden `<video>` z automatycznym odtwarzaniem; hero = poster `<img>` (`media-video-gating`).
+2. Nie montuje się **żaden `<video>`**: ani autoodtwarzane nagranie hero, ani klipy hover ściany (na dotyku hover nie istnieje, a tap ma otwierać podstronę). Hero = kadr produktu `<img>` (`media-video-gating`). Bramka jest **liczbą bajtów, nie tylko liczbą elementów**: transfer do `/media/*.webm|mp4` na `pointer: coarse` = **0 B** (0 requestów).
 3. Tło = `.bg-layer` ze statycznym gradientem stalowym (`globals.css:13-38`), bez żadnych dzieci.
 4. Elementy `position: fixed`: tylko `Navbar` (i natywny `<dialog>`); nic nowego.
 5. Reveale (`whileInView`, fadeUp 12 px), liczniki, `PageFade`, menu mobilne w `AnimatePresence` zostają (tanie, na kompozytorze).
@@ -4839,11 +5028,13 @@ Impact: **HIGH** · Tagi: perf, images, cls, lcp, webp · Źródło: synthesis �
 
 | Obraz | Format | Wymiary | Limit | Atrybuty |
 |---|---|---|---|---|
-| Poster hero | WebP | 1920×820 | ≤ 60 KB | `fetchPriority="high"`, bez lazy (`perf-lcp-poster-preload`) |
+| **Kadr produktu w hero** (= poster nagrania = element LCP) | WebP | 1600×1000 (+ 800×500 w `srcset`) | ≤ 110 KB / ≤ 55 KB | `fetchPriority="high"`, bez lazy, klasa `hero-shot` (`perf-lcp-poster-preload`) |
+| **Grunt stalowy hero** (tekstura, still Higgsfield) | WebP | 1600 px (+ 800 px) | ≤ 70 KB / ≤ 30 KB | `loading="lazy"`, `decoding="async"`, `aria-hidden`, **nigdy preload, nigdy `fetchpriority`**; wypada bez wpływu na treść |
+| **Kafel ściany narzędzi** | WebP | 480×300 (+ 320×200) | ≤ 30 KB / ≤ 16 KB | `loading="lazy"`, `decoding="async"`, `alt=""` (nazwa stoi obok w DOM) |
 | Zrzut demo w ramie S3 / hub | WebP | 1280×800 (+ 640×400 w `srcset`) | ≤ 120 KB / ≤ 40 KB | `loading="lazy"` poza pierwszą ramą, `decoding="async"`, `sizes="(min-width: 1024px) 50vw, 100vw"` |
 | Miniatura karty | WebP | 640×400 | ≤ 40 KB | `loading="lazy"` |
 | Portret foundera | WebP | 960×1200 (+ 480×600) | ≤ 90 KB | `loading="lazy"`, `srcset`, duotone w Photoshop lokalnie |
-| Still S7 (macro steel) | WebP | 1200×1500 (4:5) | ≤ 120 KB | `loading="lazy"` |
+| Kadr „ścieżki wyliczenia" w S7 | WebP | 1200×1500 (4:5) | ≤ 120 KB | `loading="lazy"` (still generatywny macro **wypadł**: sekcja o determinizmie ma być ilustrowana dowodem determinizmu) |
 | OG per trasa | PNG (wymóg crawlerów social) | 1200×630 | ≤ 200 KB | generowany `og.mjs` (faza 3), deterministyczny |
 | Ikony | SVG inline (lucide) | 20/24 px | n/d | `aria-hidden` gdy dekoracyjne |
 | Schematy (`KsefFlow`, `CollaborationFlow`) | SVG inline | `viewBox` | ≤ 12 KB | tokeny kolorów, statyczne |
@@ -4861,6 +5052,7 @@ Reguły:
 - Obraz bez wymiarów = layout shift przy dociągnięciu (CLS), a przy `whileInView` błędne offsety IO (motion-dev §8.8); na podstronie narzędzia persona z Google widzi skaczący układ.
 - JPG 300 KB zrzutu × 4 ramy na home = 1,2 MB transferu na 4G; budżet mobile `/` ≤ 350 KB bez wideo.
 - `loading="lazy"` nad foldem opóźnia LCP; brak lazy poniżej folda ładuje 13 obrazów huba naraz (13 = KARTY narzędzi w `tools.ts`: 12 dem + KSeF; dashboardów jest 12).
+- Grunt hero jest **dekoracją**: gdyby dostał `fetchpriority` albo preload, konkurowałby z kadrem produktu o LCP i odbierał budżet ścieżce krytycznej, a to jedyna warstwa hero, którą wolno zdjąć bez straty treści.
 - Niedeterministyczne zrzuty (data w UI, losowe ID) zmieniają się przy każdym buildzie → cache immutable nie działa, git puchnie. Ten sam skutek ma zrzut zrobiony za wcześnie: `data-ready` ustawione przed dociągnięciem chunku = wyścig sieci ze zrzutem.
 
 #### Niepoprawnie
@@ -4952,6 +5144,8 @@ Po `npm run build` suma gzip chunków JS ładowanych STATYCZNIE z `dist/index.ht
 
 Podstrona narzędzia (`/narzedzia/<slug>`): chunki dociągane po nawigacji (`ToolPage` + jeden dashboard + `lib/*`) ≤ **61 440 B (60 KB)** gz ponad wspólne. `pdfmake` (~830 KB gz z fontem) tylko po kliknięciu „Pobierz PDF", nigdy w modulepreload.
 
+Warstwa mediów (`HeroMedia`, `MediaBoundary`, klipy hover w `ToolWall`) to ≈ 1,5 KB gz logiki i **zero nowych zależności**: budżet 140 KB gz nie rośnie z powodu powrotu wideo (rosną wyłącznie budżety TRANSFERU, patrz `media-video-budgets`).
+
 Zakazane w chunku krytycznym: `three`, `@react-three/fiber`, `pdfmake`, 12 dashboardów, `ToolPage`, `BookingDialog` (lazy przy otwarciu), `toolsSeo.ts` w całości (dane per slug ładowane z podstroną albo hub importuje tylko `getTools()` bez FAQ), `radial-orbital-timeline`, `canvas-reveal-effect`.
 
 Baseline w `site/scripts/verify-site.baseline.json` (`homeGz`, `toolGz`), aktualizowany tylko commitem `Perf: nowy baseline (powód)`. Plik tworzy `verify-site.mjs --write-baseline` po pierwszym zielonym buildzie v2; do tego czasu budżet to stałe 140 KB gz z `--budget`.
@@ -5031,16 +5225,17 @@ Docelowo `scripts/verify-site.mjs` krok `js-budget` (home + per slug z `dist/nar
 
 ### 5.8 perf-lcp-poster-preload
 
-**LCP = poster hero: preload z fetchpriority high w każdym z 19 HTML, H1 w shellu, wideo dopiero po load; bramki CWV: LCP mobile < 2,5 s / desktop < 1,8 s, CLS < 0,05 na / i < 0,1 na podstronach, INP < 200 ms**
+**LCP = kadr produktu w hero (bramka ELEMENTOWA, nie tylko czasowa): preload z fetchpriority high, H1 w shellu, wideo nigdy preloadowane i montowane dopiero po load i rIC; bramki CWV: LCP mobile < 2,5 s / desktop < 1,8 s, CLS < 0,05 na / i < 0,1 na podstronach, INP < 200 ms**
 
 Impact: **HIGH** · Tagi: perf, lcp, hero, preload, prerender · Źródło: synthesis §2.3 S1/§2.4.9/§5 (perf-cls, perf-inp) · docs/plan/strona-v2-plan.md:410-412 i :647 (LCP < 2,5 s, CLS < 0,1, INP < 200 ms) · higgsfield §4.5 p.6 · taste §7.6 (6.D) · vercel.md WIG · feasibility-perf §9 p.5 · Dodano: 2026-09-12 · Plik: `rules/perf-lcp-poster-preload.md`
 
 #### Zasada
 
-1. Kandydat LCP na `/` to poster hero (`<img>` 1920×820 WebP ≤ 60 KB). Na pozostałych trasach LCP to H1/tekst z shellu (bez obrazów nad foldem poza miniaturami ≤ 40 KB).
-2. `index.html` (a przez `prerender.mjs` każdy z 19 HTML) zawiera w `<head>`: `<link rel="preload" as="image" href="<HERO_POSTER>" fetchpriority="high">` PRZED skryptami; na trasach bez hero preload postera jest USUWANY przez prerender (nie marnować pasma).
-3. `<img>` postera ma `fetchPriority="high"`, `decoding="async"`, `width`/`height`, bez `loading="lazy"`; wszystkie inne obrazy nad foldem: bez `loading="lazy"`; poniżej folda: `loading="lazy"`.
-4. Wideo nie startuje ładowania przed `window.load` (`media-video-gating`); `preload="metadata"`.
+1. **Element LCP na `/` musi być kadrem produktu**: `<img class="hero-shot">` z `hero-production-v<N>.webp` (1600×1000 WebP ≤ 110 KB; mobile 800×500 ≤ 55 KB). Ten sam plik jest jednocześnie `poster` nagrania i klatką 0 pliku wideo (`media-poster-first-frame`). Na pozostałych trasach LCP to H1/tekst z shellu (bez obrazów nad foldem poza miniaturami ≤ 40 KB).
+2. `index.html` (a przez `prerender.mjs` każdy z 19 HTML) zawiera w `<head>`: `<link rel="preload" as="image" href="<HERO_POSTER>" fetchpriority="high">` PRZED skryptami; na trasach bez hero preload jest USUWANY przez prerender (nie marnować pasma). **Preloadów obrazu jest dokładnie jeden na `/`.**
+3. `<img>` kadru ma `fetchPriority="high"`, `decoding="async"`, `width`/`height`, bez `loading="lazy"`; wszystkie inne obrazy nad foldem: bez `loading="lazy"`; poniżej folda: `loading="lazy"`. **Grunt stalowy hero (`hero-ground-v<N>.webp`) jest `loading="lazy"` i NIGDY nie jest preloadowany ani `fetchpriority="high"`** (`perf-images-policy`).
+4. **Wideo nie jest NIGDY preloadowane** (`preload="metadata"`, zero `<link rel="preload" as="video">`) i montuje się dopiero po `window.load` **oraz** `requestIdleCallback` (`media-video-gating` p.1); w shellu prerendera nie ma ani `<video>`, ani odwołania do pliku wideo.
+4a. **Bramka jest ELEMENTOWA, nie tylko progowa:** pomiar `PerformanceObserver({ type: "largest-contentful-paint" })` musi wskazać `img.hero-shot`. Sam próg czasowy nie wystarcza: przy wolniejszym łączu pierwsza klatka wideo potrafi przejąć tytuł LCP i nadal zmieścić się w progu, a regresja wychodzi dopiero w polu (CrUX). Gdyby bramka elementowa była czerwona mimo `load` + `rIC`, tryb awaryjny to montaż wideo dopiero po pierwszej interakcji użytkownika (`scroll`/`pointerdown`/`keydown`), bo wtedy LCP jest już zamrożone.
 5. Font latin (`NunitoSans-var-latin.woff2`) ma `<link rel="preload" as="font" type="font/woff2" crossorigin>`; `font-display: swap` + `size-adjust` w fallbacku (CLS).
 6. Krytyczny CSS = jeden plik ≤ 20 KB gz (`perf-chunk-size-gate`); zero `@import` z CDN; zero skryptów zewnętrznych przed LCP (CF Web Analytics po `load`/idle).
 7. **Bramki Core Web Vitals (wszystkie trzy, nie tylko LCP)** — mierzone na `dist` przez `vite preview` w fazie 4 (Lighthouse ze scratchpadu, bez `npx`) i po każdym wdrożeniu (PageSpeed Insights, pole CrUX z CF Web Analytics):
@@ -5058,15 +5253,17 @@ Impact: **HIGH** · Tagi: perf, lcp, hero, preload, prerender · Źródło: synt
 - Bez preloadu przeglądarka odkrywa poster dopiero po sparsowaniu HTML i CSS (a w SPA po starcie Reacta, gdy shell go nie ma): +0,5–1,5 s do LCP na 4G.
 - `fetchpriority="high"` na posterze przesuwa go przed fontem i chunkami JS w kolejce sieci; bez tego Chrome ładuje obraz jako „Low" do czasu layoutu.
 - `loading="lazy"` na obrazie nad foldem (częsty błąd „lazy wszędzie") opóźnia LCP o pełny cykl layoutu.
-- Wideo startujące przed `load` konkuruje z posterem i fontem o pasmo; Chrome liczy pierwszą klatkę autoplay-wideo jako kandydata LCP, co przy 1,5 MB daje LCP > 4 s.
-- Preload na trasach bez hero = 60 KB zmarnowane na każdej podstronie narzędzia (13 tras).
+- Wideo startujące przed `load` konkuruje z kadrem i fontem o pasmo; Chrome liczy pierwszą klatkę autoplay-wideo jako kandydata LCP, co przy 1,2 MB daje LCP > 3 s (R-M2).
+- Preload na trasach bez hero = 110 KB zmarnowane na każdej podstronie narzędzia (13 tras).
+- Preload postera/tekstury, która NIE jest elementem LCP, jest podwójnie szkodliwy: zjada pasmo na ścieżce krytycznej i sam bywa promowany na kandydata LCP.
 - CLS i INP bez progu w regułach = metryki, których żaden audytor nie ma czym egzekwować: `verify-site.mjs` i audyt F4 sprawdzają to, co ma liczbę. Dwa najczęstsze źródła u nas to podmiana skeleton → dashboard bez `minHeight` (CLS) i montaż ciężkich komponentów w trakcie interakcji (INP), więc progi muszą stać obok LCP, a nie w prozie.
 
 #### Niepoprawnie
 
 ```html
 <head>…<script type="module" src="/src/main.tsx"></script></head>            <!-- brak preloadu; poster odkryty po starcie Reacta -->
-<img src="/media/hero-v1.poster.webp" loading="lazy" />                       <!-- lazy nad foldem -->
+<img src="/media/hero-production-v1.webp" loading="lazy" />                   <!-- lazy nad foldem -->
+<link rel="preload" as="image" href="/media/hero-ground-v1.webp">             <!-- preload tekstury: kradnie pasmo i bywa promowana na LCP -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=…">    <!-- CDN na ścieżce krytycznej -->
 ```
 
@@ -5076,7 +5273,7 @@ Impact: **HIGH** · Tagi: perf, lcp, hero, preload, prerender · Źródło: synt
 <!-- site/index.html <head> (kolejność ma znaczenie) -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="preload" as="image" href="/media/hero-v1.poster.webp" fetchpriority="high">
+<link rel="preload" as="image" href="/media/hero-production-v1.webp" fetchpriority="high">
 <link rel="preload" as="font" type="font/woff2" href="/fonts/NunitoSans-var-latin.woff2" crossorigin>
 <!-- CSS wstrzykiwany przez Vite; skrypty module na końcu -->
 ```
@@ -5088,7 +5285,9 @@ html = html.replace(/<link rel="preload" as="image"[^>]*hero-v\d+\.poster\.webp[
 ```
 
 ```tsx
-<img src={HERO_POSTER} alt="" width={1920} height={820} fetchPriority="high" decoding="async" />
+<img className="hero-shot" src={HERO_POSTER}
+     alt="Pulpit produkcji: kafle hal i suwak tygodnia, dane przykładowe"
+     width={1600} height={1000} fetchPriority="high" decoding="async" />
 ```
 
 #### Test
@@ -5099,10 +5298,13 @@ grep -c 'rel="preload" as="image"' site/dist/index.html                         
 grep -c 'fetchpriority="high"' site/dist/index.html                              # ≥ 1
 grep -lE 'rel="preload" as="image"' site/dist/narzedzia/*.html site/dist/oferta.html site/dist/faq.html site/dist/rodo.html 2>/dev/null   # = 0 plików (bez hero)
 grep -c 'rel="preload" as="font"' site/dist/index.html                           # = 1
-grep -rnE 'loading="lazy"' site/src/components/Hero.tsx site/src/components/HeroMedia.tsx 2>/dev/null   # = 0
+grep -rnE 'loading="lazy"' site/src/components/Hero.tsx site/src/components/HeroMedia.tsx 2>/dev/null   # = 0 dla kadru (grunt hero MA lazy: osobny element)
+grep -rnE 'rel="preload"[^>]*as="video"' site/index.html site/dist 2>/dev/null     # = 0 (wideo nigdy nie jest preloadowane)
+grep -rlE '<video|hero-production-v[0-9]+\.(webm|mp4)' site/dist --include=*.html  # = 0 plików (shell bez wideo)
 grep -rnE 'fonts\.googleapis|cdn\.|unpkg|jsdelivr' site/index.html site/src      # = 0
 # Lighthouse (faza 4; z scratchpadu, bez npx): node <ścieżka>/lighthouse http://localhost:4173/ --preset=perf --form-factor=mobile --throttling-method=simulate
-#   LCP < 2500 ms mobile, < 1800 ms desktop; „LCP element" = img poster (na /) lub h1 (pozostałe)
+#   LCP < 2500 ms mobile, < 1800 ms desktop; „LCP element" = img.hero-shot (na /) lub h1 (pozostałe) — bramka ELEMENTOWA:
+#   new PerformanceObserver(l => l.getEntries().at(-1).element.className) musi zawierać „hero-shot"; wartość inna = FAIL, nawet gdy czas mieści się w progu
 #   CLS < 0,05 na / i < 0,1 na /narzedzia/<slug> (audits["cumulative-layout-shift"].numericValue)
 #   INP: Lighthouse podaje TBT jako proxy — twardy pomiar w Playwright:
 #     PerformanceObserver({ type: "event", durationThreshold: 16, buffered: true }) → max(interactionId > 0) < 200 ms
@@ -5113,7 +5315,8 @@ Docelowo `scripts/verify-site.mjs` krok `preload` + Lighthouse w F4.
 
 #### Wyjątki
 
-- Plan B (GLSL Hills zamiast wideo): preload postera zostaje (poster jest wtedy statycznym tłem hero na wszystkich urządzeniach).
+- Plan B (statyczny kadr bez wideo, `strona-v2-plan.md` §7.1 wariant B): preload kadru zostaje bez zmian (kadr jest wtedy jedynym wizualem hero na wszystkich urządzeniach).
+- Wariant D37(b) (pętla generatywna jako tekstura pod scrimem): element LCP nadal musi być kadrem produktu; poster pętli jest wtedy osobnym plikiem i **nie jest preloadowany ani renderowany w shellu**.
 
 ### 5.9 perf-three-js-policy
 
@@ -5122,6 +5325,8 @@ Docelowo `scripts/verify-site.mjs` krok `preload` + Lighthouse w F4.
 Impact: **HIGH** · Tagi: perf, three, webgl, background, bundle · Źródło: synthesis §2.6.3/§1.3 P7 · site-audit §1.7/§1.9/§3.1 p.2 · feasibility-perf §5.2 p.5 · glsl-hills.tsx (wzorzec GPU-higieny) · higgsfield §9 werdykt · Dodano: 2026-09-12 · Plik: `rules/perf-three-js-policy.md`
 
 #### Zasada
+
+> **Stan po 2026-09-12 (D37):** jedyne ruchome tło na trasie `/` zajmuje **nagranie narzędzia w hero**, więc GLSL Hills **nie wracają** do v1 ani w planie B (`media-one-autoplay-per-route`: nigdy dwa ruchome tła). `three` i `@react-three/fiber` są poza `dependencies`; poniższa polityka obowiązuje na wypadek powrotu WebGL w fazie 2, po nowej decyzji founderów.
 
 Decyzja dwustopniowa (D-08):
 

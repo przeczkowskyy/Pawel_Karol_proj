@@ -9,6 +9,8 @@ added: 2026-09-12
 
 ## Zasada
 
+> **Stan po 2026-09-12 (D37):** jedyne ruchome tło na trasie `/` zajmuje **nagranie narzędzia w hero**, więc GLSL Hills **nie wracają** do v1 ani w planie B (`media-one-autoplay-per-route`: nigdy dwa ruchome tła). `three` i `@react-three/fiber` są poza `dependencies`; poniższa polityka obowiązuje na wypadek powrotu WebGL w fazie 2, po nowej decyzji founderów.
+
 Decyzja dwustopniowa (D-08):
 
 **Faza 0**: `GLSLHills` schodzi z bundla `/` (usunąć `lazy(() => import("@/components/ui/glsl-hills"))` i `useAnimatedBg()` z `App.tsx`; plik `glsl-hills.tsx` + `BgBoundary.tsx` zostają w repo jako wzorzec GPU-higieny cytowany przez strażnika).

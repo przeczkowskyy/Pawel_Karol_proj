@@ -3,27 +3,28 @@ id: media-video-embed-spec
 title: Specyfikacja elementu <video>: muted playsInline loop preload=metadata poster, źródła AV1→VP9→H.264, aria-hidden, disablePictureInPicture, MediaBoundary, przycisk pauzy tła (WCAG 2.2.2)
 impact: HIGH
 tags: [media, video, a11y, ios, lcp]
-source: higgsfield §4.5 (szkic HeroVideo, wymagania 1–9) · synthesis §2.4.4 HeroMedia · showreel §5.4 · WebKit „New video policies for iOS" · WIG · WCAG 2.2.2 (Pause, Stop, Hide) · docs/plan/strona-v2-plan.md:384 (przycisk „Zatrzymaj tło" + sessionStorage)
+source: higgsfield §4.5 (szkic HeroVideo, wymagania 1–9) · synthesis §2.4.4 HeroMedia · showreel §5.4 · WebKit „New video policies for iOS" · WIG · WCAG 2.2.2 (Pause, Stop, Hide) · docs/plan/strona-v2-plan.md §3 S1 (przycisk pauzy + sessionStorage; etykieta „Zatrzymaj podgląd / Pause preview" po D37)
 added: 2026-09-12
 ---
 
 ## Zasada
 
-Każdy `<video>` na stronie (dziś: wyłącznie `HeroMedia`; faza 2: hover-klipy `CaseFrame`) ma DOKŁADNIE ten zestaw atrybutów:
+Każdy `<video>` na stronie (v1: `HeroMedia` na `/` i klipy hover w `ToolWall`) ma DOKŁADNIE ten zestaw atrybutów:
 
 ```tsx
 <video
-  muted playsInline loop
-  preload="metadata"                       // hover-klipy: "none"
-  poster={POSTER}                          // ten sam plik co <img> LCP; pierwsza klatka pętli
+  muted playsInline
+  // loop: TAK dla klipów hover (pętla 6–7 s); NIE dla nagrania hero (jedno odtworzenie, stop na ostatniej klatce)
+  preload="metadata"                       // klipy hover: "none"
+  poster={POSTER}                          // ten sam plik co <img> LCP; KLATKA 0 pliku wideo
   disablePictureInPicture disableRemotePlayback
   aria-hidden="true" tabIndex={-1}
-  width={1920} height={820}                // wymiary jawne = CLS 0
+  width={1600} height={1000}               // wymiary jawne = CLS 0 (klipy hover: 960×600)
   onCanPlay / onSuspend / onError          // obsługa w media-video-gating
 >
-  <source src="/media/hero-v1.av1.mp4" type='video/mp4; codecs="av01.0.05M.08"' />   {/* opcjonalny, najmniejszy */}
-  <source src="/media/hero-v1.webm"    type='video/webm; codecs="vp9"' />
-  <source src="/media/hero-v1.mp4"     type='video/mp4; codecs="avc1.640028"' />     {/* fallback Safari/iOS, stare Androidy */}
+  <source src="/media/hero-production-v1.av1.mp4" type='video/mp4; codecs="av01.0.05M.08"' />   {/* opcjonalny, najmniejszy */}
+  <source src="/media/hero-production-v1.webm"    type='video/webm; codecs="vp9"' />
+  <source src="/media/hero-production-v1.mp4"     type='video/mp4; codecs="avc1.640028"' />     {/* fallback Safari/iOS */}
 </video>
 ```
 
@@ -35,7 +36,8 @@ Dodatkowo:
 - zawsze obok: `<img src={POSTER} alt="" width height fetchPriority="high" decoding="async">` renderowany PRZED wideo (także w shellu prerenderu; `<video>` nigdy w shellu),
 - nazwy plików z wersją (`hero-v1.*`, `media-headers-versioning`),
 - **kontrola pauzy (WYMAGANA, WCAG 2.2.2 Pause, Stop, Hide)**: obok kontenera — POZA `aria-hidden` — renderowany jest przycisk
-  `<button type="button" className="btn btn-secondary btn-sm hero-media-toggle" aria-pressed={paused}>Zatrzymaj tło / Odtwórz tło</button>`
+  `<button type="button" className="btn btn-secondary btn-sm hero-media-toggle" aria-pressed={paused}>Zatrzymaj podgląd / Pause preview</button>`
+  (etykieta mówi prawdę: w v1 hero nie jest tłem, tylko **podglądem prawdziwego narzędzia**; „Zatrzymaj tło" byłoby nieprawdziwe i łamałoby `brand-honest-labels`)
   (PL/EN przez `pick()`), widoczny stale (nie tylko na hover), z widocznym `:focus-visible`, polem klikalnym ≥ 44×44 px
   (`a11y-touch-targets-44`) i scrimem pod spodem dla kontrastu AA na najjaśniejszej klatce. Przycisk istnieje TYLKO wtedy,
   gdy `<video>` jest zamontowane (poster sam z siebie się nie rusza, więc nie ma czego pauzować). Wybór użytkownika jest
@@ -65,17 +67,18 @@ Dodatkowo:
 // src/components/HeroMedia.tsx (render; logika w media-video-gating)
 import { HERO_POSTER, HERO_SOURCES } from "@/data/media";   // media-headers-versioning (zero literalow sciezek)
 const TOGGLE = {
-  pause: { pl: "Zatrzymaj tło", en: "Pause background" },
-  play:  { pl: "Odtwórz tło",   en: "Play background" },
+  pause: { pl: "Zatrzymaj podgląd", en: "Pause preview" },
+  play:  { pl: "Odtwórz podgląd",   en: "Play preview" },
 } as const;
 
 return (
   <>
     <div className="hero-media" aria-hidden="true">
-      <img src={HERO_POSTER} alt="" width={1920} height={820} fetchPriority="high" decoding="async" />
+      <img className="hero-shot" src={HERO_POSTER} alt="Pulpit produkcji: kafle hal i suwak tygodnia, dane przykładowe"
+           width={1600} height={1000} fetchPriority="high" decoding="async" />
       {enabled ? (
-        <video ref={ref} muted playsInline loop preload="metadata" poster={HERO_POSTER}
-               disablePictureInPicture disableRemotePlayback tabIndex={-1} width={1920} height={820}
+        <video ref={ref} muted playsInline preload="metadata" poster={HERO_POSTER}
+               disablePictureInPicture disableRemotePlayback tabIndex={-1} width={1600} height={1000}
                onCanPlay={onCanPlay} onSuspend={onSuspend} onError={() => setEnabled(false)}
                style={{ opacity: ready ? 1 : 0, transition: "opacity var(--duration-media) var(--ease-out)" }}>
           {HERO_SOURCES.map((s) => <source key={s.src} src={s.src} type={s.type} />)}
@@ -103,7 +106,7 @@ return (
 
 ```tsx
 // App.tsx
-<MediaBoundary fallback={<img src={POSTER} alt="" width={1920} height={820} />}><HeroMedia /></MediaBoundary>
+<MediaBoundary fallback={<img className="hero-shot" src={HERO_POSTER} alt="…" width={1600} height={1000} />}><HeroMedia /></MediaBoundary>
 ```
 
 ## Test
@@ -122,7 +125,8 @@ const els = (src, tag) => { const out = [], re = new RegExp("<" + tag + "\\b", "
     for (; i < src.length; i++) { const c = src[i]; if (c === "{") d++; else if (c === "}") d--; else if (c === ">" && d === 0) break; }
     out.push(src.slice(m.index, i + 1)); }
   return out; };
-const REQ = ["\\bmuted\\b", "\\bplaysInline\\b", "\\bloop\\b", "preload=\"(metadata|none)\"", "poster=", "disablePictureInPicture", "disableRemotePlayback", "tabIndex=\\{-1\\}", "width=", "height="];
+const REQ = ["\\bmuted\\b", "\\bplaysInline\\b", "preload=\"(metadata|none)\"", "poster=", "disablePictureInPicture", "disableRemotePlayback", "tabIndex=\\{-1\\}", "width=", "height="];
+// `loop` sprawdzamy warunkowo: WYMAGANY w ToolWall.tsx (klipy hover), ZAKAZANY w HeroMedia.tsx (jedno odtworzenie)
 const BAD = ["\\bautoPlay\\b", "\\bcontrols\\b(?=[\\s/>=])", "preload=\"auto\"", "\\bsrc="];
 let bad = 0;
 for (const f of walk("site/src").filter((x) => x.endsWith(".tsx"))) {
@@ -130,11 +134,15 @@ for (const f of walk("site/src").filter((x) => x.endsWith(".tsx"))) {
   for (const el of els(src, "video")) {
     for (const a of REQ) if (!new RegExp(a).test(el)) { console.log(f + ": BRAK " + a); bad++; }
     for (const a of BAD) if (new RegExp(a).test(el)) { console.log(f + ": ZAKAZANY " + a); bad++; }
+    const hero = /HeroMedia\.tsx$/.test(f.replace(/\\/g, "/"));
+    if (hero && /\bloop\b/.test(el)) { console.log(f + ": ZAKAZANY loop (hero gra raz)"); bad++; }
+    if (!hero && !/\bloop\b/.test(el)) { console.log(f + ": BRAK loop (klip hover jest pętlą)"); bad++; }
   }
 }
 console.log(bad === 0 ? "video-attrs OK" : "video-attrs: " + bad + " naruszen");'
 # zrodla, boundary i kontrola pauzy
 F=site/src/components/HeroMedia.tsx
+grep -cE 'pointer-events:\s*none' site/src/components/ToolWall.tsx site/src/styles/globals.css   # ≥ 1 (klip nie przechwytuje kliknięcia)
 grep -cE '<source[^>]*type=.video/webm; codecs="vp9"' $F       # ≥ 1
 grep -cE '<source[^>]*type=.video/mp4; codecs="avc1' $F         # ≥ 1
 grep -cE 'MediaBoundary' site/src/App.tsx                       # ≥ 1
@@ -143,7 +151,7 @@ grep -cE 'aria-pressed' $F                                      # = 1
 grep -cE 'klarow:media:paused' $F                               # = 1 (sessionStorage, plan:384)
 grep -nE 'hero-media-toggle[^>]*aria-hidden|aria-hidden[^>]*hero-media-toggle' $F   # = 0 (przycisk POZA aria-hidden)
 # plik: brak ścieżki audio (wymaga ffprobe ze scratchpadu)
-ffprobe -v error -select_streams a -show_entries stream=codec_type -of csv=p=0 site/public/media/hero-v1.mp4 | wc -l   # = 0
+ffprobe -v error -select_streams a -show_entries stream=codec_type -of csv=p=0 site/public/media/hero-production-v1.mp4 | wc -l   # = 0
 # CSS pas bezpieczeństwa
 grep -nE 'prefers-reduced-motion[^}]*\.hero-media video[^}]*display:\s*none' -z site/src/styles/globals.css | wc -c   # > 0
 ```
@@ -152,4 +160,5 @@ Docelowo `node scripts/check-motion.mjs` sekcja `video-attrs`.
 
 ## Wyjątki
 
-- Hover-klipy (faza 2): `preload="none"`, bez `poster` w atrybucie (poster to `<img>` karty), `loop` tak, `muted playsInline` tak; wymiary 1280×800. Nie wymagają własnego przycisku pauzy (ruch startuje wyłącznie po `mouseenter`/`focus`, więc nie jest automatyczny w rozumieniu WCAG 2.2.2), ale honorują globalny stan `klarow:media:paused`.
+- Klipy hover (v1, `ToolWall`): `preload="none"`, bez `poster` w atrybucie (poster to `<img>` kafla), `loop` **wymagany**, `muted playsInline` tak; wymiary 960×600; `pointer-events: none`. Nie wymagają własnego przycisku pauzy (ruch startuje wyłącznie po `mouseenter`/`focus`, więc nie jest automatyczny w rozumieniu WCAG 2.2.2), ale honorują globalny stan `klarow:media:paused`.
+- Nagranie hero (`HeroMedia`): `loop` **zakazany** (jedno odtworzenie, stop na ostatniej klatce). Przycisk pauzy jest mimo to wymagany: ruch trwa 8 s, czyli powyżej progu 5 s z WCAG 2.2.2.
