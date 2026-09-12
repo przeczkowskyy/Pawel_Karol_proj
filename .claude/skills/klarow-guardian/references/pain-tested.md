@@ -159,3 +159,23 @@
   `node -e "require('fs').accessSync('site/node_modules/pdfmake/build/vfs_fonts.js')"` oraz golden-test
   generatora (dwa przebiegi = identyczne bajty); przy zmianie kroju: sprawdzić obecność trzech plików TTF
   przed podmianą rejestracji.
+
+## 2026-09-12 · `git push` wisi mimo poprawnie ustawionego `credential.helper=wincred`
+
+**Objaw.** `git push origin main` nie kończy się przez ponad pięć minut i nie wypisuje żadnego błędu. `git ls-remote origin` przechodzi w sekundę, więc wygląda, jakby uwierzytelnianie działało. Rozmiar wysyłki nie jest przyczyną: 624 obiekty, największy plik 0,8 MB.
+
+**Prawdziwa przyczyna.** `ls-remote` na repozytorium, do którego odczyt jest otwarty, nie wymaga poświadczeń, więc jego powodzenie NICZEGO nie dowodzi o zapisie. Przy zapisie Git prosi o poświadczenia, a gdy pomocnik ich nie zwróci, proces czeka na interakcję, której w sesji agenta nikt nie obsłuży. Zamiast błędu dostajemy ciszę.
+
+**Naprawa.** Wymusić brak interaktywności, żeby zamiast zawieszenia dostać komunikat:
+```bash
+GIT_TERMINAL_PROMPT=0 GCM_INTERACTIVE=never git push origin main
+```
+Paradoksalnie w tej sesji push PRZESZEDŁ po tej zmianie: Git wypisał „Cannot prompt because user interactivity has been disabled", ale referencja poszła (`b9677ea..2d99c54 main -> main`), bo poświadczenie z Menedżera poświadczeń wystarczyło, a prompt dotyczył czegoś pobocznego. Weryfikacja po fakcie jest obowiązkowa, bo kod wyjścia potrafi kłamać.
+
+**Test.** Nigdy nie wierz komunikatowi pushu. Sprawdź referencję zdalną:
+```bash
+git ls-remote origin -h refs/heads/main   # ma zwrócić skrót lokalnego HEAD
+git status -sb                             # ma pokazać „## main...origin/main" bez „ahead"
+```
+
+**Zasada.** Każdy `git push` w sesji agenta uruchamiaj z `GIT_TERMINAL_PROMPT=0` i potwierdzaj wynik osobną komendą. Powodzenie odczytu zdalnego nie jest dowodem na działające uwierzytelnianie zapisu.
