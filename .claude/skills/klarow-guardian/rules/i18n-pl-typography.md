@@ -56,4 +56,8 @@ Severity: HIGH (em-dash, półpauza poza prozą, proste cudzysłowy w meta). Aut
 
 ## Wyjątki
 
-Kod, ścieżki, identyfikatory, wartości liczbowe ujemne (`-5 %`), minus w tabelach dem. Cytaty klientów (gdy powstaną) zachowują oryginalną interpunkcję, ale bez `—`.
+Kod, ścieżki, identyfikatory, wartości liczbowe ujemne (`-5 %`), minus w tabelach dem.
+
+**Dokumenty wewnętrzne, które nigdy nie opuszczają Klarow** (np. `brief-<firma>.pdf` z generatora leadów, stopka „dokument wewnętrzny, nie przekazywać poza firmę"; notatki, plany w `.claude/work/`, raporty audytu): reguła ich nie obejmuje, bo nie są powierzchnią marki. Cytat z ogłoszenia czy z maila zostaje tam DOSŁOWNY, razem z oryginalną interpunkcją. Granicę wyznacza odbiorca, nie format: to samo `pdfDoc` generuje `klarow-<firma>.pdf` do koperty i ten dokument regule podlega w całości.
+
+**Cytaty na powierzchniach publicznych** (case study, strona, one-pager handlowy, post): pauzę zamieniamy na dwukropek albo kropkę, brzmienie słów zostaje bez zmian, a cytat oznaczamy jako skrócony. Wierność interpunkcji nie jest tu argumentem, bo to nasz dokument handlowy, nie protokół.

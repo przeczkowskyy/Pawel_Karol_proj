@@ -8038,7 +8038,11 @@ Severity: HIGH (em-dash, półpauza poza prozą, proste cudzysłowy w meta). Aut
 
 #### Wyjątki
 
-Kod, ścieżki, identyfikatory, wartości liczbowe ujemne (`-5 %`), minus w tabelach dem. Cytaty klientów (gdy powstaną) zachowują oryginalną interpunkcję, ale bez `—`.
+Kod, ścieżki, identyfikatory, wartości liczbowe ujemne (`-5 %`), minus w tabelach dem.
+
+**Dokumenty wewnętrzne, które nigdy nie opuszczają Klarow** (np. `brief-<firma>.pdf` z generatora leadów, stopka „dokument wewnętrzny, nie przekazywać poza firmę"; notatki, plany w `.claude/work/`, raporty audytu): reguła ich nie obejmuje, bo nie są powierzchnią marki. Cytat z ogłoszenia czy z maila zostaje tam DOSŁOWNY, razem z oryginalną interpunkcją. Granicę wyznacza odbiorca, nie format: to samo `pdfDoc` generuje `klarow-<firma>.pdf` do koperty i ten dokument regule podlega w całości.
+
+**Cytaty na powierzchniach publicznych** (case study, strona, one-pager handlowy, post): pauzę zamieniamy na dwukropek albo kropkę, brzmienie słów zostaje bez zmian, a cytat oznaczamy jako skrócony. Wierność interpunkcji nie jest tu argumentem, bo to nasz dokument handlowy, nie protokół.
 
 ### 9.4 i18n-sentence-case-headings
 
@@ -8835,7 +8839,9 @@ grep -rnE "sendMessage|chat_id" leadscout/notify.mjs | head
 
 #### Wyjątki
 
-Odpowiedź na zapytanie zainicjowane przez odbiorcę (formularz, `mailto:`, rezerwacja, telefon od klienta) nie wymaga odrębnej zgody — art. 398 ust. 2 PKE; zgoda jest potrzebna dopiero na kolejne, niezamówione wiadomości handlowe i na newsletter. Komunikacja wewnętrzna (digesty Lead-Scout na Telegram do founderów) nie jest informacją handlową. Kwalifikacja telefonu jako kanału objętego art. 398 (telekomunikacyjne urządzenia końcowe w marketingu bezpośrednim) jest w tej regule przyjęta ostrożnościowo — do potwierdzenia przez radcę przy zatwierdzaniu szablonów; do czasu potwierdzenia obowiązuje wersja ostrożniejsza (pytamy o zgodę także na telefon).
+Odpowiedź na zapytanie zainicjowane przez odbiorcę (formularz, `mailto:`, rezerwacja, telefon od klienta) nie wymaga odrębnej zgody — art. 398 ust. 2 PKE; zgoda jest potrzebna dopiero na kolejne, niezamówione wiadomości handlowe i na newsletter.
+
+**Spór między organami („paradoks zgody"), nie ustalony stan prawny** (za oknem researchu c1, do rozstrzygnięcia przez radcę): UKE dopuszcza neutralne zapytanie o zgodę na kontakt handlowy jako czynność poprzedzającą marketing, natomiast UOKiK w decyzji DOZIK 3/2019 uznał takie zapytanie za informację handlową samą w sobie. Dopóki radca tego nie rozstrzygnie, pierwsza wiadomość ma być maksymalnie neutralna (prośba o zgodę bez opisu oferty, bez cennika, bez CTA sprzedażowego) i traktowana w audycie jako materiał objęty tą regułą. Komunikacja wewnętrzna (digesty Lead-Scout na Telegram do founderów) nie jest informacją handlową. Kwalifikacja telefonu jako kanału objętego art. 398 (telekomunikacyjne urządzenia końcowe w marketingu bezpośrednim) jest w tej regule przyjęta ostrożnościowo — do potwierdzenia przez radcę przy zatwierdzaniu szablonów; do czasu potwierdzenia obowiązuje wersja ostrożniejsza (pytamy o zgodę także na telefon).
 
 ### 11.3 legal-rodo-page-required
 
@@ -9984,6 +9990,19 @@ founderów, obowiązuje skan CAŁEJ historii, nie tylko HEAD:
 Stan 2026-09-12: repo `przeczkowskyy/Pawel_Karol_proj` zawiera `leads.json` i referencję poprzedniej firmy,
 więc do decyzji founderów traktujemy je jako PRYWATNE; upublicznienie wymaga wcześniejszego wydzielenia
 tych plików do osobnego prywatnego repo albo ich usunięcia z historii.
+
+**Dane osobowe w gicie: powód mocniejszy niż higiena sekretów.** Historia gita jest niekasowalna bez
+przepisania wszystkich commitów, więc każdy plik śledzony przez gita czyni NIEUSUWALNYMI dane, które
+art. 17 RODO (prawo do usunięcia) i art. 21 (sprzeciw) każą usunąć na żądanie osoby. Dlatego dane
+osobowe nie wchodzą do repo w ogóle, a nie „wchodzą i sprzątamy je później". Obowiązujący podział klas
+danych (ustalony z oknem researchu c1, 2026-09-12): `leadscout/leads.json` wyłącznie dane PODMIOTÓW
+(nazwa, `www`, NIP/REGON/KRS, PKD, forma prawna, adres siedziby spółki, sygnały, oceny, właścicielstwo
+jako ścieżka spółek); nazwiska, role, LinkedIn i adresy osób fizycznych wyłącznie w
+`leadscout/decydenci.local.json` POZA gitem (`.gitignore`); rejestr sprzeciwów `suppression.json`
+w gicie, ale klucze WYŁĄCZNIE jako SHA-256 (sprzeciw musi przetrwać jako dowód dla UKE, hasz spełnia
+zasadę minimalizacji); `kontakt_historia` bez treści wiadomości i bez nazwisk, tylko
+`{data, kanal, szablon, wynik}`. Skrzynka funkcyjna (`rodo@`, `biuro@`, `kontakt@`) formalnie nie jest
+daną osobową, ale w repo i tak jest zbędna.
 
 #### Mechanizm awarii (dlaczego)
 

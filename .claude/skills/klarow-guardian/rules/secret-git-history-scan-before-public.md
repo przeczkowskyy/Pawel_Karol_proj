@@ -24,6 +24,19 @@ Stan 2026-09-12: repo `przeczkowskyy/Pawel_Karol_proj` zawiera `leads.json` i re
 więc do decyzji founderów traktujemy je jako PRYWATNE; upublicznienie wymaga wcześniejszego wydzielenia
 tych plików do osobnego prywatnego repo albo ich usunięcia z historii.
 
+**Dane osobowe w gicie: powód mocniejszy niż higiena sekretów.** Historia gita jest niekasowalna bez
+przepisania wszystkich commitów, więc każdy plik śledzony przez gita czyni NIEUSUWALNYMI dane, które
+art. 17 RODO (prawo do usunięcia) i art. 21 (sprzeciw) każą usunąć na żądanie osoby. Dlatego dane
+osobowe nie wchodzą do repo w ogóle, a nie „wchodzą i sprzątamy je później". Obowiązujący podział klas
+danych (ustalony z oknem researchu c1, 2026-09-12): `leadscout/leads.json` wyłącznie dane PODMIOTÓW
+(nazwa, `www`, NIP/REGON/KRS, PKD, forma prawna, adres siedziby spółki, sygnały, oceny, właścicielstwo
+jako ścieżka spółek); nazwiska, role, LinkedIn i adresy osób fizycznych wyłącznie w
+`leadscout/decydenci.local.json` POZA gitem (`.gitignore`); rejestr sprzeciwów `suppression.json`
+w gicie, ale klucze WYŁĄCZNIE jako SHA-256 (sprzeciw musi przetrwać jako dowód dla UKE, hasz spełnia
+zasadę minimalizacji); `kontakt_historia` bez treści wiadomości i bez nazwisk, tylko
+`{data, kanal, szablon, wynik}`. Skrzynka funkcyjna (`rodo@`, `biuro@`, `kontakt@`) formalnie nie jest
+daną osobową, ale w repo i tak jest zbędna.
+
 ## Mechanizm awarii (dlaczego)
 
 Historia gita jest kompletna: `git rm` i nowy commit nie usuwają starych blobów, a każdy klon pobiera

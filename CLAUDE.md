@@ -214,9 +214,16 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
   - **DO ZROBIENIA NAJPIERW (blokuje F0):** spotkanie decyzyjne nad 24 decyzjami (domyślne wybory
     obowiązują przy braku odpowiedzi); dane administratora JDG do `/rodo`; **sprawdzić, czy repo
     GitHub jest publiczne** (jeśli tak, `docs/nuconic-ekosystem-referencja.md` i ten plik łamią
-    zasadę #3 niezależnie od strony); **`leadscout/leads.json` jest śledzony przez gita i zawiera
-    adres e-mail oraz wzmianki o osobach** — wyczyścić przed upublicznieniem; rotacja klucza
-    Anthropic z appki KSeF; portfolio i zdjęcie Pawła.
+    zasadę #3 niezależnie od strony); **`leadscout/leads.json` (śledzony przez gita) zawiera jedną
+    skrzynkę funkcyjną `rodo@…` z publicznego ogłoszenia i JEDNO nazwisko w `uwagi_weryfikacji`**
+    (zweryfikowane przez okno c1; pola `hook` są bezosobowe) — dwie linie do wycięcia, a przed
+    ewentualnym upublicznieniem repo także czyszczenie historii (`git filter-repo`), bo commit
+    z 2026-07-23 już je zawiera i usunięcie z HEAD nic nie da. **Zasada podziału danych (od c1):**
+    `leads.json` tylko dane podmiotów (nazwa, NIP/REGON/KRS, PKD, adres siedziby, sygnały, oceny);
+    nazwiska, role i LinkedIn wyłącznie w `decydenci.local.json` POZA gitem; `suppression.json`
+    z kluczami jako SHA-256, nigdy plaintext; `kontakt_historia` bez treści i nazwisk. Powód:
+    historia gita jest niekasowalna, więc czyni nieusuwalnymi dane, które art. 17 i 21 RODO każą
+    usunąć na żądanie. Dalej: rotacja klucza Anthropic z appki KSeF; portfolio i zdjęcie Pawła.
 
 - **2026-07-27 (sesja reframe „szeroki wachlarz" + KSeF + redesign) — POZYCJONOWANIE ZMIENIONE:**
   - **Reframe z „12 gotowych narzędzi (menu)" na „budujemy custom pod proces — oto DOWODY"**
