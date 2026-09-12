@@ -46,8 +46,8 @@ export const PAGES_SEO: Record<PageKey, PageSeo> = {
   },
   tools: {
     title: {
-      pl: "Realizacje i dema Klarow: 13 narzędzi do otwarcia",
-      en: "Klarow work and demos: 13 tools you can open",
+      pl: "Narzędzia, które zbudowaliśmy: 13 do otwarcia",
+      en: "Tools we have built: 13 you can open right now",
     },
     description: {
       pl: "Raport zarządczy, kontroling kosztów, integracja z KSeF, importy z ERP, płatności i obieg dokumentów. Każde otwierasz i liczysz na danych przykładowych.",

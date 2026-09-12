@@ -108,7 +108,14 @@ const has404 = allFiles.some((p) => path.basename(p) === "404.html");
 // w sitemapie to więc DWIE różne liczby; porównujemy sitemapę z trasami INDEKSOWANYMI.
 const isNoindex = (p) => {
   try {
-    const head = fs.readFileSync(p, "utf8").slice(0, 8192);
+    /* Czytamy CAŁY <head>, nie pierwsze N bajtów. Powód z F1 (2026-09-12): prerender
+       dokleja blok SEO na KOŃCU nagłówka, za skryptem wejściowym i sondą ?debug=1,
+       więc po dołożeniu preloadu kadru hero <meta name="robots"> na /rodo wylądował
+       na znaku 8519 i sztywny wycinek 8 KB przestał go widzieć: trasa z noindex była
+       liczona jako indeksowana, a bramka podnosiła fałszywy BLOCKER. */
+    const raw = fs.readFileSync(p, "utf8");
+    const end = raw.toLowerCase().indexOf("</head");
+    const head = end === -1 ? raw : raw.slice(0, end);
     return /<meta[^>]+name=["']robots["'][^>]*content=["'][^"']*noindex/i.test(head);
   } catch {
     return false;

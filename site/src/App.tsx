@@ -26,6 +26,8 @@ import {
   CircleDot,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
+import HeroMedia, { HeroPoster } from "@/components/HeroMedia";
+import { MediaBoundary } from "@/motion/MediaBoundary";
 import BgBoundary from "@/components/BgBoundary";
 import CollaborationFlow from "@/components/CollaborationFlow";
 import Differentiators from "@/components/Differentiators";
@@ -108,74 +110,43 @@ function Section({
   );
 }
 
-/* ── HERO ── (mniej tekstu; breadth = chipy ikonowe, nie akapit)
-   H1, lead i etykiety CTA przychodzą z src/data/messaging.ts: to samo zdanie
-   stoi w meta, w JSON-LD, w llms.txt i w shellu prerendera. Tutaj zostają
-   wyłącznie chipy, czyli copy własne tej sekcji. */
-const HERO = {
-  pl: {
-    chips: [
-      { icon: BarChart3, label: "Raporty i kontroling" },
-      { icon: Plug, label: "Integracje (KSeF, ERP)" },
-      { icon: ArrowLeftRight, label: "Importy danych" },
-      { icon: ClipboardCheck, label: "Obieg dokumentów" },
-      { icon: Gauge, label: "Panele i dashboardy" },
-    ],
-  },
-  en: {
-    chips: [
-      { icon: BarChart3, label: "Reports & controlling" },
-      { icon: Plug, label: "Integrations (KSeF, ERP)" },
-      { icon: ArrowLeftRight, label: "Data imports" },
-      { icon: ClipboardCheck, label: "Document workflows" },
-      { icon: Gauge, label: "Panels & dashboards" },
-    ],
-  },
-};
-
+/* ── HERO ── (plan §3 S1: split, DOKŁADNIE 4 elementy)
+   H1 = MESSAGING.oneLiner, lead = MESSAGING.subtext, para CTA (primary biały +
+   ghost) i media. Copy przychodzi WYŁĄCZNIE z src/data/messaging.ts: to samo
+   zdanie stoi w meta, w JSON-LD, w llms.txt i w shellu prerendera.
+   Usunięte 2026-09-12 wobec v1 (reguła design-hero-discipline): duplikat
+   wordmarku, chipy ikonowe i telefon pod CTA. Telefon żyje w stopce i na
+   /oferta; wachlarz usług w sekcji „Co możemy zbudować”.
+   Bez animacji wejścia: shell prerendera pokazuje te same elementy, więc każde
+   `initial` dałoby mignięcie (motion-no-initial-hidden-above-fold). */
 function Hero({ onBook }: { onBook: () => void }) {
   const { lang } = useLang();
-  const t = pick(lang, HERO);
   return (
-    <div className="flex flex-col items-center text-center px-6">
-      <span className="brand-word" style={{ fontSize: 15 }}>KLAROW</span>
-      <h1
-        className="mt-5 max-w-3xl text-4xl md:text-6xl font-extrabold tracking-tight leading-[1.08]"
-        style={{ color: "var(--heading)" }}
-      >
-        {pick(lang, MESSAGING.oneLiner)}
-      </h1>
-      <p className="mt-5 max-w-2xl text-lg md:text-xl" style={{ color: "var(--foreground)" }}>
-        {pick(lang, MESSAGING.subtext)}
-      </p>
-      {/* breadth = chipy ikonowe (mniej tekstu, więcej przekazu) */}
-      <div className="mt-6 flex flex-wrap items-center justify-center gap-2 max-w-2xl">
-        {t.chips.map((c) => (
-          <span
-            key={c.label}
-            className="chip"
-            style={{ display: "inline-flex", alignItems: "center", gap: 6 }}
-          >
-            <c.icon size={13} style={{ color: "var(--primary)" }} /> {c.label}
-          </span>
-        ))}
+    <section className="hero">
+      <div className="hero-inner">
+        <div className="hero-copy">
+          <h1 className="hero-title">{pick(lang, MESSAGING.oneLiner)}</h1>
+          <p className="hero-lead">{pick(lang, MESSAGING.subtext)}</p>
+          <div className="hero-cta">
+            <button className="btn btn-primary" type="button" onClick={onBook}>
+              {pick(lang, MESSAGING.cta.primary)}
+            </button>
+            <Link className="btn btn-secondary" to="/narzedzia">
+              {pick(lang, MESSAGING.cta.secondary)}
+            </Link>
+          </div>
+        </div>
+        {/* Rama kadru: jedyne miejsce mediów na stronie (media-video-placement).
+            `position: relative` i `overflow: hidden` siedzą w .hero-frame, więc
+            media są `absolute` w ramie, nigdy `fixed`, i nie tworzą kontekstu
+            stackingu w .content-layer (bug iOS „samo tło”, 2026-07-24/26). */}
+        <div className="hero-frame">
+          <MediaBoundary fallback={<HeroPoster />}>
+            <HeroMedia />
+          </MediaBoundary>
+        </div>
       </div>
-      <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-        <button className="btn btn-primary" type="button" onClick={onBook}>
-          {pick(lang, MESSAGING.cta.primary)}
-        </button>
-        <Link className="btn btn-secondary" to="/narzedzia">
-          {pick(lang, MESSAGING.cta.secondary)}
-        </Link>
-      </div>
-      <a
-        href={PHONE_HREF}
-        className="mt-4 inline-flex items-center gap-2 text-sm font-bold"
-        style={{ color: "var(--muted-foreground)" }}
-      >
-        <Phone size={14} style={{ color: "var(--primary)" }} /> {PHONE_DISPLAY}
-      </a>
-    </div>
+    </section>
   );
 }
 
@@ -741,9 +712,7 @@ function HomePage({ onBook }: { onBook: () => void }) {
         jsonLd={[ORG_JSONLD]}
       />
       <PageMain>
-        <div className="pb-4">
-          <Hero onBook={onBook} />
-        </div>
+        <Hero onBook={onBook} />
         <Capabilities />
         <ProofBand />
         <Pain />

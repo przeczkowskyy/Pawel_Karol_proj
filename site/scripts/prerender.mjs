@@ -42,6 +42,13 @@ for (const r of routes) {
     .replace(/<meta[^>]*property="og:description"[^>]*>/, "")
     .replace(/<meta[^>]*property="og:url"[^>]*>/, "");
 
+  /* Preload kadru hero ma sens wyłącznie na „/”: na 18 pozostałych trasach
+     to 64 KB zabrane fontowi i CSS-owi na ścieżce krytycznej, a sam obraz
+     bywa wtedy promowany na kandydata LCP (perf-lcp-poster-preload p.2). */
+  if (r.path !== "/") {
+    html = html.replace(/\s*<link[^>]*rel="preload"[^>]*as="image"[^>]*>/, () => "");
+  }
+
   const url = "https://klarow.com" + (r.path === "/" ? "/" : r.path);
   /* 404 nie jest adresem kanonicznym żadnej treści: bez canonical i bez og:url */
   const isErrorPage = r.file === "404.html";

@@ -146,3 +146,185 @@
    (getBoundingClientRect, clientWidth osi czasu, IntersectionObserver) i liczyła
    się różnie w Safari, Firefoksie i Chrome. Rolę skalowania przejęły `clamp()`
    na stopniach `--text-*` oraz `--container` w tokens.css. */
+
+/* ── HERO strony głównej (plan „strona v2” §3 S1) ───────────────────────
+   Split: tekst w kolumnach 1-6, kadr produktu w 7-12. Kadr jest przycinany
+   LAYOUTEM (`overflow: hidden` na ramie), nie obrazem.
+
+   WARSTWY (to jest miejsce, w którym projekt wywracał się dwa razy):
+   kolejność malowania wynika z KOLEJNOŚCI W DOM, nie z `z-index`.
+   Rama `.hero-frame` jest `position: relative`, media stoją w niej
+   `absolute` z longhandami. Ani jednego `position: fixed` i ani jednego
+   nowego kontekstu stackingu w `.content-layer` (który CELOWO nie ma
+   `z-index`; `.bg-layer` zostaje z `z-index: -1`). Historia: iOS pod
+   `overflow: hidden` nie malował elementów `fixed` uwięzionych w kontekście
+   stackingu warstwy treści, czyli „samo tło na telefonie” (2026-07-24/26). */
+.hero {
+  position: relative;
+  overflow: hidden;
+  min-height: min(72dvh, 640px);
+  display: flex;
+  /* Plan §3 S1 mówi „tekst wyrównany do dołu”, ale to założenie kadru
+     wychodzącego poza siatkę. W F2 rama stoi w kolumnach 7-12 i ma 16:10, więc
+     przy `min(86dvh, 820px)` wyrównanie do dołu zostawiało ~390 px pustki pod
+     nawigacją (zmierzone zrzutem 1440x900). Wyśrodkowanie dzieli tę pustkę na
+     pół i czyta się jak decyzja, nie jak błąd. Gdy kadr zacznie wychodzić poza
+     siatkę, wraca `flex-end`. */
+  align-items: center;
+  padding-block: clamp(32px, 6vw, 72px);
+}
+.hero-inner {
+  width: 100%;
+  max-width: var(--container);
+  /* 24px = px-6 pozostałych sekcji: hero ma stać w tej samej kolumnie tekstu */
+  margin-inline: auto;
+  padding-inline: 24px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  align-items: center;
+}
+.hero-title {
+  margin: 0;
+  max-width: 34ch;
+  /* NIE `--text-display`, choć to nagłówek pierwszego ekranu: ten stopień
+     (do 68 px) był kalibrowany pod hero na pełnej szerokości. W splicie tytuł
+     dostaje pole ~6 kolumn i zmierzone zrzutami wychodziło 5 linii na 1440 px
+     oraz 4 na 390 px, przy wymaganych ≤ 2 i ≤ 3 (design-hero-discipline).
+     `--text-3xl` (40 px na 1440, 28 px na 390) mieści PL i EN w limicie.
+     Do decyzji właściciela tokenów: albo `--text-display` dostaje drugą
+     kalibrację pod split, albo kolumna tekstu rośnie do 7. */
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  /* najdłuższe słowo EN nie może rozepchnąć kolumny na 390 px */
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+  color: var(--heading);
+}
+.hero-lead {
+  margin-top: 20px;
+  max-width: 46ch;
+  font-size: clamp(1.0625rem, 1.6vw, 1.25rem);
+  line-height: 1.5;
+  color: var(--foreground);
+}
+.hero-cta {
+  margin-top: 28px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.hero-frame {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  max-height: 320px;
+  border: 1px solid var(--border);
+  border-radius: 0;
+}
+.hero-media {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+}
+.hero-media img,
+.hero-media video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* na wąskim ekranie rama jest niższa niż kadr: trzymamy górę pulpitu */
+  object-position: top;
+}
+/* Crossfade kadr → nagranie: jedyny ruch w hero. Wideo czeka na `canplay`
+   (atrybut data-ready ustawia HeroMedia), poster zostaje pod spodem jako
+   zapas na pauzę, awarię i koniec nagrania.
+
+   DWA PIKSELE WCIĘCIA SĄ TU CELOWE I NIE WOLNO ICH USUNĄĆ (perf-lcp-poster-preload
+   p. 4a: element LCP na „/” MUSI być kadrem `img.hero-shot`). Zmierzone na
+   Chromium 149, 1440x900: wideo malowane na dokładnie tym samym pudełku co kadr
+   raportowało 180 499 px² wobec 180 230 px² kadru (różnica z zaokrągleń
+   subpikselowych) i jako WIĘKSZY kandydat przejmowało tytuł LCP, przesuwając go
+   z 0,12 s na 0,19 s. Wcięcie 2 px daje 177 288 px², czyli wideo nie może już
+   wygrać. Widać to zerowo: pod spodem leży TEN SAM obraz (klatka 0 nagrania).
+   Alternatywa z reguły (montaż wideo dopiero po pierwszej interakcji) zabija
+   moment „hero się budzi”, więc zostaje wcięcie. */
+/* selektor z elementem, bo wspolna regula `.hero-media video` ma wyzsza
+   specyficznosc niz sama klasa i skasowalaby wciecie */
+.hero-media video.hero-clip {
+  top: 2px;
+  left: 2px;
+  width: calc(100% - 4px);
+  height: calc(100% - 4px);
+  opacity: 0;
+  transition: opacity var(--duration-media) var(--ease-out);
+}
+.hero-media video.hero-clip[data-ready="true"] {
+  opacity: 1;
+}
+/* Kontrola pauzy (WCAG 2.2.2). Bez `z-index`: przycisk stoi w DOM PO
+   `.hero-media`, więc maluje się wyżej. Tło `.btn-secondary` jest
+   nieprzezroczyste, więc kontrast nie zależy od najjaśniejszej klatki. */
+/* Kontrola pauzy pojawia się DOPIERO, gdy nagranie faktycznie gra (stan `started`
+   w HeroMedia). Wcześniej wisiała nad kadrem także przy samym posterze i zasłaniała
+   ostatni wiersz pulpitu, czyli podpis „DEMO, dane fikcyjne, read-only", który niesie
+   dowód. WCAG 2.2.2 wymaga mechanizmu dla treści, która RUSZA SIĘ dłużej niż 5 s;
+   nieruchomy kadr nie jest taką treścią. Pozycja w rogu zostaje, bo `.hero-frame`
+   ma `overflow: hidden` i przycisk pod ramką zostałby przycięty. */
+.hero-media-toggle {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  min-height: 44px;
+}
+/* pole klikalne >= 44x44 px bez powiększania samego przycisku */
+.hero-media-toggle::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  bottom: -6px;
+  left: -6px;
+}
+@media (min-width: 1024px) {
+  .hero {
+    min-height: min(86dvh, 820px);
+  }
+  .hero-inner {
+    grid-template-columns: repeat(12, 1fr);
+    gap: 24px;
+  }
+  .hero-copy {
+    grid-column: 1 / span 6;
+  }
+  .hero-frame {
+    grid-column: 7 / span 6;
+    max-height: none;
+  }
+  .hero-media img,
+  .hero-media video {
+    object-position: center;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  /* Pas bezpieczeństwa: przy ograniczonym ruchu nagranie i tak NIE POWSTAJE
+     (bramka w HeroMedia), ale gdyby kiedykolwiek powstało, nie zobaczy go
+     nikt, kto o to poprosił. Przycisk pauzy znika razem z nim: nie ma czego
+     pauzować. */
+  .hero-media video {
+    display: none;
+  }
+  .hero-media-toggle {
+    display: none;
+  }
+  .hero-media video.hero-clip {
+    transition: none;
+  }
+}

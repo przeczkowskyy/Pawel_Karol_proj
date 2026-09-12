@@ -6,6 +6,14 @@ import { NOT_FOUND_COPY, PAGES_SEO, SKIP_LINK } from "@/data/pagesSeo";
 import { MESSAGING } from "@/data/messaging";
 import { RODO, type RodoObjection, type RodoSection } from "@/data/rodo";
 import { EMAIL, MAIL_HREF, ORIGIN, PHONE_DISPLAY, PHONE_E164, PHONE_HREF } from "@/data/contact";
+import {
+  HERO_ALT,
+  HERO_H,
+  HERO_POSTER,
+  HERO_POSTER_SIZES,
+  HERO_POSTER_SRCSET,
+  HERO_W,
+} from "@/data/media";
 import { ORG_JSONLD, toolJsonLd, faqPageJsonLd } from "@/components/Seo";
 
 /* Prerender (SSG): budowany osobno przez `vite build --ssr` i odpalany
@@ -131,14 +139,34 @@ function H2({ children }: { children: React.ReactNode }) {
 function HomeShell() {
   return (
     <ShellChrome>
-      <span className="brand-word" style={{ fontSize: 15 }}>KLAROW</span>
-      <h1 className="mt-4 text-4xl font-extrabold tracking-tight" style={HEAD}>
-        {MESSAGING.oneLiner.pl}
-      </h1>
-      <p className="mt-4 max-w-3xl text-lg" style={BODY}>
-        {MESSAGING.subtext.pl}
-      </p>
-      <p className="mt-3 max-w-3xl text-sm" style={MUTED}>
+      {/* HERO bez JS (plan §3 S1): ten sam H1, ten sam lead z messaging.ts,
+          oba CTA jako zwykłe linki i kadr produktu jako obraz. Zero nagrania
+          i zero przycisku pauzy: nagranie montuje wyłącznie React po `load`
+          (bramka: zero wystąpień elementu video w plikach HTML z dist).
+          Kadr jest elementem LCP także tutaj, więc ma fetchPriority="high",
+          jawne wymiary i ten sam `srcset`, co preload w index.html. */}
+      <h1 className="hero-title" style={HEAD}>{MESSAGING.oneLiner.pl}</h1>
+      <p className="hero-lead" style={BODY}>{MESSAGING.subtext.pl}</p>
+      <div className="hero-cta">
+        <a className="btn btn-primary" href={MAIL_HREF}>{MESSAGING.cta.primary.pl}</a>
+        <a className="btn btn-secondary" href="/narzedzia">{MESSAGING.cta.secondary.pl}</a>
+      </div>
+      <div className="hero-frame" style={{ marginTop: 32 }}>
+        <div className="hero-media">
+          <img
+            className="hero-shot"
+            src={HERO_POSTER}
+            srcSet={HERO_POSTER_SRCSET}
+            sizes={HERO_POSTER_SIZES}
+            alt={HERO_ALT.pl}
+            width={HERO_W}
+            height={HERO_H}
+            fetchPriority="high"
+            decoding="async"
+          />
+        </div>
+      </div>
+      <p className="mt-6 max-w-3xl text-sm" style={MUTED}>
         {MESSAGING.zeroVendorCloud.pl}
       </p>
       <ContactLine />
@@ -618,7 +646,7 @@ function llmsTxt(pl: ToolItem[], en: ToolItem[]): string {
 Trzy filary:
 ${pillars}
 
-Główne strony: [Realizacje i dema](${ORIGIN}/narzedzia) · [Oferta](${ORIGIN}/oferta) · [FAQ](${ORIGIN}/faq) · [RODO i prywatność](${ORIGIN}/rodo)
+Główne strony: [Narzędzia](${ORIGIN}/narzedzia) · [Oferta](${ORIGIN}/oferta) · [FAQ](${ORIGIN}/faq) · [RODO i prywatność](${ORIGIN}/rodo)
 
 Dwa twarde wyróżniki:
 - ${MESSAGING.zeroVendorCloud.pl} Dema na klarow.com liczą w 100% w przeglądarce, bez logowania.

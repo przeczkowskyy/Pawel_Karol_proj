@@ -25,7 +25,9 @@ import { useLang, pick, type Lang } from "@/i18n";
    byłby drugim źródłem prawdy (code-contact-single-source). */
 
 const LINKS = [
-  { to: "/narzedzia", label: { pl: "Realizacje i dema", en: "Work and demos" } },
+  // D31: „Narzędzia", nie „Realizacje". „Realizacja" znaczy „zlecenie dla klienta",
+  // a klientów jest zero; URL /narzedzia zostaje bez zmian (inwestycja SEO od lipca).
+  { to: "/narzedzia", label: { pl: "Narzędzia", en: "Tools" } },
   { to: "/oferta", label: { pl: "Oferta", en: "Offer" } },
   { to: "/faq", label: { pl: "FAQ", en: "FAQ" } },
 ] as const;

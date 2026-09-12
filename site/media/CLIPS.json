@@ -1,0 +1,71 @@
+{
+  "hero-production-v1.webm": {
+    "bytes": 340581,
+    "crf": 20,
+    "durationMs": 8000,
+    "engine": "chromium-1228",
+    "fps": 24,
+    "framesSha256": "d6d3ee12f3dce906a5ddac8cc15e2c6ab27f1714ed927d7e3fdcd2dc88f2fceb",
+    "h": 1000,
+    "posterPsnrDb": 52.92,
+    "scene": "tydzien-przelicza",
+    "slug": "dashboard-produkcji",
+    "w": 1600
+  },
+  "tools/audyt-jakosci-danych-v1.webm": {
+    "bytes": 318918,
+    "crf": 24,
+    "durationMs": 6000,
+    "engine": "chromium-1228",
+    "fps": 24,
+    "framesSha256": "bb495c5ebd311ba41508ab66091eae4e953d57f922861b8604f0ba63ac0bed37",
+    "h": 600,
+    "loopPsnrDb": 63.43,
+    "posterPsnrDb": 48.26,
+    "scene": "macierz-werdykt",
+    "slug": "audyt-jakosci-danych",
+    "w": 960
+  },
+  "tools/import-z-rekoncyliacja-v1.webm": {
+    "bytes": 309622,
+    "crf": 26,
+    "durationMs": 6000,
+    "engine": "chromium-1228",
+    "fps": 24,
+    "framesSha256": "12f227b1b4d31f60df0f4ffe7ceb850d81d0fab44cbe57429b35a6cefa5786c5",
+    "h": 600,
+    "loopPsnrDb": 71.54,
+    "posterPsnrDb": 49.41,
+    "scene": "pass-co-do-grosza",
+    "slug": "import-z-rekoncyliacja",
+    "w": 960
+  },
+  "tools/os-czasu-zadan-v1.webm": {
+    "bytes": 108283,
+    "crf": 24,
+    "durationMs": 6000,
+    "engine": "chromium-1228",
+    "fps": 24,
+    "framesSha256": "d562dc7f017ecdb9d53afef0ca8ac2847e5485f6dee433a6a4aac2b74a388c83",
+    "h": 600,
+    "loopPsnrDb": 56.5,
+    "posterPsnrDb": 46.98,
+    "scene": "skala-dzien-dryf",
+    "slug": "os-czasu-zadan",
+    "w": 960
+  },
+  "tools/raport-zarzadczy-v1.webm": {
+    "bytes": 184478,
+    "crf": 24,
+    "durationMs": 6000,
+    "engine": "chromium-1228",
+    "fps": 24,
+    "framesSha256": "ccfee0166dedbcee4f5854da5bf46b1cdd377439e2ab83986677bd91b4518d60",
+    "h": 600,
+    "loopPsnrDb": 76.47,
+    "posterPsnrDb": 50.36,
+    "scene": "przyklad-kpi-wykres",
+    "slug": "raport-zarzadczy",
+    "w": 960
+  }
+}
