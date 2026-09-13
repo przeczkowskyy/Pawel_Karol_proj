@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import * as m from "motion/react-m";
-import { useMotionValue, useReducedMotion, useScroll, useTransform } from "motion/react";
+import { useMotionValue, useReducedMotion, useScroll, useSpring, useTransform } from "motion/react";
 import { SHIFT } from "@/motion/tokens";
 import { SceneContext, useStage, type SceneApi } from "./context";
 
@@ -131,8 +131,20 @@ export function Scene({
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
 
   /* Lokalny postęp sceny podawany dzieciom. To NIE jest `scrollYProgress`:
-     to wartość bramkowana widocznością, więc poza zasięgiem stoi. */
-  const progress = useMotionValue(0);
+     to wartość bramkowana widocznością, więc poza zasięgiem stoi.
+
+     WYGŁADZANIE (korekta 2026-09-13 po ocenie foundera: „animacje są tragiczne,
+     w ogóle nie smooth"). Pierwsza wersja przypinała postęp JEDEN DO JEDNEGO do
+     pozycji paska przewijania, więc każde kliknięcie kółka i każdy ruch palca
+     przeskakiwał animację dokładnie o tyle, ile przesunął się scroll. Tak
+     zachowuje się suwak, nie animacja: ruch był skokowy, bo scroll jest skokowy.
+     Teraz surowy odczyt karmi sprężynę, a dzieci dostają jej wyjście: ruch
+     dogania przewijanie z lekkim opóźnieniem i wytraca prędkość, zamiast
+     teleportować się między pozycjami. `restDelta` jest mały, bo scena
+     w spoczynku musi dojść do dokładnego 0 albo 1, inaczej treść zatrzymałaby
+     się o włos od pełnej widoczności. */
+  const raw = useMotionValue(0);
+  const progress = useSpring(raw, { stiffness: 120, damping: 28, mass: 0.6, restDelta: 0.0005 });
   const [inView, setInView] = useState(false);
 
   /* 0) Meldunek do ramy: kim jestem i gdzie leżę w dokumencie. Rama układa
@@ -174,7 +186,8 @@ export function Scene({
         na klatkę, i leży pod bramką `inView`. */
   useEffect(() => {
     if (reduce) {
-      progress.set(1);
+      raw.jump(1);
+      progress.jump(1);
       return;
     }
     if (!inView) {
@@ -186,17 +199,19 @@ export function Scene({
          (reguła `motion-no-initial-hidden-above-fold`). Gdy scena naprawdę
          wyjeżdża z zasięgu, margines obserwatora wynosi cały ekran, więc
          odczyt i tak jest wtedy dokładnym 0 albo 1. */
-      progress.set(scrollYProgress.get());
+      raw.jump(scrollYProgress.get());
+      progress.jump(scrollYProgress.get());
       return;
     }
-    progress.set(scrollYProgress.get());
+    raw.jump(scrollYProgress.get());
+    progress.jump(scrollYProgress.get());
     if (import.meta.env.DEV) countSubscription(1);
-    const stop = scrollYProgress.on("change", (v) => progress.set(v));
+    const stop = scrollYProgress.on("change", (v) => raw.set(v));
     return () => {
       stop();
       if (import.meta.env.DEV) countSubscription(-1);
     };
-  }, [inView, reduce, progress, scrollYProgress]);
+  }, [inView, reduce, raw, progress, scrollYProgress]);
 
   /* Ruszają się wyłącznie `opacity` i `transform` (reguła `motion-gpu-props-only`).
      Hooki stoją bezwarunkowo, a gałąź ograniczonego ruchu podmienia dopiero
