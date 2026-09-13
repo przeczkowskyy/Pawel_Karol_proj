@@ -1,0 +1,267 @@
+/* ── Silnik prezentacji: warstwa wyglądu ────────────────────────────────────
+   Cały wygląd scen siedzi TUTAJ, nie w `style={{ }}` komponentów (reguła
+   `code-no-inline-style-colors`: w TSX wolno ustawiać wyłącznie wartości
+   runtime i wyłącznie przez zmienne custom). Z TSX przychodzi dokładnie jedna
+   taka zmienna: `--_scene-length`, czyli długość toru przewijania sceny.
+
+   Plik importuje `Stage.tsx`, więc trafia do tego samego chunku co prezentacja
+   i nie obciąża tras, które prezentacji nie renderują.
+
+   Kolory: wyłącznie tokeny z `src/styles/tokens.css`. Ani jednego hexa.
+   Tam, gdzie potrzebna jest przezroczystość, składamy ją z tokenu `*-rgb`
+   dokładnie tak, jak robi to sam `tokens.css` przy `--accent-a8`.
+
+   PUŁAPKA, KTÓREJ TEN PLIK UNIKA: `position: sticky` przestaje działać po cichu,
+   gdy KTÓRYKOLWIEK przodek ma `overflow` inny niż `visible`. Dlatego kadrowanie
+   (`overflow: hidden`) siedzi na SAMYM elemencie przyklejonym, nigdy na
+   `.pr-stage` ani na `.pr-scene`. Jeśli scena przestanie się kleić, szukaj
+   `overflow-x: hidden` dopisanego gdzieś wyżej w layoucie strony. */
+
+/* ── rama ─────────────────────────────────────────────────────────────────── */
+
+.pr-stage {
+  /* CELOWO bez `overflow`, bez `transform`, bez `filter` i bez `will-change`:
+     każda z tych własności zrobiłaby z ramy albo klipujący kontener (sticky
+     ginie), albo blok zawierający dla `position: fixed` (wskaźnik postępu
+     przestałby się trzymać krawędzi okna). */
+  position: relative;
+  width: 100%;
+}
+
+/* ── scena ────────────────────────────────────────────────────────────────── */
+
+.pr-scene {
+  position: relative;
+  /* jedyna wartość przychodząca z TSX; domyślna wartość zostaje w CSS, żeby
+     scena bez propsa nadal miała tor */
+  /* para vh + dvh: na telefonie pasek adresu zmienia wysokość okna, a tor sceny
+     ma trwać tyle samo ekranów niezależnie od tego (reguła design-overflow-rules) */
+  height: var(--_scene-length, 200vh);
+  height: var(--_scene-length, 200dvh);
+}
+
+.pr-scene-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  /* dvh po vh: telefon z chowającym się paskiem adresu nie przycina kadru
+     (reguła a11y-safe-area-dvh); stare silniki zostają przy vh */
+  height: 100dvh;
+  display: grid;
+  place-items: center;
+  /* kadrowanie TŁA sceny. Stoi na elemencie przyklejonym, więc nie jest
+     przodkiem żadnego innego sticky i niczego nie psuje. */
+  overflow: hidden;
+}
+
+/* warstwa tła sceny: wideo, kadr albo gradient zastępczy */
+.pr-scene-media {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  /* longhandy zamiast `inset`: minifier CSS potrafił sklejać je z powrotem
+     w skrót, którego stare WebKity nie znały (nauczka z 2026-07-22) */
+  pointer-events: none;
+}
+
+/* przyciemnienie pod tekstem: kontrast tekstu nie może zależeć od tego,
+   jaka klatka nagrania akurat stoi pod spodem (reguła design-contrast-aa) */
+.pr-scene-scrim {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(var(--gray-975-rgb), 0.55) 0%,
+    rgba(var(--gray-975-rgb), 0.72) 55%,
+    rgba(var(--gray-975-rgb), 0.88) 100%
+  );
+}
+
+.pr-scene-content {
+  position: relative;
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+  padding-block: var(--gutter);
+  /* treść stoi nad tłem bez tworzenia kontekstu stackingu z ujemnym z-index
+     pod spodem: wystarczy kolejność w DOM i `position: relative` */
+}
+
+/* ── wskaźnik postępu (jedyna „nawigacja" tej wersji) ─────────────────────── */
+
+.pr-rail {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 100vh;
+  height: 100dvh;
+  z-index: 40;
+  pointer-events: none;
+  background: var(--border-subtle);
+}
+
+.pr-rail-fill {
+  width: 100%;
+  height: 100%;
+  transform-origin: top center;
+  background: var(--accent);
+}
+
+.pr-count {
+  position: fixed;
+  right: calc(var(--gutter) + env(safe-area-inset-right, 0px));
+  bottom: calc(var(--gutter) + env(safe-area-inset-bottom, 0px));
+  z-index: 40;
+  margin: 0;
+  pointer-events: none;
+  font-size: var(--text-xs);
+  line-height: 1;
+  letter-spacing: 0.14em;
+  font-variant-numeric: tabular-nums;
+  color: var(--foreground-faint);
+}
+
+/* ── media sceny ──────────────────────────────────────────────────────────── */
+
+.pr-media {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+/* kadr (poster albo zrzut): zawsze w DOM, zawsze pod nagraniem */
+.pr-media-still,
+.pr-media-clip {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Nagranie wjeżdża dopiero, gdy ma klatki (`data-ready`). Do tego czasu widać
+   kadr. Przejście jest na samej nieprzezroczystości, więc nie rusza layoutu. */
+.pr-media-clip {
+  opacity: 0;
+  transition: opacity var(--duration-media) var(--ease-std);
+}
+.pr-media-clip[data-ready="true"] {
+  opacity: 1;
+}
+
+/* ── tło zastępcze ────────────────────────────────────────────────────────
+   Ma wyglądać jak decyzja, nie jak brak pliku: stal wstaje od dołu kadru,
+   winieta zamyka rogi, a opcjonalna siatka komórek (sceny „plikowe") jest
+   wygaszona maską, więc nie czyta się jak tapeta. Wszystko statyczne:
+   zero animacji, zero warstw kompozytora, zero kosztu na telefonie. */
+
+/* Podkład jest NIEPRZEZROCZYSTY i siedzi na ramce, a nie na warstwie stali.
+   Kolejność malowania: podkład, potem kadr, potem stal i winieta. Gdyby
+   nieprzezroczysty kolor był w `.pr-fallback-steel`, przykryłby kadr
+   w wariancie „shot" i nikt by go nie zobaczył. */
+.pr-fallback {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: var(--background);
+}
+
+/* Wyłącznie warstwy PRZEZROCZYSTE: stalowa łuna od dołu plus winieta. */
+.pr-fallback-steel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background:
+    radial-gradient(
+      120% 85% at 50% 100%,
+      rgba(var(--steel-300-rgb), 0.16) 0%,
+      rgba(var(--steel-300-rgb), 0.06) 45%,
+      rgba(var(--gray-975-rgb), 0) 75%
+    ),
+    radial-gradient(
+      100% 70% at 50% 50%,
+      rgba(var(--gray-975-rgb), 0) 40%,
+      rgba(var(--gray-975-rgb), 0.75) 100%
+    );
+}
+
+.pr-fallback-grid {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-image:
+    repeating-linear-gradient(
+      to right,
+      rgba(var(--steel-300-rgb), 0.13) 0 1px,
+      transparent 1px 72px
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      rgba(var(--steel-300-rgb), 0.13) 0 1px,
+      transparent 1px 72px
+    );
+  /* maska używa koloru wyłącznie jako kanału alfa; i tak składamy ją z tokenu,
+     żeby w całym pliku nie było ani jednego literału koloru */
+  -webkit-mask-image: radial-gradient(
+    90% 70% at 50% 45%,
+    rgba(var(--gray-975-rgb), 1) 0%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    90% 70% at 50% 45%,
+    rgba(var(--gray-975-rgb), 1) 0%,
+    transparent 100%
+  );
+}
+
+/* Kadr pod gradientem (wariant „shot"): wygaszony, żeby był fakturą, a nie
+   drugą treścią konkurującą z tekstem sceny. */
+.pr-fallback .pr-media-still {
+  opacity: 0.35;
+}
+
+/* ── ograniczony ruch ─────────────────────────────────────────────────────
+   Warstwa CSS jest DRUGIM zabezpieczeniem obok gałęzi w JS. Tor przewijania
+   znika, scena przestaje być przyklejona i wraca do zwykłego przepływu
+   dokumentu, a treść pokazuje STAN KOŃCOWY (gałąź w `Scene.tsx` ustawia
+   postęp na 1). Wskaźnik postępu znika w całości: nie ma czego pokazywać,
+   bo prezentacja jest wtedy zwykłym ciągiem sekcji.
+   Wymóg reguły `motion-no-pinning-no-scroll-hijack` §B p.3. */
+@media (prefers-reduced-motion: reduce) {
+  .pr-scene {
+    height: auto;
+  }
+  .pr-scene-sticky {
+    position: static;
+    height: auto;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow: visible;
+  }
+  .pr-media-clip {
+    display: none;
+    transition: none;
+  }
+  .pr-rail {
+    display: none;
+  }
+}

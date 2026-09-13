@@ -13,9 +13,6 @@ import {
   Phone,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
-import HeroMedia, { HeroPoster } from "@/components/HeroMedia";
-import HomeSections from "@/pages/Home";
-import { MediaBoundary } from "@/motion/MediaBoundary";
 import BgBoundary from "@/components/BgBoundary";
 import CollaborationFlow from "@/components/CollaborationFlow";
 import Faq from "@/components/Faq";
@@ -24,7 +21,6 @@ import Seo, { ORG_JSONLD, faqPageJsonLd } from "@/components/Seo";
 import { useLang, pick } from "@/i18n";
 import { FAQ_I18N } from "@/data/faq";
 import { NOT_FOUND_COPY, PAGES_SEO, SKIP_LINK } from "@/data/pagesSeo";
-import { MESSAGING } from "@/data/messaging";
 import { RODO, type RodoObjection, type RodoSection } from "@/data/rodo";
 import { EMAIL, MAIL_HREF, PHONE_DISPLAY, PHONE_HREF } from "@/data/contact";
 
@@ -45,6 +41,7 @@ const GLSLHills = lazy(() =>
    - okno rezerwacji dopiero po kliknięciu „Umów rozmowę”.
    Ścieżki literalne, inaczej Rollup nie zrobi z nich osobnych chunków. */
 const ToolPage = lazy(() => import("@/pages/ToolPage"));
+const Presentation = lazy(() => import("@/pages/Presentation"));
 const BookingModal = lazy(() => import("@/components/BookingModal"));
 
 /* Czy renderować ozdobne tło WebGL (animowane wzgórza).
@@ -93,46 +90,6 @@ function Section({
         <div className="mb-7" />
       )}
       {children}
-    </section>
-  );
-}
-
-/* ── HERO ── (plan §3 S1: split, DOKŁADNIE 4 elementy)
-   H1 = MESSAGING.oneLiner, lead = MESSAGING.subtext, para CTA (primary biały +
-   ghost) i media. Copy przychodzi WYŁĄCZNIE z src/data/messaging.ts: to samo
-   zdanie stoi w meta, w JSON-LD, w llms.txt i w shellu prerendera.
-   Usunięte 2026-09-12 wobec v1 (reguła design-hero-discipline): duplikat
-   wordmarku, chipy ikonowe i telefon pod CTA. Telefon żyje w stopce i na
-   /oferta; wachlarz usług w sekcji „Co możemy zbudować”.
-   Bez animacji wejścia: shell prerendera pokazuje te same elementy, więc każde
-   `initial` dałoby mignięcie (motion-no-initial-hidden-above-fold). */
-function Hero({ onBook }: { onBook: () => void }) {
-  const { lang } = useLang();
-  return (
-    <section className="hero">
-      <div className="hero-inner">
-        <div className="hero-copy">
-          <h1 className="hero-title">{pick(lang, MESSAGING.oneLiner)}</h1>
-          <p className="hero-lead">{pick(lang, MESSAGING.subtext)}</p>
-          <div className="hero-cta">
-            <button className="btn btn-primary" type="button" onClick={onBook}>
-              {pick(lang, MESSAGING.cta.primary)}
-            </button>
-            <Link className="btn btn-secondary" to="/narzedzia">
-              {pick(lang, MESSAGING.cta.secondary)}
-            </Link>
-          </div>
-        </div>
-        {/* Rama kadru: jedyne miejsce mediów na stronie (media-video-placement).
-            `position: relative` i `overflow: hidden` siedzą w .hero-frame, więc
-            media są `absolute` w ramie, nigdy `fixed`, i nie tworzą kontekstu
-            stackingu w .content-layer (bug iOS „samo tło”, 2026-07-24/26). */}
-        <div className="hero-frame">
-          <MediaBoundary fallback={<HeroPoster />}>
-            <HeroMedia />
-          </MediaBoundary>
-        </div>
-      </div>
     </section>
   );
 }
@@ -508,15 +465,16 @@ function HomePage({ onBook }: { onBook: () => void }) {
         path="/"
         jsonLd={[ORG_JSONLD]}
       />
-      {/* Strona główna v2 (2026-09-13): sekcje-karty z akapitami zastąpione scenami
-          sterowanymi przewijaniem. Hero zostaje tutaj, bo jest nad zgięciem i musi
-          być w pierwszym chunku; reszta mieszka w pages/Home.tsx i ładuje się leniwie.
-          Capabilities, ProofBand, Pain i HomeNext ZDJĘTE ze strony głównej: to była
-          ta „ściana tekstu", 219 słów w samych kartach. DiffSection („Kalkulator,
-          nie wróżka") wraca w kolejnym kroku jako scena, nie jako lista. */}
+      {/* STRONA GŁÓWNA TO PREZENTACJA (decyzja Karola 2026-09-13): osiem scen
+          w jednym ciągu, bez zakładek, bez sekcji do wyboru. Scenariusz:
+          docs/plan/prezentacja-scenariusz.md. Hero, kafle i listy zdjęte: ich rolę
+          przejęły sceny, bo „za dużo tekstu" padło trzy razy z rzędu.
+          Prezentacja wchodzi leniwie: osiem scen z biblioteką ruchu to realne
+          obciążenie budżetu pierwszego chunku (perf-js-budget-home). */}
       <PageMain pad={false}>
-        <Hero onBook={onBook} />
-        <HomeSections onBook={onBook} />
+        <Suspense fallback={<div style={{ minHeight: "100dvh" }} aria-hidden />}>
+          <Presentation onBook={onBook} />
+        </Suspense>
       </PageMain>
       <Footer />
     </>
@@ -737,7 +695,12 @@ export default function App() {
   const [bookingOpen, setBookingOpen] = useState(false);
   const onBook = () => setBookingOpen(true);
   /* animowane tło WebGL tylko na desktopie: na mobile statyczny gradient .bg-layer */
-  const animatedBg = useAnimatedBg();
+  /* Animowane wzgórza NIE wchodzą na prezentację (2026-09-13). Każda scena niesie
+     własne tło, a wzgórza przebijały się przez wszystkie osiem naraz: zrzut pulpitu,
+     wykres i pejzaż nakładały się w jedną szarą breję, nieczytelną na żadnej warstwie.
+     Na podstronach (narzędzia, oferta, FAQ, RODO) tło zostaje bez zmian. */
+  const isPresentation = useLocation().pathname === "/";
+  const animatedBg = useAnimatedBg() && !isPresentation;
 
   return (
     /* UWAGA: ten wrapper MUSI być bez nieprzezroczystego tła. `.bg-layer` ma

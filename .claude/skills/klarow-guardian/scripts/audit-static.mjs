@@ -393,6 +393,15 @@ function mainRules(file, raw) {
       if (/theme-color|token-exempt|--_/.test(lt)) continue;
       if (/^#[0-9a-fA-F]{3,8}$/.test(m[0]) && /(href|to|id)=["']#/.test(lt)) continue; // kotwice
       if (/^#/.test(m[0]) && src.slice(Math.max(0, m.index - 2), m.index) === "-[") continue; // zgłasza reguła arbitralnych klas
+      /* `rgba(var(--coś-rgb), .5)` TO JEST użycie tokenu, i to dokładnie ten wzorzec,
+         który `tokens.css` zaleca dla przezroczystości (color-mix odpada przez
+         cssTarget safari13). Reguła zgłaszała go jako literał, więc warstwa scen
+         dostała 13 fałszywych HIGH na gradientach zbudowanych poprawnie.
+         Literałem jest dopiero rgba( z liczbą zaraz za nawiasem. */
+      if (/^(?:rgba?|hsla?)\($/.test(m[0])) {
+        const after = src.slice(m.index + m[0].length, m.index + m[0].length + 12);
+        if (/^\s*var\(--/.test(after)) continue;
+      }
       add(file, ln, 1, "design-tokens-only", `kolor literałem ${m[0]} — użyj tokenu`, { snippet: lt });
     }
     if (isJsx(ext)) {

@@ -396,9 +396,11 @@
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 1px;
-  background: var(--border);
-  border: 1px solid var(--border);
+  /* Odstęp zamiast hairline'ów: przy jasnym obrysie kafla siatka 1 px robiła się
+     szumem. Tło sceny widoczne między ekranami czyta się spokojniej. */
+  gap: clamp(0.75rem, 1.5vw, 1.25rem);
+  background: transparent;
+  border: 0;
   grid-template-columns: 1fr;
 }
 
@@ -549,4 +551,257 @@
 .wall-shot--diagram svg {
   width: 100%;
   height: auto;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   PREZENTACJA (2026-09-13): typografia i układ scen
+   Osiem scen jednego ciągu (`src/presentation/scenes/`, treść w
+   `src/data/presentation.ts`). Decyzja foundera: „to ma być prezentacja, jedna
+   wielka animacja wraz ze scrollowaniem, broszura".
+
+   DLACZEGO TYPOGRAFIA JEST TAK DUŻA. To nie jest artykuł, tylko slajd, który
+   widz mija w dwie sekundy. Skala zaczyna się tam, gdzie kończy się skala
+   podstron (`.scene-title` ma maksimum 3,25rem), i sięga 6,5rem: nagłówek ma
+   być czytelny „z drugiego końca pokoju", a nie zapraszać do dopisania akapitu.
+   Dolny koniec każdego `clamp()` jest dobrany pod ekran 320 px: najdłuższe
+   polskie słowo sceny („Zamknięcie") mieści się w wierszu bez łamania.
+
+   Kolory wyłącznie tokenami (`design-tokens-only`): zero hexów, zero rgba.
+   Promienie: tylko 0 i 8 px (Shape Lock, wariant marketing).
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Szerokość i gutter daje JUŻ `.pr-scene-content` silnika (max-width
+   `--container` plus `--gutter` po bokach). Tu dokładamy wyłącznie węższą miarę
+   tekstu: dublowanie paddingu dałoby podwójny margines i poziomy pasek
+   przewijania na telefonie. */
+.pres-scene {
+  width: 100%;
+  max-width: 64rem;
+  margin-inline: auto;
+}
+
+/* scena dowodu: ściana trzynastu kafli bierze pełną szerokość kadru silnika */
+.pres-scene--wide {
+  max-width: none;
+}
+
+/* scena zamknięcia: jedno zdanie na środku ciemnego ekranu */
+.pres-scene--center {
+  text-align: center;
+}
+.pres-scene--center .pres-sub {
+  margin-inline: auto;
+}
+
+/* Nagłówek sceny: JEDNO zdanie, bez wyjątków. `text-wrap: balance` wyrównuje
+   długości wierszy w wielkim stopniu pisma (silniki bez tej własności po prostu
+   zawijają normalnie). `overflow-wrap` chroni wąski ekran przed wysypaniem się
+   długiego polskiego słowa poza kadr. */
+.pres-headline {
+  margin: 0;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.02;
+  font-size: clamp(2.25rem, 1.3rem + 4.8vw, 6.5rem);
+  color: var(--foreground-strong);
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+
+/* Podlinia: tylko tam, gdzie scena bez niej nie ma sensu (dwie sceny na osiem).
+   Miara 34 znaków trzyma ją przy jednym, najwyżej dwóch wierszach. */
+.pres-sub {
+  margin: clamp(0.875rem, 2vw, 1.5rem) 0 0;
+  max-width: 34ch;
+  font-size: clamp(1.0625rem, 0.95rem + 0.8vw, 1.625rem);
+  line-height: 1.35;
+  color: var(--foreground-muted);
+  text-wrap: pretty;
+}
+
+/* ── liczba sceny ────────────────────────────────────────────────────────── */
+.pres-figure {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.4rem;
+  margin: 0 0 clamp(1rem, 2.5vw, 2rem);
+}
+/* Liczba jest największym elementem sceny, większym od nagłówka: ona niesie
+   dowód, zdanie ją tylko nazywa. `tabular-nums` ustawia `ScrollCounter` sam. */
+.pres-figure-value {
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 0.92;
+  font-size: clamp(3.25rem, 1.8rem + 9vw, 9rem);
+  color: var(--accent-text);
+}
+
+/* Działanie pod wynikiem: „8 350 × 12 × 1,2048". Drobne, ale zawsze widoczne,
+   bo od niego zależy, czy liczba jest do sprawdzenia, czy do uwierzenia. */
+.pres-figure-math {
+  font-size: clamp(0.875rem, 0.82rem + 0.35vw, 1.125rem);
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums;
+  color: var(--foreground-muted);
+}
+
+.pres-figure-caption {
+  max-width: 26ch;
+  font-size: clamp(1rem, 0.92rem + 0.5vw, 1.375rem);
+  line-height: 1.3;
+  color: var(--foreground);
+}
+
+/* Źródło liczby: drobne, ale na ekranie, nie w przypisie na dole strony. */
+.pres-source {
+  margin: clamp(1rem, 2.5vw, 2rem) 0 0;
+  max-width: 48ch;
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  color: var(--foreground-faint);
+}
+
+/* ── ilustracja sceny (komponenty z motion/scroll) ───────────────────────── */
+.pres-illo {
+  margin-top: clamp(1.5rem, 4vw, 3rem);
+}
+
+/* Komponenty `ChaosToOrder` i `ScrollChart` niosą własny `figcaption` na dwa
+   zdania. W prezentacji obowiązuje limit jednego zdania na scenę, a scena ma
+   już swoje, więc podpis schodzi do warstwy dla czytników ekranu. NIE
+   `display: none`: czytnik też by go stracił, a to jedyne miejsce, w którym
+   pada „ilustracja, nie dane". */
+.pres-illo figcaption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Zapas na czas ładowania ilustracji: trzyma wysokość, żeby scena nie skakała
+   (CLS), i niczego nie udaje. Para vh + dvh, bo na telefonie pasek adresu
+   zmienia wysokość okna. */
+.pres-illo-skeleton {
+  min-height: min(34vh, 15rem);
+  min-height: min(34dvh, 15rem);
+  border: 1px solid var(--border);
+  background: var(--surface-muted);
+}
+
+/* ── ściana dowodu (scena 6) ─────────────────────────────────────────────── */
+.pres-wall {
+  list-style: none;
+  margin: clamp(1rem, 2.5vw, 2rem) 0 0;
+  padding: 0;
+  display: grid;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  /* KOREKTA 2026-09-13: kafel 8,5rem (136 px) zamieniał zrzut ciemnego pulpitu
+     w nieczytelną plamę, a to on jest tu dowodem, nie zdanie nad nim. Szerszy
+     kafel daje cztery kolumny na desktopie i dwie na telefonie, czyli obraz,
+     na którym widać, że to prawdziwy interfejs, a nie prostokąt. */
+  /* JEDEN RZĄD, nie siatka: trzynaście kafli w siatce nie mieści się w ekranie
+     sceny, a prezentacja nie może mieć sceny wychodzącej poza kadr. Rząd płynie
+     w lewo wraz z przewijaniem (transform w SceneProof), więc oko widzi skalę
+     jako ruch, a nie jako liczbę rzędów. */
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(15rem, 18rem);
+  grid-template-columns: none;
+  width: max-content;
+  will-change: auto;
+}
+
+/* Rama rzeki: przycina ją do szerokości ekranu i chowa nadmiar. Przy ograniczonym
+   ruchu zamienia się w zwykły przewijany pasek, więc treść zostaje dostępna. */
+.pres-scene--wide {
+  overflow: hidden;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pres-scene--wide {
+    overflow-x: auto;
+  }
+}
+
+/* W scenie dowodu nagłówek ustępuje miejsca ekranom: to jedyna scena, w której
+   treścią są obrazy, a nie zdanie. Bez tego wall wychodzi poza ekran. */
+.pres-scene--wide .pres-headline {
+  font-size: clamp(1.5rem, 0.9rem + 2vw, 2.5rem);
+  margin-bottom: 0;
+}
+
+.pres-wall-cell {
+  /* Zrzut ciemnego interfejsu na ciemnym tle sceny znika: na nagraniu z 13.09
+     rzeka kafli była ledwie widoczna. Ekran musi mieć KRAWĘDŹ i trochę światła,
+     inaczej czyta się jak plama, a nie jak działający program. Stąd jasny obrys,
+     podniesiona jasność samego zrzutu i odstęp, przez który widać tło sceny. */
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  min-width: 0;
+  aspect-ratio: 8 / 5;
+  overflow: hidden;
+}
+
+.pres-wall-shot {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  object-fit: cover;
+  /* kadr pulpitu czyta się od góry: pasek nagłówka niesie kontekst */
+  object-position: top;
+  /* Zrzuty są ciemnym interfejsem na ciemnej stronie. Delikatne podbicie
+     jasności i kontrastu oddziela je od tła sceny, nie zmieniając barw marki. */
+  filter: brightness(1.35) contrast(1.08);
+}
+
+/* Kafel bez zrzutu (wdrożenie KSeF: nie ma pulpitu, więc nie ma czego zrzucić).
+   Ta sama proporcja i ta sama ramka, żeby siatka nie drgnęła. */
+.pres-wall-shot--diagram {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  background: var(--surface-muted);
+}
+.pres-wall-shot--diagram svg {
+  width: 100%;
+  height: auto;
+}
+
+/* ── efekt (scena 7) ─────────────────────────────────────────────────────── */
+.pres-beats {
+  list-style: none;
+  margin: clamp(1.5rem, 4vw, 3rem) 0 0;
+  padding: 0;
+  border-top: 1px solid var(--border);
+}
+
+.pres-beat {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-block: clamp(0.875rem, 2vw, 1.5rem);
+  border-bottom: 1px solid var(--border);
+  font-size: clamp(1.0625rem, 0.95rem + 0.8vw, 1.75rem);
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--foreground-strong);
+}
+
+.pres-beat svg {
+  flex: none;
+  color: var(--accent);
+}
+
+/* ── zamknięcie (scena 8) ────────────────────────────────────────────────── */
+.pres-cta {
+  margin-top: clamp(1.5rem, 4vw, 2.5rem);
+  min-height: 48px;
 }
