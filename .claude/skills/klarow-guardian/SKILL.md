@@ -19,7 +19,7 @@ z marką, prawem i decyzjami founderów, i żeby dało się to sprawdzić mechan
 4. Znak: tekstowy wordmark `KLAROW` (`.brand-word` / `BrandMark`), płaski; zero logo graficznego, zero gradientu w tekście.
 5. Ton: founder-led, problem-first, zdania oznajmujące, sentence case; PL kanoniczne + EN przez `{ pl, en }` + `pick()`; zero „AI" w sprzedaży; „kalkulator, nie wróżka".
 6. Dowód: 12 dem liczy na żywo na danych fikcyjnych; KSeF = „Własny produkt"; poprzednia firma = „firma produkcyjno-budowlana", nigdy z nazwy; każda liczba publiczna ma źródło w `references/allowed-numbers.md`.
-7. Motion: rzeczy się pojawiają, nie wjeżdżają (160 / 240 / 420 / 600 ms, `--ease-out`); wykresy statyczne; reduced-motion i poster zawsze; zero pinowania, scroll-hijack, parallax, marquee.
+7. Motion: rzeczy się pojawiają, nie wjeżdżają (160 / 240 / 420 / 600 ms, `--ease-out`); w narzędziu wykres statyczny, na stronie marketingowej wolno go budować postępem scrolla (≤ 2 sceny sticky na trasę, ≤ 300vh, stan końcowy przy reduced-motion); reduced-motion i poster zawsze; zero scroll-hijacku, parallaxu, marquee, karuzel.
 8. Determinizm: te same dane dają ten sam wynik; zero `Date.now` / `Math.random` / sieci w silnikach i demach; PDF pobierany, nie okno druku.
 
 ## Precedencja skilli (od najwyższej)
@@ -111,5 +111,5 @@ bez `.md`; findings zawsze cytują ID, więc każde ID w skryptach ma swój plik
 1. Zero nazwy poprzedniej firmy, zero złota, wordmark tekstowy, stal jedynym akcentem.
 2. Jedno zdanie z `messaging.ts`; każda liczba z `references/allowed-numbers.md`; zero „AI" w sprzedaży; PL + EN.
 3. Tokeny są prawem; jeden biały CTA na ekran; hero ≤ 4 elementy; linie zamiast boxów.
-4. Ruch motywowany, reduced-motion i poster zawsze, wykresy statyczne, determinizm dem, `/rodo` przed pierwszym kontaktem.
+4. Ruch motywowany, reduced-motion i poster zawsze, wykres statyczny w narzędziu i budowany scrollem w marketingu, determinizm dem, `/rodo` przed pierwszym kontaktem.
 5. tsc + build + 19 plików HTML (17 w sitemapie, `/rodo` noindex, `404.html` osobno) + audyt bez BLOCKER → plan zamknięty → commit PL → push `main` → stan zapisany.

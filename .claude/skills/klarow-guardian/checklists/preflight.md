@@ -18,7 +18,7 @@
 - [ ] `grep -rn "—" site/src/data site/src/App.tsx site/src/pages site/src/components site/src/prerender site/public/llms.txt` → 0 (D-09); `–` tylko w zakresach liczbowych
 - [ ] `node .claude/skills/klarow-guardian/scripts/audit-static.mjs --changed --fail-on BLOCKER,HIGH --baseline .claude/skills/klarow-guardian/baseline/audit-static-2026-09-12.jsonl --json <scratchpad>/audit/<data>.jsonl` → exit 0 (0 BLOCKER, 0 nowych HIGH). **Baseline tłumi wyłącznie HIGH/MEDIUM/LOW — BLOCKER przechodzi przez niego zawsze** (wpisy BLOCKER w pliku baseline są ignorowane, skrypt mówi o tym na stderr). Stan na 2026-09-12: **6 otwartych BLOCKER-ów** (`DemoReport.tsx:259,262` `performance.now`; „AI" w `tools.ts:644,658` i `toolsSeo.ts:628,652`) — dopóki żyją, ta bramka jest czerwona i push nie jest gotowy
 - [ ] `node .claude/skills/klarow-guardian/scripts/find-integrations.mjs` → każdy host ma wpis w rejestrze integracji; brak CDN (`picsum|unsplash|fonts.googleapis|cdnjs|unpkg|esm.sh`) w `dist`
-- [ ] `node .claude/skills/klarow-guardian/scripts/verify-site.mjs` → budżety: JS krytyczny `/` ≤ 140 KB gz, chunki Motion ≤ 36 KB gz, CSS ≤ 20 KB gz, fonty ≤ 100 KB, poster ≤ 60 KB, wideo ≤ 1,5 MB/format
+- [ ] `node .claude/skills/klarow-guardian/scripts/verify-site.mjs` → budżety: JS krytyczny `/` ≤ 175 KB gz, chunki Motion ≤ 36 KB gz, CSS ≤ 20 KB gz, fonty ≤ 100 KB, poster ≤ 60 KB, wideo ≤ 1,5 MB/format
 - [ ] `node .claude/skills/klarow-guardian/scripts/build-index.mjs --check` → AGENTS.md (pełna tabela reguł) i tabela sekcji w SKILL.md aktualne, zero ostrzeżeń o ID bez pliku reguły (gdy zmieniano `rules/` albo `scripts/`)
 - [ ] `node .claude/skills/klarow-guardian/scripts/check-secrets.mjs` → `✓ pass` (§13: zero wzorców kluczy i zero plików sekretów pod kontrolą gita)
 - [ ] `git diff --cached | grep -iE "nuconic|sk-ant-|AKIA|ghp_|TELEGRAM_BOT_TOKEN|ANTHROPIC_API_KEY"` → 0; `git ls-files | grep -E "\.env|\.dev\.vars|credentials"` → 0
@@ -60,11 +60,13 @@
 
 ## 3. Motion i media
 
-- [ ] Każda animacja ma motywację w 1 zdaniu (tabela w planie lub komentarz); zero pinowania / sticky-scen / scroll-hijack / parallax / marquee / kursora / glitch / blur w wejściach
+- [ ] Każda animacja ma motywację w 1 zdaniu (tabela w planie lub komentarz; na marketingu wolno też „demonstracja produktu"); zero scroll-hijacku / parallaxu / marquee / karuzel / kursora / glitchu / bluru w wejściach
+- [ ] Sceny sticky: ≤ 2 na trasę, każda ≤ 300vh, postęp czytany pasywnie (`useScroll` tylko w `motion/scroll/**`), reduced-motion → kontener `height: auto` + treść w stanie KOŃCOWYM
 - [ ] `MotionConfig reducedMotion="user"` na korzeniu; `useReducedMotion` w `HeroMedia`, `Counter`, `ChartReveal`, mini-diagramach; CSS `@media (prefers-reduced-motion: reduce)`; DevTools „Emulate prefers-reduced-motion": zero elementów utkniętych w `initial`, wideo → poster
 - [ ] `pointer: coarse` (DevTools touch / iPhone): zero canvasu WebGL, zero `<video>` autoplay, hover-akcje dostępne bez hovera, cele dotyku ≥ 44 px
 - [ ] Treść obecna w shellu prerenderu ma `initial={false}`; `grep -c "opacity:0" site/dist/index.html` na treści → 0; `<video>` nie występuje w `dist/*.html`
-- [ ] Wykresy statyczne: instant render, fade ≤ 400 ms panelu, zero „rysowania", kropki tylko informacyjne; `ChartReveal` tylko poniżej folda na treści spoza shellu
+- [ ] Wykres w NARZĘDZIU statyczny: instant render, fade ≤ 400 ms panelu, zero „rysowania", kropki tylko informacyjne; `ChartReveal` tylko poniżej folda na treści spoza shellu
+- [ ] Wykres NARRACYJNY (marketing) buduje się postępem scrolla: `scaleY`/`clipPath` zamiast `height`/`pathLength`, zero listenerów scrolla, reduced-motion → wykres kompletny, chunk sceny lazy
 - [ ] ≤ 1 autoplay `<video>` per trasa: `muted playsInline loop poster preload="metadata" aria-hidden`, pauza przy `document.hidden` i poza viewportem, `MediaBoundary`; poster = LCP z `fetchpriority="high"` i `<link rel="preload">`
 - [ ] Tło animowane tylko na desktopie (`pointer: fine`), jedno na trasę, pauza hidden, cleanup rAF; nigdy wideo + GLSL naraz
 - [ ] `import { motion }` → 0; tylko `m` z `motion/react-m` pod `LazyMotion domAnimation strict`; `layout/layoutId/drag` → 0; `motion/*` nie w `prerender/entry.tsx`; `transition: all` → 0; `linear`/`ease-in-out` na interakcjach → 0

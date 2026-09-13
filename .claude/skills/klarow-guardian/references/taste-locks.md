@@ -431,9 +431,14 @@ _(SKILL.md, linie 365-425)_
 >
 > Critical points: `start: "top top"`, `pin: true`, every card except the last is pinned, the scale/opacity transform is driven by the NEXT card's scroll trigger (so previous card shrinks as next one arrives).
 
-**Klarow: ZAKAZ PRODUKTOWY**, niezależnie od techniki (GSAP, Motion `useScroll`, CSS `scroll-timeline`, `position: sticky`
-+ transform): decyzje Karola 2026-07-22 (karuzela orbitalna usunięta) i 2026-07-26 (deck slajdowy usunięty pod SEO).
-Reguła `motion-no-pinning-no-scroll-hijack` (BLOCKER). Skill nie nadpisuje decyzji produktowej.
+**Klarow: ten wzorzec (pinowany stos kart przełączany scrollem) pozostaje ZAKAZANY** — decyzje Karola
+2026-07-22 (karuzela orbitalna usunięta) i 2026-07-26 (deck slajdowy usunięty pod SEO): karty przełączane
+gestem to slajdy, a slajdy odbierają kontrolę.
+**Dozwolona jest natomiast scena sticky**, w której użytkownik scrolluje normalnie, a treść buduje się wraz
+z postępem (decyzja Karola 2026-09-13): ≤ 2 sceny na trasę, ≤ 300vh, postęp czytany pasywnie w
+`site/src/motion/scroll/**`, gałąź reduced-motion ze stanem KOŃCOWYM. GSAP i tak zostaje zakazany (jedna
+biblioteka ruchu). Reguła `motion-no-pinning-no-scroll-hijack` (BLOCKER) rozstrzyga granicę; skill nie
+nadpisuje decyzji produktowej w żadną stronę.
 
 ### D.3 §5.B Horizontal-Pan: ZAKAZANE (jak wyżej)
 

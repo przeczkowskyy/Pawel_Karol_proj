@@ -5,32 +5,19 @@ import {
   Copy,
   Eye,
   Save,
-  UserX,
-  ClipboardPaste,
-  AlertTriangle,
-  Hourglass,
-  User,
   Lock,
   FileCode2,
   ScrollText,
   Check,
   X as XIcon,
   Phone,
-  BarChart3,
-  Plug,
-  ArrowLeftRight,
-  ClipboardCheck,
-  Gauge,
-  Database,
-  Zap,
-  CircleDot,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import HeroMedia, { HeroPoster } from "@/components/HeroMedia";
+import HomeSections from "@/pages/Home";
 import { MediaBoundary } from "@/motion/MediaBoundary";
 import BgBoundary from "@/components/BgBoundary";
 import CollaborationFlow from "@/components/CollaborationFlow";
-import Differentiators from "@/components/Differentiators";
 import Faq from "@/components/Faq";
 import ToolsGrid from "@/components/ToolsGrid";
 import Seo, { ORG_JSONLD, faqPageJsonLd } from "@/components/Seo";
@@ -151,145 +138,13 @@ function Hero({ onBook }: { onBook: () => void }) {
 }
 
 /* ── CO MOŻEMY ZBUDOWAĆ (breadth: kafle ikonowe, nie zamknięte menu) ── */
-const CAPS = {
-  pl: {
-    title: "Co możemy zbudować",
-    sub: "Nie zamknięty katalog. Budujemy pod Twój proces.",
-    items: [
-      { icon: BarChart3, h: "Raporty i kontroling", d: "marża i KPI na żywo" },
-      { icon: Plug, h: "Integracje i e-dokumenty", d: "KSeF · API · ERP" },
-      { icon: ArrowLeftRight, h: "Importy i scalanie", d: "ERP ↔ Excel, co do grosza" },
-      { icon: ClipboardCheck, h: "Obieg dokumentów", d: "akcept · protokoły · rejestry" },
-      { icon: Gauge, h: "Panele i dashboardy", d: "produkcja · płynność · KPI" },
-      { icon: Database, h: "Porządek w danych", d: "audyt · dedup · migracje" },
-    ],
-    foot: "Nie widzisz swojego? Napisz, pewnie to robimy.",
-  },
-  en: {
-    title: "What we can build",
-    sub: "Not a fixed catalogue. We build around your process.",
-    items: [
-      { icon: BarChart3, h: "Reports & controlling", d: "live margin & KPIs" },
-      { icon: Plug, h: "Integrations & e-docs", d: "KSeF · APIs · ERP" },
-      { icon: ArrowLeftRight, h: "Imports & merging", d: "ERP ↔ Excel, to the cent" },
-      { icon: ClipboardCheck, h: "Document workflows", d: "approvals · protocols · registers" },
-      { icon: Gauge, h: "Panels & dashboards", d: "production · liquidity · KPIs" },
-      { icon: Database, h: "Order in your data", d: "audit · dedup · migration" },
-    ],
-    foot: "Don't see yours? Write to us; it's usually what we do.",
-  },
-};
 
-function Capabilities() {
-  const { lang } = useLang();
-  const t = pick(lang, CAPS);
-  return (
-    <Section title={t.title} sub={t.sub}>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {t.items.map((c) => (
-          <div key={c.h} className="card flex flex-col gap-2">
-            <div
-              className="w-10 h-10 rounded-[10px] flex items-center justify-center"
-              style={{ background: "rgba(168,180,194,.14)", color: "var(--primary)" }}
-            >
-              <c.icon size={19} />
-            </div>
-            <h3 className="mt-1 text-[15px] font-extrabold" style={{ color: "var(--heading)" }}>{c.h}</h3>
-            <p className="text-[12.5px] leading-relaxed" style={{ color: "var(--muted-foreground)" }}>{c.d}</p>
-          </div>
-        ))}
-      </div>
-      <p className="mt-5 text-[13px] font-semibold" style={{ color: "var(--accent-foreground)" }}>{t.foot}</p>
-    </Section>
-  );
-}
 
 /* ── DOWÓD (pasek statystyk: „co już zrobiliśmy”, liczby anonimowe) ── */
-const PROOF = {
-  pl: {
-    title: "Co już zrobiliśmy",
-    sub: "Kilkanaście narzędzi dla firmy produkcyjno-budowlanej + integracja z KSeF.",
-    stats: [
-      { icon: Gauge, v: "kilkanaście", l: "narzędzi wdrożonych wewnętrznie" },
-      { icon: ArrowLeftRight, v: "≈10 000", l: "wierszy kosztów z ERP na miesiąc" },
-      { icon: Zap, v: "sekundy", l: "raport zarządu zamiast godzin" },
-      { icon: CircleDot, v: "co do grosza", l: "kontrola sum w każdym imporcie" },
-    ],
-  },
-  en: {
-    title: "What we've already built",
-    sub: "A dozen+ tools for a manufacturing-and-construction company + a KSeF integration.",
-    stats: [
-      { icon: Gauge, v: "a dozen+", l: "tools deployed internally" },
-      { icon: ArrowLeftRight, v: "≈10,000", l: "ERP cost rows per month" },
-      { icon: Zap, v: "seconds", l: "the board report, instead of hours" },
-      { icon: CircleDot, v: "to the cent", l: "totals controlled on every import" },
-    ],
-  },
-};
 
-function ProofBand() {
-  const { lang } = useLang();
-  const t = pick(lang, PROOF);
-  return (
-    <Section title={t.title} sub={t.sub}>
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {t.stats.map((s) => (
-          <div key={s.l} className="card flex flex-col gap-2">
-            <s.icon size={20} style={{ color: "var(--primary)" }} />
-            <div className="text-[22px] font-extrabold tracking-tight leading-none" style={{ color: "var(--heading)" }}>
-              {s.v}
-            </div>
-            <p className="text-[12px] leading-relaxed" style={{ color: "var(--muted-foreground)" }}>{s.l}</p>
-          </div>
-        ))}
-      </div>
-    </Section>
-  );
-}
 
 /* ── BÓL ── */
-const PAIN = {
-  pl: {
-    title: "To działa, więc boisz się ruszać. Słusznie.",
-    sub: "Nie migrujemy Cię z Excela. Wchodzimy obok Twoich plików.",
-    items: [
-      { icon: UserX, title: "Makro po kimś, kto odszedł", body: "Nikt nie wie, jak działa w środku, więc wszyscy boją się je ruszyć." },
-      { icon: ClipboardPaste, title: "Ręczne przeklejanie", body: "Tysiące wierszy między ERP a arkuszami, co tydzień, na piechotę." },
-      { icon: AlertTriangle, title: "Ciche pomyłki", body: "Zły wiersz, zła kolumna: wychodzi po fakcie, u zarządu albo w wycenie." },
-      { icon: Hourglass, title: "Raport składany godzinami", body: "Zbieranie metryk z dziesiątek plików, formatowanie, wysyłka. Co cykl." },
-      { icon: User, title: "Wszystko na jednej osobie", body: "Gdy „człowiek-Excel” jest na urlopie, firma nie zna swoich liczb." },
-    ],
-  },
-  en: {
-    title: "It works, so you're afraid to touch it. Rightly so.",
-    sub: "No migration off Excel. We build alongside your files.",
-    items: [
-      { icon: UserX, title: "A macro by someone long gone", body: "Nobody knows how it works inside, so everyone is afraid to touch it." },
-      { icon: ClipboardPaste, title: "Manual copy-pasting", body: "Thousands of rows between the ERP and spreadsheets, every week, by hand." },
-      { icon: AlertTriangle, title: "Silent mistakes", body: "Wrong row, wrong column: discovered after the fact, at the board meeting or in a quote." },
-      { icon: Hourglass, title: "Reports assembled for hours", body: "Collecting metrics from dozens of files, formatting, sending. Every cycle." },
-      { icon: User, title: "Everything rests on one person", body: "When the “Excel person” is on holiday, the company doesn't know its numbers." },
-    ],
-  },
-};
 
-function Pain() {
-  const { lang } = useLang();
-  const t = pick(lang, PAIN);
-  return (
-    <Section title={t.title} sub={t.sub}>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-        {t.items.map((p) => (
-          <div key={p.title} className="card flex flex-col gap-3">
-            <p.icon size={22} style={{ color: "var(--primary)" }} />
-            <h3 className="text-[14px] font-bold leading-snug" style={{ color: "var(--heading)" }}>{p.title}</h3>
-          </div>
-        ))}
-      </div>
-    </Section>
-  );
-}
 
 /* ── NARZĘDZIA (interaktywne dashboardy) ── */
 const TOOLS_TXT = {
@@ -344,26 +199,7 @@ function Collaboration() {
 }
 
 /* ── WYRÓŻNIKI (zero chmury + determinizm) ── */
-const DIFF_TXT = {
-  pl: {
-    title: "Dwa twarde wyróżniki: zero chmury i zero wróżenia",
-    sub: "Narzędzie nie ma nawet którędy wysłać danych, a każdą liczbę policzysz ręcznie.",
-  },
-  en: {
-    title: "Two hard differentiators: zero cloud, zero fortune-telling",
-    sub: "The tool has no way to send your data anywhere, and you check every number by hand.",
-  },
-};
 
-function DiffSection() {
-  const { lang } = useLang();
-  const t = pick(lang, DIFF_TXT);
-  return (
-    <Section title={t.title} sub={t.sub}>
-      <Differentiators />
-    </Section>
-  );
-}
 
 /* ── OFERTA (skondensowana: pilot + dlaczego-dni + zaufanie + dla-kogo) ── */
 const OFFER = {
@@ -566,46 +402,7 @@ function FaqSection() {
 }
 
 /* ── „Zobacz też”: crosslinki z home do głównych podstron (SEO wewnętrzne + UX) ── */
-const HOME_NEXT = {
-  pl: {
-    title: "Zobacz konkrety",
-    open: "Otwórz →",
-    items: [
-      { to: "/narzedzia", h: "Przykłady realizacji", d: "Klikalne dema i wdrożenia. Zobacz, co potrafimy." },
-      { to: "/oferta", h: "Oferta i wycena", d: "Pilot na kopii, efekt w dni. Wycena po diagnozie." },
-      { to: "/faq", h: "Najczęstsze pytania", d: "Bezpieczeństwo, koszt, ERP, makra: wprost." },
-    ],
-  },
-  en: {
-    title: "See the specifics",
-    open: "Open →",
-    items: [
-      { to: "/narzedzia", h: "Examples we've built", d: "Clickable demos and deployments. See what we can do." },
-      { to: "/oferta", h: "Offer & pricing", d: "Pilot on a copy, results in days. Quote after a diagnosis." },
-      { to: "/faq", h: "Common questions", d: "Security, cost, ERP, macros: head-on." },
-    ],
-  },
-};
 
-function HomeNext() {
-  const { lang } = useLang();
-  const t = pick(lang, HOME_NEXT);
-  return (
-    <Section title={t.title}>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {t.items.map((x) => (
-          <Link key={x.to} to={x.to} className="card" style={{ display: "block" }}>
-            <h3 className="text-[15px] font-bold" style={{ color: "var(--heading)" }}>{x.h}</h3>
-            <p className="mt-2 text-[13px] leading-relaxed" style={{ color: "var(--muted-foreground)" }}>{x.d}</p>
-            <span className="mt-3 inline-block text-[12.5px] font-bold" style={{ color: "var(--accent-foreground)" }}>
-              {t.open}
-            </span>
-          </Link>
-        ))}
-      </div>
-    </Section>
-  );
-}
 
 /* ── STOPKA ── */
 const FOOT = {
@@ -711,15 +508,15 @@ function HomePage({ onBook }: { onBook: () => void }) {
         path="/"
         jsonLd={[ORG_JSONLD]}
       />
-      <PageMain>
+      {/* Strona główna v2 (2026-09-13): sekcje-karty z akapitami zastąpione scenami
+          sterowanymi przewijaniem. Hero zostaje tutaj, bo jest nad zgięciem i musi
+          być w pierwszym chunku; reszta mieszka w pages/Home.tsx i ładuje się leniwie.
+          Capabilities, ProofBand, Pain i HomeNext ZDJĘTE ze strony głównej: to była
+          ta „ściana tekstu", 219 słów w samych kartach. DiffSection („Kalkulator,
+          nie wróżka") wraca w kolejnym kroku jako scena, nie jako lista. */}
+      <PageMain pad={false}>
         <Hero onBook={onBook} />
-        <Capabilities />
-        <ProofBand />
-        <Pain />
-        <div id="wyrozniki">
-          <DiffSection />
-        </div>
-        <HomeNext />
+        <HomeSections onBook={onBook} />
       </PageMain>
       <Footer />
     </>

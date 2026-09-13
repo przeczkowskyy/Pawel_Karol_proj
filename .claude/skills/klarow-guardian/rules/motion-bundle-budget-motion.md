@@ -25,7 +25,7 @@ Plik NIE istnieje przed pierwszym zielonym buildem v2: tworzy go świadomie `nod
 
 ## Mechanizm awarii (dlaczego)
 
-- Różnica `m`+`domAnimation` vs pełny `motion` to 13,7 KB gz (29 %): ~23 % chunku react-dom. Na stronie z budżetem JS `/` ≤ 140 KB gz (react-dom ~58 + router ~15 + motion ~34 + app ~25) nie ma miejsca na 47,5.
+- Różnica `m`+`domAnimation` vs pełny `motion` to 13,7 KB gz (29 %): ~23 % chunku react-dom. Budżet JS `/` to od 2026-09-13 175 KB gz (`perf-js-budget-home`), ale zapas 35 KB jest znakowany na warstwę scroll-narracyjną i jej dane — nie na tłustszy import Motion. Limit 35 KB gz na chunk Motion zostaje bez zmian: 47,5 zjadłoby zapas, zanim powstanie pierwsza scena.
 - Regresja bundla jest cicha: `tsc` i `vite build` przechodzą, strona działa, a każdy użytkownik płaci 14 KB więcej na każdej trasie. Tylko bramka liczbowa ją łapie.
 - Docs Motion obiecują „4,6 kB"; w praktyce wspólny rdzeń (`MotionConfigContext` 11,6 KB + silnik) ładuje się zawsze. Nie obiecywać founderom „5 KB"; budżet 35 jest realny, ≥ 40 = błąd w imporcie, nie „drobna regresja".
 

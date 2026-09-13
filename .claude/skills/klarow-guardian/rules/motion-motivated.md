@@ -3,7 +3,7 @@ id: motion-motivated
 title: Każda animacja ma motywację w jednym zdaniu; brak zdania = brak animacji
 impact: MEDIUM
 tags: [motion, design, review]
-source: taste §7.1 („MOTION MUST BE MOTIVATED") · synthesis §2.4.7 (tabela z motywacją) · motion-design (zasady Disney: staging, appeal) · decyzje Karola 2026-07-22/26
+source: taste §7.1 („MOTION MUST BE MOTIVATED") · synthesis §2.4.7 (tabela z motywacją) · motion-design (zasady Disney: staging, appeal) · decyzje Karola 2026-07-22/26 · decyzja Karola 2026-09-13 (kategoria „demonstracja produktu" na warstwie marketingowej)
 added: 2026-09-12
 ---
 
@@ -15,6 +15,15 @@ Każdy ruch na stronie (Motion, CSS transition/keyframes, wideo, crossfade) ma z
 2. komentarz nad elementem w kodzie: `// motion: <motywacja>` (np. `// motion: hierarchia czytania L→R`).
 
 Dozwolone kategorie motywacji (taste §7.1): **hierarchia** (kieruje wzrok), **storytelling** (sekwencja odpowiada narracji, np. kierunek danych w `KsefFlow`), **feedback** (potwierdza akcję: hover, tap, otwarcie), **stan** (pokazuje, że coś się zmieniło: swap zakładki, nowy wynik). Niedozwolone: „wygląda premium", „strona musi się ruszać", „bo mamy Motion".
+
+Piąta kategoria, **wyłącznie na warstwie marketingowej** (decyzja Karola 2026-09-13): **demonstracja
+produktu** — „pokazać, co narzędzie robi". Ruch, który buduje wykres, odsłania kroki procesu albo pokazuje
+rozsypane dane układające się w wynik, ma motywację funkcjonalną, bo to jedyny sposób, w jaki odwiedzający
+widzi produkt w ruchu przed rozmową: dema liczą na żywo dopiero na podstronach, a landing musi pokazać ten
+sam mechanizm w jednym spojrzeniu. Warunki wykonania (postęp scrolla, właściwości akcelerowane, gałąź
+reduced-motion ze stanem końcowym, zero przechwytywania scrolla) stawia `motion-charts-static` §B
+i `motion-no-pinning-no-scroll-hijack` §B. W trybie `tool` ta kategoria NIE obowiązuje: w narzędziu
+„pokazać, co robi" znaczy pokazać wynik, a nie drogę do niego.
 
 Rejestr home w v2 (zamknięty; kolejność sekcji po reframe z 2026-09-12 i po decyzjach D35/D37/D38):
 
@@ -38,6 +47,9 @@ Wiersz „S5 liczniki" **usunięty**: pasek „W liczbach" nie istnieje (D30), a
 - Karol dwukrotnie kazał usuwać efekty (karuzela 2026-07-22, deck 2026-07-26): oba były „ładne", żadne nie miało funkcji. Zdanie motywacji przed napisaniem kodu odsiewa je wcześniej i taniej.
 - Persona (CFO/właściciel firmy produkcyjnej, „kalkulator, nie wróżka") czyta nadmiar ruchu jako agencję marketingową, nie wykonawcę narzędzi.
 - Rejestr pozwala audytorowi mechanicznie porównać: „ruchów w kodzie" vs „wierszy w rejestrze"; różnica = animacja bez decyzji.
+- Druga strona tej samej monety (2026-09-13): brak ruchu też jest awarią, gdy sprzedajemy narzędzia, które
+  liczą. Karol o gotowej stronie: „za dużo tekstu, bardzo liczyłem na motion grafiki". Zdanie motywacji nie
+  służy do wycinania ruchu, tylko do odróżnienia ruchu, który coś pokazuje, od ruchu, który tylko ozdabia.
 
 ## Niepoprawnie
 

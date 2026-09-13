@@ -13,7 +13,7 @@ Ciężkie i nie-krytyczne moduły ładujemy leniwie z literalną ścieżką: `pa
 
 ## Mechanizm awarii (dlaczego)
 
-Dziś `pages/ToolPage.tsx:7-18` importuje 12 dashboardów statycznie, a `App.tsx:36` importuje `ToolPage` statycznie. Skutek zmierzony w `dist` (2026-07-28): główny chunk 511 KB / 157 KB gz zawiera wszystkie dashboardy, `lib/report.ts` i `lib/qualityGate.ts`, więc strona główna, `/oferta` i `/faq` płacą za kod, którego nie renderują. Budżet z synthesis §2.4.9: JS krytyczny na `/` ≤ 140 KB gz, chunk podstrony narzędzia ≤ +60 KB gz. `import()` ze zmienną ścieżką każe Rollupowi spakować cały katalog w jeden chunk albo wygenerować dziesiątki mikro-chunków, a esbuild przestaje widzieć zależności (RBP 2.5).
+Dziś `pages/ToolPage.tsx:7-18` importuje 12 dashboardów statycznie, a `App.tsx:36` importuje `ToolPage` statycznie. Skutek zmierzony w `dist` (2026-07-28): główny chunk 511 KB / 157 KB gz zawiera wszystkie dashboardy, `lib/report.ts` i `lib/qualityGate.ts`, więc strona główna, `/oferta` i `/faq` płacą za kod, którego nie renderują. Budżet po decyzji Karola 2026-09-13 (`perf-js-budget-home`): JS krytyczny na `/` ≤ 175 KB gz, chunk podstrony narzędzia ≤ +60 KB gz. `import()` ze zmienną ścieżką każe Rollupowi spakować cały katalog w jeden chunk albo wygenerować dziesiątki mikro-chunków, a esbuild przestaje widzieć zależności (RBP 2.5).
 
 ## Niepoprawnie
 
@@ -62,7 +62,7 @@ grep -rnE "^import ToolPage|^import .*pages/Tool" site/src/App.tsx              
 # 2. import() ze zmienną ścieżką (template literal albo konkatenacja)
 grep -rnE "import\(\s*(\`|\"[^\"]*\"\s*\+)" site/src                                                   # oczekiwane: 0
 # 3. budżet: po `npm run build` rozmiar chunków wołanych z dist/index.html
-node .claude/skills/klarow-guardian/scripts/verify-site.mjs --budget 140                        # chunk wejściowy ≤ 140 KB gz, CSS ≤ 20 KB, chunk Motion ≤ 36 KB
+node .claude/skills/klarow-guardian/scripts/verify-site.mjs --budget 175                        # chunk wejściowy ≤ 175 KB gz, CSS ≤ 20 KB, chunk Motion ≤ 36 KB
 # PLANOWANE (F3, verify-site.mjs nie zna tego trybu): node .claude/skills/klarow-guardian/scripts/verify-site.mjs --budgets
 ```
 

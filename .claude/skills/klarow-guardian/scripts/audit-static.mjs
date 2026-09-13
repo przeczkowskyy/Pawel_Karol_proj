@@ -456,12 +456,27 @@ function mainRules(file, raw) {
       const ln = lineOf(src, m.index);
       add(file, ln, 1, "design-no-glass-no-blur", undefined, { snippet: lineText(lines, ln) });
     }
-    // wyjątek z reguły: tło i hero-media mogą mieć stały will-change (nie zawierają treści)
-    if (!/glsl-hills|hero-media|bg-layer/.test(r)) {
-      const reWc = /will-change/g;
+    /* Wyjątek z reguły: tło i hero-media mogą mieć stały will-change (nie zawierają treści).
+       Dokumentacja (.md) jest wyłączona, bo opisuje regułę, a nie ją łamie: DEMO.md
+       tłumaczył WŁAŚNIE zdejmowanie podpowiedzi po ruchu i dostawał za to HIGH.
+       Wzorzec łapie oba zapisy: CSS `will-change` i reactowe `willChange` w obiekcie
+       stylu. Luka znaleziona 2026-09-13: komponent z `style={{ willChange: "transform" }}`
+       przechodził audyt na zielono, choć trzymał trwałą warstwę GPU. */
+    if (!/glsl-hills|hero-media|bg-layer/.test(r) && !r.endsWith(".md")) {
+      const reWc = /will-change|willChange/g;
       while ((m = reWc.exec(src))) {
         const ln = lineOf(src, m.index);
-        add(file, ln, 1, "design-animation-fill-backwards", undefined, { snippet: lineText(lines, ln) });
+        const text = lineText(lines, ln);
+        /* Regułę łamie podpowiedź wpisana NA STAŁE, nie samo jej użycie. Wartość
+           przełączana (zmienna, wyrażenie warunkowe, własność custom) jest wzorcem
+           POPRAWNYM i tak właśnie działa hook w motion/scroll: podnosi warstwę na
+           czas ruchu i zdejmuje po nim. Zgłaszamy więc tylko literał inny niż
+           `auto`, np. `will-change: transform;` albo `willChange: "transform"`. */
+        const literalAlways = /will-?[cC]hange\s*[:=]\s*["']?(?!auto\b)[a-z-]+/.test(text);
+        const toggled = /\?|:\s*[A-Z_a-z$]|var\(--/.test(text.replace(/will-?[cC]hange\s*:/, ""));
+        if (literalAlways && !toggled) {
+          add(file, ln, 1, "design-animation-fill-backwards", undefined, { snippet: text });
+        }
       }
     }
   }

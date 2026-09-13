@@ -21,7 +21,8 @@
  *     brak opacity:0 na treści shellu,
  *   - _headers/_redirects obecne w dist; alias /polityka-prywatnosci → /rodo gdy /rodo istnieje,
  *   - budżety chunków: assets/*.js gz (zlib, level 9) — chunk wejściowy (ze <script> w index.html)
- *     ≤ --budget (140 KB), CSS ≤ 20 KB, chunk z „motion" w nazwie ≤ 36 KB (HIGH przy przekroczeniu),
+ *     ≤ --budget (175 KB; zapas 35 KB znakowany na warstwę scroll-narracyjną — perf-js-budget-home),
+ *     CSS ≤ 20 KB, chunk z „motion" w nazwie ≤ 36 KB (HIGH przy przekroczeniu),
  *   - liczby w treści HTML vs references/allowed-numbers.md: liczby ≥ 4 cyfr lub z „%"
  *     nieobecne na liście → warn (MEDIUM) [brand-allowed-numbers-only]; lata 1990–2035, NAP, daty
  *     i wartości w JSON-LD/skryptach są wyłączone.
@@ -45,7 +46,7 @@ const REPO_ROOT = path.resolve(__dirname, "..", "..", "..", "..");
 const GUARDIAN = path.resolve(__dirname, "..");
 
 const argv = process.argv.slice(2);
-const opts = { dist: "site/dist", expected: null, minToolLinks: 13, budget: 140, json: null, quiet: false, failOn: ["BLOCKER"], writeBaseline: false };
+const opts = { dist: "site/dist", expected: null, minToolLinks: 13, budget: 175, json: null, quiet: false, failOn: ["BLOCKER"], writeBaseline: false };
 for (let i = 0; i < argv.length; i++) {
   const a = argv[i];
   if (a === "--dist") opts.dist = argv[++i];

@@ -51,9 +51,9 @@
 | 2.16 | `design-shape-lock` | MEDIUM | Shape Lock: promienie tylko ze zbioru {0, 8, 10, 12, 999} rozdzielonego per data-surface | [rules/design-shape-lock.md](rules/design-shape-lock.md) |
 | 2.17 | `design-theme-inline-zeroed` | MEDIUM | @theme inline zeruje palety Tailwinda; utility tylko z naszych tokenów | [rules/design-theme-inline-zeroed.md](rules/design-theme-inline-zeroed.md) |
 | 2.18 | `design-typography-scale` | MEDIUM | Skala pisma w rem, maksymalnie 7 stopni, minimum 12 px w UI, jeden krój, zero serif i mono | [rules/design-typography-scale.md](rules/design-typography-scale.md) |
-| 3.1 | `motion-charts-static` | BLOCKER | Wykresy statyczne: reveal raz ≤ 420 ms (DUR.reveal / --duration-slow) na poziomie panelu, potem statyka; zero „rysowania" | [rules/motion-charts-static.md](rules/motion-charts-static.md) |
+| 3.1 | `motion-charts-static` | BLOCKER | Wykres w narzędziu statyczny (reveal raz ≤ 420 ms, zero „rysowania"); wykres w sekcji marketingowej wolno budować postępem scrolla | [rules/motion-charts-static.md](rules/motion-charts-static.md) |
 | 3.2 | `motion-no-initial-hidden-above-fold` | BLOCKER | Treść obecna w shellu prerenderu nie może startować ukryta: initial={false} nad foldem | [rules/motion-no-initial-hidden-above-fold.md](rules/motion-no-initial-hidden-above-fold.md) |
-| 3.3 | `motion-no-pinning-no-scroll-hijack` | BLOCKER | Zakaz produktowy pinowania, sticky-scen, horizontal-pan, parallaxu, marquee, scroll-hijack i własnego kursora | [rules/motion-no-pinning-no-scroll-hijack.md](rules/motion-no-pinning-no-scroll-hijack.md) |
+| 3.3 | `motion-no-pinning-no-scroll-hijack` | BLOCKER | Scroll-hijack zakazany bez wyjątku; scena sticky dozwolona warunkowo (≤ 2 na trasę, ≤ 300vh, gałąź reduced-motion); parallax, marquee, karuzele i własny kursor dalej zakazane | [rules/motion-no-pinning-no-scroll-hijack.md](rules/motion-no-pinning-no-scroll-hijack.md) |
 | 3.4 | `motion-reduced-motion-three-layers` | BLOCKER | Reduced motion w trzech warstwach: MotionConfig user + useReducedMotion + CSS globalne | [rules/motion-reduced-motion-three-layers.md](rules/motion-reduced-motion-three-layers.md) |
 | 3.5 | `motion-bundle-budget-motion` | HIGH | Chunki Motion ≤ 35 KB gz w ścieżce krytycznej; ≥ 40 KB = sygnatura domMax / pełnego motion | [rules/motion-bundle-budget-motion.md](rules/motion-bundle-budget-motion.md) |
 | 3.6 | `motion-cleanup-required` | HIGH | Każda animacja imperatywna, subskrypcja, timer, rAF i observer ma cleanup w useEffect | [rules/motion-cleanup-required.md](rules/motion-cleanup-required.md) |
@@ -84,7 +84,7 @@
 | 5.4 | `perf-code-split-dashboards` | HIGH | Dashboardy przez React.lazy per klucz + DashboardMount (IntersectionObserver, requestIdleCallback, kolejka) + skeleton z minHeight | [rules/perf-code-split-dashboards.md](rules/perf-code-split-dashboards.md) |
 | 5.5 | `perf-fonts-budget` | HIGH | Fonty self-hosted w public/fonts, zero CDN, ≤ 100 KB w fazie 1 (Nunito Sans solo) / ≤ 150 KB po ewentualnym drugim kroju, preload latin, font-display swap + size-adjust | [rules/perf-fonts-budget.md](rules/perf-fonts-budget.md) |
 | 5.6 | `perf-images-policy` | HIGH | Obrazy: WebP (AVIF opcjonalnie), srcset dla ram i portretów, jawne width/height (CLS 0), loading lazy poniżej folda, limity rozmiarów, zero PNG/JPG w treści | [rules/perf-images-policy.md](rules/perf-images-policy.md) |
-| 5.7 | `perf-js-budget-home` | HIGH | JS krytyczny na / ≤ 140 KB gz (react-dom ~58 + router ~15 + motion ~34 + app ~25); podstrona narzędzia ≤ +60 KB gz lazy | [rules/perf-js-budget-home.md](rules/perf-js-budget-home.md) |
+| 5.7 | `perf-js-budget-home` | HIGH | JS krytyczny na / ≤ 175 KB gz (react-dom ~58 + router ~15 + motion ~34 + app ~25 + warstwa scroll-narracyjna ~35); podstrona narzędzia ≤ +60 KB gz lazy | [rules/perf-js-budget-home.md](rules/perf-js-budget-home.md) |
 | 5.8 | `perf-lcp-poster-preload` | HIGH | LCP = kadr produktu w hero (bramka ELEMENTOWA, nie tylko czasowa): preload z fetchpriority high, H1 w shellu, wideo nigdy preloadowane i montowane dopiero po load i rIC; bramki CWV: LCP mobile < 2,5 s / desktop < 1,8 s, CLS < 0,05 na / i < 0,1 na podstronach, INP < 200 ms | [rules/perf-lcp-poster-preload.md](rules/perf-lcp-poster-preload.md) |
 | 5.9 | `perf-three-js-policy` | HIGH | three.js (GLSL Hills) tylko jako plan B: desktop pointer fine, montaż po idle po load, saveData gate, poza pierwszym JS, nigdy z wideo; usunąć z dependencies, gdy hero-loop przejdzie | [rules/perf-three-js-policy.md](rules/perf-three-js-policy.md) |
 | 5.10 | `perf-no-zoom-root` | MEDIUM | Zakaz zoom na :root; skalowanie dużych ekranów przez clamp() w tokenach typografii i kontenerze | [rules/perf-no-zoom-root.md](rules/perf-no-zoom-root.md) |
@@ -2000,35 +2000,89 @@ Domyślny impact: **BLOCKER** · tryb: both · właściciel audytu: `motion-audi
 
 ### 3.1 motion-charts-static
 
-**Wykresy statyczne: reveal raz ≤ 420 ms (DUR.reveal / --duration-slow) na poziomie panelu, potem statyka; zero „rysowania"**
+**Wykres w narzędziu statyczny (reveal raz ≤ 420 ms, zero „rysowania"); wykres w sekcji marketingowej wolno budować postępem scrolla**
 
-Impact: **BLOCKER** · Tagi: motion, charts, dashboards, determinism · Źródło: CLAUDE.md #2 · ui-kit-habits F2 (M2) · synthesis §2.4.3 ChartReveal/§2.4.7 · showreel M8 · proof M1–M2 (via feasibility-perf §7) · bklit-ui §4.2/§10.9 · Dodano: 2026-09-12 · Plik: `rules/motion-charts-static.md`
+Impact: **BLOCKER** · Tagi: motion, charts, dashboards, marketing, scroll, determinism · Źródło: CLAUDE.md #2 · decyzja Karola 2026-09-13 (odwrócenie zasady #2 dla warstwy marketingowej) · ui-kit-habits F2 (M2) · synthesis §2.4.3 ChartReveal/§2.4.7 · showreel M8 · proof M1–M2 (via feasibility-perf §7) · bklit-ui §4.2/§10.9 · Dodano: 2026-09-12 · Plik: `rules/motion-charts-static.md`
 
 #### Zasada
 
-Wykres (SVG w dashboardach, mini-wykres S2, `DemoReport`) renderuje się od razu w stanie końcowym.
+Wykres pełni na stronie dwie różne funkcje, więc reguła rozróżnia DWA konteksty. Kryterium jest jedno:
+**czy z tego wykresu ktoś odczytuje liczbę, na podstawie której podejmuje decyzję.**
 
-Jedna liczba na całe zjawisko: **reveal wykresu ≤ `DUR.reveal` = 420 ms = `--duration-slow`** (`motion-tokens-only`). Bez wariantów „400", „450", „0,45 s". Jedyny dozwolony ruch:
+### A. Narzędzie (dashboard, tabela, macierz, dokument): wykres pokazuje wynik, więc zostaje statyczny
+
+Zakres: `site/src/components/dashboards/**`, `site/src/components/DemoReport.tsx`, mini-embedy liczące na
+żywo (`MiniReport.tsx`, `MiniAudit.tsx`), `site/src/lib/**`, `demo/**`, każdy element z `data-surface="tool"`.
+
+Wykres renderuje się od razu w stanie końcowym. Jedna liczba na całe zjawisko: **reveal wykresu ≤ `DUR.reveal`
+= 420 ms = `--duration-slow`** (`motion-tokens-only`). Bez wariantów „400", „450", „0,45 s". Jedyny dozwolony ruch:
 
 1. **wejście panelu**: fade `opacity` ≤ 420 ms (`.chart-reveal`/`fade` na kontenerze, `animation: chartFade var(--duration-slow) …`), LUB
 2. **`ChartReveal`**: clip-reveal L→R `clipPath: inset(0 100% 0 0) → inset(0 0 0 0)`, `EASE_SOFT`, `duration: DUR.reveal` (420 ms), DOKŁADNIE RAZ po montażu; replay wyłącznie przez jawne `key` z przycisku „Odtwórz", nigdy z danych,
 3. **licznik KPI** ≤ 200 ms przy zmianie wejścia (opcjonalnie), reszta wyniku w tej samej klatce.
 
-Zakazane: animacja słupków/linii per element (`stroke-dashoffset`, `pathLength`, `animate={{ height }}` na `<rect>`, `isAnimationActive` w Recharts), stagger słupków, „dojeżdżanie" osi, `key` zależne od danych (remount przy każdej zmianie wejścia), spring na wartościach danych, kropki dekoracyjne na każdym punkcie (kropki tylko informacyjne: ostatni punkt, markery, hover), pętle (`repeat: Infinity`) na czymkolwiek w dashboardzie, `ChartReveal` w hero lub na treści obecnej w shellu (`motion-no-initial-hidden-above-fold`).
+Zakazane w narzędziu: animacja słupków i linii per element (`animate={{ height }}` albo `scaleY` na `<rect>`,
+`stroke-dashoffset`, `pathLength`, `isAnimationActive` w Recharts), ruch sterowany scrollem (`useScroll`,
+`scrollYProgress`, `animation-timeline`), stagger słupków, „dojeżdżanie" osi, `key` zależne od danych (remount
+przy każdej zmianie wejścia), spring na wartościach danych, kropki dekoracyjne na każdym punkcie (kropki tylko
+informacyjne: ostatni punkt, markery, hover), pętle (`repeat: Infinity`), `ChartReveal` w hero albo na treści
+obecnej w shellu (`motion-no-initial-hidden-above-fold`).
 
-Zmiana wejścia (suwak, tolerancja, filtr) = nowy wynik w tej samej klatce (bez remountu) + opcjonalny cross-fade panelu 250–300 ms (`.nc-swap`/`.nc-tab-swap` kitu), nie „rysowanie" od zera.
+Zmiana wejścia (suwak, tolerancja, filtr) = nowy wynik w tej samej klatce (bez remountu) + opcjonalny
+cross-fade panelu 250–300 ms (`.nc-swap`/`.nc-tab-swap` kitu), nie „rysowanie" od zera.
+
+### B. Strona marketingowa (`/`, sekcje narracyjne): wykres opowiada, więc MOŻE budować się postępem scrolla
+
+Zakres: trasy marketingowe poza trybem `tool`; implementacja ruchu mieszka w `site/src/motion/scroll/**`,
+a sekcje strony ją konsumują. Tam wykres nie jest źródłem decyzji, tylko opowieścią o tym, co narzędzie robi,
+więc budowanie się słupka albo linii jest DOZWOLONE. Cztery warunki, wszystkie obowiązkowe:
+
+1. **Ruch sterowany postępem scrolla, nie zegarem.** Tempo należy do użytkownika: `useScroll({ target, offset })`
+   + `useTransform` (Motion, pasywny odczyt) wyłącznie w `site/src/motion/scroll/**`, albo CSS
+   `animation-timeline: view()` w `globals.css`. Zero `setTimeout`, zero `repeat: Infinity`, zero
+   autoodtwarzania. Scroll w tył cofa budowanie: postęp jest funkcją pozycji, nie stanem, który raz „poszedł".
+2. **Tylko właściwości akcelerowane** (`motion-gpu-props-only`): słupek rośnie przez `scaleY` z
+   `transform-origin: bottom` (nigdy `height`), linia odsłania się przez `clipPath` albo `scaleX` na grupie
+   (nigdy `pathLength`, nigdy `stroke-dashoffset`), reszta przez `opacity`.
+3. **Gałąź reduced-motion pokazuje stan KOŃCOWY**, nie początkowy: `useReducedMotion()` → `initial={false}`
+   i wartości docelowe (`scaleY: 1`, `clipPath: inset(0)`), w CSS `@media (prefers-reduced-motion: reduce)`
+   → `animation-timeline: none` + `transform: scaleY(1)`. Zero elementów utkniętych w `scaleY: 0`
+   (`motion-reduced-motion-three-layers`).
+4. **Zero przechwytywania zdarzeń scrolla**: bez listenerów `wheel`/`touchmove`/`scroll`, bez blokady
+   `overflow` na `body`, bez skryptowego przewijania, bez slajdów przełączanych gestem
+   (`motion-no-pinning-no-scroll-hijack`: scena sticky do 300vh jest dozwolona, hijack nie).
+
+Dodatkowo: scena scroll-narracyjna nie startuje nad foldem i nie ukrywa treści z shella prerenderu
+(`motion-no-initial-hidden-above-fold`), ma wiersz w rejestrze animacji (`motion-motivated`, kategoria
+„demonstracja produktu") i ładuje się leniwie (`perf-js-budget-home`). Liczby na takim wykresie są
+ilustracyjne, mieszkają w `data/*.ts` i podlegają `brand-allowed-numbers-only` jak każda liczba publiczna.
 
 #### Mechanizm awarii (dlaczego)
 
-- CLAUDE.md #2: „Wykresy statyczne: bez teatralnego „rysowania"; krótki fade, kropki tylko informacyjne". Twarda reguła projektu = BLOCKER.
-- Obietnica produktowa „kalkulator, nie wróżka": wynik ma być natychmiastowy i powtarzalny; wykres, który „rośnie" 1,1 s (domyślne bklit), sugeruje obliczenie w toku i teatr.
-- Remount przez `key` od danych → `ResizeObserver` → pusta klatka → błysk (kit SKILL.md:246-248); `ResponsiveContainer` mierzy po paincie.
-- bklit-ui: clip-reveal i stagger słupków grają zawsze, także przy reduced motion (bklit-ui §4.6); nasz `ChartReveal` ma gałąź `useReducedMotion` → `initial={false}`.
-- Per-path `stroke-dash` = repaint całego viewportu co klatkę (kit `app.css:78-82`, „Background Paths retired").
+- **W narzędziu**: obietnica produktowa „kalkulator, nie wróżka" znaczy, że wynik jest natychmiastowy
+  i powtarzalny. Wykres, który „rośnie" 1,1 s (domyślne bklit), opóźnia odczyt liczby i sugeruje obliczenie
+  w toku; użytkownik przestaje ufać liczbie, którą przed chwilą oglądał w ruchu. Animacja w miejscu decyzji
+  podważa zaufanie do danych.
+- Remount przez `key` od danych → `ResizeObserver` → pusta klatka → błysk (kit SKILL.md:246-248);
+  `ResponsiveContainer` mierzy po paincie.
+- bklit-ui: clip-reveal i stagger słupków grają zawsze, także przy reduced motion (bklit-ui §4.6); nasz
+  `ChartReveal` ma gałąź `useReducedMotion` → `initial={false}`.
+- Per-path `stroke-dash` i `pathLength` = repaint całego viewportu co klatkę (kit `app.css:78-82`,
+  „Background Paths retired") — dlatego pozostają zakazane także w warstwie marketingowej.
+- **Na stronie marketingowej działa odwrotny mechanizm awarii i to on wymusił tę zmianę**: strona bez ruchu
+  czyta się jak dokument tekstowy, a odwiedzający nie widzi, że narzędzie cokolwiek liczy. Karol 2026-09-13:
+  „Strona dalej wygląda minimalistycznie, nawet gorzej niż wcześniej. Za dużo tekstu. Bardzo liczyłem na
+  motion grafiki, typu że podczas scrollowania buduje się jakiś wykres". Zasada #2 CLAUDE.md powstała pod
+  kontekst narzędzia i była błędnie rozciągana na landing; rozciąganie skończyło się stroną, której founder
+  nie chce pokazywać klientom.
+- Ruch sterowany scrollem (a nie zegarem) nie zabiera kontroli: użytkownik decyduje, czy i jak szybko wykres
+  się zbuduje, zatrzymany scroll zatrzymuje ruch, a scroll w tył go cofa. To jest różnica między narracją
+  a teatrem, którą stary zapis reguły gubił, bo mieszał oba konteksty w jedno zdanie.
 
 #### Niepoprawnie
 
 ```tsx
+// A. narzędzie: słupki dojeżdżają, linia się rysuje, remount od danych
 {bars.map((b, i) => (
   <m.rect key={b.id} initial={{ height: 0, y: H }} animate={{ height: b.h, y: H - b.h }}
           transition={{ delay: i * 0.05, duration: 1.1, ease: [0.85, 0, 0.15, 1] }} />
@@ -2038,10 +2092,17 @@ Zmiana wejścia (suwak, tolerancja, filtr) = nowy wynik w tej samej klatce (bez 
 <LineChart isAnimationActive />                                // Recharts animacja per punkt
 ```
 
+```tsx
+// B. strona marketingowa: ruch na zegarze i na layoucie zamiast na postępie scrolla, bez gałęzi reduced
+<m.rect animate={{ height: [0, 120] }} transition={{ duration: 1.8, repeat: Infinity }} />   // pętla + height
+useEffect(() => { const id = setTimeout(() => setBuilt(true), 800); return () => clearTimeout(id); }, []);
+<m.path initial={{ pathLength: 0 }} whileInView={{ pathLength: 1 }} />                        // repaint co klatkę
+```
+
 #### Poprawnie
 
 ```tsx
-// src/motion/ChartReveal.tsx
+// A. narzędzie: src/motion/ChartReveal.tsx
 import * as m from "motion/react-m";
 import { useReducedMotion } from "motion/react";
 import { DUR, EASE_SOFT } from "./tokens";
@@ -2056,34 +2117,87 @@ export function ChartReveal({ replayKey = 0, children }: { replayKey?: number; c
   );
 }
 
-// dashboard: statyczny SVG, wynik w tej samej klatce, replay tylko z przycisku
+// A. dashboard: statyczny SVG, wynik w tej samej klatce, replay tylko z przycisku
 const [replay, setReplay] = useState(0);
 const rows = useMemo(() => aggregate(parsed.rows), [parsed]);
 <button className="btn btn-secondary btn-sm" type="button" onClick={() => setReplay((n) => n + 1)}>{t.replay}</button>
 <ChartReveal replayKey={replay}><Bars rows={rows} /></ChartReveal>
 ```
 
+```tsx
+// B. strona marketingowa: src/motion/scroll/ScrollBars.tsx (lazy, poniżej folda)
+// motion: demonstracja produktu — słupki budują się w tempie czytelnika, bo tak wygląda praca narzędzia
+import { useRef } from "react";
+import * as m from "motion/react-m";
+import { useScroll, useTransform, useReducedMotion, type MotionValue } from "motion/react";
+
+export function ScrollBars({ bars }: { bars: { id: string; v: number }[] }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const reduce = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start 80%", "end 60%"] });
+  return (
+    <div ref={ref} className="scroll-bars">
+      <svg role="img" aria-label="Udział etapów w budżecie: projekt 32, produkcja 41, montaż 27">
+        {bars.map((b, i) => (
+          <ScrollBar key={b.id} v={b.v} progress={scrollYProgress} index={i} reduce={reduce} />
+        ))}
+      </svg>
+    </div>
+  );
+}
+
+function ScrollBar({ v, progress, index, reduce }: { v: number; progress: MotionValue<number>; index: number; reduce: boolean | null }) {
+  const scaleY = useTransform(progress, [index * 0.08, index * 0.08 + 0.4], [0, 1]);
+  // reduced motion: stan KOŃCOWY od razu, postęp w ogóle nieczytany
+  return <m.rect height={v} width={24} style={{ transformOrigin: "bottom", scaleY: reduce ? 1 : scaleY }} />;
+}
+```
+
 ```css
-/* alternatywa CSS (kit): fade panelu, bez rysowania */
+/* A. alternatywa CSS w narzędziu (kit): fade panelu, bez rysowania */
 .chart-reveal { animation: chartFade var(--duration-slow) var(--ease-out) backwards; }
 @keyframes chartFade { from { opacity: 0 } }
 @media (prefers-reduced-motion: reduce) { .chart-reveal { animation: none } }
+
+/* B. alternatywa CSS na stronie marketingowej: postęp scrolla zamiast zegara */
+.scroll-bars rect { transform-origin: bottom; animation: barGrow linear both; animation-timeline: view(); animation-range: entry 20% cover 60%; }
+@keyframes barGrow { from { transform: scaleY(0) } to { transform: scaleY(1) } }
+@media (prefers-reduced-motion: reduce) {
+  .scroll-bars rect { animation: none; animation-timeline: none; transform: scaleY(1); }   /* stan końcowy */
+}
 ```
 
 #### Test
 
 ```bash
-# w dashboardach, DemoReport i mini-komponentach (oczekiwane: 0)
+# ── A. narzędzie: wykres statyczny (wszystkie oczekiwane: 0) ──
 D="site/src/components/dashboards site/src/components/DemoReport.tsx site/src/components/MiniReport.tsx site/src/components/MiniAudit.tsx"
 grep -rnE 'pathLength|stroke-dashoffset|strokeDashoffset|isAnimationActive|repeat:\s*Infinity|animationBegin|animationDuration' $D
-grep -rnE '<m\.(rect|path|circle|line|g)\b' $D                          # per-element Motion w wykresach
-grep -rnE 'key=\{(JSON\.stringify|data|rows|result)' $D                  # remount od danych
-grep -rnE 'duration:\s*(0\.[5-9]|[1-9])' $D                              # > 420 ms w dashboardach (literały i tak łamią motion-tokens-only)
+grep -rnE '<m\.(rect|path|circle|line|g)\b' $D                             # per-element Motion w wykresach
+grep -rnE 'scaleY|scaleX|useScroll|scrollYProgress|animation-timeline' $D  # budowanie i scroll-progress: wyłącznie marketing
+grep -rnE 'key=\{(JSON\.stringify|data|rows|result)' $D                    # remount od danych
+grep -rnE 'duration:\s*(0\.[5-9]|[1-9])' $D                                # > 420 ms w dashboardach (literały i tak łamią motion-tokens-only)
 grep -rnE '(400|450)ms|duration:\s*0\.4[05]' $D site/src/styles/globals.css   # = 0 (jedyny próg to var(--duration-slow) / DUR.reveal)
 # ChartReveal tylko poniżej folda: nie w Hero/Bento/MetricsStrip
 grep -rnE 'ChartReveal' site/src/components/Hero.tsx site/src/components/Bento.tsx site/src/components/MetricsStrip.tsx 2>/dev/null   # = 0
-# przegląd ręczny (agent motion-auditor): otworzyć 12 dashboardów, zmienić wejście (suwak/tolerancja) → wynik bez błysku i bez „rysowania";
-# DevTools Performance: po pierwszych 500 ms od montażu zero animacji w panelu (Animations tab pusty).
+
+# ── B. rozróżnienie kontekstów: budowanie tylko w warstwie narracyjnej ──
+# animacja skalująca słupki i odczyt postępu scrolla: dozwolone w site/src/motion/scroll/**, zakazane wszędzie indziej
+grep -rlE 'useScroll\(|scrollYProgress|animation-timeline' site/src --include=*.tsx --include=*.ts | grep -v '^site/src/motion/scroll/'   # = 0
+grep -rlE 'scaleY' site/src --include=*.tsx | grep -v '^site/src/motion/scroll/'                                                          # = 0
+grep -rnE 'animation-timeline' site/src/styles/*.css | grep -v globals.css                                                                # = 0
+# każdy plik warstwy scroll ma gałąź reduced-motion (brak katalogu = NIE SPRAWDZANO, nie PASS)
+for f in site/src/motion/scroll/*.tsx; do grep -qE 'useReducedMotion|prefers-reduced-motion' "$f" || echo "BRAK gałęzi reduced: $f"; done
+# CSS scroll-driven zawsze z blokiem reduced, który daje stan KOŃCOWY
+grep -nE 'animation-timeline:\s*none' site/src/styles/globals.css                                                                          # ≥ 1, gdy jest animation-timeline
+# zakaz rysowania per-path obowiązuje też w marketingu
+grep -rnE 'pathLength|stroke-dashoffset|strokeDashoffset' site/src --include=*.tsx --include=*.css                                          # = 0
+
+# przegląd ręczny (agent motion-auditor):
+#   narzędzie — otworzyć 12 dashboardów, zmienić wejście (suwak/tolerancja) → wynik bez błysku i bez „rysowania";
+#     DevTools Performance: po pierwszych 500 ms od montażu zero animacji w panelu (Animations tab pusty);
+#   marketing — scroll w dół i w GÓRĘ: wykres buduje się i cofa razem z pozycją, zatrzymany scroll = zatrzymany ruch;
+#     DevTools „Emulate prefers-reduced-motion: reduce" → wykres od razu kompletny (stan końcowy), zero scaleY(0).
 ```
 
 Docelowo `node scripts/check-motion.mjs` sekcja `charts` + ocena LLM.
@@ -2093,6 +2207,7 @@ Docelowo `node scripts/check-motion.mjs` sekcja `charts` + ocena LLM.
 - Klasa kitu `.nc-chart-build` (CSS clip-reveal **450 ms**, `backwards`, z blokiem reduced) jest równoważna `ChartReveal` i dozwolona w dashboardach — to TOLEROWANY DŁUG kitu do przepisania na `var(--duration-slow)` (420 ms) przy najbliższej aktualizacji `company-ui.css`; nie łączyć obu na jednym wykresie. Poza tą jedną klasą 450 ms nie występuje.
 - Mini-diagram `KsefFlow` (S2): węzły `opacity` sekwencyjnie 3 × 120 ms raz; to nie wykres danych, a schemat kierunku (motywacja: „sekwencja = kierunek danych").
 - Gantt (`TaskTimeline`) w trybie compare: „dryf" jest liczbą i barwą, nie animacją; zmiana snapshotu = cross-fade panelu.
+- Mini-embed na stronie marketingowej, który LICZY na żywo (`MiniReport`, `MiniAudit`), jest narzędziem mimo marketingowej trasy: obowiązuje go wariant A. Wykres narracyjny obok niego rysuje liczby ilustracyjne z `data/*.ts` i podlega wariantowi B; nie łączyć obu w jednym komponencie.
 
 ### 3.2 motion-no-initial-hidden-above-fold
 
@@ -2192,50 +2307,102 @@ Docelowo `scripts/verify-site.mjs` krok `shell-visible` + bramka shell-vs-DOM (f
 
 ### 3.3 motion-no-pinning-no-scroll-hijack
 
-**Zakaz produktowy pinowania, sticky-scen, horizontal-pan, parallaxu, marquee, scroll-hijack i własnego kursora**
+**Scroll-hijack zakazany bez wyjątku; scena sticky dozwolona warunkowo (≤ 2 na trasę, ≤ 300vh, gałąź reduced-motion); parallax, marquee, karuzele i własny kursor dalej zakazane**
 
-Impact: **BLOCKER** · Tagi: motion, product-decision, seo, a11y, scroll · Źródło: decyzja Karola 2026-07-26 (deck usunięty) i 2026-07-22 (karuzela usunięta) · CLAUDE.md „Architektura strony" · synthesis §1.6/§1.7 p.14/§2.4.7 · showreel M3/M5 (przepisane na zakaz) · taste §7.5/§7.7 · motion-dev §0 p.11 · Dodano: 2026-09-12 · Plik: `rules/motion-no-pinning-no-scroll-hijack.md`
+Impact: **BLOCKER** · Tagi: motion, product-decision, seo, a11y, scroll, sticky · Źródło: decyzja Karola 2026-07-26 (deck usunięty) i 2026-07-22 (karuzela usunięta) · decyzja Karola 2026-09-13 (sticky-scena odblokowana dla warstwy narracyjnej; hijack zostaje zakazany) · CLAUDE.md „Architektura strony" · synthesis §1.6/§1.7 p.14/§2.4.7 · taste §7.5/§7.7 · motion-dev §0 p.11 · Dodano: 2026-09-12 · Plik: `rules/motion-no-pinning-no-scroll-hijack.md`
 
 #### Zasada
 
-Na landingu klarow.com (wszystkie trasy `/`, `/narzedzia`, `/narzedzia/:slug`, `/oferta`, `/faq`, `/rodo`) NIEZALEŻNIE OD TECHNIKI (Motion, CSS `animation-timeline`, GSAP, `position: sticky` z torem, three.js, wideo sterowane scrollem) zakazane są:
+Stary zapis sklejał dwa różne pojęcia w jeden zakaz („zero pinowania i scroll-hijacku"). Rozdzielamy je,
+bo tylko jedno z nich odbiera użytkownikowi kontrolę.
 
-- sceny pinowane (`sticky` + kontener o wysokości N × 100vh, „scrollytelling", `PinnedScene`),
-- horizontal-pan / poziome przewijanie sterowane pionowym scrollem,
-- scroll-hijack: przechwytywanie `wheel`/`touchmove`/klawiszy, smooth-scroll z inercją (Lenis i podobne), `overflow: hidden` na `html`/`body` poza otwartym dialogiem,
-- parallax (`useScroll` + `useTransform` na tle/obrazie, `background-attachment: fixed`),
-- marquee/ticker (logotypy, hasła) i „kinetyczna typografia",
-- własny kursor (`Cursor` z Motion+, `cursor: none`), magnetyczne przyciski,
-- karuzele/orbity/decki slajdów (historia: karuzela orbitalna i deck usunięte na polecenie Karola),
-- `window.addEventListener("scroll", ...)`, `window.scrollY`/`scrollTop` w stanie React, pętle rAF piszące do `useState`.
+### A. Scroll-hijack: ZAKAZANY, bez trybu „po decyzji"
 
-Dozwolone: zwykły scroll dokumentu, `whileInView`/`IntersectionObserver` do jednorazowych wejść, `position: sticky` WYŁĄCZNIE dla navbara i nagłówków tabel w dashboardach (bez toru), natywny `scroll-snap` w poziomej liście na `pointer: coarse` (tylko w trybie `tool`, nigdy na home).
+Na wszystkich trasach (`/`, `/narzedzia`, `/narzedzia/:slug`, `/oferta`, `/faq`, `/rodo`, `404`) i niezależnie
+od techniki (Motion, CSS, GSAP, three.js, wideo) zakazane są:
 
-Ta reguła nie ma trybu „po decyzji": zmiana wymaga wpisu w `docs/plan/plan-strategiczny.md` podpisanego przez Karola i Pawła oraz aktualizacji tego pliku.
+- przechwytywanie zdarzeń wejścia: listenery `wheel`, `touchmove`, `scroll`, `keydown` z `preventDefault()`,
+- blokowanie przewijania dokumentu: `overflow: hidden` na `html`/`body` poza otwartym `<dialog>`,
+- przewijanie sterowane skryptem: `scrollTo`/`scrollIntoView` w pętli rAF, smooth-scroll z inercją
+  (Lenis, Locomotive), `scroll-behavior: smooth` narzucone globalnie,
+- slajdy przełączane gestem: deck, karuzela, orbita, horizontal-pan sterowany pionowym scrollem,
+- `window.addEventListener("scroll", …)`, `window.scrollY`/`scrollTop` w stanie React, pętle rAF piszące do `useState`.
+
+Zakazane pozostają także (osobne decyzje produktowe, nieobjęte odblokowaniem sticky): parallax na tle i obrazach
+(`background-attachment: fixed`, `useTransform` na warstwie tła), marquee/ticker i „kinetyczna typografia",
+własny kursor (`Cursor` z Motion+, `cursor: none`), magnetyczne przyciski.
+
+### B. Sticky: DOZWOLONY warunkowo, bo nie odbiera kontroli
+
+`position: sticky` w kontenerze o JAWNEJ wysokości, w którym użytkownik scrolluje normalnie, a treść zmienia
+się wraz z postępem (wykres się buduje, kroki procesu się odsłaniają), jest dozwolony. Pasek przewijania
+zachowuje się zwyczajnie, „Znajdź na stronie" działa, historia przewijania i `ScrollToTop` działają.
+
+Limity, wszystkie twarde:
+
+1. **najwyżej DWIE sceny sticky na trasę** (licząc każdy kontener z torem, nie licząc navbara i `thead`),
+2. **każda scena ≤ 300vh** wysokości kontenera (tor krótszy = mniej czekania na treść),
+3. **obowiązkowa gałąź reduced-motion**: przy `prefers-reduced-motion: reduce` kontener wraca do
+   `height: auto`, element przestaje być `sticky` (`position: static`), a treść pokazuje **stan końcowy**
+   (nie początkowy, nie pusty),
+4. **odczyt postępu wyłącznie pasywny**: `useScroll({ target, offset })` + `useTransform` w
+   `site/src/motion/scroll/**` albo CSS `animation-timeline: view()`/`scroll()` w `globals.css`; żadnego
+   własnego listenera (patrz A),
+5. tylko właściwości akcelerowane (`motion-gpu-props-only`), `will-change` zdejmowane po scenie
+   (`motion-cleanup-required`),
+6. scena nie zaczyna się nad foldem i nie ukrywa treści obecnej w shellu prerenderu
+   (`motion-no-initial-hidden-above-fold`); na `pointer: coarse` scena albo działa tak samo, albo degraduje
+   się do stanu końcowego, nigdy do pustego ekranu.
+
+Dozwolone poza scenami: zwykły scroll dokumentu, `whileInView`/`IntersectionObserver` do jednorazowych wejść,
+`position: sticky` dla navbara i nagłówków tabel w dashboardach, natywny `scroll-snap` w poziomej liście na
+`pointer: coarse` (tylko w trybie `tool`, nigdy na home).
+
+Zmiana zakresu A wymaga wpisu w `docs/plan/plan-strategiczny.md` podpisanego przez Karola i Pawła oraz
+aktualizacji tego pliku. Zakres B odblokowała decyzja Karola z 2026-09-13 (wiersz w
+`references/decisions-log.md`); rozszerzenie limitów z §B wymaga nowej decyzji, nie oceny agenta.
 
 #### Mechanizm awarii (dlaczego)
 
-- Decyzja Karola 2026-07-26: deck (slajdy przełączane scrollem) usunięty, bo „rozbicie na trasy o odrębnej intencji jest lepsze pod SEO"; 2026-07-22: karuzela orbitalna usunięta („usuń te koła"). Sędzia marki (brand-icp) zdyskwalifikował showreel właśnie za scenę pinowaną. Każdy powrót do tych wzorców to powrót do już odrzuconej decyzji.
-- Scena pinowana 300dvh opóźnia pierwszy dowód o ~3 viewporty na desktopie i nie działa na mobile (główny kanał wejść z LinkedIn).
-- Scroll-hijack łamie a11y (czytniki, klawiatura, `prefers-reduced-motion`), psuje „Znajdź na stronie", historię przewijania i `ScrollToTop` przy zmianie trasy.
-- Parallax = motion values poza `MotionConfig` (reduced motion ich nie wyłącza) + 12,9 KB hooków + ryzyko pomiarów pod `zoom` roota. Persona (CFO firmy produkcyjnej) czyta parallax jako „agencja", nie „kalkulator".
+- **Dlaczego hijack zostaje zakazany.** Deck (slajdy przełączane scrollem) został skasowany 2026-07-26, bo
+  „rozbicie na trasy o odrębnej intencji jest lepsze pod SEO", a karuzela orbitalna 2026-07-22 („usuń te koła").
+  Wspólny mianownik obu: gest użytkownika znaczył co innego, niż użytkownik chciał. Hijack łamie a11y
+  (czytniki, klawiatura), psuje „Znajdź na stronie", historię przewijania i `ScrollToTop` przy zmianie trasy,
+  a na telefonie zamienia przewijanie w loterię.
+- **Dlaczego sticky wraca.** Karol 2026-09-13: „Bardzo liczyłem na motion grafiki, typu że podczas
+  scrollowania buduje się jakiś wykres". Scena sticky, w której użytkownik scrolluje normalnie, nie odbiera
+  kontroli: zatrzymany scroll zatrzymuje ruch, scroll w tył go cofa, a klawiatura i czytnik dalej przechodzą
+  przez treść. Zakaz sticky był zakazem estetycznym doklejonym do zakazu hijacku i kosztował stronę, której
+  founder nie chce pokazywać klientom.
+- Limit 2 × 300vh pilnuje tego, co pierwotnie uzasadniało zakaz: scena 300dvh opóźnia pierwszy dowód
+  o trzy viewporty, a trzy takie sceny robią z landingu przewijankę bez treści.
 - `addEventListener("scroll")` w React = re-render co klatkę; taste §7.5 wpisuje to na listę zakazanych.
+  `useScroll` czyta postęp pasywnie (Motion używa `ScrollTimeline`/pasywnego listenera wewnątrz biblioteki),
+  więc nie generuje re-renderów Reacta — dlatego wolno go użyć w warstwie `motion/scroll/**`, a ręcznego
+  listenera nie wolno nigdzie.
+- Parallax zostaje zakazany osobno: to ruch tła nieskorelowany z treścią, motion values poza `MotionConfig`
+  (reduced motion ich nie wyłącza) i ryzyko pomiarów pod `zoom` roota; persona (CFO firmy produkcyjnej) czyta
+  parallax jako „agencja", nie „kalkulator".
 
 #### Niepoprawnie
 
 ```tsx
-// PinnedScene.tsx
-const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
-const y = useTransform(scrollYProgress, [0, 1], [24, -24]);
-<div ref={ref} style={{ height: "300vh" }}><div style={{ position: "sticky", top: 0, height: "100vh" }}>…</div></div>
-```
+// hijack: własny listener + przewijanie sterowane skryptem
+useEffect(() => {
+  const onWheel = (e: WheelEvent) => { e.preventDefault(); goToSlide(dir(e)); };
+  window.addEventListener("wheel", onWheel, { passive: false });
+  return () => window.removeEventListener("wheel", onWheel);
+}, []);
 
-```tsx
+// hijack: pozycja scrolla w stanie React (re-render co klatkę)
 useEffect(() => {
   const onScroll = () => setProgress(window.scrollY / document.body.scrollHeight);
   window.addEventListener("scroll", onScroll);
   return () => window.removeEventListener("scroll", onScroll);
 }, []);
+
+// scena bez gałęzi reduced i o torze 600vh (dwa limity złamane naraz)
+<div ref={ref} style={{ height: "600vh" }}><div style={{ position: "sticky", top: 0 }}>…</div></div>
 ```
 
 ```css
@@ -2247,10 +2414,35 @@ html, body { overflow: hidden; }            /* relikt decka */
 #### Poprawnie
 
 ```tsx
-// wejście jednorazowe: whileInView + VIEWPORT_ONCE, bez toru scrolla
+// src/motion/scroll/StickyScene.tsx — jedna z najwyżej dwóch scen na trasę
+// motion: demonstracja produktu — wykres buduje się w tempie czytelnika
+export function StickyScene({ children }: { children: (p: MotionValue<number>) => ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const reduce = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
+  // reduced motion: kontener bez toru (height:auto), treść w stanie końcowym
+  if (reduce) return <div className="scene scene--static">{children(MOTION_ONE)}</div>;
+  return (
+    <div ref={ref} className="scene" style={{ height: "300vh" }}>
+      <div className="scene-sticky">{children(scrollYProgress)}</div>
+    </div>
+  );
+}
+```
+
+```css
+.scene-sticky { position: sticky; top: 0; min-height: 100dvh; }
+@media (prefers-reduced-motion: reduce) {
+  .scene { height: auto; }                     /* tor znika */
+  .scene-sticky { position: static; }           /* treść w stanie końcowym */
+}
+```
+
+```tsx
+// wejście jednorazowe poza sceną: whileInView + VIEWPORT_ONCE, bez toru scrolla
 <m.section variants={fadeUp} initial="hidden" whileInView="show" viewport={VIEWPORT_ONCE}>…</m.section>
 
-// logotypy/hasła: statyczna siatka zamiast marquee
+// logotypy i hasła: statyczna siatka zamiast marquee
 <ul className="logo-grid">{items.map((it) => <li key={it.id}>{it.node}</li>)}</ul>
 
 // dialog: blokada scrolla tylko przez natywny <dialog> (showModal) + CSS :modal, bez overflow:hidden na body
@@ -2259,26 +2451,41 @@ html, body { overflow: hidden; }            /* relikt decka */
 #### Test
 
 ```bash
-# wszystkie oczekiwane: 0
-grep -rnE 'useScroll\(|useTransform\(|useVelocity\(|useSpring\(' site/src --include=*.tsx --include=*.ts
+# ── A. scroll-hijack: zawsze 0 ──
 grep -rnE 'addEventListener\(\s*["'"'"'](scroll|wheel|touchmove)["'"'"']' site/src
 grep -rnE 'window\.scrollY|document\.documentElement\.scrollTop|scrollTop\b' site/src --include=*.tsx | grep -vE 'ScrollToTop|scrollTo\('
-grep -rnE 'position:\s*sticky|sticky' site/src --include=*.tsx --include=*.css | grep -vE 'Navbar|thead|th\b|table|kit-overflow'
-grep -rnE 'height:\s*"?[2-9]00(vh|dvh)|animation-timeline|scroll-timeline|background-attachment:\s*fixed' site/src
-grep -rnE 'marquee|ticker|Cursor\b|cursor:\s*none|lenis|locomotive|smooth-scroll' site/src -i
+grep -rnE 'lenis|locomotive|smooth-scroll|scroll-behavior:\s*smooth' site/src -i
 grep -rnE '(html|body)[^{]*\{[^}]*overflow:\s*hidden' site/src --include=*.css
+grep -rnE 'marquee|ticker|Cursor\b|cursor:\s*none' site/src -i
+grep -rnE 'background-attachment:\s*fixed' site/src
 grep -rnE 'carousel|orbital|SlideDeck|\.deck\b|\.slide\b' site/src -i | grep -v 'ui/radial-orbital-timeline.tsx'   # zapas poza bundlem
-# zapas poza bundlem: radial-orbital-timeline nie może być importowany
-grep -rnE 'radial-orbital-timeline|canvas-reveal-effect' site/src --include=*.tsx | grep import   # = 0
+grep -rnE 'radial-orbital-timeline|canvas-reveal-effect' site/src --include=*.tsx | grep import                     # = 0
+
+# ── B. sticky: dozwolony w granicach ──
+# 1) odczyt postępu tylko w warstwie narracyjnej
+grep -rlE 'useScroll\(|useTransform\(|scrollYProgress' site/src --include=*.tsx --include=*.ts | grep -v '^site/src/motion/scroll/'   # = 0
+# 2) sticky poza navbarem, tabelami i warstwą scroll (oczekiwane: 0)
+grep -rnE 'position:\s*sticky|sticky' site/src --include=*.tsx --include=*.css | grep -vE 'Navbar|thead|th\b|table|kit-overflow|motion/scroll|scene-sticky'
+# 3) tor sceny ≤ 300vh (każde trafienie musi być ≤ 300 i leżeć w kontenerze sceny)
+grep -rnE 'height:\s*"?[0-9]+(vh|dvh)' site/src --include=*.tsx --include=*.css | grep -vE '\b(1|2|3)00(vh|dvh)'                      # = 0
+# 4) ≤ 2 sceny na trasę (licznik per plik trasy; > 2 = FAIL)
+for p in site/src/pages/*.tsx site/src/App.tsx; do echo "$p: $(grep -cE 'StickyScene' "$p")"; done
+# 5) każda scena ma gałąź reduced w JS i w CSS
+for f in site/src/motion/scroll/*.tsx; do grep -qE 'useReducedMotion' "$f" || echo "BRAK gałęzi reduced: $f"; done
+grep -nE 'prefers-reduced-motion' -A6 site/src/styles/globals.css | grep -E 'height:\s*auto|position:\s*static'                        # ≥ 1, gdy istnieje scena
+# 6) Playwright WebKit 390×844 i 1440×900: scroll całej trasy klawiaturą (PageDown) dochodzi do stopki;
+#    z reducedMotion:"reduce" zrzut pokazuje treść sceny w stanie końcowym, a wysokość dokumentu spada
+#    (tor sceny zniknął); „Znajdź na stronie" znajduje tekst ze sceny bez przewijania myszą.
 ```
 
 Docelowo `node scripts/check-motion.mjs` sekcja `scroll`.
 
 #### Wyjątki
 
-- `Navbar` `position: sticky`/`fixed` (jedna linia, 64/56 px) i nagłówki tabel dashboardów (`thead` sticky w scrollboxie) są dozwolone.
+- `Navbar` `position: sticky`/`fixed` (jedna linia, 64/56 px) i nagłówki tabel dashboardów (`thead` sticky w scrollboxie) są dozwolone i NIE liczą się do limitu dwóch scen.
 - `ScrollToTop` (scroll na górę przy zmianie trasy) to nawigacja, nie animacja; zostaje.
-- `WipeCompare` (faza 2, podstrony dem) używa `clip-path` sterowanego suwakiem `<input type="range">`, nie scrollem; dozwolone.
+- `WipeCompare` (faza 2, podstrony dem) używa `clip-path` sterowanego suwakiem `<input type="range">`, nie scrollem; dozwolone i nie liczy się do limitu.
+- Tryb `tool` (dashboardy, `DemoReport`, `demo/**`) nie ma scen sticky w ogóle: w narzędziu wynik jest natychmiastowy (`motion-charts-static` §A).
 
 ### 3.4 motion-reduced-motion-three-layers
 
@@ -2406,7 +2613,7 @@ Plik NIE istnieje przed pierwszym zielonym buildem v2: tworzy go świadomie `nod
 
 #### Mechanizm awarii (dlaczego)
 
-- Różnica `m`+`domAnimation` vs pełny `motion` to 13,7 KB gz (29 %): ~23 % chunku react-dom. Na stronie z budżetem JS `/` ≤ 140 KB gz (react-dom ~58 + router ~15 + motion ~34 + app ~25) nie ma miejsca na 47,5.
+- Różnica `m`+`domAnimation` vs pełny `motion` to 13,7 KB gz (29 %): ~23 % chunku react-dom. Budżet JS `/` to od 2026-09-13 175 KB gz (`perf-js-budget-home`), ale zapas 35 KB jest znakowany na warstwę scroll-narracyjną i jej dane — nie na tłustszy import Motion. Limit 35 KB gz na chunk Motion zostaje bez zmian: 47,5 zjadłoby zapas, zanim powstanie pierwsza scena.
 - Regresja bundla jest cicha: `tsc` i `vite build` przechodzą, strona działa, a każdy użytkownik płaci 14 KB więcej na każdej trasie. Tylko bramka liczbowa ją łapie.
 - Docs Motion obiecują „4,6 kB"; w praktyce wspólny rdzeń (`MotionConfigContext` 11,6 KB + silnik) ładuje się zawsze. Nie obiecywać founderom „5 KB"; budżet 35 jest realny, ≥ 40 = błąd w imporcie, nie „drobna regresja".
 
@@ -3195,7 +3402,7 @@ for f in site/src/styles/globals.css site/src/styles/tokens.css; do [ -f "$f" ] 
 
 **Każda animacja ma motywację w jednym zdaniu; brak zdania = brak animacji**
 
-Impact: **MEDIUM** · Tagi: motion, design, review · Źródło: taste §7.1 („MOTION MUST BE MOTIVATED") · synthesis §2.4.7 (tabela z motywacją) · motion-design (zasady Disney: staging, appeal) · decyzje Karola 2026-07-22/26 · Dodano: 2026-09-12 · Plik: `rules/motion-motivated.md`
+Impact: **MEDIUM** · Tagi: motion, design, review · Źródło: taste §7.1 („MOTION MUST BE MOTIVATED") · synthesis §2.4.7 (tabela z motywacją) · motion-design (zasady Disney: staging, appeal) · decyzje Karola 2026-07-22/26 · decyzja Karola 2026-09-13 (kategoria „demonstracja produktu" na warstwie marketingowej) · Dodano: 2026-09-12 · Plik: `rules/motion-motivated.md`
 
 #### Zasada
 
@@ -3205,6 +3412,15 @@ Każdy ruch na stronie (Motion, CSS transition/keyframes, wideo, crossfade) ma z
 2. komentarz nad elementem w kodzie: `// motion: <motywacja>` (np. `// motion: hierarchia czytania L→R`).
 
 Dozwolone kategorie motywacji (taste §7.1): **hierarchia** (kieruje wzrok), **storytelling** (sekwencja odpowiada narracji, np. kierunek danych w `KsefFlow`), **feedback** (potwierdza akcję: hover, tap, otwarcie), **stan** (pokazuje, że coś się zmieniło: swap zakładki, nowy wynik). Niedozwolone: „wygląda premium", „strona musi się ruszać", „bo mamy Motion".
+
+Piąta kategoria, **wyłącznie na warstwie marketingowej** (decyzja Karola 2026-09-13): **demonstracja
+produktu** — „pokazać, co narzędzie robi". Ruch, który buduje wykres, odsłania kroki procesu albo pokazuje
+rozsypane dane układające się w wynik, ma motywację funkcjonalną, bo to jedyny sposób, w jaki odwiedzający
+widzi produkt w ruchu przed rozmową: dema liczą na żywo dopiero na podstronach, a landing musi pokazać ten
+sam mechanizm w jednym spojrzeniu. Warunki wykonania (postęp scrolla, właściwości akcelerowane, gałąź
+reduced-motion ze stanem końcowym, zero przechwytywania scrolla) stawia `motion-charts-static` §B
+i `motion-no-pinning-no-scroll-hijack` §B. W trybie `tool` ta kategoria NIE obowiązuje: w narzędziu
+„pokazać, co robi" znaczy pokazać wynik, a nie drogę do niego.
 
 Rejestr home w v2 (zamknięty; kolejność sekcji po reframe z 2026-09-12 i po decyzjach D35/D37/D38):
 
@@ -3228,6 +3444,9 @@ Wiersz „S5 liczniki" **usunięty**: pasek „W liczbach" nie istnieje (D30), a
 - Karol dwukrotnie kazał usuwać efekty (karuzela 2026-07-22, deck 2026-07-26): oba były „ładne", żadne nie miało funkcji. Zdanie motywacji przed napisaniem kodu odsiewa je wcześniej i taniej.
 - Persona (CFO/właściciel firmy produkcyjnej, „kalkulator, nie wróżka") czyta nadmiar ruchu jako agencję marketingową, nie wykonawcę narzędzi.
 - Rejestr pozwala audytorowi mechanicznie porównać: „ruchów w kodzie" vs „wierszy w rejestrze"; różnica = animacja bez decyzji.
+- Druga strona tej samej monety (2026-09-13): brak ruchu też jest awarią, gdy sprzedajemy narzędzia, które
+  liczą. Karol o gotowej stronie: „za dużo tekstu, bardzo liczyłem na motion grafiki". Zdanie motywacji nie
+  służy do wycinania ruchu, tylko do odróżnienia ruchu, który coś pokazuje, od ruchu, który tylko ozdabia.
 
 #### Niepoprawnie
 
@@ -4736,7 +4955,7 @@ Impact: **HIGH** · Tagi: perf, bundle, gate, ci, regression · Źródło: synth
    ```json
    { "homeGz": 138000, "cssGz": 19000, "motionGz": 33800, "toolGzMax": 58000, "lazy": { "pdfmake": 830000, "three": 118000 }, "updated": "2026-09-xx", "reason": "faza 0: lazy dashboardy" }
    ```
-   Reguły: każda grupa ≤ twardy limit (`homeGz` 140 KB, `cssGz` 20 KB, `motionGz` 35 KB, `toolGzMax` 60 KB) ORAZ ≤ baseline × 1,05; nowy chunk w zbiorze krytycznym, którego nie było w baseline = fail; chunk lazy, który przeszedł do krytycznych = fail.
+   Reguły: każda grupa ≤ twardy limit (`homeGz` 175 KB, `cssGz` 20 KB, `motionGz` 35 KB, `toolGzMax` 60 KB) ORAZ ≤ baseline × 1,05; nowy chunk w zbiorze krytycznym, którego nie było w baseline = fail; chunk lazy, który przeszedł do krytycznych = fail.
 4. Wynik w formacie findings: `dist/index.html:0 - HIGH [perf-chunk-size-gate] homeGz 146 812 B > baseline 138 000 × 1,05 (chunk nowy: assets/ToolPage-xxxx.js)` + JSONL.
 5. Baseline aktualizuje TYLKO commit z komunikatem zaczynającym się od `Perf: nowy baseline` z polem `reason`; agent audytu odrzuca PR, w którym `baseline.json` zmienia się w innym commicie.
 6. Vite: `build.rollupOptions.output.manualChunks` tylko dla `react-dom`/`react-router` (stabilne cache) i `motion` (osobny chunk = mierzalny); zero `chunkSizeWarningLimit` podbijanego „żeby nie ostrzegało".
@@ -4765,7 +4984,7 @@ build: { chunkSizeWarningLimit: 2000 }          // wyciszenie ostrzeżeń zamias
 import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { gzipSync } from "node:zlib";
 const baseline = JSON.parse(readFileSync("scripts/verify-site.baseline.json", "utf8"));
-const LIMITS = { homeGz: 140 * 1024, cssGz: 20 * 1024, motionGz: 35 * 1024, toolGzMax: 60 * 1024 };
+const LIMITS = { homeGz: 175 * 1024, cssGz: 20 * 1024, motionGz: 35 * 1024, toolGzMax: 60 * 1024 };
 const gz = (f) => gzipSync(readFileSync(`dist/${f}`)).length;
 const statics = (html) => [...html.matchAll(/(?:src|href)="\/(assets\/[^"]+\.(?:js|css))"/g)].map((m) => m[1]);
 const home = statics(readFileSync("dist/index.html", "utf8"));
@@ -5134,28 +5353,47 @@ cd site && SRC_BRAND_RE="$SRC_BRAND_RE" node scripts/shoot-tools.mjs && sha256su
 
 ### 5.7 perf-js-budget-home
 
-**JS krytyczny na / ≤ 140 KB gz (react-dom ~58 + router ~15 + motion ~34 + app ~25); podstrona narzędzia ≤ +60 KB gz lazy**
+**JS krytyczny na / ≤ 175 KB gz (react-dom ~58 + router ~15 + motion ~34 + app ~25 + warstwa scroll-narracyjna ~35); podstrona narzędzia ≤ +60 KB gz lazy**
 
-Impact: **HIGH** · Tagi: perf, bundle, budget, home · Źródło: synthesis §2.4.9 · feasibility-perf §5.2 p.2/§9 p.5 · site-audit §1.9 (dziś 157 KB gz index.js z 12 dashboardami) · showreel §5.9 · Dodano: 2026-09-12 · Plik: `rules/perf-js-budget-home.md`
+Impact: **HIGH** · Tagi: perf, bundle, budget, home, scroll · Źródło: synthesis §2.4.9 · feasibility-perf §5.2 p.2/§9 p.5 · site-audit §1.9 (dziś 157 KB gz index.js z 12 dashboardami) · showreel §5.9 · decyzja Karola 2026-09-13 (warstwa narracyjna jako część produktu: budżet 140 → 175 KB gz) · Dodano: 2026-09-12 · Plik: `rules/perf-js-budget-home.md`
 
 #### Zasada
 
-Po `npm run build` suma gzip chunków JS ładowanych STATYCZNIE z `dist/index.html` (`<script type="module" src>` + `<link rel="modulepreload">`) wynosi ≤ **143 360 B (140 KB)**. Składowe orientacyjne: `react-dom` ~58, `react-router` ~15, `motion` ~34 (`motion-bundle-budget-motion`), kod aplikacji + dane ~25, `lucide` (tylko używane ikony, tree-shaken) ~5.
+Po `npm run build` suma gzip chunków JS ładowanych STATYCZNIE z `dist/index.html` (`<script type="module" src>`
++ `<link rel="modulepreload">`) wynosi ≤ **179 200 B (175 KB)**. Składowe orientacyjne: `react-dom` ~58,
+`react-router` ~15, `motion` ~34 (`motion-bundle-budget-motion`), kod aplikacji + dane ~25, `lucide` (tylko
+używane ikony, tree-shaken) ~5, zapas na warstwę scroll-narracyjną i jej dane ~35.
 
-Podstrona narzędzia (`/narzedzia/<slug>`): chunki dociągane po nawigacji (`ToolPage` + jeden dashboard + `lib/*`) ≤ **61 440 B (60 KB)** gz ponad wspólne. `pdfmake` (~830 KB gz z fontem) tylko po kliknięciu „Pobierz PDF", nigdy w modulepreload.
+Podstrona narzędzia (`/narzedzia/<slug>`): chunki dociągane po nawigacji (`ToolPage` + jeden dashboard
++ `lib/*`) ≤ **61 440 B (60 KB)** gz ponad wspólne. `pdfmake` (~830 KB gz z fontem) tylko po kliknięciu
+„Pobierz PDF", nigdy w modulepreload.
 
-Warstwa mediów (`HeroMedia`, `MediaBoundary`, klipy hover w `ToolWall`) to ≈ 1,5 KB gz logiki i **zero nowych zależności**: budżet 140 KB gz nie rośnie z powodu powrotu wideo (rosną wyłącznie budżety TRANSFERU, patrz `media-video-budgets`).
+**Warunek twardszy w zamian za wyższy limit: wszystko powyżej pierwszego ekranu ładuje się leniwie.**
+Statycznie w `index.html` wolno wysłać wyłącznie to, co maluje pierwszy ekran (shell, nawigacja, hero,
+typografia, tokeny). Każda sekcja poniżej folda, każda scena z `site/src/motion/scroll/**` i każdy jej zestaw
+danych wchodzi przez `React.lazy` + `IntersectionObserver` (wzorzec `DashboardMount`) albo przez `import()`
+po `load`; scena, która trafi do chunku krytycznego, jest błędem nawet wtedy, gdy suma mieści się w 175 KB.
 
-Zakazane w chunku krytycznym: `three`, `@react-three/fiber`, `pdfmake`, 12 dashboardów, `ToolPage`, `BookingDialog` (lazy przy otwarciu), `toolsSeo.ts` w całości (dane per slug ładowane z podstroną albo hub importuje tylko `getTools()` bez FAQ), `radial-orbital-timeline`, `canvas-reveal-effect`.
+Warstwa mediów (`HeroMedia`, `MediaBoundary`, klipy hover w `ToolWall`) to ≈ 1,5 KB gz logiki i **zero nowych
+zależności**: budżet nie rośnie z powodu powrotu wideo (rosną wyłącznie budżety TRANSFERU, patrz
+`media-video-budgets`).
 
-Baseline w `site/scripts/verify-site.baseline.json` (`homeGz`, `toolGz`), aktualizowany tylko commitem `Perf: nowy baseline (powód)`. Plik tworzy `verify-site.mjs --write-baseline` po pierwszym zielonym buildzie v2; do tego czasu budżet to stałe 140 KB gz z `--budget`.
+Zakazane w chunku krytycznym: `three`, `@react-three/fiber`, `pdfmake`, 12 dashboardów, `ToolPage`,
+`BookingDialog` (lazy przy otwarciu), sceny scroll-narracyjne i ich dane, `toolsSeo.ts` w całości (dane per
+slug ładowane z podstroną albo hub importuje tylko `getTools()` bez FAQ), `radial-orbital-timeline`,
+`canvas-reveal-effect`.
+
+Baseline w `site/scripts/verify-site.baseline.json` (`homeGz`, `toolGz`), aktualizowany tylko commitem
+`Perf: nowy baseline (powód)`. Plik tworzy `verify-site.mjs --write-baseline` po pierwszym zielonym buildzie
+v2; do tego czasu budżet to stałe 175 KB gz z `--budget` (domyślna wartość skryptu).
 
 #### Mechanizm awarii (dlaczego)
 
 - Dziś `index-*.js` = 511 KB / 157 KB gz na KAŻDEJ trasie, bo `ToolPage.tsx:7-18` importuje 12 dashboardów statycznie, a `App.tsx:36` importuje `ToolPage` statycznie (site-audit §3.1 p.1). Strona `/oferta` płaci za Gantt, G703 i kalkulator transz, których nie pokazuje.
-- Budżet 140 KB przy 4G to ~0,5 s pobierania + parsowanie na Moto G4 ~0,8 s; 157 KB + 118 KB three = INP i TBT poza zielenią Lighthouse.
-- Sędzia wykonalności: budżet 130 KB (proof) był nierealny dla home z 6 mini-embedami; editorial ma mniej kodu w home i 140 się domyka TYLKO z lazy dashboardami i bez three w ścieżce krytycznej.
-- Regresja bundla jest cicha (`tsc`/`build` zielone); tylko bramka liczbowa ją łapie.
+- Budżet 175 KB przy 4G to ~0,6 s pobierania + parsowanie na Moto G4 ~1,0 s. To jest świadomy koszt, nie rozluźnienie: 35 KB zapasu ma sfinansować warstwę narracyjną (sceny scroll + `useScroll`/`useTransform` z Motion + dane wykresów), a nie przykryć regresję w kodzie aplikacji. Gdy warstwa narracyjna nie powstanie, budżet wraca do 140 KB przy najbliższym `--write-baseline`.
+- Powód podniesienia (decyzja Karola 2026-09-13): warstwa narracyjna jest teraz częścią produktu, a nie ozdobą. Strona bez ruchu nie pokazuje, że narzędzia liczą, więc ruch przestał być czymś, co można wyciąć pierwszym cięciem budżetu. Skoro jest produktem, ma własną linię w budżecie i własną dyscyplinę: lazy poniżej folda.
+- Sędzia wykonalności: budżet 130 KB (proof) był nierealny dla home z 6 mini-embedami; editorial domyka się TYLKO z lazy dashboardami i bez three w ścieżce krytycznej. Podniesienie limitu tego nie zmienia.
+- Regresja bundla jest cicha (`tsc`/`build` zielone); tylko bramka liczbowa ją łapie. Dlatego warunek „lazy poniżej folda" jest sprawdzany osobno od sumy: suma rośnie powoli, a jedna statyczna scena potrafi ją zjeść w całości.
 
 #### Niepoprawnie
 
@@ -5163,6 +5401,7 @@ Baseline w `site/scripts/verify-site.baseline.json` (`homeGz`, `toolGz`), aktual
 // App.tsx
 import ToolPage from "@/pages/ToolPage";                       // statycznie, ciągnie 12 dashboardów
 import { BookingModal } from "@/components/BookingModal";       // 2 KB auto-animate + kalendarz na każdej trasie
+import { ScrollBars } from "@/motion/scroll/ScrollBars";        // scena narracyjna w chunku krytycznym
 // pages/ToolPage.tsx
 import ProductionDashboard from "@/components/dashboards/ProductionDashboard";  // ×12
 ```
@@ -5176,6 +5415,10 @@ const ToolsPage = lazy(() => import("@/pages/Tools"));
 const OfferPage = lazy(() => import("@/pages/Offer"));
 const BookingDialog = lazy(() => import("@/components/BookingDialog"));
 // Home = import statyczny (LCP), reszta lazy z Suspense WEWNĄTRZ PageFade (skeleton kitu)
+
+// sekcja poniżej folda: scena narracyjna montowana dopiero przy zbliżeniu do viewportu
+const ScrollBars = lazy(() => import("@/motion/scroll/ScrollBars"));
+<SectionMount minHeight={420}><ScrollBars bars={BARS} /></SectionMount>   // IntersectionObserver + Suspense
 
 // components/DashboardMount.tsx: mapa literalnych ścieżek (bundle-analyzable)
 // klucze = unia DashboardKey z src/data/tools.ts:99-111 (NIE „flow/cost/erp/labour" — takich kluczy nie ma)
@@ -5199,7 +5442,7 @@ const LOADERS: Record<DashboardKey, () => Promise<{ default: ComponentType }>> =
 // scripts/verify-site.mjs (fragment)
 const critical = [...html.matchAll(/(?:src|href)="\/assets\/([^"]+\.js)"/g)].map((m) => m[1]);
 const homeGz = critical.reduce((s, f) => s + gzipSync(readFileSync(`dist/assets/${f}`)).length, 0);
-if (homeGz > 140 * 1024) fail(`perf-js-budget-home: ${homeGz} B gz > 140 KB`);
+if (homeGz > 175 * 1024) fail(`perf-js-budget-home: ${homeGz} B gz > 175 KB`);
 ```
 
 #### Test
@@ -5207,12 +5450,15 @@ if (homeGz > 140 * 1024) fail(`perf-js-budget-home: ${homeGz} B gz > 140 KB`);
 ```bash
 cd site && npm run build >/dev/null
 # suma chunków statycznych z index.html
-for f in $(grep -oE '/assets/[^"]+\.js' dist/index.html | sort -u); do gzip -c "dist$f" | wc -c; done | awk '{s+=$1} END {print s " B gz (limit 143360)"}'
-# zakazane biblioteki w chunkach krytycznych
-for f in $(grep -oE '/assets/[^"]+\.js' dist/index.html | sort -u); do grep -lE 'pdfmake|THREE\.|WebGLRenderer|ProductionDashboard|G703|allocateGrosze' "dist$f"; done   # = 0
+for f in $(grep -oE '/assets/[^"]+\.js' dist/index.html | sort -u); do gzip -c "dist$f" | wc -c; done | awk '{s+=$1} END {print s " B gz (limit 179200)"}'
+# zakazane biblioteki i sceny w chunkach krytycznych
+for f in $(grep -oE '/assets/[^"]+\.js' dist/index.html | sort -u); do grep -lE 'pdfmake|THREE\.|WebGLRenderer|ProductionDashboard|G703|allocateGrosze|scrollYProgress' "dist$f"; done   # = 0
 # lazy w kodzie
 grep -nE 'lazy\(\(\) => import\("@/pages/ToolPage"\)' src/App.tsx | wc -l     # = 1
 grep -nE '^import .* from "@/components/dashboards/' src/pages/ToolPage.tsx | wc -l   # = 0
+# warunek „wszystko poniżej folda leniwie": żadna scena narracyjna nie jest importowana statycznie
+grep -rnE '^import .* from "@/motion/scroll/' src --include=*.tsx | wc -l              # = 0
+grep -rnE 'lazy\(\(\) => import\("@/motion/scroll/' src --include=*.tsx | wc -l        # = liczba scen
 # klucze LOADERS == unia DashboardKey (bramka „12 chunków" ich nie sprawdza): patrz test w perf-code-split-dashboards
 # podstrona narzędzia: chunki dociągane (Playwright: performance.getEntriesByType("resource") po nawigacji do /narzedzia/raport-zarzadczy, suma transferSize .js ≤ 61440)
 ```
@@ -5221,7 +5467,8 @@ Docelowo `scripts/verify-site.mjs` krok `js-budget` (home + per slug z `dist/nar
 
 #### Wyjątki
 
-- Plan B (GLSL Hills): `three` wchodzi jako chunk lazy po idle po `load`, NIE liczy się do 140 KB, ale liczy się do transferu desktop ≤ 2,5 MB.
+- Plan B (GLSL Hills): `three` wchodzi jako chunk lazy po idle po `load`, NIE liczy się do 175 KB, ale liczy się do transferu desktop ≤ 2,5 MB.
+- Zapas 35 KB jest znakowany: wolno go wydać na warstwę scroll-narracyjną (`site/src/motion/scroll/**` i jej dane). Wydanie go na cokolwiek innego wymaga wpisu w `references/decisions-log.md`, bo inaczej podniesienie budżetu stanie się cichą amnestią dla regresji.
 
 ### 5.8 perf-lcp-poster-preload
 
@@ -5768,7 +6015,7 @@ Ciężkie i nie-krytyczne moduły ładujemy leniwie z literalną ścieżką: `pa
 
 #### Mechanizm awarii (dlaczego)
 
-Dziś `pages/ToolPage.tsx:7-18` importuje 12 dashboardów statycznie, a `App.tsx:36` importuje `ToolPage` statycznie. Skutek zmierzony w `dist` (2026-07-28): główny chunk 511 KB / 157 KB gz zawiera wszystkie dashboardy, `lib/report.ts` i `lib/qualityGate.ts`, więc strona główna, `/oferta` i `/faq` płacą za kod, którego nie renderują. Budżet z synthesis §2.4.9: JS krytyczny na `/` ≤ 140 KB gz, chunk podstrony narzędzia ≤ +60 KB gz. `import()` ze zmienną ścieżką każe Rollupowi spakować cały katalog w jeden chunk albo wygenerować dziesiątki mikro-chunków, a esbuild przestaje widzieć zależności (RBP 2.5).
+Dziś `pages/ToolPage.tsx:7-18` importuje 12 dashboardów statycznie, a `App.tsx:36` importuje `ToolPage` statycznie. Skutek zmierzony w `dist` (2026-07-28): główny chunk 511 KB / 157 KB gz zawiera wszystkie dashboardy, `lib/report.ts` i `lib/qualityGate.ts`, więc strona główna, `/oferta` i `/faq` płacą za kod, którego nie renderują. Budżet po decyzji Karola 2026-09-13 (`perf-js-budget-home`): JS krytyczny na `/` ≤ 175 KB gz, chunk podstrony narzędzia ≤ +60 KB gz. `import()` ze zmienną ścieżką każe Rollupowi spakować cały katalog w jeden chunk albo wygenerować dziesiątki mikro-chunków, a esbuild przestaje widzieć zależności (RBP 2.5).
 
 #### Niepoprawnie
 
@@ -5817,7 +6064,7 @@ grep -rnE "^import ToolPage|^import .*pages/Tool" site/src/App.tsx              
 # 2. import() ze zmienną ścieżką (template literal albo konkatenacja)
 grep -rnE "import\(\s*(\`|\"[^\"]*\"\s*\+)" site/src                                                   # oczekiwane: 0
 # 3. budżet: po `npm run build` rozmiar chunków wołanych z dist/index.html
-node .claude/skills/klarow-guardian/scripts/verify-site.mjs --budget 140                        # chunk wejściowy ≤ 140 KB gz, CSS ≤ 20 KB, chunk Motion ≤ 36 KB
+node .claude/skills/klarow-guardian/scripts/verify-site.mjs --budget 175                        # chunk wejściowy ≤ 175 KB gz, CSS ≤ 20 KB, chunk Motion ≤ 36 KB
 # PLANOWANE (F3, verify-site.mjs nie zna tego trybu): node .claude/skills/klarow-guardian/scripts/verify-site.mjs --budgets
 ```
 

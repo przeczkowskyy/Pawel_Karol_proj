@@ -9,8 +9,10 @@ tools: Read, Grep, Glob, Bash
 Audytor ruchu i mediów Klarow. **Nie zmieniasz żadnego pliku poza własnym raportem**
 (`.claude/work/audit/<data>/motion-auditor.md` przez Bash heredoc). Reguły: `rules/motion-*.md`,
 `rules/media-*.md`, `rules/perf-*.md` (jeśli istnieją) w `.claude/skills/klarow-guardian/`.
-Precedencja: twarde zasady CLAUDE.md (#2: wykresy statyczne, `prefers-reduced-motion`, tła tylko na GPU
-z pauzą przy `document.hidden` i sprzątaniem rAF) → reguły strażnika → skill `/motion`
+Precedencja: twarde zasady CLAUDE.md (#2 po zmianie z 2026-09-13: w narzędziu wykres statyczny, na stronie
+marketingowej wolno go budować postępem scrolla przy zachowaniu `prefers-reduced-motion`, właściwości
+akcelerowanych i zakazu scroll-hijacku; tła tylko na GPU z pauzą przy `document.hidden` i sprzątaniem rAF)
+→ reguły strażnika → skill `/motion`
 (`.claude/skills/motion/best-practices/`) → `motion-design`. Gdy `/motion` radzi `import { motion }`,
 strażnik i tak wymaga `m` z `motion/react-m` pod `LazyMotion domAnimation strict`.
 
@@ -80,7 +82,14 @@ Brak listy → `site/src/motion/**`, `site/src/components/**`, `site/src/styles/
   heredoc, `Set-Content`/`Out-File`). Naprawy robi osobny krok „Fix”, nie Ty.
 - Read-only; nigdy `.env*`/sekrety; nigdy „Nuconic”/`#FFA914` w raporcie (pisz „nazwa poprzedniej firmy”).
 - `CONFIRMED` tylko z linią kodu / wynikiem skryptu / zrzutem; ocena estetyczna = `PLAUSIBLE`.
-- BLOCKER = brak reduced-motion, scroll-hijack/pinowanie, wykres „rysujący się”, nowy `position: fixed`
+- BLOCKER = brak reduced-motion (albo gałąź reduced pokazująca stan początkowy zamiast końcowego),
+  scroll-hijack (listener `wheel`/`touchmove`/`scroll`, blokada `overflow` na `body`, przewijanie skryptem,
+  slajdy gestem), wykres „rysujący się” w trybie `tool` (dashboardy, `DemoReport`), scroll-progress poza
+  `site/src/motion/scroll/**`, > 2 sceny sticky na trasę albo scena > 300vh, nowy `position: fixed`
   w treści, canvas na mobile, dwie biblioteki na jednym elemencie; HIGH = budżet, GPU-props, cleanup,
   wideo bez atrybutów; MEDIUM = tokeny/spójność; LOW = szlif (stagger, motywacja w komentarzu).
+- **Wykres budujący się na stronie marketingowej NIE jest naruszeniem** (decyzja Karola 2026-09-13,
+  `motion-charts-static` §B): sprawdzasz warunki (postęp scrolla, `scaleY`/`clipPath` zamiast
+  `height`/`pathLength`, gałąź reduced-motion ze stanem końcowym, brak listenerów scrolla, chunk lazy),
+  a nie sam fakt ruchu.
 - Format: `ścieżka:linia - SEV [id] komunikat`, `Σ BLOCKER n · HIGH n · MEDIUM n · LOW n`. Zero preambuły.

@@ -157,7 +157,7 @@ checklisty (raport, bez blokowania) — lista zbiorcza w §3.15.
 | `A-BUN-04` | preload chunku na hover/focus `[RBP:bundle-preload]` | LOW | `Link` do `/narzedzia/:slug` bez `onMouseEnter`/`onFocus` | — |
 | `A-BUN-05` | analityka i skrypty trzecie po hydracji `[RBP:bundle-defer-third-party]` | MEDIUM | `import` analityki w `main.tsx` | `legal-analytics-cookieless-or-consent` |
 | `A-BUN-06` | barrel-files: `lodash`, `date-fns`, `react-icons` zakazane; `lucide-react` OK `[RBP:bundle-barrel-imports]` | LOW | `from "lodash"` | `code-no-barrel-imports` |
-| `A-BUN-07` | budżety: JS krytyczny `/` ≤ 140 KB gz, chunk Motion ≤ 35 KB gz, CSS ≤ 20 KB `[KL:bundle-budget]` | HIGH | `verify-site.mjs` (gzip level 9) | `perf-js-budget-home`, `perf-chunk-size-gate`, `motion-bundle-budget-motion` |
+| `A-BUN-07` | budżety: JS krytyczny `/` ≤ 175 KB gz (zapas 35 KB znakowany na warstwę scroll-narracyjną), chunk Motion ≤ 35 KB gz, CSS ≤ 20 KB `[KL:bundle-budget]` | HIGH | `verify-site.mjs` (gzip level 9) | `perf-js-budget-home`, `perf-chunk-size-gate`, `motion-bundle-budget-motion` |
 | `A-BUN-08` | zgodność z `build.target es2019/safari13` `[KL:build-target]` | HIGH | grep `toSorted`, `\.at(`, `structuredClone`, `findLast`, `Object.hasOwn`, `color-mix`, `oklch` | `code-tosorted-safari13`, `perf-build-target`, `code-build-target-policy` |
 
 ### 3.3 `A-HOO` hooki i cykl życia
@@ -266,9 +266,9 @@ checklisty (raport, bez blokowania) — lista zbiorcza w §3.15.
 | `A-MOT-07` | animacja nazywa relację (shared / reveal / list / state / route); brak zdania motywacji = brak animacji `[VT:motion-communicates]` | MEDIUM | `motion-motivated` |
 | `A-MOT-08` | budżety czasu: trasa ≤ 250 ms, reveal ≤ 400 ms, toggle ≤ 200 ms, morph ≤ 500 ms `[VT:motion-timing-budget]` | MEDIUM | `motion-tokens-only`, `motion-stagger-caps` |
 | `A-MOT-09` | navbar, stopka i toasty nie animują się razem ze stroną `[VT:motion-chrome-isolated]` | MEDIUM | `motion-view-transition-rules` |
-| `A-MOT-10` | wykresy statyczne: reveal panelu raz ≤ 450 ms, zero „rysowania" `[KL:charts-static]` | BLOCKER | `motion-charts-static` |
+| `A-MOT-10` | narzędzie: wykres statyczny, reveal panelu raz ≤ 450 ms, zero „rysowania"; marketing: budowanie wykresu wolno TYLKO postępem scrolla, na właściwościach akcelerowanych, z reduced-motion w stanie końcowym `[KL:charts-static]` | BLOCKER | `motion-charts-static` |
 | `A-MOT-11` | tła tylko canvas/WebGL z pauzą na `document.hidden` i cleanupem; zero na `pointer: coarse` `[KL:gpu-bg-hygiene]` | BLOCKER | `perf-no-webgl-on-coarse`, `motion-cleanup-required` |
-| `A-MOT-12` | zero pinowania, scroll-hijacku, parallaxu, marquee i własnego kursora | BLOCKER | `motion-no-pinning-no-scroll-hijack` |
+| `A-MOT-12` | zero scroll-hijacku, parallaxu, marquee, karuzel i własnego kursora; sceny sticky ≤ 2 na trasę, ≤ 300vh, z gałęzią reduced-motion (`height: auto` + stan końcowy) | BLOCKER | `motion-no-pinning-no-scroll-hijack` |
 | `A-MOT-13` | treść z shella prerenderu nie startuje ukryta (`initial={false}` nad foldem) | BLOCKER | `motion-no-initial-hidden-above-fold` |
 
 ### 3.10 `A-I18` PL + EN

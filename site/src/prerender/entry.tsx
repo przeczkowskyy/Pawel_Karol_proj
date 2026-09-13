@@ -171,44 +171,12 @@ function HomeShell() {
       </p>
       <ContactLine />
 
-      <H2>Co możemy zbudować</H2>
-      <p className="mt-2 max-w-3xl text-sm" style={MUTED}>
-        Nie mamy zamkniętego katalogu: jeśli proces żyje w plikach albo w ERP, zwykle da się go
-        zautomatyzować. Rodzaje narzędzi, które robimy:
-      </p>
-      <ul className="mt-2 flex flex-col gap-1.5 text-sm" style={BODY}>
-        <li><strong>Raporty i kontroling</strong>: panele zarządcze, marża i estymaty na żywo, zamknięcie miesiąca.</li>
-        <li><strong>Integracje i e-dokumenty</strong>: KSeF, e-faktury, API urzędowe, wymiana z ERP i systemami.</li>
-        <li><strong>Importy i scalanie danych</strong>: ERP ↔ Excel, łączenie źródeł, rekoncyliacja co do grosza.</li>
-        <li><strong>Obieg dokumentów</strong>: akceptacje, protokoły, rejestry, koniec obiegu w mailu.</li>
-        <li><strong>Panele i dashboardy</strong>: produkcja, KPI, płynność w jednym kadrze.</li>
-        <li><strong>Porządek w danych</strong>: audyt jakości, deduplikacja, czyszczenie i migracje.</li>
-      </ul>
-
-      <H2>Co już zrobiliśmy</H2>
-      <p className="mt-2 max-w-3xl text-sm" style={BODY}>
-        Zbudowaliśmy od środka ekosystem kilkunastu narzędzi dla firmy produkcyjno-budowlanej
-        (~30 równoległych projektów, klienci w USA): ~10 000 wierszy kosztów z ERP miesięcznie,
-        raport zarządczy w kilkanaście sekund zamiast godzin, kontrola sum co do grosza.
-        Osobnym wdrożeniem jest <a href="/narzedzia/kontroling-ksef" style={LINK}>kontroling na
-        danych z KSeF</a>: read-only integracja z oficjalnym API Ministerstwa Finansów.
-      </p>
-
-      <H2>To działa, więc boisz się ruszać. I słusznie</H2>
-      <p className="mt-2 max-w-3xl text-sm" style={MUTED}>
-        Nie każemy Ci migrować z Excela ani zmieniać sposobu pracy. Wchodzimy obok Twoich plików.
-        Makro po kimś, kto odszedł; ręczne przeklejanie tysięcy wierszy między ERP a arkuszami;
-        ciche pomyłki wychodzące u zarządu; raport składany godzinami; wszystko na jednej osobie:
-        te bóle znamy i to je usuwamy.
-      </p>
-
-      <H2>Dwa twarde wyróżniki: zero chmury i zero wróżenia</H2>
-      <p className="mt-2 max-w-3xl text-sm" style={BODY}>
-        „On-premise” deklaruje dziś każdy, my idziemy krok dalej. Narzędzia Klarow nie mają nawet
-        którędy wysłać Twoich danych: działają lokalnie, bez API, bez serwera, a dema na tej
-        stronie liczą w 100% w przeglądarce. Druga rzecz: {MESSAGING.determinism.pl} Każdą liczbę
-        możesz sprawdzić ręcznie dzięki jawnej ścieżce wyliczenia.
-      </p>
+      {/* Shell strony głównej jest KRÓTKI, bo strona jest krótka (2026-09-13).
+          Wcześniej stały tu cztery akapity prozy, których React po starcie nie
+          renderował: crawler bez JavaScriptu widział inną stronę niż człowiek.
+          Treść long-tail żyje tam, gdzie ma rankować, czyli na /narzedzia,
+          /oferta, /faq i na podstronach narzędzi. Tutaj zostaje tyle, ile
+          strona naprawdę mówi, plus linkowanie wewnętrzne niżej. */}
 
       <H2>Zobacz konkrety</H2>
       <ul className="mt-2 flex flex-col gap-1.5 text-sm" style={BODY}>

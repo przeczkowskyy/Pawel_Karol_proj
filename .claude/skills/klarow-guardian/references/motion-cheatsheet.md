@@ -174,7 +174,7 @@ export function RevealGroup({ pace = "base", as = "ul", className, children }: {
 // <RevealGroup className="bento">{cells.map((c) => <m.li key={c.key} variants={fadeUp} className="cell">…</m.li>)}</RevealGroup>
 ```
 
-Dlaczego `whileInView`, nie `useScroll`: reveal jednorazowy przez pooled `IntersectionObserver` (Motion), 0 KB dodatkowo; scroll-linked jest zakazany produktowo (`motion-no-pinning-no-scroll-hijack`).
+Dlaczego w `Reveal`/`RevealGroup` `whileInView`, nie `useScroll`: reveal jednorazowy przez pooled `IntersectionObserver` (Motion), 0 KB dodatkowo. Ruch scroll-linked jest dozwolony WYŁĄCZNIE w warstwie narracyjnej `site/src/motion/scroll/**` (sceny sticky i budowane wykresy, decyzja Karola 2026-09-13: `motion-charts-static` §B, `motion-no-pinning-no-scroll-hijack` §B); zwykłe wejścia sekcji zostają na `whileInView`.
 
 ## 5. `Counter`
 

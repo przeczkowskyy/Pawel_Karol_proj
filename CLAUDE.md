@@ -29,7 +29,17 @@
    na czerni; **zero złota `#FFA914`** (stara marka Nuconic) i zero logo graficznego — znak marki
    to tekstowy wordmark `KLAROW` (klasa `.brand-word`, komponent `BrandMark`).
    Audyt: `/ui-audit` albo skrypty `node .claude/skills/klarow-guardian/scripts/*.mjs`.
-2. **Wykresy statyczne** — bez teatralnego „rysowania"; krótki fade, kropki tylko informacyjne.
+2. **Ruch zależy od kontekstu (decyzja Karola 2026-09-13, odwraca dawne „wykresy statyczne"):**
+   w **narzędziu** (dashboard, tabela, macierz, dokument) wykres pokazuje wynik, więc zostaje
+   statyczny — krótki fade przy wejściu, zero „rysowania", kropki tylko informacyjne, bo tam
+   animacja opóźnia odczyt liczby i podważa zaufanie do danych. Na **stronie marketingowej**
+   (`/`, sekcje narracyjne) wykres MOŻE budować się wraz z postępem scrolla, bo nie jest źródłem
+   decyzji, tylko opowieścią o tym, co narzędzie robi. Warunki: ruch sterowany postępem scrolla
+   (tempo należy do użytkownika), tylko właściwości akcelerowane, gałąź `prefers-reduced-motion`
+   pokazująca stan KOŃCOWY, zero przechwytywania zdarzeń scrolla. **Scroll-hijack pozostaje
+   zakazany** (przechwytywanie `wheel`/`touchmove`, blokada `overflow` na `body`, przewijanie
+   sterowane skryptem, slajdy przełączane gestem); sticky-scena, w której użytkownik scrolluje
+   normalnie, jest dozwolona w granicach reguły `motion-no-pinning-no-scroll-hijack`.
    Wszystkie animacje szanują `prefers-reduced-motion`; tła animowane tylko na GPU
    (canvas/WebGL), z pauzą przy `document.hidden` i sprzątaniem rAF.
 3. **Marka Nuconic nie może pojawić się publicznie** (strona, case, zrzuty) **przed umową IP**
