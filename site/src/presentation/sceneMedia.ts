@@ -18,8 +18,8 @@ import type { SceneId } from "@/data/presentation";
    hasha Vite, a `public/_headers` podaje je jako `immutable`. Zmiana treści =
    nowa nazwa `-v2`, NIGDY nadpisanie istniejącego pliku.
 
-   Identyfikatory materiału (V1, V2, V3, S1) i budżet kredytów: patrz
-   `docs/plan/prezentacja-scenariusz.md` sekcja „Materiał z Higgsfield". */
+   Prompty do wygenerowania materiału (S1–S8, po jednym na scenę), formuła stylu
+   i parametry modeli: `docs/plan/prezentacja-scenariusz.md` §4. */
 
 /* Identyfikatory scen NIE powstają tutaj. Jedynym źródłem ośmiu beatów jest
    `src/data/presentation.ts` (tam leży też copy każdej sceny), a ten plik mówi
@@ -63,67 +63,66 @@ export function videoSources(asset: SceneVideoAsset): { src: string; type: strin
 
 /* ── Materiał do podmiany, gdy Higgsfield będzie opłacony ──────────────────
    Zakomentowane CELOWO, z docelowymi nazwami plików. Agent nie uruchamia
-   zakupu ani generacji (scenariusz, sekcja „Materiał z Higgsfield").
+   zakupu ani generacji — robi to founder (`docs/plan/prezentacja-scenariusz.md` §6,
+   decyzja D-38).
 
-   V1 — scena 1 „Hak": pętla stalowa, powolny ruch materii, bez ludzi i tekstu.
-   const V1: SceneVideoAsset = {
-     webm: "/media/presentation/scene-hook-steel-v1.webm",
-     mp4: "/media/presentation/scene-hook-steel-v1.mp4",
-     poster: "/media/presentation/scene-hook-steel-v1.webp",
-   };
+   OSIEM KLIPÓW, PO JEDNYM NA SCENĘ. Wersja 1 planowała trzy nagrania i jedną
+   fakturę na resztę scen. Founder poprosił wprost o „wideo pełnoekranowe pod
+   każdą sceną", więc plan to komplet S1–S8. Gotowe prompty do każdego z nich
+   leżą w scenariuszu §4.5 i są napisane w jednym zablokowanym stylu
+   („Editorial Motion Graphics"), żeby osiem klipów czytało się jak jeden film.
 
-   V2 — scena 5 „Zwrot": rozsypane elementy zbiegają się w tabelę.
-   const V2: SceneVideoAsset = {
-     webm: "/media/presentation/scene-turn-order-v1.webm",
-     mp4: "/media/presentation/scene-turn-order-v1.mp4",
-     poster: "/media/presentation/scene-turn-order-v1.webp",
-   };
+   const S = (name: string): SceneVideoAsset => ({
+     webm: `/media/presentation/${name}-v1.webm`,
+     mp4: `/media/presentation/${name}-v1.mp4`,
+     poster: `/media/presentation/${name}-v1.webp`,
+   });
+   // scene-hook, scene-handover, scene-time, scene-cost,
+   // scene-turn, scene-craft, scene-outcome, scene-contact
 
-   V3 — scena 8 „Kontakt": wygaszenie do czerni ze stalowym refleksem.
-   const V3: SceneVideoAsset = {
-     webm: "/media/presentation/scene-contact-fade-v1.webm",
-     mp4: "/media/presentation/scene-contact-fade-v1.mp4",
-     poster: "/media/presentation/scene-contact-fade-v1.webp",
-   };
+   DWA WARUNKI KODOWANIA, OBA TWARDE:
 
-   S1 — tło scen 2–4: statyczna faktura stali pod tekstem (obraz, nie wideo).
-   const S1 = "/media/presentation/scene-texture-steel-v1.webp";
+   1. GĘSTE KLATKI KLUCZOWE (`-g 12` przy 30 fps, czyli co ~0,4 s). Bez tego
+      dekoder przy każdym skoku `currentTime` cofa się do poprzedniej klatki
+      kluczowej i przewijanie zacina — a u nas czasem filmu steruje scroll.
+   2. BEZ ŚCIEŻKI DŹWIĘKU. Materiał leży pod treścią i nigdy nie gra dźwiękiem;
+      ścieżka audio to czysty transfer do wyrzucenia.
 
-   WARUNEK DLA WIDEO PRZEWIJANEGO: plik musi mieć GĘSTE KLATKI KLUCZOWE
-   (`-g 12` przy 30 fps, czyli klatka kluczowa co ~0,4 s). Bez tego dekoder
-   przy każdym skoku `currentTime` cofa się do poprzedniej klatki kluczowej
-   i przewijanie zacina. Szczegóły kodowania:
+   Szczegóły kodowania:
    `.claude/skills/klarow-guardian/references/higgsfield-pipeline.md`. */
 
 /** Co leży pod którą sceną. Dziś: komplet na materiale zastępczym. */
 export const SCENE_MEDIA: Record<SceneId, SceneMediaEntry> = {
-  /* 1. Hak: „Twoja firma działa na plikach." Docelowo V1. */
+  /* 1. Hak: firma urosła, proces został ten sam. Docelowo S1. */
   hook: { id: "hook", fallback: "gradient" },
 
-  /* 2. Skala chaosu: 88 % arkuszy ma błąd w formule. Docelowo S1 jako faktura.
+  /* 2. Przekazanie: praca stoi między ludźmi. Docelowo S2.
      Siatka komórek w tle zastępczym włącza się propsem `grid` na
      `SceneFallbackMedia`, nie tutaj: to decyzja wizualna sceny, nie materiału. */
-  scale: { id: "scale", fallback: "gradient" },
+  handover: { id: "handover", fallback: "gradient" },
 
-  /* 3. Koszt czasu: zamknięcie miesiąca. Docelowo S1. */
+  /* 3. Koszt czasu: zamknięcie miesiąca. Docelowo S3.
+     Scena ma też własny wykres budujący się przy przewijaniu (SceneTime),
+     więc materiał tła musi być SPOKOJNY — dwa ruchy naraz się zabijają. */
   time: { id: "time", fallback: "gradient" },
 
-  /* 4. Koszt pieniędzy: rozbicie działania na ekranie. Docelowo S1. */
+  /* 4. Koszt pieniędzy: rozbicie działania na ekranie. Docelowo S4. */
   cost: { id: "cost", fallback: "gradient" },
 
-  /* 5. Zwrot: chaos składa się w tabelę, wjeżdża pulpit. Docelowo V2.
-     Dziś gra kadrem prawdziwego narzędzia, który i tak jest w repo:
-     ta sama klatka co poster hero, więc zero nowego transferu. */
+  /* 5. Zwrot: rozsypane elementy składają się w jeden układ. Docelowo S5.
+     To jest oś całego filmu i jedyna scena z mocnym uderzeniem w materiale
+     (scenariusz §4.5, S5) — reszta scen ma być spokojna, żeby ta jedna zagrała. */
   turn: { id: "turn", fallback: "gradient" },
 
-  /* 6. Dowód: ściana narzędzi. Materiał powstaje ze zrzutów Playwrighta
-     za zero kredytów, więc ta scena nigdy nie potrzebuje Higgsfielda. */
-  proof: { id: "proof", fallback: "gradient" },
+  /* 6. Co potrafimy: sześć rodzajów pracy. Docelowo S6.
+     UWAGA: to już NIE jest scena ze zrzutami narzędzi (wersja 2 scenariusza).
+     Materiał ma pokazywać rodzaje pracy, nie nasze interfejsy. */
+  craft: { id: "craft", fallback: "gradient" },
 
-  /* 7. Efekt: cztery zdania na spokojnym tle. Z założenia bez materiału. */
+  /* 7. Efekt: plątanina rozplątuje się w równoległe linie. Docelowo S7. */
   outcome: { id: "outcome", fallback: "gradient" },
 
-  /* 8. Kontakt: kadr wygasza się do czerni. Docelowo V3. */
+  /* 8. Kontakt: scena pustoszeje, zostaje jedna karta. Docelowo S8. */
   contact: { id: "contact", fallback: "gradient" },
 };
 

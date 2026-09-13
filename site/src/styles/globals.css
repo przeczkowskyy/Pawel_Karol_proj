@@ -574,22 +574,52 @@
    `--container` plus `--gutter` po bokach). Tu dokładamy wyłącznie węższą miarę
    tekstu: dublowanie paddingu dałoby podwójny margines i poziomy pasek
    przewijania na telefonie. */
+/* UKŁAD DWUKOLUMNOWY (wersja 2). Po lewej zdanie, po prawej akapit i punkty.
+   Powód jest twardy, nie estetyczny: nagłówek w stopniu do 4 rem PLUS akapit
+   na 110 słów PLUS trzy punkty nie mieszczą się w jednej kolumnie na ekranie
+   o wysokości 100dvh, a scena prezentacji nie może wychodzić poza kadr.
+   Dwie kolumny są też wzorcem obu referencji foundera.
+
+   Poniżej 64rem wraca jedna kolumna: na telefonie dwie kolumny dałyby dwie
+   za wąskie miary tekstu. */
 .pres-scene {
   width: 100%;
-  max-width: 64rem;
+  max-width: 72rem;
   margin-inline: auto;
+  display: grid;
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  align-items: start;
 }
 
-/* scena dowodu: ściana trzynastu kafli bierze pełną szerokość kadru silnika */
-.pres-scene--wide {
-  max-width: none;
+@media (min-width: 64rem) {
+  .pres-scene {
+    grid-template-columns: 1.05fr 1fr;
+    gap: clamp(2rem, 5vw, 4.5rem);
+  }
 }
 
-/* scena zamknięcia: jedno zdanie na środku ciemnego ekranu */
+/* Lewa kolumna: zdanie, ewentualna liczba, ewentualna ilustracja. */
+.pres-lede {
+  min-width: 0;
+}
+
+/* Prawa kolumna: akapit i rzeczy sprawdzalne. */
+.pres-prose {
+  min-width: 0;
+}
+
+/* scena zamknięcia: jedno zdanie na środku ekranu, więc bez dwóch kolumn */
 .pres-scene--center {
   text-align: center;
+  max-width: 48rem;
 }
-.pres-scene--center .pres-sub {
+@media (min-width: 64rem) {
+  .pres-scene--center {
+    grid-template-columns: 1fr;
+  }
+}
+.pres-scene--center .pres-sub,
+.pres-scene--center .pres-body {
   margin-inline: auto;
 }
 
@@ -602,7 +632,10 @@
   font-weight: 800;
   letter-spacing: -0.03em;
   line-height: 1.02;
-  font-size: clamp(2.25rem, 1.3rem + 4.8vw, 6.5rem);
+  /* KOREKTA WERSJI 2: gorny koniec 6,5rem -> 3,75rem. Przy 6,5 rem nagłówek
+     zjadał całą lewą kolumnę i akapit obok niego nie miał gdzie stanąć.
+     Zdanie nadal jest największym elementem sceny, tylko przestało być plakatem. */
+  font-size: clamp(1.875rem, 1.15rem + 2.6vw, 3.75rem);
   color: var(--foreground-strong);
   text-wrap: balance;
   overflow-wrap: anywhere;
@@ -633,7 +666,9 @@
   font-weight: 800;
   letter-spacing: -0.04em;
   line-height: 0.92;
-  font-size: clamp(3.25rem, 1.8rem + 9vw, 9rem);
+  /* KOREKTA WERSJI 2: 9rem -> 5,5rem, z tego samego powodu co nagłówek.
+     Liczba nadal jest większa od zdania, bo to ona niesie dowód. */
+  font-size: clamp(2.75rem, 1.6rem + 4.4vw, 5.5rem);
   color: var(--accent-text);
 }
 
@@ -694,86 +729,55 @@
   background: var(--surface-muted);
 }
 
-/* ── ściana dowodu (scena 6) ─────────────────────────────────────────────── */
-.pres-wall {
-  list-style: none;
-  margin: clamp(1rem, 2.5vw, 2rem) 0 0;
-  padding: 0;
-  display: grid;
-  gap: 1px;
-  background: var(--border);
-  border: 1px solid var(--border);
-  /* KOREKTA 2026-09-13: kafel 8,5rem (136 px) zamieniał zrzut ciemnego pulpitu
-     w nieczytelną plamę, a to on jest tu dowodem, nie zdanie nad nim. Szerszy
-     kafel daje cztery kolumny na desktopie i dwie na telefonie, czyli obraz,
-     na którym widać, że to prawdziwy interfejs, a nie prostokąt. */
-  /* JEDEN RZĄD, nie siatka: trzynaście kafli w siatce nie mieści się w ekranie
-     sceny, a prezentacja nie może mieć sceny wychodzącej poza kadr. Rząd płynie
-     w lewo wraz z przewijaniem (transform w SceneProof), więc oko widzi skalę
-     jako ruch, a nie jako liczbę rzędów. */
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(15rem, 18rem);
-  grid-template-columns: none;
-  width: max-content;
-  will-change: auto;
+/* ── proza sceny (wersja 2) ──────────────────────────────────────────────
+   Wersja 1 miała na scenie samo zdanie i 65 słów na całą prezentację. Founder
+   wskazał `automatyzacje.ai` jako wzór treści („treściwie i wysoko w SEO") —
+   tamta strona ma ok. 1 900 słów i to jest cały mechanizm jej pozycji.
+   Stąd druga kolumna: akapit i rzeczy sprawdzalne. */
+
+.pres-body {
+  margin: 0;
+  /* miara 62 znaków: dłuższy wiersz gubi się przy powrocie do lewej krawędzi */
+  max-width: 62ch;
+  font-size: clamp(1rem, 0.95rem + 0.35vw, 1.1875rem);
+  line-height: 1.6;
+  color: var(--foreground-muted);
+  text-wrap: pretty;
 }
 
-/* Rama rzeki: przycina ją do szerokości ekranu i chowa nadmiar. Przy ograniczonym
-   ruchu zamienia się w zwykły przewijany pasek, więc treść zostaje dostępna. */
-.pres-scene--wide {
-  overflow: hidden;
+.pres-points {
+  list-style: none;
+  margin: clamp(1rem, 2.5vw, 1.75rem) 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0;
+  /* Hairline zamiast boxów: pozycje rozdziela linia 1 px, nie ramka i nie tło.
+     To jest wzorzec redakcyjny obu referencji foundera i jedyny, który nie
+     zamienia sceny w siatkę kafelków. */
+  border-top: 1px solid var(--border-subtle);
 }
-@media (prefers-reduced-motion: reduce) {
-  .pres-scene--wide {
-    overflow-x: auto;
+
+.pres-points--grid {
+  /* sześć pozycji sceny „co potrafimy": dwie kolumny, gdy jest miejsce */
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 48rem) {
+  .pres-points--grid {
+    grid-template-columns: 1fr 1fr;
+    column-gap: clamp(1rem, 3vw, 2.5rem);
   }
 }
 
-/* W scenie dowodu nagłówek ustępuje miejsca ekranom: to jedyna scena, w której
-   treścią są obrazy, a nie zdanie. Bez tego wall wychodzi poza ekran. */
-.pres-scene--wide .pres-headline {
-  font-size: clamp(1.5rem, 0.9rem + 2vw, 2.5rem);
-  margin-bottom: 0;
+.pres-point {
+  padding-block: 0.625rem;
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: clamp(0.9375rem, 0.9rem + 0.25vw, 1.0625rem);
+  line-height: 1.45;
+  color: var(--foreground);
+  text-wrap: pretty;
 }
 
-.pres-wall-cell {
-  /* Zrzut ciemnego interfejsu na ciemnym tle sceny znika: na nagraniu z 13.09
-     rzeka kafli była ledwie widoczna. Ekran musi mieć KRAWĘDŹ i trochę światła,
-     inaczej czyta się jak plama, a nie jak działający program. Stąd jasny obrys,
-     podniesiona jasność samego zrzutu i odstęp, przez który widać tło sceny. */
-  background: var(--surface);
-  border: 1px solid var(--border-strong);
-  min-width: 0;
-  aspect-ratio: 8 / 5;
-  overflow: hidden;
-}
-
-.pres-wall-shot {
-  display: block;
-  width: 100%;
-  height: 100%;
-  max-width: 100%;
-  object-fit: cover;
-  /* kadr pulpitu czyta się od góry: pasek nagłówka niesie kontekst */
-  object-position: top;
-  /* Zrzuty są ciemnym interfejsem na ciemnej stronie. Delikatne podbicie
-     jasności i kontrastu oddziela je od tła sceny, nie zmieniając barw marki. */
-  filter: brightness(1.35) contrast(1.08);
-}
-
-/* Kafel bez zrzutu (wdrożenie KSeF: nie ma pulpitu, więc nie ma czego zrzucić).
-   Ta sama proporcja i ta sama ramka, żeby siatka nie drgnęła. */
-.pres-wall-shot--diagram {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.5rem;
-  background: var(--surface-muted);
-}
-.pres-wall-shot--diagram svg {
-  width: 100%;
-  height: auto;
-}
 
 /* ── efekt (scena 7) ─────────────────────────────────────────────────────── */
 .pres-beats {
