@@ -163,6 +163,42 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
 
 ## Stan operacyjny (aktualizuj przy zmianach!)
 
+- **2026-09-13 (sesja „strona = prezentacja") — STRONA GŁÓWNA TO BROSZURA; NARRACJA PRZEPISANA:**
+  - **Trasa `/` renderuje `<Presentation>`**: osiem scen przewijanych w jednym ciągu, bez zakładek
+    (`src/presentation/` = silnik: `Stage`, `Scene` ze sticky i sprężyną, `SceneVideo` przewijane
+    scrollem, `SceneFallbackMedia`; `src/presentation/scenes/` = treść). Menu w `Navbar` jest PUSTE
+    celowo — trzynaście podstron narzędzi żyje dalej, jest w sitemapie i łapie ruch, ale nie
+    zabiera uwagi. Tło WebGL zgaszone na `/` (przebijało się przez wszystkie sceny naraz).
+  - **Narracja v2 (po odrzuceniu v1 przez Karola):** problem zostaje, ale bohaterem jest
+    **przekazywanie pracy między ludźmi**, nie plik. Słowo „Excel" nie pada na stronie ani razu.
+    Wypadły: scena z 88 % arkuszy z błędem (liczba prawdziwa, zła historia) i ściana trzynastu
+    zrzutów z narzędzi („Nie musimy przedstawiać już narzędzi które zrobiłem"). Weszły: `handover`
+    (praca stoi między ludźmi) i `craft` (rodzaje pracy przekrojowo przez działy, BEZ zrzutów).
+    Została jedna liczba: 121 000 zł/rok za etat kontrolera z działaniem `8 350 × 12 × 1,2048`.
+  - **Gęstość treści zamiast minimalizmu (zmiana zasady!):** scena ma teraz nagłówek + akapit
+    (60–120 słów) + trzy rzeczy sprawdzalne. Strona główna: **1025 słów w statycznym HTML** (było 65
+    w całej prezentacji). Powód: referencja Karola `automatyzacje.ai` ma ~1900 słów na jednej
+    stronie i to JEST cały mechanizm jej pozycji w Google — nie technika, tylko gęstość.
+  - **NAPRAWIONY CICHY BŁĄD:** `prerender/entry.tsx` `HomeShell` wypisywał jeszcze stare hero
+    z kadrem produktu, choć `/` renderuje prezentację od dnia przebudowy. Crawler bez JS dostawał
+    INNĄ stronę niż człowiek. Shell odtwarza teraz osiem scen z `data/presentation.ts`.
+    **Nauczka ogólna: po każdej zmianie tego, co renderuje trasa, sprawdź jej shell w prerenderze.**
+  - **Kierunek wizualny ROZSTRZYGNIĘTY researchem:** obie referencje Karola (`automatyzacje.ai`
+    oraz film o motion graphics → styl „Editorial Motion Graphics" w katalogu Higgsfielda) to
+    **ta sama estetyka**: kremowy papier, szare wycinanki halftone, JEDEN akcent, hairline zamiast
+    boxów. Szczegóły i osiem gotowych promptów: `docs/plan/prezentacja-scenariusz.md`.
+  - **OTWARTE DECYZJE FOUNDERA:** **D-36** kremowe tło zamiast czarnego (łamie `design-dark-only`),
+    **D-37** kolorowy akcent zamiast stalowego (łamie `brand-single-accent-steel`; stal jest szara,
+    a w tym stylu cały kadr jest szary, więc akcent by zniknął — propozycja: petrol blue),
+    **D-38** Higgsfield PLUS na jeden miesiąc, **D-39** los trzynastu podstron narzędzi.
+    Obie reguły zapisują WCZEŚNIEJSZE decyzje Karola, więc tylko on może je zdjąć.
+  - **Nauczki narzędziowe:** strony SPA (jak `automatyzacje.ai`) czytać Playwrightem ze scratchpada,
+    bo `WebFetch` zwraca pustą skorupę. Ffmpeg z Playwrighta **nie ma dekodera H.264** — klatki
+    z mp4 zrzucać przeglądarką (`<video>` + `currentTime` + screenshot). Bramka `audit-static.mjs`
+    liczy cały dług, dopóki nie poda się `--baseline .claude/skills/klarow-guardian/baseline/*.jsonl`.
+    Build SSR MUSI mieć `--outDir dist-ssr --emptyOutDir` (bez tego czyści `dist/`) — używać
+    `npm run build`, nie składać komendy ręcznie.
+
 - **2026-09-11/12 (sesja „strona = CV firmy" + strażnik) — PLAN v2, STRAŻNIK I AUDYT GOTOWE; KOD `site/` NIETKNIĘTY:**
   - **Zakres sesji:** deep research (17 agentów: audyt strony, kit, bklit-ui, motion.dev, Manus,
     taste-skill, skille Vercel, Higgsfield, portfolio founderów, strategia → 3 koncepcje strony →
