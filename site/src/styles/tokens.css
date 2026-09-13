@@ -72,6 +72,20 @@
   --steel-300-rgb: 168, 180, 194;
   --gray-975-rgb: 18, 18, 18;
 
+  /* ALIASY: warstwy nad materiałem (scena prezentacji, tło zastępcze).
+     Komponent NIE składa ich z prymitywów, bo prymityw nie zna motywu:
+     `rgba(var(--gray-975-rgb), .7)` w motywie jasnym dałby czarną zasłonę
+     na kremowej stronie. Reguła `design-light-ready-tokens`. */
+  --veil-rgb: 18, 18, 18; /* zasłona pod tekstem leżącym na wideo */
+  --media-tint-rgb: 168, 180, 194; /* refleks stali w tle zastępczym */
+  /* Krycie zasłony jest OSOBNYM tokenem, bo zależy od kierunku motywu, a nie
+     tylko od koloru: ciemna zasłona MUSI być gęsta (jasny tekst na dowolnym
+     kadrze), jasna zasłona musi być rzadka (gęsta biel na jasnej stronie daje
+     po prostu biel i zjada kolor papieru). Trzy przystanki gradientu. */
+  --veil-1: 0.55;
+  --veil-2: 0.72;
+  --veil-3: 0.88;
+
   /* ── 2. ALIASY SEMANTYCZNE: powierzchnie ───────────────────────────── */
   --background: var(--gray-975); /* #121212, to samo co meta theme-color */
   --surface: var(--gray-900); /* panel, karta narzędzia */
@@ -155,21 +169,27 @@
 [data-theme="light"] {
   color-scheme: light;
 
-  --background: #f4f5f7;
+  /* CIEPŁY PAPIER, nie chłodna szarość (decyzja Karola 2026-09-13:
+     „Wchodzimy w cartoon jasny, przyjemny dla oka"). Wartości przeliczone
+     wzorem WCAG na nowym tle: najciemniejsza jasna powierzchnia to
+     `--surface-raised` #F2EFE9 i to na niej liczone są progi niżej. */
+  --background: #f7f5f1;
   --surface: #ffffff;
-  --surface-muted: #f9fafb;
-  --surface-raised: #f3f4f6;
+  --surface-muted: #fbf9f6;
+  --surface-raised: #f2efe9;
   --surface-overlay: #ffffff;
-  --scrim: rgba(255, 255, 255, 0.8);
+  --scrim: rgba(255, 255, 255, 0.82);
 
-  --foreground: var(--gray-900); /* 13,75 do 15,13 */
-  --foreground-strong: #111827; /* 16,12 do 17,74 */
-  --foreground-muted: #5b6472; /* 5,44 do 5,98 (#6B7280 dawał 4,39, poniżej AA) */
-  --foreground-faint: #67707e; /* 4,55 do 5,01 */
+  --foreground: var(--gray-900); /* 13,19 do 15,13 */
+  --foreground-strong: #111827; /* 15,46 do 17,74 */
+  --foreground-muted: #5b6472; /* 5,21 do 5,98 (#6B7280 dawał 4,39, poniżej AA) */
+  /* #67707E na cieplejszym `--surface-raised` spadał do 4,36, czyli PONIŻEJ AA.
+     Przyciemnione o jeden stopień: 4,69 do 4,95. */
+  --foreground-faint: #626b79; /* 4,69 do 4,95 */
 
-  --border: #e6e8ec;
+  --border: #e7e2d9;
   --border-strong: var(--steel-200);
-  --border-subtle: #eef0f3;
+  --border-subtle: #efebe4;
 
   --accent: var(--steel-700); /* 7,16 do 7,88; stal 300 na bieli ma 2,11 */
   --accent-strong: var(--steel-800); /* 10,70 do 11,78 */
@@ -183,6 +203,17 @@
   --accent-a16: rgba(66, 82, 110, 0.16);
   --accent-a35: rgba(66, 82, 110, 0.35);
   --accent-a45: rgba(66, 82, 110, 0.45);
+
+  /* Zasłona w motywie jasnym jest BIAŁA, nie czarna: rozjaśnia kadr, żeby
+     ciemny tekst sceny miał pod sobą wystarczająco jasne tło. */
+  --veil-rgb: 255, 255, 255;
+  --media-tint-rgb: 66, 82, 110;
+  /* Rzadka, bo materiał tego motywu jest z założenia JASNY (kreskówka na
+     jasnym tle). Gęstsza zabiłaby ciepły papier i zrobiła z każdej sceny
+     biały prostokąt — zmierzone zrzutem 2026-09-13. */
+  --veil-1: 0.2;
+  --veil-2: 0.3;
+  --veil-3: 0.44;
 
   --cta: #111827;
   --on-cta: #ffffff; /* 17,74 na --cta */

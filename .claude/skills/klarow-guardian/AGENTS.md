@@ -46,7 +46,7 @@
 | 2.11 | `design-icons-lucide-one-family` | MEDIUM | Ikony wyłącznie lucide-react, strokeWidth 1.5 domyślnie (1.75 tylko dla ikon 16 px), rozmiary z mapy, zero emoji i glifów | [rules/design-icons-lucide-one-family.md](rules/design-icons-lucide-one-family.md) |
 | 2.12 | `design-light-ready-tokens` | MEDIUM | Komplet tokenów [data-theme="light"] od dnia 1, bez przełącznika na stronie | [rules/design-light-ready-tokens.md](rules/design-light-ready-tokens.md) |
 | 2.13 | `design-no-three-equal-cards` | MEDIUM | Zero trzech równych kart w rzędzie; rodziny layoutu się nie powtarzają | [rules/design-no-three-equal-cards.md](rules/design-no-three-equal-cards.md) |
-| 2.14 | `design-page-theme-lock` | MEDIUM | Page Theme Lock: landing jest ciemny na całej stronie, motyw przez tokeny, zero dark: i inwersji sekcji | [rules/design-page-theme-lock.md](rules/design-page-theme-lock.md) |
+| 2.14 | `design-page-theme-lock` | MEDIUM | Page Theme Lock: strona jest JASNA na całej długości, motyw przez tokeny, zero dark: i zero inwersji sekcji | [rules/design-page-theme-lock.md](rules/design-page-theme-lock.md) |
 | 2.15 | `design-pdf-document-pattern` | MEDIUM | Dokument PDF: pdfmake lazy, deterministyczny, 1 strona A4, nagłówek KLAROW, stopka DEMO, Roboto z parametrem font | [rules/design-pdf-document-pattern.md](rules/design-pdf-document-pattern.md) |
 | 2.16 | `design-shape-lock` | MEDIUM | Shape Lock: promienie tylko ze zbioru {0, 8, 10, 12, 999} rozdzielonego per data-surface | [rules/design-shape-lock.md](rules/design-shape-lock.md) |
 | 2.17 | `design-theme-inline-zeroed` | MEDIUM | @theme inline zeruje palety Tailwinda; utility tylko z naszych tokenów | [rules/design-theme-inline-zeroed.md](rules/design-theme-inline-zeroed.md) |
@@ -1614,20 +1614,45 @@ w dashboardach (`tool`) to dane, nie marketing.
 
 ### 2.14 design-page-theme-lock
 
-**Page Theme Lock: landing jest ciemny na całej stronie, motyw przez tokeny, zero dark: i inwersji sekcji**
+**Page Theme Lock: strona jest JASNA na całej długości, motyw przez tokeny, zero dark: i zero inwersji sekcji**
 
-Impact: **MEDIUM** · Tagi: design, theme, dark, tokens, color-scheme · Źródło: taste §4.11 Page Theme Lock, §8 Dark Mode Protocol, §6.C / globals.css:5 („Landing jest dark-only") / synthesis §2.5.1 / taste.md §8 (Klarow: brand insists) · Dodano: 2026-09-12 · Plik: `rules/design-page-theme-lock.md`
+Impact: **MEDIUM** · Tagi: design, theme, light, tokens, color-scheme · Źródło: decyzja Karola 2026-09-13 („Wychodzimy ze stylu ciemnego. Wchodzimy w cartoon jasny, przyjemny dla oka") / taste §4.11 Page Theme Lock / WIG „Dark Mode & Theming" · Dodano: 2026-09-12 · Plik: `rules/design-page-theme-lock.md`
+
+> **ZMIANA KIERUNKU 2026-09-13.** Do 13 września ta reguła mówiła „strona jest ciemna".
+> Karol odwrócił decyzję po czterech odrzuconych podejściach wizualnych: „Wychodzimy ze
+> stylu ciemnego. Wchodzimy w cartoon jasny, przyjemny dla oka."
+>
+> Reguła NIE została złamana ani obejściem, ani wyjątkiem — została przepisana, bo zapisywała
+> wcześniejszą decyzję tego samego człowieka. Sama mechanika (jeden motyw na całej długości,
+> tokeny zamiast `dark:`, zero inwersji sekcji) zostaje bez zmian; odwraca się kierunek.
+>
+> Koszt, którego ta reguła się wcześniej obawiała („12 ciemnych dashboardów, +2–3 dni, ryzyko
+> regresji"), okazał się znacznie niższy: `tokens.css` miał już KOMPLETNY zestaw
+> `[data-theme="light"]` z policzonymi kontrastami, łącznie z tokenami wykresów. Przełączenie
+> to `data-theme="light"` na `<html>` plus odczepienie czterech miejsc, które miały czerń
+> wpisaną na stałe (`.bg-layer`, zasłona sceny, tło zastępcze, `theme-color`).
 
 #### Zasada
 
-Strona ma **jeden motyw: ciemny** (`--background #121212`, stal jako akcent), zamknięty na poziomie
-dokumentu: `:root { color-scheme: dark }`, `<meta name="theme-color" content="#121212">`,
-`data-theme` nie ustawiane na stronie. Żadna sekcja nie odwraca motywu (brak „jasnej kartki"
-między ciemnymi sekcjami, brak jasnego footera, brak jasnego embedu bez ramy). Strategia tokenów
-= **CSS variables** (`:root` dark, `[data-theme="light"]` tylko jako komplet tokenów gotowy dla
-narzędzi i PDF-preview); wariant Tailwinda `dark:` jest zakazany (mieszanie strategii). Tinty
-w obrębie rodziny (`--surface` obok `--surface-raised`) są dozwolone. Dokumenty PDF są jasne, ale to
-osobny artefakt, nie sekcja strony.
+Strona ma **jeden motyw: jasny**, zamknięty na poziomie dokumentu:
+`<html data-theme="light">`, `[data-theme="light"] { color-scheme: light }`,
+`<meta name="theme-color" content="#f7f5f1">`. Żadna sekcja nie odwraca motywu (brak „ciemnej
+kartki" między jasnymi sekcjami, brak ciemnej stopki, brak ciemnego embedu bez ramy).
+Strategia tokenów = **CSS variables**; wariant Tailwinda `dark:` jest zakazany (mieszanie
+strategii). Tinty w obrębie rodziny (`--surface` obok `--surface-raised`) są dozwolone.
+
+**Warstwy nad materiałem składa się z tokenów motywu, nigdy z prymitywów.**
+`rgba(var(--gray-975-rgb), .72)` wpisane w komponent jest błędem nawet wtedy, gdy akurat
+wygląda dobrze: prymityw nie zna motywu, więc po zmianie kierunku zostaje czarną zasłoną na
+jasnej stronie. Do tego służą `--veil-rgb`, `--veil-1..3` i `--media-tint-rgb`.
+
+**Zasłona jasna musi być RZADKA.** Gęsta biel na jasnej stronie daje po prostu biel i zjada
+kolor papieru (zmierzone zrzutem 2026-09-13: zasłona 0,55–0,88 zamieniała każdą scenę
+w biały prostokąt). Stąd osobne krycie per motyw, a nie jedna wartość w arkuszu.
+
+**Materiał wideo musi być jasny**, bo to on, a nie zasłona, gwarantuje kontrast ciemnemu
+tekstowi sceny. Ciemny klip pod jasną sceną łamie `design-contrast-aa` i żadna zasłona tego
+nie naprawi, jeśli ma zostawić widoczny papier.
 
 #### Mechanizm awarii (dlaczego)
 

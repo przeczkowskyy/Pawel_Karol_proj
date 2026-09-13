@@ -13,7 +13,6 @@ import {
   Phone,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
-import BgBoundary from "@/components/BgBoundary";
 import CollaborationFlow from "@/components/CollaborationFlow";
 import Faq from "@/components/Faq";
 import ToolsGrid from "@/components/ToolsGrid";
@@ -31,10 +30,6 @@ import { EMAIL, MAIL_HREF, PHONE_DISPLAY, PHONE_HREF } from "@/data/contact";
    2026-07-26: rozbicie na trasy o odrębnej intencji jest lepsze pod SEO.
    Tło całej strony: GLSL Hills (desktop) / stalowy gradient (mobile). */
 
-const GLSLHills = lazy(() =>
-  import("@/components/ui/glsl-hills").then((m) => ({ default: m.GLSLHills }))
-);
-
 /* Chunk krytyczny strony głównej nie płaci za kod, którego home nie renderuje
    (reguły perf-js-budget-home i code-lazy-routes-and-dashboards):
    - podstrona narzędzia wchodzi dopiero przy wejściu na /narzedzia/:slug,
@@ -51,15 +46,6 @@ const BookingModal = lazy(() => import("@/components/BookingModal"));
    klarow.com na iPhone, diagnoza 2026-07-24). Na mobile zostaje statyczny
    stalowy gradient .bg-layer (zaprojektowany fallback). Desktop (fine pointer)
    dostaje pełne animowane wzgórza. SSR/prerender: false (brak window). */
-function useAnimatedBg(): boolean {
-  const [enabled, setEnabled] = useState(false);
-  useEffect(() => {
-    if (typeof window === "undefined" || !window.matchMedia) return;
-    const coarse = window.matchMedia("(pointer: coarse)").matches;
-    setEnabled(!coarse);
-  }, []);
-  return enabled;
-}
 
 /* Pierwsza sekcja podstrony renderuje tytuł jako H1 (`as="h1"`): prerenderowany
    shell ma H1, więc bez tego po starcie Reacta zostawała strona bez nagłówka
@@ -694,14 +680,6 @@ function ScrollToTop() {
 export default function App() {
   const [bookingOpen, setBookingOpen] = useState(false);
   const onBook = () => setBookingOpen(true);
-  /* animowane tło WebGL tylko na desktopie: na mobile statyczny gradient .bg-layer */
-  /* Animowane wzgórza NIE wchodzą na prezentację (2026-09-13). Każda scena niesie
-     własne tło, a wzgórza przebijały się przez wszystkie osiem naraz: zrzut pulpitu,
-     wykres i pejzaż nakładały się w jedną szarą breję, nieczytelną na żadnej warstwie.
-     Na podstronach (narzędzia, oferta, FAQ, RODO) tło zostaje bez zmian. */
-  const isPresentation = useLocation().pathname === "/";
-  const animatedBg = useAnimatedBg() && !isPresentation;
-
   return (
     /* UWAGA: ten wrapper MUSI być bez nieprzezroczystego tła. `.bg-layer` ma
        z-index:-1 (fixed background pod treścią), a wrapper po rozbiciu na
@@ -709,18 +687,17 @@ export default function App() {
        background:var(--body-bg)) zamalowałoby wzgórza/gradient. Podkład #121212
        daje body (company-ui.css) i sama .bg-layer. NIE dodawać tu tła. */
     <div>
-      {/* tło CAŁEJ strony: GLSL Hills (lazy chunk z three.js), spowolnione.
-          .bg-layer/.content-layer = czysty CSS (globals). Na urządzeniach
-          dotykowych canvas WebGL się NIE renderuje (bug iOS), więc zostaje gradient. */}
-      <div className="bg-layer" aria-hidden="true">
-        {animatedBg && (
-          <BgBoundary>
-            <Suspense fallback={null}>
-              <GLSLHills width="100%" height="100%" speed={0.2} />
-            </Suspense>
-          </BgBoundary>
-        )}
-      </div>
+      {/* TŁO STRONY = sam CSS (`.bg-layer` w globals.css).
+
+          ANIMOWANE WZGÓRZA WebGL ZDJĘTE 2026-09-13 razem z przejściem na motyw
+          jasny (decyzja Karola: „Wychodzimy ze stylu ciemnego"). Były ciemnym
+          pejzażem 3D zaprojektowanym pod czerń — na kremowej stronie nie da się
+          ich ani doświetlić, ani obronić. Wcześniej i tak nie wchodziły na
+          prezentację, bo przebijały się przez wszystkie osiem scen naraz.
+          Zysk uboczny: z bundla wypada three.js, czyli lazy-chunk 116 KB gz.
+          Pliki `components/ui/glsl-hills.tsx` i `BgBoundary` zostają w repo
+          jako zapas (tak jak `radial-orbital-timeline`), ale nic ich nie woła. */}
+      <div className="bg-layer" aria-hidden="true"></div>
 
       <div className="content-layer">
         <SkipLink />

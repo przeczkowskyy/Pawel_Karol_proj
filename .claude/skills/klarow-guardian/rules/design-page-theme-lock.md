@@ -1,22 +1,48 @@
 ---
 id: design-page-theme-lock
-title: Page Theme Lock: landing jest ciemny na całej stronie, motyw przez tokeny, zero dark: i inwersji sekcji
+title: "Page Theme Lock: strona jest JASNA na całej długości, motyw przez tokeny, zero dark: i zero inwersji sekcji"
 impact: MEDIUM
-tags: [design, theme, dark, tokens, color-scheme]
-source: taste §4.11 Page Theme Lock, §8 Dark Mode Protocol, §6.C / globals.css:5 („Landing jest dark-only") / synthesis §2.5.1 / taste.md §8 (Klarow: brand insists)
+tags: [design, theme, light, tokens, color-scheme]
+source: decyzja Karola 2026-09-13 („Wychodzimy ze stylu ciemnego. Wchodzimy w cartoon jasny, przyjemny dla oka") / taste §4.11 Page Theme Lock / WIG „Dark Mode & Theming"
 added: 2026-09-12
+updated: 2026-09-13
 ---
+
+> **ZMIANA KIERUNKU 2026-09-13.** Do 13 września ta reguła mówiła „strona jest ciemna".
+> Karol odwrócił decyzję po czterech odrzuconych podejściach wizualnych: „Wychodzimy ze
+> stylu ciemnego. Wchodzimy w cartoon jasny, przyjemny dla oka."
+>
+> Reguła NIE została złamana ani obejściem, ani wyjątkiem — została przepisana, bo zapisywała
+> wcześniejszą decyzję tego samego człowieka. Sama mechanika (jeden motyw na całej długości,
+> tokeny zamiast `dark:`, zero inwersji sekcji) zostaje bez zmian; odwraca się kierunek.
+>
+> Koszt, którego ta reguła się wcześniej obawiała („12 ciemnych dashboardów, +2–3 dni, ryzyko
+> regresji"), okazał się znacznie niższy: `tokens.css` miał już KOMPLETNY zestaw
+> `[data-theme="light"]` z policzonymi kontrastami, łącznie z tokenami wykresów. Przełączenie
+> to `data-theme="light"` na `<html>` plus odczepienie czterech miejsc, które miały czerń
+> wpisaną na stałe (`.bg-layer`, zasłona sceny, tło zastępcze, `theme-color`).
 
 ## Zasada
 
-Strona ma **jeden motyw: ciemny** (`--background #121212`, stal jako akcent), zamknięty na poziomie
-dokumentu: `:root { color-scheme: dark }`, `<meta name="theme-color" content="#121212">`,
-`data-theme` nie ustawiane na stronie. Żadna sekcja nie odwraca motywu (brak „jasnej kartki"
-między ciemnymi sekcjami, brak jasnego footera, brak jasnego embedu bez ramy). Strategia tokenów
-= **CSS variables** (`:root` dark, `[data-theme="light"]` tylko jako komplet tokenów gotowy dla
-narzędzi i PDF-preview); wariant Tailwinda `dark:` jest zakazany (mieszanie strategii). Tinty
-w obrębie rodziny (`--surface` obok `--surface-raised`) są dozwolone. Dokumenty PDF są jasne, ale to
-osobny artefakt, nie sekcja strony.
+Strona ma **jeden motyw: jasny**, zamknięty na poziomie dokumentu:
+`<html data-theme="light">`, `[data-theme="light"] { color-scheme: light }`,
+`<meta name="theme-color" content="#f7f5f1">`. Żadna sekcja nie odwraca motywu (brak „ciemnej
+kartki" między jasnymi sekcjami, brak ciemnej stopki, brak ciemnego embedu bez ramy).
+Strategia tokenów = **CSS variables**; wariant Tailwinda `dark:` jest zakazany (mieszanie
+strategii). Tinty w obrębie rodziny (`--surface` obok `--surface-raised`) są dozwolone.
+
+**Warstwy nad materiałem składa się z tokenów motywu, nigdy z prymitywów.**
+`rgba(var(--gray-975-rgb), .72)` wpisane w komponent jest błędem nawet wtedy, gdy akurat
+wygląda dobrze: prymityw nie zna motywu, więc po zmianie kierunku zostaje czarną zasłoną na
+jasnej stronie. Do tego służą `--veil-rgb`, `--veil-1..3` i `--media-tint-rgb`.
+
+**Zasłona jasna musi być RZADKA.** Gęsta biel na jasnej stronie daje po prostu biel i zjada
+kolor papieru (zmierzone zrzutem 2026-09-13: zasłona 0,55–0,88 zamieniała każdą scenę
+w biały prostokąt). Stąd osobne krycie per motyw, a nie jedna wartość w arkuszu.
+
+**Materiał wideo musi być jasny**, bo to on, a nie zasłona, gwarantuje kontrast ciemnemu
+tekstowi sceny. Ciemny klip pod jasną sceną łamie `design-contrast-aa` i żadna zasłona tego
+nie naprawi, jeśli ma zostawić widoczny papier.
 
 ## Mechanizm awarii (dlaczego)
 

@@ -33,15 +33,22 @@
   pointer-events: none;
   /* statyczny „awaryjny pejzaż": delikatna stalowa łuna od dołu, widoczna wtedy,
      gdy WebGL padnie (Lockdown Mode / limit kontekstów / bloker) i canvas
-     się nie narysuje; z canvasem siedzi pod nim i nie przeszkadza */
+     się nie narysuje; z canvasem siedzi pod nim i nie przeszkadza.
+
+     MOTYW JASNY (2026-09-13): wartości były wpisane na stałe pod czerń
+     #121212, więc po przejściu na ciepły papier zostawały czarnym prostokątem
+     pod całą stroną. Teraz łuna idzie z tokenu motywu, a podkład z `--background`.
+     Bez literału-fallbacku: `tokens.css` jest importowany PRZED tym plikiem
+     (kolejność wymuszona na górze arkusza), więc `--background` istnieje zawsze,
+     a literał tylko łamałby `design-tokens-only`. */
   background:
     radial-gradient(
       120% 85% at 50% 100%,
-      rgba(168, 180, 194, 0.14) 0%,
-      rgba(168, 180, 194, 0.05) 45%,
-      rgba(18, 18, 18, 0) 75%
+      rgba(var(--media-tint-rgb), 0.1) 0%,
+      rgba(var(--media-tint-rgb), 0.04) 45%,
+      rgba(var(--veil-rgb), 0) 75%
     ),
-    #121212;
+    var(--background);
   isolation: isolate;
 }
 .content-layer {
@@ -138,6 +145,28 @@
 }
 :root .e-ico {
   color: var(--foreground-faint); /* 4,59:1 na karcie (--surface) */
+}
+
+/* ── Główne CTA w motywie jasnym ──────────────────────────────────────────
+   `company-ui.css` ma `.btn-primary` wpisany na stałe jako stalowy gradient
+   (#B9C4D1 → #96A3B3). Zaprojektowano go pod czerń; na jasnej stronie wychodzi
+   wyblakły szary guzik, który nie czyta się jak główna akcja, a biały tekst na
+   nim ma 1,9:1, czyli daleko poniżej AA.
+
+   Reguła marki mówi „primary CTA = płaska biel na czerni". W motywie jasnym
+   ta sama zasada odwraca się: płaska czerń na papierze. Stąd `--cta`/`--on-cta`
+   (17,74:1) i zero gradientu — kit ładuje się PO tym arkuszu, więc nadpisanie
+   wymaga wyższej specyficzności (`html[data-theme=...]`). Znika razem z kitem. */
+html[data-theme="light"] .btn-primary,
+html[data-theme="light"] .btn-primary:hover {
+  background: var(--cta);
+  color: var(--on-cta);
+  border-color: var(--cta);
+  box-shadow: none;
+}
+html[data-theme="light"] .btn-primary:hover {
+  background: var(--cta-hover);
+  border-color: var(--cta-hover);
 }
 
 /* Skalowanie dużych ekranów NIE idzie już przez powiększanie całego dokumentu

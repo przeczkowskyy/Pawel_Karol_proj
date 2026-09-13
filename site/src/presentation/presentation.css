@@ -75,11 +75,17 @@
   bottom: 0;
   left: 0;
   pointer-events: none;
+  /* MOTYW JASNY (2026-09-13): zasłona była składana z prymitywu `--gray-975-rgb`,
+     czyli z czerni, niezależnie od motywu. Na kremowej stronie przyciemniałaby
+     kadr do czarnego prostokąta pod jasnym tekstem. `--veil-rgb` zna motyw:
+     w ciemnym przyciemnia, w jasnym rozjaśnia. Zadanie jest to samo w obu —
+     dać tekstowi sceny pewne tło niezależnie od tego, jaka klatka stoi pod
+     spodem (reguła design-contrast-aa). */
   background: linear-gradient(
     to bottom,
-    rgba(var(--gray-975-rgb), 0.55) 0%,
-    rgba(var(--gray-975-rgb), 0.72) 55%,
-    rgba(var(--gray-975-rgb), 0.88) 100%
+    rgba(var(--veil-rgb), var(--veil-1)) 0%,
+    rgba(var(--veil-rgb), var(--veil-2)) 55%,
+    rgba(var(--veil-rgb), var(--veil-3)) 100%
   );
 }
 
@@ -191,14 +197,14 @@
   background:
     radial-gradient(
       120% 85% at 50% 100%,
-      rgba(var(--steel-300-rgb), 0.16) 0%,
-      rgba(var(--steel-300-rgb), 0.06) 45%,
-      rgba(var(--gray-975-rgb), 0) 75%
+      rgba(var(--media-tint-rgb), 0.14) 0%,
+      rgba(var(--media-tint-rgb), 0.05) 45%,
+      rgba(var(--veil-rgb), 0) 75%
     ),
     radial-gradient(
       100% 70% at 50% 50%,
-      rgba(var(--gray-975-rgb), 0) 40%,
-      rgba(var(--gray-975-rgb), 0.75) 100%
+      rgba(var(--veil-rgb), 0) 40%,
+      rgba(var(--veil-rgb), 0.55) 100%
     );
 }
 
@@ -211,24 +217,24 @@
   background-image:
     repeating-linear-gradient(
       to right,
-      rgba(var(--steel-300-rgb), 0.13) 0 1px,
+      rgba(var(--media-tint-rgb), 0.13) 0 1px,
       transparent 1px 72px
     ),
     repeating-linear-gradient(
       to bottom,
-      rgba(var(--steel-300-rgb), 0.13) 0 1px,
+      rgba(var(--media-tint-rgb), 0.13) 0 1px,
       transparent 1px 72px
     );
   /* maska używa koloru wyłącznie jako kanału alfa; i tak składamy ją z tokenu,
      żeby w całym pliku nie było ani jednego literału koloru */
   -webkit-mask-image: radial-gradient(
     90% 70% at 50% 45%,
-    rgba(var(--gray-975-rgb), 1) 0%,
+    rgba(var(--veil-rgb), 1) 0%,
     transparent 100%
   );
   mask-image: radial-gradient(
     90% 70% at 50% 45%,
-    rgba(var(--gray-975-rgb), 1) 0%,
+    rgba(var(--veil-rgb), 1) 0%,
     transparent 100%
   );
 }
