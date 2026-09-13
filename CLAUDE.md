@@ -187,11 +187,28 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
     oraz film o motion graphics → styl „Editorial Motion Graphics" w katalogu Higgsfielda) to
     **ta sama estetyka**: kremowy papier, szare wycinanki halftone, JEDEN akcent, hairline zamiast
     boxów. Szczegóły i osiem gotowych promptów: `docs/plan/prezentacja-scenariusz.md`.
-  - **OTWARTE DECYZJE FOUNDERA:** **D-36** kremowe tło zamiast czarnego (łamie `design-dark-only`),
-    **D-37** kolorowy akcent zamiast stalowego (łamie `brand-single-accent-steel`; stal jest szara,
-    a w tym stylu cały kadr jest szary, więc akcent by zniknął — propozycja: petrol blue),
-    **D-38** Higgsfield PLUS na jeden miesiąc, **D-39** los trzynastu podstron narzędzi.
-    Obie reguły zapisują WCZEŚNIEJSZE decyzje Karola, więc tylko on może je zdjąć.
+  - **MOTYW JASNY WDROŻONY (D-36 i D-37 ROZSTRZYGNIĘTE przez Karola 2026-09-13):**
+    „Wychodzimy ze stylu ciemnego. Wchodzimy w cartoon jasny, przyjemny dla oka. KLAROWny."
+    `<html data-theme="light">`, powierzchnie ocieplone na papier (`--background #F7F5F1`,
+    `--surface-raised #F2EFE9`). **Akcentem zostaje STAL, tylko jej ciemny koniec `--steel-700`**
+    (7,24–7,88 na papierze; stal 300 na bieli miała 2,11) — czyli kolor JEST, a reguła
+    `brand-single-accent-steel` NIE jest łamana. Główne CTA: płaska czerń na papierze
+    (kit miał `.btn-primary` jako stalowy gradient pod czerń, biały tekst 1,9:1 — nadpisane
+    tokenami w globals.css). **Animowane wzgórza WebGL ZDJĘTE** (ciemny pejzaż 3D nie do
+    doświetlenia; z bundla wypadł three.js, 116 KB gz). Reguła `design-page-theme-lock`
+    PRZEPISANA (nie obejście): zapisywała wcześniejszą decyzję tego samego człowieka.
+    Koszt okazał się niski, bo `tokens.css` miał już komplet `[data-theme="light"]`
+    z policzonymi kontrastami — podstrony z dashboardami przeszły bez zmian w komponentach.
+  - **NAUCZKA, KTÓRA KOSZTOWAŁA ZRZUT:** warstwy nad materiałem (zasłona sceny, tło zastępcze)
+    składane wprost z prymitywu (`rgba(var(--gray-975-rgb), .72)`) nie znają motywu i po zmianie
+    kierunku zostają czarne na jasnej stronie. Służą do tego `--veil-rgb`, `--veil-1..3`,
+    `--media-tint-rgb`. **Krycie zasłony też zależy od motywu:** ciemna musi być gęsta, jasna
+    rzadka, bo gęsta biel na jasnym tle daje biel i zjada kolor papieru. Konsekwencja przy
+    zamawianiu materiału: **kontrast tekstu gwarantuje teraz JASNY klip, nie zasłona.**
+  - **OTWARTE DECYZJE FOUNDERA:** **D-37b** wybór stylu kreskówki (rekomendacja: „2D Illustrator";
+    UWAGA: podglądy presetów w katalogu NIE zgadzają się z nazwami, więc wybierać po klatkach,
+    nie po nazwie), **D-38** Higgsfield PLUS na jeden miesiąc, **D-39** los trzynastu podstron
+    narzędzi, oraz wciąż dane administratora do `/rodo` (twardy bloker publikacji i outboundu).
   - **Nauczki narzędziowe:** strony SPA (jak `automatyzacje.ai`) czytać Playwrightem ze scratchpada,
     bo `WebFetch` zwraca pustą skorupę. Ffmpeg z Playwrighta **nie ma dekodera H.264** — klatki
     z mp4 zrzucać przeglądarką (`<video>` + `currentTime` + screenshot). Bramka `audit-static.mjs`
