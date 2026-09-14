@@ -94,36 +94,68 @@ export function videoSources(asset: SceneVideoAsset): { src: string; type: strin
 /** Co leży pod którą sceną. Dziś: komplet na materiale zastępczym. */
 export const SCENE_MEDIA: Record<SceneId, SceneMediaEntry> = {
   /* 1. Hak: firma urosła, proces został ten sam. Docelowo S1. */
-  hook: { id: "hook", fallback: "gradient" },
+  hook: {
+    id: "hook",
+    still: "/media/presentation/scene-hook-v1.webp",
+    fallback: "shot",
+  },
 
   /* 2. Przekazanie: praca stoi między ludźmi. Docelowo S2.
      Siatka komórek w tle zastępczym włącza się propsem `grid` na
      `SceneFallbackMedia`, nie tutaj: to decyzja wizualna sceny, nie materiału. */
-  handover: { id: "handover", still: "/media/presentation/scene-handover-v1.webp", fallback: "shot" },
+  handover: {
+    id: "handover",
+    still: "/media/presentation/scene-handover-v1.webp",
+    fallback: "shot",
+  },
 
   /* 3. Koszt czasu: zamknięcie miesiąca. Docelowo S3.
      Scena ma też własny wykres budujący się przy przewijaniu (SceneTime),
      więc materiał tła musi być SPOKOJNY — dwa ruchy naraz się zabijają. */
-  time: { id: "time", fallback: "gradient" },
+  time: {
+    id: "time",
+    still: "/media/presentation/scene-time-v1.webp",
+    fallback: "shot",
+  },
 
   /* 4. Koszt pieniędzy: rozbicie działania na ekranie. Docelowo S4. */
-  cost: { id: "cost", fallback: "gradient" },
+  cost: {
+    id: "cost",
+    still: "/media/presentation/scene-cost-v1.webp",
+    fallback: "shot",
+  },
 
   /* 5. Zwrot: rozsypane elementy składają się w jeden układ. Docelowo S5.
      To jest oś całego filmu i jedyna scena z mocnym uderzeniem w materiale
      (scenariusz §4.5, S5) — reszta scen ma być spokojna, żeby ta jedna zagrała. */
-  turn: { id: "turn", fallback: "gradient" },
+  turn: {
+    id: "turn",
+    still: "/media/presentation/scene-turn-v1.webp",
+    fallback: "shot",
+  },
 
   /* 6. Co potrafimy: sześć rodzajów pracy. Docelowo S6.
      UWAGA: to już NIE jest scena ze zrzutami narzędzi (wersja 2 scenariusza).
      Materiał ma pokazywać rodzaje pracy, nie nasze interfejsy. */
-  craft: { id: "craft", fallback: "gradient" },
+  craft: {
+    id: "craft",
+    still: "/media/presentation/scene-craft-v1.webp",
+    fallback: "shot",
+  },
 
   /* 7. Efekt: plątanina rozplątuje się w równoległe linie. Docelowo S7. */
-  outcome: { id: "outcome", fallback: "gradient" },
+  outcome: {
+    id: "outcome",
+    still: "/media/presentation/scene-outcome-v1.webp",
+    fallback: "shot",
+  },
 
   /* 8. Kontakt: scena pustoszeje, zostaje jedna karta. Docelowo S8. */
-  contact: { id: "contact", fallback: "gradient" },
+  contact: {
+    id: "contact",
+    still: "/media/presentation/scene-contact-v1.webp",
+    fallback: "shot",
+  },
 };
 
 /** Materiał dla sceny; zawsze zwraca wpis, nigdy `undefined`. */
