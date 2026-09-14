@@ -16,6 +16,7 @@
 | `.claude/skills/klarow-guardian/` | **STRAŻNIK ZASAD (nadrzędny nad wszystkimi skillami wizualnymi)** — 144 reguły z ID/severity/testem mechanicznym (`rules/`), `AGENTS.md` generowany, rejestry (dozwolone liczby, integracje, przekierowania, tokeny), zwendorowane wytyczne (WIG, writing, locki taste), checklisty, 8 skryptów bramek (`node`, nigdy `npx`), baseline długu. Wejście: `SKILL.md` (115 linii) |
 | `.claude/agents/`, `.claude/workflows/`, `.claude/skills/ui-audit/` | **Audyt automatyczny** — 7 audytorów read-only + orkiestrator, workflow `/ui-audit` (bramki → audytorzy → weryfikacja adwersaryjna → naprawy mechaniczne → re-audyt → `INDEX.md`) |
 | `.claude/skills/` (reszta) | `motion` (Motion AI Kit), `design-taste-frontend` + `minimalist-ui`/`high-end-visual-design`/`redesign-existing-projects`/`brandkit`/`imagegen-frontend-web`/`full-output-enforcement` (pakiet taste-skill), `react-best-practices`/`composition-patterns`/`react-view-transitions`/`web-design-guidelines`/`writing-guidelines` (Vercel), `bklit-ui`, `auto-animate`, `aceternity-ui`, `motion-design`, `lead-scout` |
+| `.claude/skills/higgsfield-*` + `HIGGSFIELD-README.md` | **Skille i CLI Higgsfielda** (zainstalowane 2026-09-14). **Czytaj README PIERWSZE**: używamy `higgsfield-generate`; `higgsfield-websites` jest ZAKAZANY dla klarow.com (przepisałby stronę na infrastrukturę Higgsfielda), `higgsfield-soul-id` zakazany (trenuje na twarzy). CLI: `higgsfield` (`npm i -g @higgsfield/cli`) |
 | `leadscout/` | **Agent pozyskiwania leadów** — baza `leads.json`, digesty na Telegram (@Klarow_BOT przez `notify.mjs`; token w `.env` POZA gitem), przewodnik źródeł `zrodla.md`, playbook outboundu, ranking kanałów marketingowych, kolejka rund `nastepne-rundy.md`. Uruchamianie: `/lead-scout` |
 
 ## Twarde zasady (obowiązują każdą sesję)
@@ -162,6 +163,34 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
 - Docelowo (plan §4.2): treść do YAML w `site/content/` + trasy `/pl/` `/en/` build-time.
 
 ## Stan operacyjny (aktualizuj przy zmianach!)
+
+- **2026-09-14 (plany Higgsfielda) — STARTER $19 WYSTARCZA; CLI I SKILLE ZAINSTALOWANE:**
+  - **Karol: „PLUS po podatkach wychodzi około 300 zł/mies."** Sprawdzone: w MCP nie ma
+    w ogóle planu Starter (tylko PLUS $49 i ULTRA $129, pakiety doładowań puste), ale
+    **na stronie higgsfield.ai jest STARTER $19/mies. z 270 kredytami** — i on nam wystarczy.
+  - **Rachunek na nasz przypadek** (z tabeli porównawczej wyciągniętej z DOM, kolumnowo):
+    8 klipów × 10 s na `Kling Omni 3 Image Reference 1080p` (~7 kr/5 s) = **~112 kredytów**,
+    plus ~20 prób obrazu-klucza (Seedream / GPT Image, 1 kr/obraz) = **~20–40 kr**.
+    Razem **~130–150 kr** przy limicie **270 kr/mies.** Czyli pełne podejście i prawie cała
+    runda powtórek. **„Commercial use" jest w Starterze WŁĄCZONE** (w Free go nie ma) — wolno
+    tego użyć na klarow.com.
+  - **Co Starter zawiera z modeli wideo** (zweryfikowane kolumnowo, nie z płaskiego tekstu):
+    Kling Omni 3 Image Reference 720p i **1080p**, Kling Omni 3 FLF, Kling 3.0 **tylko 720p**,
+    Seedance 1.5 do 1080p, Wan 3.0, Grok Video, Kling 2.6. **Czego NIE ma:** Seedance 2.0 i 2.5
+    w ogóle, Kling 3.0 w 1080p/4K, promocje „unlimited". Równoległość 2 zadania zamiast 6.
+  - **Model z referencją obrazu JEST w Starterze w 1080p** i to jest jedyna rzecz, która
+    naprawdę musiała tam być: technika „jeden klucz stylu → każdy klip się do niego odwołuje"
+    (patrz `docs/plan/prezentacja-scenariusz.md` §4.1) bez niej nie działa.
+  - **Ceny są BEZ VAT** („Prices exclude VAT and local taxes, calculated at checkout") — stąd
+    rozjazd między $49 a ~300 zł, który zauważył Karol.
+  - **PUŁAPKA MCP vs WEB:** „Unlimited models and Free Generations are accessible only via
+    higgsfield.ai and are **not** accessible on MCP/CLI, Canvas or Supercomputer." Czyli kto
+    kupuje PLUS dla 7-dniowego unlimited Kling 3.0, dostaje go WYŁĄCZNIE na stronie, nie w CLI.
+  - **`higgsfield generate cost <model>` potwierdza rachunek PRZED wydaniem kredytów** —
+    używać zawsze przed pierwszą generacją.
+  - Zainstalowane: CLI `@higgsfield/cli` 1.1.24 (pakiet zweryfikowany w rejestrze npm przed
+    instalacją globalną) + 8 skilli. Logowanie OAuth robi founder w przeglądarce.
+    **Nigdy nie uruchamiać `higgsfield auth token`** (drukuje sekret).
 
 - **2026-09-13 (sesja „strona = prezentacja") — STRONA GŁÓWNA TO BROSZURA; NARRACJA PRZEPISANA:**
   - **Trasa `/` renderuje `<Presentation>`**: osiem scen przewijanych w jednym ciągu, bez zakładek
