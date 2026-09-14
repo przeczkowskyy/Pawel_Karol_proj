@@ -1,5 +1,16 @@
 # Prezentacja klarow.com — scenariusz v2 i pakiet promptów Higgsfield
 
+> **KOREKTA KIERUNKU 2026-09-13/14 — czytaj przed sekcją 1.**
+> Sekcja 1 opisuje research, który doprowadził do stylu „papierowy kolaż redakcyjny"
+> (Editorial Motion Graphics). **Ten wniosek jest już nieaktualny.** Founder po obejrzeniu
+> materiału zdecydował inaczej: „Wchodzimy w cartoon jasny, przyjemny dla oka. KLAROWny."
+>
+> Co z sekcji 1 **zostaje w mocy**: metoda badania referencji, ustalenie że pozycja
+> `automatyzacje.ai` w wyszukiwarce bierze się z gęstości tekstu a nie z techniki, oraz
+> kierunek JASNY zamiast ciemnego. Co **odpada**: konkretny styl kolażu i jego paleta.
+> Obowiązujący pakiet promptów to **sekcja 4 w wersji 4** (jasna kreskówka).
+
+
 > **Wersja 2 z 2026-09-13. Zastępuje v1 w całości.** v1 opowiadała o błędach w Excelu
 > i kończyła się ścianą zrzutów z narzędzi. Founder odrzucił jedno i drugie:
 > „Zły writing. Nie skupiamy się na błędach w excelu" oraz „Nie musimy przedstawiać
@@ -50,15 +61,16 @@ To nie jest kompromis między dwiema referencjami — to jeden kierunek.
 | Decyzja | v1 (odrzucone) | v2 |
 |---|---|---|
 | Tło strony | czerń | **kremowy papier** |
-| Akcent | stal `#A8B4C2` | **jeden kolor, propozycja: petrol blue** |
+| Akcent | stal `#A8B4C2` (na bieli 2,11) | **`#42526E` — ciemny koniec TEJ SAMEJ stali**, 7,24 na papierze |
 | Treść | 65 słów na osiem ekranów | **nagłówek na wideo + realny akapit pod nim**, cel 1 200–1 800 słów |
 | Problem | błędy w arkuszach | **firma urosła, proces został ten sam** |
 | Dowód | ściana 13 zrzutów | **rodzaje pracy, które umiemy przejąć** — bez zrzutów |
 | Tło sceny | gradient zastępczy | **wideo pełnoekranowe pod każdą sceną** |
 
-**Dwie decyzje należą do foundera, nie do mnie — wypisane w §6.** Kremowe tło łamie
-`design-dark-only`, a kolorowy akcent łamie `brand-single-accent-steel`. Obie reguły
-zapisują JEGO wcześniejsze decyzje, więc tylko on może je zdjąć.
+**Obie te decyzje founder podjął 2026-09-13 i obie są WDROŻONE** (§6, D-36 i D-37).
+Motyw jasny jest na produkcji, reguła `design-page-theme-lock` została przepisana razem
+z decyzją, a akcentem został ciemny koniec stali — więc `brand-single-accent-steel`
+nie musiała być łamana w ogóle.
 
 ---
 
@@ -94,235 +106,249 @@ nigdy nie sugerujemy odjęcia etatu, tylko na co ma iść jego czas.
 
 ---
 
-## 4. Pakiet promptów Higgsfield
+## 4. Pakiet promptow Higgsfield
 
-Rzemiosło poniżej nie jest zgadywane — pochodzi z warsztatu produkcyjnego wbudowanego
-w silnik (`faceless-video`, `references/style-editorial-collage.md`).
+> **Wersja 4 z 2026-09-14.** Zastepuje prompty pisane pod „Editorial Motion Graphics".
+> Powod: decyzja Karola — „Wychodzimy ze stylu ciemnego. Wchodzimy w cartoon jasny,
+> przyjemny dla oka. KLAROWny."
+>
+> Pakiet przeszedl **trzy rundy krytyki adwersaryjnej** (35 agentow: autorzy stylu,
+> autorzy scen i trzech niezaleznych krytykow przez osobne soczewki — technika,
+> narracja, spojnosc — powtorzonych po kazdej naprawie).
+> Blokujacych zarzutow: **10 -> 3 -> 1 -> 0**. Wszystkich: 45 -> 38 -> 16.
 
-### 4.1 Cztery zasady, które trzymają osiem scen w jednym filmie
+### 4.1 Cztery zasady, ktore trzymaja osiem scen w jednym filmie
 
-1. **Najpierw KLUCZ STYLU, potem sceny.** Generujemy JEDEN obraz-klucz i każda scena
-   odwołuje się do niego jako `image_references`. Bez tego osiem scen to osiem różnych
-   filmów. To jest jedyny powód, dla którego całość wygląda spójnie.
-2. **Klucz stylu nigdy nie powstaje z samego tekstu.** Zawsze z obrazem-dawcą.
-   Kanoniczny dawca tego stylu:
-   `https://cdn.higgsfield.ai/youtube_faceless_preset_image/306ee0a1-58e7-43c8-9cee-0493702e5e6b.webp`
-   Bierzemy z niego sposób renderowania i paletę, **nigdy** jego tematu.
-3. **`aspect_ratio` podajemy jawnie przy każdym wywołaniu** — nie dziedziczy się z klucza.
-4. **Zero tekstu w kadrze.** Styl tego zakazuje, a nam to rozwiązuje osobny problem:
-   **film bez słów obsługuje i PL, i EN.** Jeden komplet materiału zamiast dwóch.
+1. **Najpierw KLUCZ STYLU, potem sceny.** Generujemy JEDEN obraz-klucz i kazda scena
+   odwoluje sie do niego jako referencji. Bez tego osiem scen to osiem roznych filmow.
+2. **Bloki kanoniczne wklejone DOSLOWNIE.** Model nie wie nic o pozostalych siedmiu
+   ujeciach, wiec spojnosc musi byc wpisana w kazdy prompt osobno — **tym samym ciagiem
+   znakow**. Parafraza to dryf stylu; krytyk spojnosci zlapal to w rundzie 1, gdy kazdy
+   prompt opisywal ten sam styl wlasnymi slowami.
+3. **`aspect_ratio` podajemy jawnie przy kazdym wywolaniu** — nie dziedziczy sie.
+4. **Zero tekstu w kadrze.** Przy okazji rozwiazuje dwujezycznosc: jeden komplet
+   materialu obsluguje PL i EN.
 
-### 4.2 Jedno świadome odstępstwo od warsztatu
+### 4.2 Trzy pulapki, ktore kosztowalyby kredyty
 
-Warsztat każe budować blok jako **pięć twardych cięć po 2 s**. U nas to byłby błąd.
-Nasze klipy nie lecą na osi czasu — są **przewijane scrollem**: to widz steruje
-czasem. Twarde cięcie pod palcem czyta się jak zacięcie obrazu, nie jak montaż.
+Wyszly dopiero z krytyki adwersaryjnej i warto je znac przy pisaniu kazdego
+kolejnego promptu.
 
-Dlatego nasze klipy są **ciągłe, bez cięć**, z trzema etapowanymi beatami i jednym
-ruchem kamery. Wolne, bo widz może zatrzymać się w dowolnej klatce.
+**(a) Model wideo NIE wykonuje negacji jako wykluczenia.** Lista rzeczownikow po slowie
+„never" dziala jak podpowiedz tematu. Zakaz `never a silhouette` stal osiem razy
+w kluczu stylu i **sam zamawial ciemna sylwetke** — czyli dokladnie te ciemna mase nisko
+w kadrze, ktora czyni tekst strony nieczytelnym. Regula: **opisuj twierdzaco.**
+Nie „nigdy ciemne", tylko „wypelnione ciepla putty".
 
-### 4.3 Parametry
+**(b) Akcent musi miec zablokowana FORME, nie tylko znaczenie.** Runda 1 mowila „granat
+znaczy droge pracy" i nie zabronila formy. Model zrobil z niego lita szyne przez caly
+kadr, pusta tace i zegar — trzy rozne znaczenia i ciemne bryly w jasnym ujeciu. Regula:
+**granat to zawsze cienka linia tej samej grubosci co kontury.**
 
-| Parametr | Wartość | Dlaczego |
+**(c) Blokada skali kloci sie z ruchem kamery.** „Postac zawsze zajmuje jedna trzecia
+wysokosci kadru" jest nie do spelnienia przy odjezdzie. Wiazemy skale z **kadrem
+otwarcia**, nie z calym ujeciem.
+
+### 4.3 Jedno swiadome odstepstwo od warsztatu producenta
+
+Warsztat `faceless-video` kaze budowac blok jako **piec twardych ciec po 2 s**.
+U nas to bylby blad: klipy sa **przewijane scrollem**, wiec czasem steruje widz,
+a twarde ciecie pod palcem czyta sie jak zaciecie obrazu. Nasze klipy sa **ciagle,
+bez ciec**, z trzema etapowanymi beatami i jednym ruchem kamery.
+
+### 4.4 Parametry
+
+| Parametr | Wartosc | Dlaczego |
 |---|---|---|
-| Model klucza stylu | `seedream_v5_pro`, `resolution: "1k"` | zablokowany w warsztacie |
-| Model klipów | `minimax_h3`, `resolution: "2K"` | zablokowany w warsztacie |
-| Długość | 10 s | jedna scena = jeden klip |
-| `aspect_ratio` | `16:9` | jawnie, przy każdym wywołaniu |
-| Dźwięk | nieużywany | wideo leży pod treścią i jest wyciszone |
-| AKCENT | **jeden na cały film** | mieszanie akcentów między scenami zabija spójność |
+| Model klipow | z referencja obrazu, 1080p | np. `Kling Omni 3 Image Reference 1080p` (~7 kr/5 s) — **jest w planie Starter** |
+| Model klucza stylu | obrazowy, 1 kr/obraz | Seedream / GPT Image |
+| Dlugosc | 10 s | jedna scena = jeden klip |
+| `aspect_ratio` | `16:9` | jawnie, przy kazdym wywolaniu |
+| Dzwiek | brak | klip lezy pod trescia i jest wyciszony; sciezka audio to czysty transfer |
+| Akcent | `#42526E` | ciemny koniec stali: kolor JEST, a regula jednego akcentu marki nie jest lamana |
 
-**Akcent — rekomendacja: `petrol blue`.** Styl dopuszcza: burnt orange, coral red,
-mustard gold, petrol blue, deep crimson, forest green. Stalowy `#A8B4C2` **nie wejdzie
-w ogóle** — jest szary, a w tym stylu cała reszta kadru też jest szara, więc akcent
-by zniknął. Petrol blue jest najbliżej chłodnego, nie-hurraoptymistycznego charakteru
-Klarow i nie wygląda jak terakota konkurencji.
+### 4.5 Osiem promptow
 
-### 4.4 FORMUŁA STYLU — wklejać bajt w bajt, wszędzie
-
-> flat editorial documentary collage on a warm cream paper stage with subtle
-> fiber grain: monochrome halftone archival photo cutouts with rough white
-> keylines and a slightly offset petrol blue stroke behind each cutout, one
-> single petrol blue accent color per video — a large flat petrol blue disc behind
-> the main subject and exactly one color-popped hero element among the
-> monochrome — torn paper edges and tape strips, soft paper drop shadows,
-> hand-drawn petrol blue marker circles, arrows and underline strokes (abstract
-> strokes only, never letters), abstract unlabeled data shapes and flat
-> stylized maps, subtle print misregistration on inked elements, snappy
-> staggered spring motion with slight overshoot, non-photorealistic
-> illustrated collage, never live-action.
-
-**PALETTE LOCK** (dopisywana do każdego promptu):
-
-> warm cream paper base, monochrome halftone cutouts, ONE petrol blue accent
-> (disc, strokes, one popped element) — no other colors, no gradients, no
-> full-color scenes.
-
-**NEGATIVE** (dopisywany do każdego promptu):
-
-> readable text, letters, words, numbers, live-action footage, photographic
-> realism, full-color scene, foreign accent colors, 3D render, hard cuts,
-> scene changes, camera orbit.
-
-`hard cuts, scene changes` w negatywie to nasz dopisek — konsekwencja §4.2.
-
-### 4.5 Osiem promptów scen
-
-Każdy do `minimax_h3`, `duration: 10`, `resolution: "2K"`, `aspect_ratio: "16:9"`,
-`medias` = klucz stylu jako `image_references`. Do każdego doklejamy FORMUŁĘ STYLU,
-PALETTE LOCK i NEGATIVE.
+Do kazdego doklejamy NEGATIVE z sekcji 4.6. Bloki kanoniczne (STYLE KEY, opis figur,
+opis podlogi, ustawienie kamery) sa juz **wklejone w kazdy prompt doslownie** — nie
+skracac ich i nie parafrazowac przy edycji.
 
 ---
 
-**S1 · `hook` — firma urosła, proces został ten sam**
+#### S1 - `hook` - Firma urosla. Proces zostal ten sam.
 
-> STAGE: a warm cream paper field with a faint graph-grid impression, locked for the
-> whole shot. CHOREOGRAPHY, one continuous take, three staggered beats: (1) a single
-> monochrome halftone cutout of a small workshop building stamps down slightly
-> left of centre, with a thin hand-drawn petrol blue underline stroke drawing itself
-> beneath it; (2) two identical building cutouts drop in beside it with a bounce,
-> then four more, then a full row, each landing staggered with slight overshoot,
-> the row extending to both edges of the frame; (3) the petrol blue underline
-> beneath them does NOT extend — it stays exactly as long as it was under the first
-> building, and a small petrol blue bracket snaps in at its end to mark where it
-> stops. CAMERA: one very slow push-in, nothing else. SETTLE: the final frame rests
-> on the long row above the short stroke, elements still micro-drifting.
+*Hala rosnie w kadrze, zsyp nie zmienia sie ani o milimetr.*
 
----
+```text
+STAGE: STYLE KEY, identical in every shot: flat 2D cut-paper cartoon on a warm cream #F7F5F1 paper ground, high-key across the whole frame; all masses in warm putty, sand and cream only; every object and every figure described by an even thin near-black #111827 contour of constant weight, never thicker, never tapered; ONE single accent colour, a desaturated dark navy-steel #42526E, and it appears only as a drawn line - a hairline, or a pair of thin parallel rules of exactly the same weight as the near-black contours - marking the path along which the work travels; every mass in the frame is warm putty, sand or cream; there is never more than one navy element in frame; shadows are flat pale warm-grey shapes offset a short constant distance down and to the right, never soft, never dark, never a pool, never a vignette, never a glow; a fine even halftone print grain breathes across the entire frame from first frame to last; no gradients, no rim light, no texture other than that grain. One locked, side-on view of a calm working floor, the same set from first frame to last. The bottom third of the frame and the upper-left quarter stay bare cream paper for the entire take: nothing stands in them, no object enters them and no shadow crosses into them. The ground is marked by a single thin near-black rule running the full width of the frame at exactly one third up from the bottom edge; everything below that rule is bare cream paper to the bottom edge, with no band, no fill, no shadow and no object entering it, in every shot. Right of centre stands a low, simple structure of flat warm-putty and sand blocks: a squat receiving bay with one shallow platform on top, plain and blank. From the edge of that platform a single narrow chute runs gently down and to the left across the middle band of the frame — a channel exactly one crate wide, drawn as two thin parallel rules in the one dark navy-steel accent, the only coloured thing anywhere in the picture, and it marks the path the work travels — ending just above a small open tray of warm putty with a thin near-black contour, held at mid-height on a pale sand trestle, the tray and its trestle kept entirely above the bare bottom third. The people in the frame are simplified adult figures filled flat in warm putty and sand throughout, described only by a thin near-black contour of constant weight, faces left completely blank with no features; a standing adult figure stands one third of the frame height at the opening framing of every shot. Two of them work the set as the take opens: one standing on the upper platform, seen from behind, setting blank crates onto the chute; one standing beside the tray, in profile, lifting crates off and setting them onto a pale sand shelf beside the tray at mid-height, never onto the floor; the bottom third of the frame holds nothing for the entire take and stays bare, uninterrupted cream. Every figure's hands stay occupied with work that visibly belongs to the scene - lifting, steadying, placing, checking, passing - never idle at its sides, and never a token gesture such as turning a blank object over for no reason. Every crate face, panel, tray and wall stays completely blank — no lettering, numerals or signage anywhere; no screens, devices, monitors, boards, charts or interfaces of any kind; stacks stay irregular and physical, never an even rectangular lattice of cells, never a grid of equal squares, never anything reading as rows and columns. The whole frame is high-key throughout and the lower half is the lightest part of it: bare cream, pale sand and warm putty described by thin contour only, no dark mass, no black pool, no vignette, no glow, and shading limited to pale warm-grey offset shapes that stop short of the floor rule and never reach the bottom third.
 
-**S2 · `handover` — praca stoi między ludźmi**
+CHOREOGRAPHY, one continuous take, three staggered beats: The take is exactly ten seconds and never changes pace: beat one runs 0 to 3.5 s, beat two begins at 3 s and overlaps it, beat three begins at 6.5 s, and the settle begins at 8.5 s and holds to the last frame. No squash and stretch, no slapstick, no bounce, no elastic or rubbery deformation anywhere in the take - every object holds a rigid cut-paper shape and moves only with weight, eased acceleration and one small measured overshoot. (1) The floor works at an easy pace — the upper figure places one blank crate onto the navy chute, it slides down with weighted, eased motion and settles into the tray with a small measured overshoot, and the lower figure lifts it off and sets it onto the pale sand shelf beside the tray at mid-height, never onto the floor; one crate, one trip, unhurried, with a wide field of empty cream paper around the action and the bottom third untouched. (2) Without any cut, dissolve or change of set, the same stage grows in place: behind the existing bay two further platforms rise up into frame and slide into position, a broader sand-coloured deck extends toward the right edge, stacks of blank crates build on the new levels in staggered eased steps, and two more simplified figures walk in from the right and take up posts on the new decks, all of them feeding crates toward the top of the chute with their hands busy the whole time; the growth is upward and rightward, confident and unforced, while the chute itself does not change at all — same width, same single file, same two thin navy rules, exactly as it was in the first beat. (3) As the supply outgrows the channel, only two or three crates ever ease into the short line along the top platform, and the line never grows beyond that; they nudge forward and wait behind the mouth of the chute while the chute keeps releasing crates at its original steady rhythm, one at a time, down to the unchanged tray below; every figure on every deck keeps its own hands occupied with its own work — lifting, steadying, passing crates along its own level — no spill, no collapse, no hurried or distressed posture, nobody standing with arms hanging idle, and the small tray at the bottom keeps receiving at precisely the pace it did before anything grew.
 
-> STAGE: a locked cream paper plate with a soft newsprint strip running horizontally
-> through the middle. CHOREOGRAPHY, one continuous take: (1) five monochrome halftone
-> cutout desks stand in a row along the strip, each with a small white-bordered paper
-> card resting on it; (2) an oversized monochrome photographic hand enters from the
-> left and slides the first card to the second desk, then withdraws; a second hand
-> enters and moves it on, then withdraws — the handoffs staggered, never overlapping;
-> (3) between every pair of desks a petrol blue bracket draws itself in the empty gap
-> and stays, so the row ends up with four blue brackets marking the spaces between
-> the desks rather than the desks themselves. CAMERA: one slow lateral drift to the
-> right. SETTLE: the card sits on the last desk, the four brackets hold.
+CAMERA: one slow continuous pull-back, beginning as the structure starts to rise and easing to a stop as the short line forms, letting more bare cream paper enter on every side while the navy chute holds the middle band and the bottom third stays empty; no other camera movement anywhere in the shot. Flat side-on elevation, camera at standing chest height, held level: no vanishing point, no converging lines, no three-quarter view, no floor receding into depth - every object is seen square to the frame.
+
+SETTLE: the pull-back eases to rest and the structure stops growing. The last crate eases down the chute and settles into the tray with a small overshoot, the short line nudges forward one place and then holds; from there only micro-motion remains — the upper figures' shoulders shifting by a hair as they hold their crates, the settled crate rocking once more into stillness, the print grain breathing across the cream — the frame quiets without any element freezing and without starting another trip. The shot closes on the wide frame holding the grown, three-level structure against the unchanged chute — the same single file, the same two thin navy rules, having just released its crate at exactly its first-beat tempo — so that the size of the structure and the width of the channel read side by side in one frame.
+```
 
 ---
 
-**S3 · `time` — zamknięcie miesiąca liczone w tygodniach**
+#### S2 - `handover` - Praca nie stoi u ludzi. Stoi miedzy nimi.
 
-> STAGE: a locked cream paper plate with a thin horizontal baseline ribbon carrying
-> evenly spaced tick marks, no numerals. CHOREOGRAPHY, one continuous take: (1) a
-> petrol blue marker settles onto the ribbon at the left and begins sliding right,
-> tick by tick; (2) above the ribbon a column of monochrome halftone dots stacks
-> upward in staggered groups, each group landing with a small bounce as the marker
-> passes a tick; (3) the marker slides well past a hand-drawn petrol blue bracket
-> that had marked an earlier point on the ribbon, and keeps going toward the right
-> edge while the dot column keeps growing. CAMERA: static, locked off. SETTLE: the
-> marker rests near the right edge, the dot column stands tall, both micro-moving.
+*Granatowa linia urywa sie nad kazda luka miedzy stanowiskami.*
 
----
+```text
+STAGE: STYLE KEY, identical in every shot: flat 2D cut-paper cartoon on a warm cream #F7F5F1 paper ground, high-key across the whole frame; all masses in warm putty, sand and cream only; every object and every figure described by an even thin near-black #111827 contour of constant weight, never thicker, never tapered; ONE single accent colour, a desaturated dark navy-steel #42526E, and it appears only as a drawn line - a hairline, or a pair of thin parallel rules of exactly the same weight as the near-black contours - marking the path along which the work travels; every mass in the frame is warm putty, sand or cream; there is never more than one navy element in frame; shadows are flat pale warm-grey shapes offset a short constant distance down and to the right, never soft, never dark, never a pool, never a vignette, never a glow; a fine even halftone print grain breathes across the entire frame from first frame to last; no gradients, no rim light, no texture other than that grain. One locked interior, unchanged for the entire shot. The ground is marked by a single thin near-black rule running the full width of the frame at exactly one third up from the bottom edge; everything below that rule is bare cream paper to the bottom edge, with no band, no fill, no shadow and no object entering it, in every shot. Above that floor rule the wall is bare cream paper with no rule, no panel, no join and no horizon of any kind. Standing on that floor rule, beginning just left of centre and continuing off the right edge, are three identical low work counters, plain and completely blank, spaced far apart so the empty gaps BETWEEN them read visibly wider than the counters themselves; those two gaps of bare cream paper are the subject of the shot, and the composition keeps them open and unobstructed at all times. Behind each counter stands one figure, and all three are simplified adult figures filled flat in warm putty and sand throughout, described only by a thin near-black contour of constant weight, faces left completely blank with no features; a standing adult figure stands one third of the frame height at the opening framing of every shot. Their posture is calm, upright and grown-up, their hands occupied with their own pale putty trays on the counter top, and their heads stay below the upper third, so the upper-left of the frame is a generous, uninterrupted field of empty cream. The bottom third of the frame and the upper-left quarter stay bare cream paper for the entire take: nothing stands in them, no object enters them and no shadow crosses into them. No dark mass ever sits in the lower half of the frame: counters, trays and figures are pale putty and sand carrying only a thin contour, and there is no dark block, no pooled shadow and no filled shape anywhere below the midline. The set itself — wall, floor rule and the three counters — is never added to, removed, replaced or re-dressed; only trays may move and accumulate, and every tray must be seen sliding into frame on screen, never appearing between frames. No screens, devices, monitors, boards, charts, dials, grids, tables of cells, rows, columns or ruled sheets appear at any point, and every surface, panel, crate face and wall stays completely blank - no lettering, numerals, labels, markings or signage anywhere in frame at any moment.
 
-**S4 · `cost` — ten etat ma kupować analizę**
+CHOREOGRAPHY, one continuous take, three staggered beats: The take is exactly ten seconds and never changes pace: beat one runs 0 to 3.5 s, beat two begins at 3 s and overlaps it, beat three begins at 6.5 s, and the settle begins at 8.5 s and holds to the last frame. No squash and stretch, no slapstick, no bounce, no elastic or rubbery deformation anywhere in the take - every object holds a rigid cut-paper shape and moves only with weight, eased acceleration and one small measured overshoot. Every figure's hands stay occupied with work that visibly belongs to the scene - lifting, steadying, placing, checking, passing - never idle at its sides, and never a token gesture such as turning a blank object over for no reason. (1) the first figure makes one brisk, weighted pivot, lifts a pale putty tray off its counter, sets it down on the floor rule in the gap to its right and turns straight back to its own counter, its hands immediately busy steadying and checking the next pale putty tray waiting there — the handling is over in a moment, the work is plainly done and done well, and the tray simply sits in the empty gap, untouched; (2) staggered along the row, the second figure repeats that same single pivot, then the third after it, each handling short, unhurried and quickly finished, each returning at once to work of its own on its own counter; each figure that has just set a tray down in the gap turns toward its neighbour on the right, and that neighbour reaches out with open hands toward the stack in the gap and holds the reach, the hands stopping short of it and waiting; every figure ends the take reaching, ready or mid-turn, never idle and never empty-handed by choice, so the stall reads as the gap itself and never as the people — while in every gap a second pale putty tray slides into frame on screen and stacks onto the first with a small measured overshoot, then a third, so low leaning stacks build up in the spaces between the counters as the counter tops themselves stay clear; (3) the one accent arrives, and it arrives torn: a single navy-steel hairline draws itself along the floor rule from left to right, running under the first counter, then breaking off the instant it reaches the gap beside it and leaving that whole gap as bare cream paper, then picking up again only under the next counter, breaking again at the next gap, and running on under the third counter — so the route the work travels reaches the frame as a run of separate pieces of one and the same line, with the bare paper of each gap cutting it open, and it is the only accented element in the frame, reading as one interrupted line and never as several unrelated marks. The hairline stays hairline-thin for its whole length, never thickens, never swells, never becomes a block, a slab or a patch, and never marks a stack, a weight, a load or a person — it marks only the route, and the break is the point: the route is severed exactly where the trays are waiting, so the gaps read as the breaks in the path and the counters as the only places where the path exists. Below the floor rule the frame stays bare bright cream for the whole take, with no navy, no shadow, no contour and no object of any kind.
 
-> STAGE: a locked cream paper plate with a large flat petrol blue disc centred
-> behind the subject. CHOREOGRAPHY, one continuous take: (1) a single monochrome
-> halftone cutout of a seated office figure at a desk snaps into place in front of
-> the disc, deadpan and still; (2) white-bordered paper cards drop onto the desk one
-> after another in a staggered rhythm, each landing with a soft bounce, building into
-> a tall leaning stack that rises past the figure's shoulder; (3) one single card near
-> the bottom of the stack flips over and is rendered fully in petrol blue — the one
-> colour-popped element in the frame — and a hand-drawn petrol blue marker circle
-> draws itself around it, isolating it under the weight of all the monochrome cards
-> above. CAMERA: one slow push-in toward the circled blue card. SETTLE: the stack
-> holds, the circle holds.
+CAMERA: one slow lateral dolly to the right at constant speed, beginning framed on the first counter and the empty gap beside it and ending framed on the third counter, travelling exactly two counter-widths; no zoom, no pan, no cut, no wipe, no other move — no second move, no dissolve, no transition and no change of set at any point. Flat side-on elevation, camera at standing chest height, held level: no vanishing point, no converging lines, no three-quarter view, no floor receding into depth - every object is seen square to the frame.
+
+SETTLE: the shot settles on the row of clear, empty counter tops, the loaded gaps between them, and the three figures caught mid-handover — one still turned toward its neighbour, one holding an open-handed reach toward the stack waiting in the gap, one already weighted over the next tray of its own work; the top tray of the nearest stack rocks a hair and stills, the torn navy hairline holds its separate pieces under the counters with the gaps between them left as bare cream, the bottom third of the frame stays bare bright cream, and the fine print grain keeps breathing — the frame settles rather than freezes, its last elements still micro-drifting.
+```
 
 ---
 
-**S5 · `turn` — zamiast opisać proces, budujemy go na nowo**
+#### S3 - `time` - Zamkniecie miesiaca. Liczone w tygodniach.
 
-> STAGE: the same cream paper plate, carrying a scattered leaning pile of monochrome
-> halftone paper cards. CHOREOGRAPHY, one continuous take, this is the pivot of the
-> film and needs the hardest impact beat: (1) an oversized monochrome photographic
-> hand sweeps in from the right and pushes the entire scattered pile off the left
-> edge of the frame in one motion, leaving the cream stage briefly empty; (2) a clean
-> geometric petrol blue frame — a simple open rectangle drawn in a single confident
-> stroke — snaps into place at centre with a slight overshoot and stamps down; (3)
-> the same cutouts return from off-frame one by one, staggered with spring
-> entrances, and land in precise aligned positions INSIDE the blue frame, each
-> arrival a small impact. CAMERA: static, locked off — the stage's calm carries the
-> beat. SETTLE: the arrangement rests square inside the frame, still micro-moving.
+*Wozek jedzie zrywami, biegacz po szynie nie zwalnia ani razu.*
 
----
+```text
+STAGE: STYLE KEY, identical in every shot: flat 2D cut-paper cartoon on a warm cream #F7F5F1 paper ground, high-key across the whole frame; all masses in warm putty, sand and cream only; every object and every figure described by an even thin near-black #111827 contour of constant weight, never thicker, never tapered; ONE single accent colour, a desaturated dark navy-steel #42526E, and it appears only as a drawn line - a hairline, or a pair of thin parallel rules of exactly the same weight as the near-black contours - marking the path along which the work travels; every mass in the frame is warm putty, sand or cream; there is never more than one navy element in frame; shadows are flat pale warm-grey shapes offset a short constant distance down and to the right, never soft, never dark, never a pool, never a vignette, never a glow; a fine even halftone print grain breathes across the entire frame from first frame to last; no gradients, no rim light, no texture other than that grain. One locked flat stage, unchanged for the entire shot. The ground is marked by a single thin near-black rule running the full width of the frame at exactly one third up from the bottom edge; everything below that rule is bare cream paper to the bottom edge, with no band, no fill, no shadow and no object entering it, in every shot. Every shadow in this frame therefore falls on the cream above that floor rule, offset its short constant distance down and to the right of its object but always stopping at the rule and never crossing below it. The whole lower half of the picture stays bright: every mass standing on the floor rule is cream, warm putty or sand carried by thin near-black contours, so no dark, heavy or filled shape ever sits low in the frame. High in the upper half of the frame, well clear of everything standing on the floor rule, one single navy-steel hairline runs straight across the full width of the frame: a plain unnotched overhead rail with no marks, no notches, no ticks and no captions of any kind, drawn only as the route along which the delivery is meant to travel, and it is the only navy element in the picture; the trolley below travels that same route along the floor rule. The navy hairline marks route and nothing else - it is never the clock, never the dial, never the pointer, never a pile, never a person - and the passing of time is told only in warm putty and thin near-black contour. At the far right, standing on the floor rule, one slim warm-putty upright carries a plain round warm-putty plain round dial plate with no markings of any kind high in the upper half, described by the same thin near-black contour: a ring of short even near-black tick marks around its rim, one thin near-black pointer, no numerals, no letters, no words and no labels anywhere on it, and one flat pale warm-grey shadow offset down and to the right behind it. At the far left, standing on the floor rule, sits a low flat warm-putty loading block holding a squared pile of blank sand-coloured folders and shallow trays. Right of centre, also standing on the floor rule, stands a plain low sand plinth with an empty flat top. A trolley - a simple warm-putty slab on two plain circles with a plain putty push handle, all described by the same thin near-black contour - waits beside the loading block. One small flat warm-putty runner, a plain putty circle described by that same thin near-black contour, rests on the navy rail at the far left; the runner is warm putty, never navy, never dark and never filled black, and it is the work travelling the intended route, not a clock hand. Two slim upright warm-putty posts stand on the floor rule between the loading block and the plinth, plain blank uprights with nothing written or marked on them. The only marks anywhere in the picture are the plain tick ring on the putty plain round dial plate with no markings of any kind; no numeral, letter, word, label or caption appears at any moment. There are no screens, devices, monitors, keyboards or interfaces of any kind, and no chart, sheet, form, ruled table, grid or anything built of rows and columns appears at any moment; the only round drawn object in the frame is that plain putty plain round dial plate with no markings of any kind.
 
-**S6 · `craft` — różne działy, ten sam sposób pracy**
+CHOREOGRAPHY, one continuous take, three staggered beats: simplified adult figures filled flat in warm putty and sand throughout, described only by a thin near-black contour of constant weight, faces left completely blank with no features; a standing adult figure stands one third of the frame height at the opening framing of every shot. Two calm adult figures share this frame, both with flat warm-putty bodies and sand-coloured clothing and unhurried grown-up posture, never filled dark: a loader working at the block on the far left, and a porter who walks the trolley rightward by hand. Every figure's hands stay occupied with work that visibly belongs to the scene - lifting, steadying, placing, checking, passing - never idle at its sides, and never a token gesture such as turning a blank object over for no reason. Nothing in this frame moves by itself: the trolley advances only while the porter's hands are on its handle and stands still the instant they leave it, and every halt in its journey is a person carefully finishing a step, never a machine carrying work while people look on. The take is exactly ten seconds and never changes pace: beat one runs 0 to 3.5 s, beat two begins at 3 s and overlaps it, beat three begins at 6.5 s, and the settle begins at 8.5 s and holds to the last frame. No squash and stretch, no slapstick, no bounce, no elastic or rubbery deformation anywhere in the take - every object holds a rigid cut-paper shape and moves only with weight, eased acceleration and one small measured overshoot. (1) the loader stands at the loading block at the far left and lifts the blank folders from the block onto the trolley one at a time in an even weighted rhythm, each folder landing with one small measured overshoot until the stack stands squared and complete; at the exact instant the last folder settles onto the trolley, the porter takes the handle and the trolley begins to crawl rightward along the floor rule, and in that same instant, from directly above the loading block, the small putty runner sets off rightward along the navy rail while the thin near-black pointer on the putty plain round dial plate with no markings of any kind begins its slow even sweep - all three start from one moment, so the loading block is the point at which this work was finished and from which everything afterwards is read by the eye alone; the loader immediately turns back to the block and begins squaring and stacking the next batch of blank folders, hands occupied with that work for the whole of the remaining take, never standing still, never watching the trolley, never with arms hanging at its sides. (2) the putty runner holds its constant effortless speed along the navy rail and pulls visibly ahead, while the porter walks the trolley forward in staggered stop-start pushes - it creeps, halts at the first slim upright putty post where the porter steadies the load and squares the stack with both hands, resumes, halts again at the second post for the same careful check - so the horizontal distance between the trolley below and the runner above widens beat by beat across open bare cream, and the pointer on the putty plain round dial plate with no markings of any kind keeps creeping evenly past its plain ticks through every one of those halts; the navy rail stays plain and unnotched, and no line, no mark and no measurement is ever drawn between the trolley and the runner. (3) the porter brings the trolley to the plinth and lifts the squared stack of blank folders onto its flat top, where it settles with one small measured overshoot - the delivery arrives finished, tidy and whole, nothing spilled and nothing missing - while the small runner above is already riding at the far right edge and the pointer has swept far around the putty plain round dial plate with no markings of any kind; the wide stretch of bare cream paper lying between the arriving trolley and that distant runner is the entire statement of the frame: it reads as the age of the work that has just arrived, counted from the loading block where both set off together, not as the distance the trolley covered, and no line, no mark and no measurement is ever drawn across it.
 
-> STAGE: a locked cream paper plate, empty at the start, with a faint graph-grid
-> impression. CHOREOGRAPHY, one continuous take: (1) an oversized monochrome
-> photographic hand plants a white-bordered photo card onto the stage and presses a
-> tape strip across its corner, then withdraws; the card carries an abstract
-> unlabeled device — a dot-matrix semicircle gauge; (2) five more cards are planted
-> in a loose grid in staggered succession, each taped down, each carrying a different
-> abstract unlabeled device: a stack of halftone dot bars, a flat stylized route map
-> with a pulsing pin, an arrow set, a pair of separating pie slices, a thin drawn
-> line rising across a grid — no axis text, no numerals anywhere; (3) a single
-> hand-drawn petrol blue stroke draws itself through all six cards in one continuous
-> pass, linking them into one line. CAMERA: one slow pull-back that reveals all six
-> cards in frame. SETTLE: the six cards hold, the blue stroke holds.
+CAMERA: Flat side-on elevation, camera at standing chest height, held level: no vanishing point, no converging lines, no three-quarter view, no floor receding into depth - every object is seen square to the frame. One single slow continuous pull-back, beginning framed close on the loading block and easing steadily outward until the whole navy rail, the trolley, the plinth, the putty plain round dial plate with no markings of any kind and the distant runner are held in one wide airy frame; no second move, no cut, no wipe, no angle change, no tilt, no orbit, no rotation and no perspective shift of any kind - the elevation stays perfectly flat and square as the frame widens. The pull-back only adds bare cream paper as it goes, so the frame is at its brightest and emptiest on the very last frame.
+
+SETTLE: the shot settles on the finished stack resting on the plinth right of centre, the porter's hands still on it after placing it, the small putty runner far away at the right edge of the navy rail, the putty plain round dial plate with no markings of any kind high at the far right with its pointer standing well around the ring, and the wide empty stretch of bare cream paper holding the trolley and the runner apart; nothing freezes - the stack breathes with a barely perceptible drift, the runner rocks by a hair on the rail, the pointer creeps on by a hair, the edges of the folders waver as if the ink were still wet, the loader at the block keeps squaring its next batch in a slow unhurried rhythm to the last frame, and the fine halftone grain keeps breathing across the whole frame; the lower half of the picture stays bright cream and free of any dark mass, and no numeral, letter, label, span or measurement appears at any point in the take.
+```
 
 ---
 
-**S7 · `outcome` — co się zmienia**
+#### S4 - `cost` - Ten etat ma kupowac analize.
 
-> STAGE: a locked cream paper plate divided by nothing — one continuous field.
-> CHOREOGRAPHY, one continuous take: (1) on the left half, a dense tangle of
-> overlapping hand-drawn petrol blue strokes draws itself rapidly, crossing and
-> doubling back on itself into a knot; (2) the tangle untwists in one smooth
-> staggered motion, the strokes pulling apart and straightening; (3) they land as
-> three clean parallel petrol blue lines running left to right across the frame,
-> each snapping into alignment with slight overshoot, while a dot-matrix semicircle
-> gauge at the right fills dot by dot in staggered steps. CAMERA: one gentle drift.
-> SETTLE: three straight lines and the filled gauge, micro-moving.
+*Obie rece zajete zbieraniem; miejsce na osad zostaje puste.*
 
----
+```text
+STAGE: STYLE KEY, identical in every shot: flat 2D cut-paper cartoon on a warm cream #F7F5F1 paper ground, high-key across the whole frame; all masses in warm putty, sand and cream only; every object and every figure described by an even thin near-black #111827 contour of constant weight, never thicker, never tapered; ONE single accent colour, a desaturated dark navy-steel #42526E, and it appears only as a drawn line - a hairline, or a pair of thin parallel rules of exactly the same weight as the near-black contours - marking the path along which the work travels; every mass in the frame is warm putty, sand or cream; there is never more than one navy element in frame; shadows are flat pale warm-grey shapes offset a short constant distance down and to the right, never soft, never dark, never a pool, never a vignette, never a glow; a fine even halftone print grain breathes across the entire frame from first frame to last; no gradients, no rim light, no texture other than that grain. One single locked interior, bright and airy, held for the entire ten seconds, and nothing about the room changes at any point in the take: same wall, same bench, same light, one location, one take. The ground is marked by a single thin near-black rule running the full width of the frame at exactly one third up from the bottom edge; everything below that rule is bare cream paper to the bottom edge, with no band, no fill, no shadow and no object entering it, in every shot. A long, low workbench runs horizontally across the middle band of the frame, built from warm putty and sand flat colour fields with crisp geometric edges; its plain straight legs come down exactly to that floor rule and never cross below it. Above the bench a completely blank cream wall fills the upper-left of the frame as an uninterrupted field of empty paper. The bottom third of the frame and the upper-left quarter stay bare cream paper for the entire take: nothing stands in them, no object enters them and no shadow crosses into them. A single dark navy-steel hairline is drawn along the top of the workbench, running its whole length from the left frame edge to the far right end of the bench - a thin drawn line no heavier than the near-black contours, never a filled shape, never a solid band, never a tray, box or container of any kind - and it marks the path along which the work travels; it is the only navy element anywhere in the frame. Nothing in this room moves the work by itself: there is no chute, no conveyor, no slide, no ramp, no hopper, no rollers, no machine and no mechanism of any kind anywhere in frame, and every object that changes position is carried by a hand. The work itself is shallow sand-coloured crates holding small plain squared blocks, all in warm putty and sand flat colour fields with crisp geometric edges; no disc, coin or circular shape appears anywhere in this scene. At the start of the take the bench carries only one open crate at its far left end, under the figure's hands, and the whole long middle of the bench is empty. The far right end of the bench - the last clean stretch the navy hairline runs out across - is bare cream and is the place where the work would finally be weighed up and judged; it stands empty at the first frame, nothing ever arrives on it and no hand ever touches it, and it is still empty at the last frame. One adult figure stands at the left end of the bench in calm, deliberate, unhurried grown-up posture, and figures are built by one rule: simplified adult figures filled flat in warm putty and sand throughout, described only by a thin near-black contour of constant weight, faces left completely blank with no features; a standing adult figure stands one third of the frame height at the opening framing of every shot. Warm-grey is used for shadow only and never fills an object or a figure: each flat pale warm-grey shadow sits a short constant distance down and to the right of its object on the bench top, the bench legs cast no shadow at all, and no shadow ever falls below the floor rule. No screens, devices, monitors, boards, charts, dials, grids, tables of cells or ruled sheets appear at any point, and every surface, panel, crate face and wall stays completely blank - no lettering, numerals, labels, markings or signage anywhere in frame at any moment. No lettering, numerals, stamps, engraving, labels, logos or signage appear anywhere in the frame at any moment - every crate, tray, bench face, bench leg and wall stays completely blank for the whole take.
 
-**S8 · `contact` — pokaż nam proces, który boli**
+CHOREOGRAPHY, one continuous take, three staggered beats: The take is exactly ten seconds and never changes pace: beat one runs 0 to 3.5 s, beat two begins at 3 s and overlaps it, beat three begins at 6.5 s, and the settle begins at 8.5 s and holds to the last frame. Every figure's hands stay occupied with work that visibly belongs to the scene - lifting, steadying, placing, checking, passing - never idle at its sides, and never a token gesture such as turning a blank object over for no reason. Nothing in this take travels on its own: every crate and every block that changes position is lifted, carried and set down by the figure's own two hands, and no object ever slides, rolls, drifts, is fed in or arrives by itself at any moment. (1) From 0 to about 3.5 seconds, the figure works the left end with both hands fully committed: it reaches beyond the left frame edge, lifts in a shallow sand crate with both hands, carries it in and sets it on the bench with a small measured overshoot, takes one plain squared block from it and one from the crate already open beside it, holds the two pieces up together at chest height for a held beat as if checking one against the other, then lowers both and sets them down side by side into a small starting pile - the hands are never once empty, never once idle and never hanging at the figure's sides. (2) From about 3 seconds, overlapping the first beat and never interrupting it, the figure begins repeating that carry and never stops: it turns back to the left frame edge, lifts in the next crate with both hands, walks it a short way rightward along the navy hairline, sets it down with a small weighted overshoot, returns for the next, sets that one down a little further along, and again, and again - every single crate placed by hand, the whole run advancing only as fast as the figure's arms can move it. They accumulate into a long, low, deliberately irregular run of putty and sand boxes stacked at uneven heights and offsets - never rows and columns, never a ruled arrangement of equal small rectangles, never anything that reads as a table or a grid of cells - and this run of stacks gradually claims the middle of the bench. Between carries the figure keeps stopping to hold two blocks up against one another at chest height and then set them down, so gathering and matching fill every second its hands have. Every stack stays below the figure's shoulder line and entirely inside the middle band of the frame, so the picture stays open and bright and nothing ever piles into the bottom third. The run of boxes never reaches the far right end of the bench: it stops well short of it, and the clean bare cream stretch beyond stays untouched. (3) From about 6.5 seconds, the figure sets one last matched pair down and straightens up slowly for a single held beat, turning its shoulders a little toward the empty far right end of the bench and the last clean stretch of navy hairline running out across it - the only moment in the whole shot when it is not carrying something. It never reaches that end, never extends a hand toward it and never takes a step that way: before the held beat is finished both hands are already back at the left frame edge, closing on the next crate and lifting it in, and the shoulders turn back to the left with the weight. The far right end of the bench stands exactly as it began - bare cream paper, the navy hairline running out across it, nothing on it, nothing on its way to it, no hand anywhere near it. No squash and stretch, no slapstick, no bounce, no elastic or rubbery deformation anywhere in the take - every object holds a rigid cut-paper shape and moves only with weight, eased acceleration and one small measured overshoot. No cut, no wipe, no transition, no change of set anywhere in the take.
 
-> STAGE: a cream paper plate, nearly empty, with a large flat petrol blue disc low
-> behind centre. CHOREOGRAPHY, one continuous take: (1) the stage is bare except for
-> the disc; (2) an oversized monochrome photographic hand enters from below and
-> plants one single white-bordered paper card at centre in front of the disc, presses
-> a tape strip across its corner and withdraws; the card is blank, textured paper,
-> no writing; (3) a hand-drawn petrol blue marker circle draws itself around the card
-> in one confident pass. CAMERA: one very slow push-in. SETTLE: the card and the
-> circle hold at centre, micro-moving.
+CAMERA: Flat side-on elevation, camera at standing chest height, held level: no vanishing point, no converging lines, no three-quarter view, no floor receding into depth - every object is seen square to the frame. One slow, even lateral dolly to the right, constant speed from first frame to last, no zoom and no other move - beginning on the figure's working hands and the open crate at the left end of the bench, travelling steadily past the growing run of low boxes, and coming to rest with the figure's hands still just inside the left edge of the frame and the empty far right end of the bench, with the navy hairline running out across it, filling the rest of the picture.
+
+SETTLE: The shot comes to rest on the empty far right end of the workbench: a wide clean field of bright cream with the single navy hairline running across it, nothing standing on it and nothing on its way to it, while at the far left edge of the frame the figure's hands are still lifting in the next crate. Nothing freezes: the last crate set down at the near edge is still micro-settling by a hair, the figure's hands keep their slow working movement at the frame edge, the even halftone grain keeps breathing across the whole frame, and the navy hairline alone holds perfectly still across perfectly empty cream - the frame breathes and quiets rather than stopping.
+```
 
 ---
 
-### 4.6 Kolejność produkcji
+#### S5 - `turn` - Zamiast opisac proces, budujemy go na nowo.
 
-1. `media_import_url` na obrazie-dawcy → `media_id`.
-2. `resolve_explainer_preset` na `56fc6472-33b7-45dc-83ff-80c71d40aec6` → drugi `media_id`.
-3. **Klucz stylu**: `generate_image` / `seedream_v5_pro`, `resolution: "1k"`,
-   oba `media_id` jako `image_references`, prompt = FORMUŁA STYLU + PALETTE LOCK.
-   **Obejrzeć przed pójściem dalej.** Zły klucz = osiem złych scen.
-4. **Osiem klipów**: `generate_video_batch` / `minimax_h3`, jedna pozycja na scenę,
-   klucz stylu w `medias`. Warsztat ostrzega, że **pierwszy klip dryfuje najczęściej**,
-   bo ma najmniej kontekstu — S1 porównać z kluczem, zanim przyjmiemy resztę.
-5. Pobrać, przyciąć do pętli, zakodować WebM + MP4, wrzucić do `site/public/video/`.
+*OS FILMU. Linia rysuje balagan, potem hala przebudowuje sie pod nia.*
 
-### 4.7 Ile to kosztuje
+```text
+STAGE: STYLE KEY, identical in every shot: flat 2D cut-paper cartoon on a warm cream #F7F5F1 paper ground, high-key across the whole frame; all masses in warm putty, sand and cream only; every object and every figure described by an even thin near-black #111827 contour of constant weight, never thicker, never tapered; ONE single accent colour, a desaturated dark navy-steel #42526E, and it appears only as a drawn line - a hairline, or a pair of thin parallel rules of exactly the same weight as the near-black contours - marking the path along which the work travels; every mass in the frame is warm putty, sand or cream; there is never more than one navy element in frame; shadows are flat pale warm-grey shapes offset a short constant distance down and to the right, never soft, never dark, never a pool, never a vignette, never a glow; a fine even halftone print grain breathes across the entire frame from first frame to last; no gradients, no rim light, no texture other than that grain. Warm-grey is used for shadow only and never fills an object or a figure. Exactly one form of navy appears in this whole take, a pair of thin parallel rules of the same weight as the contour lines, and it is the same form from the first frame to the last - the navy never becomes a hairline alone, never a band, never a fill, and at no moment are two navy elements in frame at once. One locked interior of a bright, open workroom, seen straight on and held unchanged for the entire take. A tall, unbroken wall of warm cream paper fills the upper-left of the frame and stays completely empty, every surface blank. The ground is marked by a single thin near-black rule running the full width of the frame at exactly one third up from the bottom edge; everything below that rule is bare cream paper to the bottom edge, with no band, no fill, no shadow and no object entering it, in every shot. The flat pale warm-grey offset contact shapes sit beside the base of each object and always stay above that floor rule, never touching or crossing it. The bottom third of the frame and the upper-left quarter stay bare cream paper for the entire take: nothing stands in them, no object enters them and no shadow crosses into them. One plain open doorway is cut into the wall at the far right, its opening a flat pale sand field only a shade deeper than the wall, never grey, never dark, never black. Across the middle-right band stand seven low plinths of warm sand and putty, each a different height and each separated from its neighbour by a different width of gap, so together they read as a broken, uneven relay instead of one even run; their tops sit at mid-frame height, well clear of the bare cream below. Six plinths carry a plain blank crate; the seventh stands empty beside the doorway. Three figures stand in the gaps between the plinths, each with both hands resting on the crate in front of it, holding it steady and waiting for the next pair of hands: simplified adult figures filled flat in warm putty and sand throughout, described only by a thin near-black contour of constant weight, faces left completely blank with no features; a standing adult figure stands one third of the frame height at the opening framing of every shot. Every figure's hands stay occupied with work that visibly belongs to the scene - lifting, steadying, placing, checking, passing - never idle at its sides, and never a token gesture such as turning a blank object over for no reason. No screens, devices, monitors, boards, charts, dials, grids, tables of cells or ruled sheets appear at any point, and every surface, panel, crate face and wall stays completely blank - no lettering, numerals, labels, markings or signage anywhere in frame at any moment. No lettering, numerals, stencils, arrows, labels, symbols or signage appear on any crate, plinth, wall, line, doorway or surface at any moment of the take - every surface stays completely blank. Nothing enters or leaves the frame and no part of the architecture ever changes: wall, floor rule and doorway are identical at the last frame and the first - only the arrangement of the plinths, crates and figures is allowed to move.
 
-**Nie wiem i nie mogę się dowiedzieć na obecnym planie.** Konto ma 0 kredytów i plan
-`free`, a na nim katalog modeli wideo **w ogóle się nie wyświetla** — zapytanie o modele
-zwraca jedną pozycję do cięcia klipów z YouTube, żadnego `minimax_h3`. Czyli nie da się
-odczytać ani ceny, ani parametrów, dopóki nie ma płatnego planu.
+CHOREOGRAPHY, one continuous take, three staggered beats: (1) A pair of thin parallel navy-steel rules draws itself into the air above the plinths and traces the route that already exists, crate by crate, from the far left toward the doorway - zig-zagging back on itself, doubling around two plinths, pausing at every pair of waiting hands, climbing and dropping with each mismatched plinth height. The figures keep their hands on their crates; one crate is nudged forward a few centimetres on its plinth and stops short of the next pair of hands. The doubled line completes its crooked circuit and hangs there, a faithful description of the tangle that is already there, changing nothing. (2) The crooked line goes slack, sinks and fades out in place as the ink soaks into the paper, until no navy is left anywhere in the frame, while everything else stays untouched. Only then do the three figures build the new route themselves, with their own hands: working together from the left frame edge toward the doorway in one confident unbroken pass, they carry, unroll and press down a fresh pair of thin parallel navy-steel rules of exactly the same weight as the contour lines, dead straight and level at a single constant height - one figure paying the line out, one kneeling to seat and press it down, one sighting along it and correcting it by hand - so the new route is decided and made by them before anything on the floor moves. The pair of rules never thickens, never fills in, never becomes a band or a bar, never drops below mid-frame and never reads as a dark mass across the picture; it stays two hairlines, the same weight as every contour around it. (3) The same three figures bring the floor up to the line they laid: each plinth is lifted or eased down by the nearest pair of hands and slid in until its top seats flush beneath the rules, one after another in a staggered ripple with one small measured overshoot each, the crates riding them and levelling out; the floor is made to conform to the route the figures chose, instead of the route emerging out of the furniture. As the last plinth is seated, the figure beside it sets a crate onto the line at the far end and sends it off; the crate runs the whole length of the straight line in one uninterrupted pass, and every figure it reaches lays a hand on it as it comes, steadies it and sends it on without stopping it, until it eases through the doorway; the remaining crates are lifted onto the line behind it by the same hands and follow at even spacing. Every figure's hands stay on the work from the first frame to the last - lifting, seating, laying the line, setting crates on, steadying, passing - and at no point is any figure shown standing empty-handed, arms at its sides, or watching the line carry work past it. No squash and stretch, no slapstick, no bounce, no elastic or rubbery deformation anywhere in the take - every object holds a rigid cut-paper shape and moves only with weight, eased acceleration and one small measured overshoot. The take is exactly ten seconds and never changes pace: beat one runs 0 to 3.5 s, beat two begins at 3 s and overlaps it, beat three begins at 6.5 s, and the settle begins at 8.5 s and holds to the last frame.
 
-Co z tego wynika praktycznie: **bez PLUS-a nie zobaczymy nawet cennika**, więc szacunek
-„≈200 kredytów" z poprzedniej sesji trzeba traktować jako niepotwierdzony. Osiem klipów
-10 s w 2K plus klucz stylu plus poprawki — realnie trzeba założyć jeden miesiąc PLUS
-i przyjąć, że część klipów pójdzie do powtórki (styl potrafi zejść, warsztat wprost
-każe planować retry).
+CAMERA: Flat side-on elevation, camera at standing chest height, held level: no vanishing point, no converging lines, no three-quarter view, no floor receding into depth - every object is seen square to the frame. One slow continuous dolly-back, level and straight, begun on the first frame and never stopping, reversing or changing speed, widening the frame just enough to hold the finished run end to end while the empty cream upper-left grows; this single steady dolly is the only camera movement in the take. Apart from it: no cut, no wipe, no dissolve, no transition, no change of set and no change of framing at any point; every plinth must be seen moving continuously on screen from its old position to its new one, with no element appearing or relocating between frames.
 
-**Zakup robi founder, nie agent** — karta, auto-odnowienie 49 $.
+SETTLE: The move ends and the frame holds on the completed level run: the pair of thin navy rules steady inside the middle band, the three figures still at the line with both hands on the work, the cream below the floor rule still bare and open. Nothing freezes - the last crates keep drifting slowly along the line toward the doorway at an even, weighted pace, the rearmost one still being eased forward by a pair of hands as the shot closes; the shoulders of one figure rise and fall once with breath while its hands keep working, a crate lid micro-settles by a hair, and the fine print grain shimmers faintly across the cream.
+```
 
 ---
+
+#### S6 - `craft` - Rozne dzialy. Ten sam sposob pracy.
+
+*Szesc stanowisk, ten sam gest, linia biegnie nieprzerwanie pod wszystkimi.*
+
+```text
+STAGE: STYLE KEY, identical in every shot: flat 2D cut-paper cartoon on a warm cream #F7F5F1 paper ground, high-key across the whole frame; all masses in warm putty, sand and cream only; every object and every figure described by an even thin near-black #111827 contour of constant weight, never thicker, never tapered; ONE single accent colour, a desaturated dark navy-steel #42526E, and it appears only as a drawn line - a hairline, or a pair of thin parallel rules of exactly the same weight as the near-black contours - marking the path along which the work travels; every mass in the frame is warm putty, sand or cream; there is never more than one navy element in frame; shadows are flat pale warm-grey shapes offset a short constant distance down and to the right, never soft, never dark, never a pool, never a vignette, never a glow; a fine even halftone print grain breathes across the entire frame from first frame to last; no gradients, no rim light, no texture other than that grain. The ground is marked by a single thin near-black rule running the full width of the frame at exactly one third up from the bottom edge; everything below that rule is bare cream paper to the bottom edge, with no band, no fill, no shadow and no object entering it, in every shot. The bottom third of the frame and the upper-left quarter stay bare cream paper for the entire take: nothing stands in them, no object enters them and no shadow crosses into them. One locked interior, unchanged for the entire take. Six shallow working bays stand along one line at mid-height, each one its own low work surface of pale putty with a flat sand-coloured face; the line of bays is longer than the frame and continues past both the left and the right edge, so the camera never sees all six at once and never needs to reframe. Every bay is served by exactly the same short flat belt, the same simple open putty frame and the same small upright lever standing at the right edge of the bay, identical in size, shape and mechanism from bay to bay. The six bays share one identical mechanism but are never laid out as an even array - along the line three sit close together, then a wide stretch of bare cream, then three more; their front lips sit at three clearly different heights and the bays are three clearly different widths, and no two neighbouring bays share a width or a height, so the bench never reads as a row of equal rectangles, never as a grid of equal squares, never as a table of cells and never as ruled rows and columns. The six bays keep exactly the same belt, the same lever, the same open frame and the same timing, but each bay sits in a visibly different place - its own low plinth of a slightly different warm sand or putty tone standing on that floor rule, its own distance forward or back along that same flat line shown only by flat overlap and never by scale and never by converging lines, its own height along the uneven, stepped bench line, and its own single distinguishing prop standing beside it - and each figure has a differently shaped apron and stance, so the six read as six different rooms sharing one mechanism and the row never reads as six equal rectangular cells side by side. Only the object being handled inside each bay differs: bay one holds a single closed blank folder standing on its edge; bay two has two identical small crates arriving down two short chutes toward one landing pad; bay three has one shallow tray waiting to be lifted from a round-mouthed bin into a square-mouthed bin; bay four holds a small pile of identical loose blocks beside an empty stacking pad; bay five holds a short row of already-stacked blocks with one thin near-black guide line continuing forward past the last one; bay six holds a low rack of blank upright tabs, one tab pivoted slightly proud of the rest. Every surface, folder, crate, tray, block and tab is completely blank - no lettering, no numerals, no ruled grids, no gridded panels, no ruled rectangles, no repeated equal squares, no screens, devices, dials or interfaces of any kind, and nothing that resembles a chart, a table or a spreadsheet. Six figures stand one to a bay in the same calm upright posture, both hands busy on their own work - the near hand closed on the lever, the other steadying the object it is working on - nobody standing idle, nobody watching work move past them, nobody speaking or gesturing to anyone: simplified adult figures filled flat in warm putty and sand throughout, described only by a thin near-black contour of constant weight, faces left completely blank with no features; a standing adult figure stands one third of the frame height at the opening framing of every shot. Every figure's hands stay occupied with work that visibly belongs to the scene - lifting, steadying, placing, checking, passing - never idle at its sides, and never a token gesture such as turning a blank object over for no reason. The single navy-steel accent is one unbroken hairline rule drawn along the front lip of every bay and carried straight on across the bare cream between them, stepping up and down with the uneven bench line but never breaking: it is the path the work travels along this bench, and it is the only navy in the picture. All masses in the lower half of the frame stay pale - sand, putty and warm off-white, described only by thin near-black contour and low-contrast warm-grey offset shapes, with no dark blocks, no pooled shadow and no vignette anywhere in the frame.
+
+CHOREOGRAPHY, one continuous take, three staggered beats: (1) The shot opens on the leftmost bay, and one lever turns a quarter-turn with weight under a working hand; its belt carries the blank folder forward, the folder passes under the open putty frame and drops upright into its slot with a small measured overshoot before settling, the figure's free hand steadying it as it seats - the whole action reading as one simple, unhurried mechanical gesture. (2) As the camera travels on along the line, each new bay is already mid-gesture, offset from its neighbour by a fraction of a beat so the identical motion runs along the bench as a slow wave: the same quarter-turn of the same lever under the same working hand, the same short slide, the same pass under the same open frame, the same small measured overshoot - but the two crates nest into one crate, the tray lifts from the round-mouthed bin and seats into the square-mouthed bin, the loose blocks ride their belt and settle into a tidy column under the hand that turns their lever, the stacked row extends one block further along its thin near-black guide line, and the proud tab pivots flat into the rack. Different places, different props, different aprons, different objects - identical movement, identical rhythm. (3) The camera arrives on the last bay and the same quarter-turn happens there a sixth time, in a sixth different place, with the same weight and the same timing as the first; the navy hairline, which has run unbroken beneath every bay the camera has passed, arrives with it and continues out of frame, tying six different places into one way of working. No squash and stretch, no slapstick, no bounce, no elastic or rubbery deformation anywhere in the take - every object holds a rigid cut-paper shape and moves only with weight, eased acceleration and one small measured overshoot. The take is exactly ten seconds and never changes pace: beat one runs 0 to 3.5 s, beat two begins at 3 s and overlaps it, beat three begins at 6.5 s, and the settle begins at 8.5 s and holds to the last frame.
+
+CAMERA: one slow, even lateral dolly to the right at constant speed, beginning on the leftmost bay and arriving on the rightmost bay as the settle begins, where it eases imperceptibly to rest; no zoom, no pan, no cut, no snap, no second move. Flat side-on elevation, camera at standing chest height, held level: no vanishing point, no converging lines, no three-quarter view, no floor receding into depth - every object is seen square to the frame.
+
+SETTLE: The wave reaches the last bay and slows to rest there: the final lever completes its quarter-turn and holds, and from then on only micro-motion remains - the last block drifting a hair into place, the nested crate rocking a fraction and stilling, the pivoted tab breathing a degree and the print grain shimmering; nothing freezes, but no new cycle begins. The hands stay on their levers, unhurried and still at work, the bottom third of the frame is still bare cream paper with nothing standing in it, and the navy hairline holds steady and unbroken along the bench lip from one edge of the frame to the other.
+```
+
+---
+
+#### S7 - `outcome` - Co zyskujesz.
+
+*Ta sama hala co w scenie 2, ale luki zniknely. Trzy razy identycznie.*
+
+```text
+STAGE: STYLE KEY, identical in every shot: flat 2D cut-paper cartoon on a warm cream #F7F5F1 paper ground, high-key across the whole frame; all masses in warm putty, sand and cream only; every object and every figure described by an even thin near-black #111827 contour of constant weight, never thicker, never tapered; ONE single accent colour, a desaturated dark navy-steel #42526E, and it appears only as a drawn line - a hairline, or a pair of thin parallel rules of exactly the same weight as the near-black contours - marking the path along which the work travels; every mass in the frame is warm putty, sand or cream; there is never more than one navy element in frame; shadows are flat pale warm-grey shapes offset a short constant distance down and to the right, never soft, never dark, never a pool, never a vignette, never a glow; a fine even halftone print grain breathes across the entire frame from first frame to last; no gradients, no rim light, no texture other than that grain. One locked interior, unchanged for the entire shot: the same room, the same row and the same three work counters seen earlier in the handover scene, returned to and seen again. The ground is marked by a single thin near-black rule running the full width of the frame at exactly one third up from the bottom edge; everything below that rule is bare cream paper to the bottom edge, with no band, no fill, no shadow and no object entering it, in every shot. Above the floor rule the wall is bare cream paper with no rule, no panel, no join and no horizon of any kind. Standing on that floor rule, beginning just left of centre and continuing off the right edge, are three identical low work counters, plain and completely blank - the same counters as before, but now pushed together so that they touch edge to edge and form ONE single unbroken run of work surface: the wide empty floor gaps that once stood between them are gone, and no gap, no space, no interval and no bare stretch of floor remains anywhere along the row. At the right end of that run, level with the counter tops and butted straight against the last counter with no gap, a plain low landing shelf of warm sand carries a short line of four identical pale putty trays already standing on it in the very first frame - identical in size, identical in spacing, squared up and perfectly aligned - so the repeatable finish is visible before anything has moved. One single navy-steel hairline runs along the floor rule beneath the whole run, entering at the left edge and continuing to the landing shelf at the right: one continuous line of constant hairline thickness, never interrupted, never gapped, never broken into separate pieces, never dashed - it is the only accented element in the frame and it marks only the route the work travels, and it never thickens, never swells, never becomes a block, a slab, a patch or a band, and it never marks a tray, a load, a pile or a person. Behind the joined counters stand three figures, one at each: simplified adult figures filled flat in warm putty and sand throughout, described only by a thin near-black contour of constant weight, faces left completely blank with no features; a standing adult figure stands one third of the frame height at the opening framing of every shot. Their posture is calm, upright and grown-up, their heads stay below the upper third of the frame, and they stand close enough together that one can pass a tray straight into the next pair of hands without stepping, walking or leaving its own place. Every figure's hands stay occupied with work that visibly belongs to the scene - lifting, steadying, placing, checking, passing - never idle at its sides, and never a token gesture such as turning a blank object over for no reason. The bottom third of the frame and the upper-left quarter stay bare cream paper for the entire take: nothing stands in them, no object enters them and no shadow crosses into them. No dark mass ever sits in the lower half of the frame: counters, shelf, trays and figures are pale putty and sand carrying only a thin contour, and there is no dark block, no pooled shadow and no filled shape anywhere below the midline. No tray ever rests on the floor, nothing is ever set down to wait, and no stack, pile or queue builds up anywhere in the frame at any moment. The set - wall, floor rule, the three joined counters, the landing shelf and the figures - is never added to, removed, replaced or re-dressed and no new scenery enters; only the trays and the working hands move, and every tray must be seen sliding into frame and travelling along the row on screen, never appearing between frames. No screens, devices, monitors, boards, charts, dials, grids, tables of cells or ruled sheets appear at any point, and every surface, panel, tray face, shelf and wall stays completely blank - no lettering, numerals, labels, markings or signage anywhere in frame at any moment.
+
+CHOREOGRAPHY, one continuous take, three staggered beats: The take is exactly ten seconds and never changes pace: beat one runs 0 to 3.5 s, beat two begins at 3 s and overlaps it, beat three begins at 6.5 s, and the settle begins at 8.5 s and holds to the last frame. No squash and stretch, no slapstick, no bounce, no elastic or rubbery deformation anywhere in the take - every object holds a rigid cut-paper shape and moves only with weight, eased acceleration and one small measured overshoot. (1) a pale putty tray slides into frame from the left onto the joined run and is worked straight along it: the first figure steadies it with one hand and presses a plain lid down onto it with the other, then passes it without pause into the second figure's waiting hands across the place where the two counters touch, and the tray never once stops, never rests on the floor and is never set down to wait; the second figure checks it with both hands and passes it straight on to the third, which slides it onto the landing shelf at the right, where it closes into the standing line with one small measured overshoot, identically spaced and squared to the four trays already there, so this finish is indistinguishable from the four that preceded it and the repeatable result reads in the opening seconds; every pair of hands stays busy for the whole beat and no figure is ever empty-handed at any moment; (2) staggered behind it, a second tray enters from the left and runs the identical route at the identical pace - the same steadying, the same lid, the same pass, the same check, the same pass, the same slide onto the shelf - and while it travels, the hands it has already left are immediately busy again with work of their own on their clear counter top, so at every instant of the take at least one tray is in motion along the run and no hand is ever waiting for it; the single navy hairline holds unbroken beneath the whole row, one continuous line from the left edge to the shelf, and it neither draws itself nor changes in any way; (3) a third tray completes the same run and closes onto the shelf exactly like the two before it - the same overshoot, the same spacing, the same alignment - the three arrivals falling into one even repeating rhythm with no hesitation and no handover pause anywhere along the row, while the three figures carry on working with their hands full and none of them ever stops, steps back, watches a tray travel or stands with nothing to do.
+
+CAMERA: one slow lateral dolly to the right at constant speed, beginning framed on the first counter and the seam where it meets the second and ending framed on the third counter and the landing shelf with its aligned line of trays, travelling exactly two counter-widths; no zoom, no pan, no cut, no wipe, no other move - no second move, no dissolve, no transition and no change of set at any point. Flat side-on elevation, camera at standing chest height, held level: no vanishing point, no converging lines, no three-quarter view, no floor receding into depth - every object is seen square to the frame.
+
+SETTLE: the shot settles on the unbroken run of joined counters with their tops clear, the three figures still working with their hands full, the bare floor where the gaps used to be, and the aligned line of identical trays on the landing shelf at the right; the last tray to arrive micro-settles by a hair and stills, one pair of hands completes one more small unhurried movement on a tray still travelling along the row, the single navy hairline holds its unbroken length beneath the whole run, the bottom third of the frame stays bare bright cream, and the fine print grain keeps breathing - the frame settles rather than freezes, its last elements still micro-drifting.
+```
+
+---
+
+#### S8 - `contact` - Pokaz nam proces, ktory boli.
+
+*Z otwartej skrzynki goscia wyrasta ta sama linia.*
+
+```text
+STAGE: STYLE KEY, identical in every shot: flat 2D cut-paper cartoon on a warm cream #F7F5F1 paper ground, high-key across the whole frame; all masses in warm putty, sand and cream only; every object and every figure described by an even thin near-black #111827 contour of constant weight, never thicker, never tapered; ONE single accent colour, a desaturated dark navy-steel #42526E, and it appears only as a drawn line - a hairline, or a pair of thin parallel rules of exactly the same weight as the near-black contours - marking the path along which the work travels; every mass in the frame is warm putty, sand or cream; there is never more than one navy element in frame; shadows are flat pale warm-grey shapes offset a short constant distance down and to the right, never soft, never dark, never a pool, never a vignette, never a glow; a fine even halftone print grain breathes across the entire frame from first frame to last; no gradients, no rim light, no texture other than that grain. One single continuous wide shot on that cream paper ground, high-key across the entire frame. The ground is marked by a single thin near-black rule running the full width of the frame at exactly one third up from the bottom edge; everything below that rule is bare cream paper to the bottom edge, with no band, no fill, no shadow and no object entering it, in every shot. The bottom third of the frame and the upper-left quarter stay bare cream paper for the entire take: nothing stands in them, no object enters them and no shadow crosses into them. The built set stands on that floor rule in the right half of the frame and never changes, never moves and is never replaced: an open doorway made of three flat warm-putty blocks - two uprights and a lintel - outlined with a thin near-black contour, standing a head taller than a standing figure, its opening left as plain bare cream paper so that no dark hole ever appears inside it; in front of the doorway and slightly to its right, one low plain table, a flat warm-sand slab on four thin near-black legs, its top empty, its feet resting on the floor rule so that no part of it reaches down into the bottom third. The only shadow in the shot is one flat pale warm-grey offset shape at the foot of the table, sitting tight above the floor rule and never crossing below it - never a pool, never a vignette, never a glow. Exactly one navy-steel element ever appears in this shot, and only in beat three: the short straight thin navy rule that rises out of the crate, no thicker than the near-black contours around it. Nothing else is ever navy - not the crate, not the lid, not the doorway, not the table, not either figure - and there is no large dark mass, no heavy dark base and no shading anywhere below the floor rule. Every surface, panel and side stays completely blank - no lettering, numerals, labels, markings or signage anywhere in frame at any moment.
+
+CHOREOGRAPHY, one continuous take, three staggered beats: (1) One simplified adult figure stands calmly at the far side of the table: simplified adult figures filled flat in warm putty and sand throughout, described only by a thin near-black contour of constant weight, faces left completely blank with no features; a standing adult figure stands one third of the frame height at the opening framing of every shot. Over a slow eased move this host opens one arm outward toward the doorway in a single unhurried welcoming gesture and holds it open there, the other hand steadying the near edge of the tabletop throughout; the tabletop stays empty and nothing else in frame moves but the fine print grain. (2) A second figure walks in through the open doorway carrying exactly one small plain crate in both hands - a flat warm-putty box with a thin near-black contour, about the height of a hand, a single modest object with nothing else in their arms - crosses a short unhurried distance to the table and sets the crate down at the centre of the empty slab, both hands staying on it while it settles with one small measured overshoot before it comes to rest; the crate is carried and placed well above the bottom third and never enters it, and the doorway, the table and the floor rule are untouched and unchanged. (3) Both figures step half a pace inward so they stand facing each other across that one crate, the guest lifts the flat lid aside with both hands and lays it down flat on the tabletop beside the crate, keeping one hand on it to hold it steady, and out of the opened crate one continuous dark navy-steel rule rises and draws itself, in one confident unbroken left-to-right pass, into a short straight line exactly as wide as the crate, hovering level a hand's height above the tabletop and centred between the two figures - the same straight navy rule the earlier scenes have been building; one straight thin rule no thicker than the near-black contours, no tail, no knot, no arrowhead, no second mark anywhere, and no loop, ring, circle, oval or closed shape of any kind appears at any point. Both figures tilt slightly toward that rule in the same eased beat, the host's open hand still held toward it and the guest's hand still steadying the lid. Every figure's hands stay occupied with work that visibly belongs to the scene - lifting, steadying, placing, checking, passing - never idle at its sides, and never a token gesture such as turning a blank object over for no reason. The take is exactly ten seconds and never changes pace: beat one runs 0 to 3.5 s, beat two begins at 3 s and overlaps it, beat three begins at 6.5 s, and the settle begins at 8.5 s and holds to the last frame. No squash and stretch, no slapstick, no bounce, no elastic or rubbery deformation anywhere in the take - every object holds a rigid cut-paper shape and moves only with weight, eased acceleration and one small measured overshoot. The figures never speak: no mouths, no talking gestures, no facial features of any kind on either of them, and they are never rendered as portraits or likenesses. No screens, devices, panels, interfaces, boards, grids, tables of cells or ruled sheets appear at any point; the props stay physical and abstract - a doorway, a table, a crate, a lid, one straight drawn rule.
+
+CAMERA: one single very slow push-in toward the table, easing out as it arrives - no other camera move, no cut, no wipe, no transition, no change of framing. The push-in is gentle and stops wide - at the closing framing the crate still reads as one small object about the height of a hand, both figures are still seen whole and uncropped at about one third of the frame height each, and the whole bottom third of the picture remains bare bright cream with no dark mass, no shadow and no navy in it. Flat side-on elevation, camera at standing chest height, held level: no vanishing point, no converging lines, no three-quarter view, no floor receding into depth - every object is seen square to the frame.
+
+SETTLE: the shot closes with the two blank-faced figures holding on either side of the one small putty crate, the short straight navy rule resting level above it and the doorway still standing open and bright behind them; nothing freezes - both figures drift a hair as if breathing, the navy rule breathes minutely along its own length without ever bending, curving, thickening or closing, the lid rocks once more into stillness under the guest's hand, and the fine print grain keeps shimmering across the wide empty cream of the bottom third.
+```
+
+---
+
+### 4.6 NEGATIVE — doklejany do kazdego promptu
+
+```text
+readable text, letters, words, numbers, subtitles, captions, signage, labels, logos,
+watermark, spreadsheet grids, cell tables, rows and columns, screens, monitors, laptops,
+phones, tablets, dashboards, user interfaces, app windows, labelled charts, dark
+background, saturated background, night scene, low-key lighting, vignette, heavy black
+shadows, gradients, glow, neon, second accent colour, rainbow palette, childish cartoon,
+chibi, kawaii, big round eyes, mascot, toy look, recognizable face, portrait likeness,
+detailed facial features, photorealism, live-action footage, 3D render, claymation,
+hard cuts, scene changes, transitions, camera orbit, shaky camera, zoom punches, flicker,
+strobing, morphing shapes, warping geometry, melting outlines, extra limbs, duplicated figures
+```
+
+### 4.7 Kolejnosc produkcji
+
+1. **Kup Starter na higgsfield.ai** (nie przez MCP — tam Startera nie ma).
+2. `higgsfield auth login`, zatwierdzenie w przegladarce.
+3. `higgsfield model list --video` — potwierdzenie, co plan realnie udostepnia.
+4. `higgsfield generate cost <model>` — **rachunek PRZED wydaniem kredytow**.
+5. **Klucz stylu** (kilka prob po ~1 kr). **Founder akceptuje.** Zly klucz = osiem zlych klipow.
+6. **S1 pierwszy, osobno.** Warsztat ostrzega, ze pierwszy klip dryfuje najmocniej
+   (najmniej kontekstu). **Zmierzyc jasnosc dolnej polowy kadru**, nie oceniac na oko:
+   to tam lezy tekst strony, a zaslona jest celowo rzadka.
+7. Pozostale siedem klipow.
+8. Kodowanie: WebM VP9 + MP4 H.264, **geste klatki kluczowe** (`-g 12` przy 30 fps).
+   Bez tego dekoder przy kazdym skoku `currentTime` cofa sie do poprzedniej klatki
+   kluczowej i przewijanie sie zacina. **Sciezke audio wyciac.**
+9. Pliki do `site/public/media/presentation/`, jedna linia na scene w `sceneMedia.ts`,
+   bramki, build, push.
+
+### 4.8 Ile to kosztuje
+
+| Pozycja | Kredyty |
+|---|---|
+| 8 klipow x 10 s, model z referencja obrazu 1080p (~7 kr/5 s) | **~112** |
+| Klucz stylu, ~20 prob obrazu (1 kr/obraz) | **~20-40** |
+| **Razem jedno pelne podejscie** | **~130-150** |
+| Limit planu Starter | **270/mies.** |
+
+Czyli pelne podejscie **plus prawie cala runda powtorek**. Zaklada sie, ze mniej wiecej
+co trzeci klip pojdzie do powtorki.
+
+**Kredyty NIE przechodza na kolejny miesiac** — kupowac w dniu, w ktorym siadamy do
+generowania, nie wczesniej. **„Commercial use" jest w Starterze wlaczone** (w Free go nie
+ma wcale). Zakup robi founder; agent nie inicjuje platnosci.
 
 ## 5. Co się zmienia w kodzie
 
@@ -336,19 +362,25 @@ każe planować retry).
 
 ---
 
-## 6. Decyzje dla foundera
+## 6. Decyzje foundera
 
-**D-36 — kremowe tło zamiast czarnego.** Obie referencje są jasne. Reguła
-`design-dark-only` zapisuje wcześniejszą decyzję foundera i tylko on może ją zdjąć.
-*Rekomendacja: zdjąć.* Ciemna strona z ciemnymi materiałami jest powodem, dla którego
-cztery podejścia z rzędu wyglądały płasko.
+**D-36 — kremowe tlo zamiast czarnego. ROZSTRZYGNIETE 2026-09-13, WDROZONE.**
+„Wychodzimy ze stylu ciemnego." Strona jest jasna, regula `design-page-theme-lock`
+przepisana razem z decyzja.
 
-**D-37 — kolorowy akcent zamiast stalowego.** W tym stylu szary akcent nie istnieje.
-*Rekomendacja: petrol blue, jeden na całą witrynę.*
+**D-37 — akcent. ROZSTRZYGNIETE, WDROZONE.** Akcentem zostal `--steel-700` `#42526E`,
+czyli ciemny koniec tej samej stali: 7,24-7,88 na papierze (stal 300 na bieli miala
+2,11). Kolor jest, a regula `brand-single-accent-steel` nie jest lamana.
 
-**D-38 — zakup Higgsfield PLUS na jeden miesiąc.** Bez tego nie ma ani materiału,
-ani nawet cennika. *Rekomendacja: kupić, wykorzystać w jednym oknie, nie odnawiać.*
+**D-37b — ktory preset kreskowki. OTWARTE.** Rekomendacja: **„2D Illustrator"** (plaski
+wektor, dorosle proporcje). Alternatywa: **„Hand Drawn"** (olowek na papierze, sceny
+biurowe, jasny z natury). **UWAGA: podglady presetow w katalogu NIE zgadzaja sie
+z nazwami** — wybierac po pobranych klatkach, nigdy po nazwie.
 
-**D-39 — co z 13 podstronami narzędzi.** Żyją, są w mapie strony i łapią ruch, ale
-zniknęły z nawigacji, a prezentacja już ich nie pokazuje. *Rekomendacja: zostawić
-pod SEO, nie linkować z prezentacji.*
+**D-38 — zakup. ROZSTRZYGNIETE: Starter $19**, nie PLUS. Szczegoly w sekcji 4.8.
+
+**D-39 — los trzynastu podstron narzedzi. OTWARTE.** *Rekomendacja: zostawic pod SEO,
+nie linkowac z prezentacji.*
+
+**BLOKER NIEZALEZNY OD TEGO DOKUMENTU:** dane administratora do `/rodo`. Bez nich build
+nie nadaje sie na produkcje ani pod outbound.

@@ -164,6 +164,31 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
 
 ## Stan operacyjny (aktualizuj przy zmianach!)
 
+- **2026-09-14 (pakiet promptów) — OSIEM PROMPTÓW GOTOWYCH PO TRZECH RUNDACH KRYTYKI:**
+  - `docs/plan/prezentacja-scenariusz.md` §4 (wersja 4) — komplet pod **jasną kreskówkę**,
+    nie pod papierowy kolaż (banner korygujący na górze dokumentu; §1 jest historyczna).
+  - **35 agentów, trzy rundy adwersaryjne**: autorzy stylu → autorzy scen → trzech
+    niezależnych krytyków (soczewki: technika, narracja, spójność) → naprawy → ponowna
+    krytyka → naprawy → ponowna krytyka. **Blokujących: 10 → 3 → 1 → 0.**
+  - **TRZY NAUCZKI O PROMPTOWANIU WIDEO, kosztowały trzy rundy — nie zgubić:**
+    **(a) Model wideo NIE wykonuje negacji jako wykluczenia.** Lista rzeczowników po
+    „never" działa jak podpowiedź tematu. Zakaz `never a silhouette` stał 8× w kluczu
+    stylu i SAM zamawiał ciemną sylwetkę w dolnej połowie kadru, czyli dokładnie tam,
+    gdzie leży tekst strony. **Opisuj twierdząco**, nigdy przez zakaz.
+    **(b) Akcent musi mieć zablokowaną FORMĘ, nie tylko znaczenie.** „Granat znaczy drogę
+    pracy" bez zakazu formy dało litą szynę, tacę i zegar — trzy znaczenia i ciemne bryły.
+    **(c) Blokada skali kłóci się z ruchem kamery** — wiązać skalę z kadrem OTWARCIA.
+  - **Spójność ośmiu klipów = bloki kanoniczne wklejone DOSŁOWNIE, tym samym ciągiem
+    znaków.** Model nie wie nic o pozostałych ujęciach; parafraza = dryf stylu.
+  - **Narracja filmu:** bohaterem jest GRANATOWA LINIA = droga, którą idzie praca.
+    Wąski zsyp (hook) → linia porwana nad lukami (handover) → wyprzedzona przez czas
+    (time) → ręce zajęte zbieraniem (cost) → **ludzie budują trasę własnymi rękami**
+    (turn, oś filmu) → linia nieprzerwana pod sześcioma działami (craft) → ta sama hala
+    bez luk (outcome) → linia wyrasta ze skrzynki klienta (contact).
+  - **Zakaz, który krytyk narracji uratował:** scena `turn` miała skrzynię jadącą
+    „untouched by any hand" obok ludzi z opuszczonymi rękami. Formalnie zgodne z regułą,
+    ale obraz mówił „zwolniliśmy wam ludzi". Przepisane: to ludzie stawiają tę trasę.
+
 - **2026-09-14 (plany Higgsfielda) — STARTER $19 WYSTARCZA; CLI I SKILLE ZAINSTALOWANE:**
   - **Karol: „PLUS po podatkach wychodzi około 300 zł/mies."** Sprawdzone: w MCP nie ma
     w ogóle planu Starter (tylko PLUS $49 i ULTRA $129, pakiety doładowań puste), ale
