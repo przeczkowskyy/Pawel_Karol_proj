@@ -17,99 +17,168 @@
    `.pr-stage` ani na `.pr-scene`. Jeśli scena przestanie się kleić, szukaj
    `overflow-x: hidden` dopisanego gdzieś wyżej w layoucie strony. */
 
-/* ── rama ─────────────────────────────────────────────────────────────────── */
+/* ── RAMA DZIELONA ───────────────────────────────────────────────────────
+   Lewa kolumna: czytanie w zwykłym przepływie dokumentu.
+   Prawa kolumna: jedyny przyklejony element na całej stronie — obraz.
+
+   Proporcja wynika z prośby Karola („animacja musi stanowić większą część
+   strony") i z rachunku: przy 64 % kolumna tekstu schodzi do 422 px i akapit
+   łamie się co cztery słowa, przy 56 % animacja przestaje dominować. 60 % daje
+   na 1440×900 kadr 864×900 (proporcja 0,96, praktycznie kwadrat — stąd master
+   1:1) i 480 px użytecznego tekstu. */
 
 .pr-stage {
-  /* CELOWO bez `overflow`, bez `transform`, bez `filter` i bez `will-change`:
-     każda z tych własności zrobiłaby z ramy albo klipujący kontener (sticky
-     ginie), albo blok zawierający dla `position: fixed` (wskaźnik postępu
-     przestałby się trzymać krawędzi okna). */
+  /* CELOWO bez `overflow`, `transform`, `filter` i `will-change`: pierwsza
+     własność zabiłaby `position: sticky` kolumny medialnej PO CICHU, bez błędu
+     w konsoli, a każda z trzech pozostałych zrobiłaby z ramy blok zawierający
+     dla `position: fixed` i chroma przestałaby trzymać się krawędzi okna. */
   position: relative;
   width: 100%;
 }
 
-/* ── scena ────────────────────────────────────────────────────────────────── */
+/* Kolumna czytania. Na wąskim ekranie jest całą stroną. */
+.pr-flow {
+  min-width: 0;
+}
 
+@media (min-width: 64rem) {
+  .pr-stage {
+    display: grid;
+    /* tekst | animacja — animacja po prawej i szersza */
+    grid-template-columns: minmax(0, 1fr) var(--_split, 60%);
+    align-items: start;
+  }
+}
+
+@media (min-width: 100rem) {
+  .pr-stage {
+    --_split: 58%;
+  }
+}
+
+/* ── scena: zwykła sekcja, już nie tor z przyklejonym ekranem ──────────────
+   Sticky zszedł stąd 2026-09-14. Dwa powody, oba twarde:
+   (1) osiem scen przyklejonych łamało `motion-no-pinning-no-scroll-hijack`
+       §B p.1 — limit to DWIE sceny sticky na trasę;
+   (2) tekst leżący na ruchomym kadrze nie dawał się obronić kontrastowo:
+       pomiar na gęstej ilustracji dał bezpieczną wyłącznie dolną ćwiartkę.
+   BEZ `overflow`: sekcja dłuższa od ekranu rośnie, zamiast po cichu uciąć
+   akapit — a przy węższej kolumnie tekstu to się będzie zdarzać. */
 .pr-scene {
   position: relative;
-  /* jedyna wartość przychodząca z TSX; domyślna wartość zostaje w CSS, żeby
-     scena bez propsa nadal miała tor */
-  /* para vh + dvh: na telefonie pasek adresu zmienia wysokość okna, a tor sceny
-     ma trwać tyle samo ekranów niezależnie od tego (reguła design-overflow-rules) */
-  height: var(--_scene-length, 200vh);
-  height: var(--_scene-length, 200dvh);
-}
-
-.pr-scene-sticky {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  /* dvh po vh: telefon z chowającym się paskiem adresu nie przycina kadru
-     (reguła a11y-safe-area-dvh); stare silniki zostają przy vh */
-  height: 100dvh;
   display: grid;
-  place-items: center;
-  /* kadrowanie TŁA sceny. Stoi na elemencie przyklejonym, więc nie jest
-     przodkiem żadnego innego sticky i niczego nie psuje. */
-  overflow: hidden;
-}
-
-/* warstwa tła sceny: wideo, kadr albo gradient zastępczy */
-.pr-scene-media {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  /* longhandy zamiast `inset`: minifier CSS potrafił sklejać je z powrotem
-     w skrót, którego stare WebKity nie znały (nauczka z 2026-07-22) */
-  pointer-events: none;
-}
-
-/* przyciemnienie pod tekstem: kontrast tekstu nie może zależeć od tego,
-   jaka klatka nagrania akurat stoi pod spodem (reguła design-contrast-aa) */
-.pr-scene-scrim {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  pointer-events: none;
-  /* MOTYW JASNY (2026-09-13): zasłona była składana z prymitywu `--gray-975-rgb`,
-     czyli z czerni, niezależnie od motywu. Na kremowej stronie przyciemniałaby
-     kadr do czarnego prostokąta pod jasnym tekstem. `--veil-rgb` zna motyw:
-     w ciemnym przyciemnia, w jasnym rozjaśnia. Zadanie jest to samo w obu —
-     dać tekstowi sceny pewne tło niezależnie od tego, jaka klatka stoi pod
-     spodem (reguła design-contrast-aa). */
-  background: linear-gradient(
-    to bottom,
-    rgba(var(--veil-rgb), var(--veil-1)) 0%,
-    rgba(var(--veil-rgb), var(--veil-2)) 55%,
-    rgba(var(--veil-rgb), var(--veil-3)) 100%
-  );
+  align-content: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding-block: calc(var(--nav-h, 4rem) + 1.5rem) var(--gutter);
+  /* miejsce na stałą zakładkę kontaktową przy lewej krawędzi */
+  padding-inline: max(var(--gutter), 4.25rem) clamp(1.5rem, 3vw, 2.5rem);
+  justify-items: start;
 }
 
 .pr-scene-content {
   position: relative;
   width: 100%;
-  max-width: var(--container);
-  margin-inline: auto;
-  padding-inline: var(--gutter);
-  padding-block: var(--gutter);
-  /* treść stoi nad tłem bez tworzenia kontekstu stackingu z ujemnym z-index
-     pod spodem: wystarczy kolejność w DOM i `position: relative` */
 }
 
-/* ── wskaźnik postępu (jedyna „nawigacja" tej wersji) ─────────────────────── */
+/* ── kolumna medialna: JEDYNY sticky na stronie ───────────────────────────── */
 
-.pr-rail {
-  position: fixed;
+.pr-media-col {
+  position: sticky;
   top: 0;
-  left: 0;
-  width: 2px;
+  /* `align-self: start` jest OBOWIĄZKOWE: rozciągnięty element siatki nie ma
+     po czym się kleić i sticky umiera bez błędu. */
+  align-self: start;
+  /* Trójka vh -> dvh -> svh, w tej kolejności: stary silnik bierze pierwszą,
+     nowy ostatnią. `svh` jest tu właściwe, bo kolumna ma stać w najmniejszym
+     widocznym oknie i nie chować się pod paskiem adresu, gdy ten wyjedzie. */
   height: 100vh;
   height: 100dvh;
-  z-index: 40;
+  height: 100svh;
+  overflow: hidden;
+  border-inline-start: 1px solid var(--border);
+  background: var(--surface-muted);
+}
+
+/* Na wąskim ekranie kolumny medialnej NIE MA. To nie jest oszczędność,
+   tylko reguła `media-video-budgets`: mobile ma 358 KB całego transferu,
+   w tym 0 B mediów wideo. Telefon dostaje broszurę — samą typografię. */
+@media (max-width: 63.999rem) {
+  .pr-media-col {
+    display: none;
+  }
+}
+
+.pr-media-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Wszystkie kadry są w DOM od razu i przełączają się samą nieprzezroczystością.
+   Podmiana `src` przy zmianie sceny kazałaby dekodować obraz w trakcie
+   przewijania, co widać jako przycięcie. */
+.pr-media-shot {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Kadr ma pustą dolną ćwiartkę (zaprojektowaną pod tekst w poprzednim
+     układzie). W kolumnie medialnej ta pustka jest już niepotrzebna, więc
+     kadrujemy ku pasmu akcji zamiast ku podłodze. */
+  object-position: center 38%;
+  opacity: 0;
+  transition: opacity var(--duration-media) var(--ease-std);
+}
+
+.pr-media-shot[data-active="true"] {
+  opacity: 1;
+}
+
+/* Szew: kadr ma wyglądać na wydrukowany na tym samym arkuszu co tekst,
+   a nie wklejony. Cień jest zakazany (Shape Lock). */
+.pr-media-seam {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 12%;
+  pointer-events: none;
+  background: linear-gradient(
+    to right,
+    rgba(var(--veil-rgb), 0.55) 0%,
+    rgba(var(--veil-rgb), 0) 100%
+  );
+}
+
+/* ── CHROMA: komponenty stałe, niezależne od przewijania ───────────────────
+   Prośba Karola 2026-09-14: „Musimy do strony dodać komponenty które będą
+   stałe, nie ważne od scroll."
+
+   Chroma jest montowana PORTALEM na `document.body`, czyli jest rodzeństwem
+   warstwy treści, nie jej dzieckiem. Powód kosztował tę stronę tydzień
+   w lipcu: element `position: fixed` uwięziony w kontekście stackingu przodka
+   z `overflow` nie był malowany przez iOS — znikała wtedy CAŁA treść. */
+
+.pr-chrome {
+  position: relative;
+  z-index: 8;
+}
+
+/* PASEK POSTĘPU — poziomy, tuż pod nawigacją. Był pionowy na lewej krawędzi,
+   ale tę krawędź zajmuje teraz zakładka kontaktowa, a 44-pikselowa zakładka
+   przecinająca 2-pikselową linię wygląda jak błąd renderowania. */
+.pr-rail {
+  position: fixed;
+  top: var(--nav-h, 4rem);
+  right: 0;
+  left: 0;
+  height: 2px;
+  z-index: 8;
   pointer-events: none;
   background: var(--border-subtle);
 }
@@ -117,22 +186,95 @@
 .pr-rail-fill {
   width: 100%;
   height: 100%;
-  transform-origin: top center;
+  transform-origin: left center;
   background: var(--accent);
 }
 
+/* KOLOFON SCENY: numer i nazwa beatu, drobnym drukiem, w rogu. */
 .pr-count {
   position: fixed;
   right: calc(var(--gutter) + env(safe-area-inset-right, 0px));
   bottom: calc(var(--gutter) + env(safe-area-inset-bottom, 0px));
-  z-index: 40;
+  z-index: 8;
   margin: 0;
+  display: flex;
+  gap: 0.6rem;
+  align-items: baseline;
   pointer-events: none;
   font-size: var(--text-xs);
   line-height: 1;
   letter-spacing: 0.14em;
-  font-variant-numeric: tabular-nums;
+  text-transform: uppercase;
   color: var(--foreground-faint);
+}
+
+.pr-count-num {
+  font-variant-numeric: tabular-nums;
+}
+
+.pr-count-label {
+  color: var(--foreground-muted);
+}
+
+/* ZAKŁADKA KONTAKTOWA przy lewej krawędzi. Prawdziwy przycisk, nie ozdoba. */
+.pr-contact {
+  position: fixed;
+  left: 0;
+  top: 50%;
+  z-index: 9;
+  transform: translateY(-50%);
+  transform-origin: left center;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-strong);
+  border-inline-start: none;
+  border-start-end-radius: var(--radius-sm);
+  border-end-end-radius: var(--radius-sm);
+  background: var(--surface-overlay);
+  color: var(--foreground);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background var(--duration-quick) var(--ease-out);
+}
+
+.pr-contact:hover {
+  background: var(--accent-a8);
+}
+
+/* Tekst pionowo, żeby zakładka nie zjadała szerokości kolumny czytania. */
+.pr-contact-text {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+/* Na telefonie pionowa zakładka przy krawędzi jest pułapką dotykową: leży
+   dokładnie tam, gdzie system łapie gest „wstecz". Schodzi do dolnego paska. */
+@media (max-width: 63.999rem) {
+  .pr-contact {
+    top: auto;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transform: none;
+    justify-content: center;
+    padding-block: 1rem;
+    padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+    border: none;
+    border-top: 1px solid var(--border);
+    border-radius: 0;
+  }
+  .pr-contact-text {
+    writing-mode: horizontal-tb;
+    transform: none;
+  }
+  /* miejsce pod pasek, ustawione w CSS, nigdy w JS po hydracji (CLS) */
+  .pr-flow {
+    padding-bottom: 4rem;
+  }
 }
 
 /* ── media sceny ──────────────────────────────────────────────────────────── */

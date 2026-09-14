@@ -89,6 +89,9 @@ export interface SceneFigure {
 export interface Scene {
   id: SceneId;
   headline: Bilingual;
+  /** Krótka nazwa beatu do kolofonu sceny („02 / 08 · Przekazanie").
+   *  Jedno–dwa słowa. NIE jest to skrót nagłówka, tylko etykieta nawigacyjna. */
+  label: Bilingual;
   /** Akapit sceny: 60–120 słów. Warstwa, która niesie SEO i konkret.
    *  Musi być w prerenderze, inaczej nie istnieje dla wyszukiwarki. */
   body?: Bilingual;
@@ -111,6 +114,7 @@ export const SCENES = [
      tu z niczego tłumaczyć, więc nikt nie zamyka karty. */
   {
     id: "hook",
+    label: { pl: "Wzrost", en: "Growth" },
     headline: {
       pl: "Firma urosła. Proces został ten sam.",
       en: "The company grew. The process did not.",
@@ -131,6 +135,7 @@ export const SCENES = [
      procesie, czyli na jedynej rzeczy, którą da się przebudować. */
   {
     id: "handover",
+    label: { pl: "Przekazanie", en: "Handover" },
     headline: {
       pl: "Praca nie stoi u ludzi. Stoi między nimi.",
       en: "Work does not wait on people. It waits between them.",
@@ -152,6 +157,7 @@ export const SCENES = [
      który zarząd rozumie od razu. */
   {
     id: "time",
+    label: { pl: "Czas", en: "Time" },
     headline: {
       pl: "Zamknięcie miesiąca. Liczone w tygodniach.",
       en: "Month-end close. Counted in weeks.",
@@ -176,6 +182,7 @@ export const SCENES = [
      `copy-no-headcount-removal`. */
   {
     id: "cost",
+    label: { pl: "Koszt", en: "Cost" },
     headline: {
       pl: "Ten etat ma kupować analizę.",
       en: "That role should be buying analysis.",
@@ -207,6 +214,7 @@ export const SCENES = [
      i termin, czyli jedyne dwie rzeczy, o które klient pyta na tym etapie. */
   {
     id: "turn",
+    label: { pl: "Zwrot", en: "The turn" },
     headline: {
       pl: "Zamiast opisać proces, budujemy go na nowo.",
       en: "Instead of mapping the process, we rebuild it.",
@@ -232,6 +240,7 @@ export const SCENES = [
      żeby nie zamykać się w jednym dziale ani w jednym typie zadania. */
   {
     id: "craft",
+    label: { pl: "Rzemiosło", en: "Craft" },
     headline: {
       pl: "Różne działy. Ten sam sposób pracy.",
       en: "Different departments. The same way of working.",
@@ -255,6 +264,7 @@ export const SCENES = [
      tego samego tytułu. */
   {
     id: "outcome",
+    label: { pl: "Efekt", en: "Outcome" },
     headline: OUTCOMES.title,
     beats: OUTCOMES.items,
     body: {
@@ -268,6 +278,7 @@ export const SCENES = [
      nie przepisujemy. Wariantów w rodzaju „Skontaktuj się" nie tworzymy. */
   {
     id: "contact",
+    label: { pl: "Kontakt", en: "Contact" },
     headline: MESSAGING.closing.title,
     sub: MESSAGING.closing.lead,
     cta: MESSAGING.cta.primary,

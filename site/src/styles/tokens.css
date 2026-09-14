@@ -206,7 +206,9 @@
 
   /* Zasłona w motywie jasnym jest BIAŁA, nie czarna: rozjaśnia kadr, żeby
      ciemny tekst sceny miał pod sobą wystarczająco jasne tło. */
-  --veil-rgb: 255, 255, 255;
+  /* PAPIER, nie biel: czysta biel wylana na kremowe tlo odbarwia je na szaro.
+     Zaslona ma wygaszac kadr W PAPIER, a nie rozjasniac go na bialo. */
+  --veil-rgb: 247, 245, 241;
   --media-tint-rgb: 66, 82, 110;
   /* Rzadka, bo materiał tego motywu jest z założenia JASNY (kreskówka na
      jasnym tle). Gęstsza zabiłaby ciepły papier i zrobiła z każdej sceny
@@ -274,6 +276,10 @@
 
   /* Shape Lock: promienie tylko ze zbioru {0, 8, 10, 12, 9999}.
      Marketing używa {0, 8, 9999}, powierzchnia narzędzi {8, 10, 12, 9999}. */
+  /* Wysokość nawigacji: potrzebna kolumnie czytania (odstęp od góry) i paskowi
+     postępu (pozycja). Trzymana w tokenie, bo czytają ją dwa różne pliki. */
+  --nav-h: 3.5rem;
+
   --radius-0: 0px;
   --radius-sm: 8px; /* przyciski, pola formularza */
   --radius-md: 10px; /* przyciski w narzędziach */

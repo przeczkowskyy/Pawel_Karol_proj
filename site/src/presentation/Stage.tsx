@@ -1,7 +1,10 @@
-import { useCallback, useMemo, useRef, useState, type ReactNode } from "react";
-import * as m from "motion/react-m";
-import { useReducedMotion, useScroll } from "motion/react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { createPortal } from "react-dom";
+import { useScroll } from "motion/react";
 import { StageContext, type StageApi } from "./context";
+import { StageMedia } from "./StageMedia";
+import { PresentationChrome } from "./PresentationChrome";
+import { SCENES, type SceneId } from "@/data/presentation";
 import "./presentation.css";
 
 /* ── Stage ──────────────────────────────────────────────────────────────────
@@ -36,11 +39,18 @@ type StageProps = {
   /** sceny w kolejności przewijania */
   children: ReactNode;
   className?: string;
+  /** otwarcie modala rezerwacji; podpięte pod stałą zakładkę kontaktową */
+  onBook?: () => void;
 };
 
 /** Rama prezentacji: globalny postęp, wskaźnik i kontekst dla scen. */
-export function Stage({ children, className }: StageProps) {
-  const reduce = useReducedMotion();
+export function Stage({ children, className, onBook }: StageProps) {
+
+  /* Chroma montuje się portalem na `document.body`, więc musi poczekać na
+     klienta: w prerenderze `document` nie istnieje, a bez tej bramki build SSR
+     pada na „document is not defined". */
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   /* Postęp całego dokumentu. `useScroll()` bez celu = od góry strony do dołu. */
   const { scrollYProgress } = useScroll();
@@ -97,32 +107,33 @@ export function Stage({ children, className }: StageProps) {
   const total = ids.length;
   const index = activeId === null ? 0 : ids.indexOf(activeId) + 1;
 
+  const activeScene = SCENES.find((x) => x.id === activeId);
+
   return (
     <StageContext value={api}>
+      {/* RAMA DZIELONA (2026-09-14). Lewa kolumna to czytanie w zwykłym
+          przepływie, prawa to jedyny przyklejony element na stronie.
+          Rama NADAL bez `overflow`, `transform`, `filter` i `will-change`:
+          pierwsza własność zabiłaby sticky kolumny medialnej po cichu, każda
+          z pozostałych zrobiłaby z ramy blok zawierający dla `position: fixed`
+          i chroma przestałaby trzymać się krawędzi okna. */}
       <div className={className ? `pr-stage ${className}` : "pr-stage"}>
-        {children}
-
-        {/* Linia postępu. `scaleY` na gotowej wysokości, nigdy `height`:
-            wysokość przeliczana w klatce to layout całej strony, skala to sam
-            kompozytor (reguła `motion-gpu-props-only`). */}
-        {reduce ? null : (
-          <div className="pr-rail" aria-hidden="true">
-            <m.div className="pr-rail-fill" style={{ scaleY: scrollYProgress }} />
-          </div>
-        )}
-
-        {/* Numer sceny. `aria-hidden`, bo to powtórzenie struktury, którą
-            czytnik ekranu i tak ma w nagłówkach sekcji; ogłaszanie „scena 3
-            z 8" przy każdym przewinięciu byłoby hałasem, nie informacją
-            (reguła `a11y-images-alt-svg-role`: dekoracja nie wchodzi do drzewa
-            dostępności). Sam znak dzielenia nie wymaga tłumaczenia, więc nie
-            ma tu tekstu do pary PL/EN. */}
-        {total > 0 && index > 0 ? (
-          <p className="pr-count" aria-hidden="true">
-            {index} / {total}
-          </p>
-        ) : null}
+        <div className="pr-flow">{children}</div>
+        <StageMedia activeId={(activeId as SceneId | null) ?? null} />
       </div>
+
+      {mounted
+        ? createPortal(
+            <PresentationChrome
+              progress={scrollYProgress}
+              index={index}
+              total={total}
+              label={activeScene?.label}
+              onBook={onBook}
+            />,
+            document.body,
+          )
+        : null}
     </StageContext>
   );
 }

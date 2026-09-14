@@ -59,13 +59,12 @@ import { SceneContext, useStage, type SceneApi } from "./context";
 
    PUŁAPKA, KTÓREJ UNIKA: `position: sticky` przestaje działać po cichu, gdy
    KTÓRYKOLWIEK przodek ma `overflow` inny niż `visible`. Dlatego kadrowanie
-   siedzi na samym elemencie przyklejonym (`.pr-scene-sticky`), a nie na sekcji
+   siedzi na kolumnie medialnej (`.pr-media-col`), a nie na sekcji
    ani na ramie. Druga: wysokość toru jest podawana jako zmienna CSS, nie jako
    `style={{ height }}`, dzięki czemu gałąź `prefers-reduced-motion` w arkuszu
    może ją nadpisać bez `!important`. */
 
 /** domyślny tor sceny; limit reguły `motion-no-pinning-no-scroll-hijack` §B to 300vh */
-const DEFAULT_LENGTH = "200vh";
 
 /* Okna wejścia i wyjścia w przestrzeni postępu sceny (patrz geometria wyżej).
    Treść: ciasno wokół okresu przyklejenia. Tło: szerzej, żeby sąsiednie kadry
@@ -78,8 +77,12 @@ const DEFAULT_LENGTH = "200vh";
    powietrze: widz przewija i nie widzi nic. Teraz zdanie dochodzi do pełnej
    widoczności szybko (do 20 % toru), stoi przez 60 % i wychodzi na końcu.
    Przenikanie nadal jest, tylko krótsze niż pauza. */
-const CONTENT = [0.04, 0.2, 0.8, 0.96];
-const MEDIA = [0.0, 0.14, 0.86, 1.0];
+/* OKNO TRESCI: SAMO WEJSCIE (korekta 2026-09-14, rama dzielona).
+   Wczesniej scena byla przyklejona i tekst musial sie wygaszac, bo inaczej
+   nachodzilby na nastepny. W kolumnie czytania sekcja po prostu wyjezdza
+   z kadru, wiec wygaszanie na wyjsciu tylko kazalo czytac akapit przy 40 %
+   krycia. Zostaje wejscie. */
+const CONTENT = [0.04, 0.2];
 
 /** wejście i wyjście treści; dwie jednostki przesunięcia z tokenów ruchu (2 x 12 px) */
 const RISE = SHIFT * 2;
@@ -98,12 +101,9 @@ type SceneChildren = ReactNode | ((scene: SceneApi) => ReactNode);
 type SceneProps = {
   /** identyfikator sceny; trafia w `id` sekcji i w numerację ramy */
   id: string;
-  /** długość toru przewijania sceny; domyślnie 200vh, maksimum 300vh */
-  length?: string;
-  /** tło sceny: `SceneVideo`, `SceneFallbackMedia` albo animacja w kodzie */
-  media?: ReactNode;
-  /** przyciemnienie między tłem a treścią; wyłącz tylko wtedy, gdy sceny nie ma tła */
-  scrim?: boolean;
+  /** scena 1 nie animuje wejścia: nie chowamy treści nad pierwszym zgięciem
+   *  (reguła `motion-no-initial-hidden-above-fold`) */
+  entry?: boolean;
   /** treść sceny; funkcja dostaje lokalny postęp i stan bramki */
   children: SceneChildren;
   className?: string;
@@ -117,14 +117,7 @@ function countSubscription(delta: number) {
 }
 
 /** Jedna scena prezentacji: sekcja z torem, przyklejony ekran, lokalny postęp. */
-export function Scene({
-  id,
-  length = DEFAULT_LENGTH,
-  media,
-  scrim = true,
-  children,
-  className,
-}: SceneProps) {
+export function Scene({ id, entry = true, children, className }: SceneProps) {
   const stage = useStage();
   const reduce = Boolean(useReducedMotion());
   const ref = useRef<HTMLElement>(null);
@@ -216,9 +209,8 @@ export function Scene({
   /* Ruszają się wyłącznie `opacity` i `transform` (reguła `motion-gpu-props-only`).
      Hooki stoją bezwarunkowo, a gałąź ograniczonego ruchu podmienia dopiero
      wartość wpiętą w `style`: kolejność hooków musi być ta sama w obu gałęziach. */
-  const contentOpacity = useTransform(progress, CONTENT, [0, 1, 1, 0]);
-  const contentY = useTransform(progress, CONTENT, [RISE, 0, 0, -RISE]);
-  const mediaOpacity = useTransform(progress, MEDIA, [0, 1, 1, 0]);
+  const contentOpacity = useTransform(progress, CONTENT, [0, 1]);
+  const contentY = useTransform(progress, CONTENT, [RISE, 0]);
 
   const api = useMemo<SceneApi>(
     () => ({ id, progress, inView, reduce }),
@@ -232,29 +224,26 @@ export function Scene({
         id={id}
         data-scene={id}
         className={className ? `pr-scene ${className}` : "pr-scene"}
-        style={{ ["--_scene-length" as string]: length }}
       >
-        <div className="pr-scene-sticky">
-          {/* Warstwa tła CELOWO nie dostaje `aria-hidden`. Decyzję o tym, czy
-              kadr jest dekoracją, czy treścią, podejmuje sam materiał: gradient
-              i abstrakcyjna faktura mają `alt=""`, a zrzut prawdziwego pulpitu
-              (scena „Zwrot") niesie opis i ma trafić do czytnika. Zbiorcze
-              `aria-hidden` na kontenerze skasowałoby ten opis bez śladu. */}
-          {media ? (
-            <m.div className="pr-scene-media" style={{ opacity: reduce ? 1 : mediaOpacity }}>
-              {media}
-            </m.div>
-          ) : null}
+        {/* Zwykła sekcja w kolumnie czytania. Sticky zszedł stąd 2026-09-14
+            razem z ramą dzieloną: osiem scen sticky łamało regułę
+            `motion-no-pinning-no-scroll-hijack` §B p.1 (limit dwie na trasę),
+            a tekst leżący na ruchomym kadrze nie dawał się obronić kontrastowo
+            (pomiar: bezpieczna była tylko dolna ćwiartka kadru). Teraz kadr ma
+            własną kolumnę, a tekst własny, nieprzezroczysty papier.
 
-          {media && scrim ? <div className="pr-scene-scrim" aria-hidden="true" /> : null}
-
-          <m.div
-            className="pr-scene-content"
-            style={{ opacity: reduce ? 1 : contentOpacity, y: reduce ? 0 : contentY }}
-          >
-            {typeof children === "function" ? children(api) : children}
-          </m.div>
-        </div>
+            BEZ `overflow` nad treścią: sekcja dłuższa od ekranu po prostu
+            rośnie, zamiast po cichu ucinać akapit. */}
+        <m.div
+          className="pr-scene-content"
+          style={
+            reduce || !entry
+              ? undefined
+              : { opacity: contentOpacity, y: contentY }
+          }
+        >
+          {typeof children === "function" ? children(api) : children}
+        </m.div>
       </section>
     </SceneContext>
   );

@@ -99,7 +99,7 @@ export const SCENE_MEDIA: Record<SceneId, SceneMediaEntry> = {
   /* 2. Przekazanie: praca stoi między ludźmi. Docelowo S2.
      Siatka komórek w tle zastępczym włącza się propsem `grid` na
      `SceneFallbackMedia`, nie tutaj: to decyzja wizualna sceny, nie materiału. */
-  handover: { id: "handover", fallback: "gradient" },
+  handover: { id: "handover", still: "/media/presentation/scene-handover-v1.webp", fallback: "shot" },
 
   /* 3. Koszt czasu: zamknięcie miesiąca. Docelowo S3.
      Scena ma też własny wykres budujący się przy przewijaniu (SceneTime),

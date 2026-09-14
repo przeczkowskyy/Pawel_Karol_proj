@@ -613,17 +613,19 @@ html[data-theme="light"] .btn-primary:hover {
    za wąskie miary tekstu. */
 .pres-scene {
   width: 100%;
-  max-width: 72rem;
-  margin-inline: auto;
   display: grid;
-  gap: clamp(1.25rem, 3vw, 2.5rem);
+  gap: clamp(1rem, 2.5vw, 1.75rem);
   align-items: start;
 }
 
+/* KOREKTA 2026-09-14 (rama dzielona): dawny układ dwukolumnowy WEWNĄTRZ sceny
+   znika. Scena siedzi teraz w kolumnie czytania szerokiej na ~40 % ekranu,
+   więc dzielenie jej na dwie kolumny dałoby dwie miary po ~230 px — nie do
+   czytania. Jedna kolumna, węższa miara, mniejszy stopień nagłówka. */
 @media (min-width: 64rem) {
   .pres-scene {
-    grid-template-columns: 1.05fr 1fr;
-    gap: clamp(2rem, 5vw, 4.5rem);
+    grid-template-columns: 1fr;
+    max-width: 34rem;
   }
 }
 
@@ -664,7 +666,7 @@ html[data-theme="light"] .btn-primary:hover {
   /* KOREKTA WERSJI 2: gorny koniec 6,5rem -> 3,75rem. Przy 6,5 rem nagłówek
      zjadał całą lewą kolumnę i akapit obok niego nie miał gdzie stanąć.
      Zdanie nadal jest największym elementem sceny, tylko przestało być plakatem. */
-  font-size: clamp(1.875rem, 1.15rem + 2.6vw, 3.75rem);
+  font-size: clamp(1.75rem, 1.1rem + 1.6vw, 2.75rem);
   color: var(--foreground-strong);
   text-wrap: balance;
   overflow-wrap: anywhere;
@@ -697,7 +699,7 @@ html[data-theme="light"] .btn-primary:hover {
   line-height: 0.92;
   /* KOREKTA WERSJI 2: 9rem -> 5,5rem, z tego samego powodu co nagłówek.
      Liczba nadal jest większa od zdania, bo to ona niesie dowód. */
-  font-size: clamp(2.75rem, 1.6rem + 4.4vw, 5.5rem);
+  font-size: clamp(2.5rem, 1.6rem + 2.4vw, 4rem);
   color: var(--accent-text);
 }
 
@@ -767,7 +769,7 @@ html[data-theme="light"] .btn-primary:hover {
 .pres-body {
   margin: 0;
   /* miara 62 znaków: dłuższy wiersz gubi się przy powrocie do lewej krawędzi */
-  max-width: 62ch;
+  max-width: 52ch;
   font-size: clamp(1rem, 0.95rem + 0.35vw, 1.1875rem);
   line-height: 1.6;
   color: var(--foreground-muted);
