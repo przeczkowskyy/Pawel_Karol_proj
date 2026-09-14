@@ -1,6 +1,7 @@
 import { pick, useLang } from "@/i18n";
 import { scene } from "@/data/presentation";
 import { SceneProse } from "./SceneProse";
+import { SceneHeadline } from "./SceneHeadline";
 import { SceneStep } from "./SceneStep";
 import type { SceneContentProps } from "./types";
 
@@ -25,7 +26,7 @@ export function SceneHook({ progress }: SceneContentProps) {
     <div className="pres-scene">
       <div className="pres-lede">
         <SceneStep progress={progress} step={0}>
-          <h1 className="pres-headline">{pick(lang, DATA.headline)}</h1>
+          <SceneHeadline as="h1" text={pick(lang, DATA.headline)} />
         </SceneStep>
       </div>
       <SceneProse progress={progress} body={DATA.body} points={DATA.points} />

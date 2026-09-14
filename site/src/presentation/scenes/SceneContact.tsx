@@ -2,6 +2,7 @@ import { pick, useLang } from "@/i18n";
 import { scene } from "@/data/presentation";
 import { MAIL_HREF } from "@/data/contact";
 import { SceneProse } from "./SceneProse";
+import { SceneHeadline } from "./SceneHeadline";
 import { SceneStep } from "./SceneStep";
 import type { SceneContentProps } from "./types";
 
@@ -33,7 +34,7 @@ export function SceneContact({ progress, onBook }: SceneContentProps) {
   return (
     <div className="pres-scene pres-scene--center">
       <SceneStep progress={progress} step={0}>
-        <h2 className="pres-headline">{pick(lang, DATA.headline)}</h2>
+        <SceneHeadline text={pick(lang, DATA.headline)} />
       </SceneStep>
       <SceneStep progress={progress} step={1}>
         <p className="pres-sub">{pick(lang, DATA.sub)}</p>

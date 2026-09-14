@@ -2,6 +2,7 @@ import * as m from "motion/react-m";
 import { useReducedMotion, type MotionValue } from "motion/react";
 import { pick, useLang } from "@/i18n";
 import { MESSAGING } from "@/data/messaging";
+import { PHONE_DISPLAY, PHONE_HREF } from "@/data/contact";
 
 /* ── PresentationChrome ─────────────────────────────────────────────────────
    Komponenty STAŁE prezentacji: widoczne niezależnie od tego, gdzie stoi
@@ -64,16 +65,26 @@ export function PresentationChrome({ progress, index, total, label, onBook }: Ch
         </p>
       ) : null}
 
-      {/* ZAKŁADKA KONTAKTOWA. Prawdziwy przycisk, nie ozdoba: otwiera ten sam
-          modal rezerwacji co CTA w nawigacji. Etykieta przychodzi z `MESSAGING`
-          (reguła `copy-cta-labels`: jedna intencja, jedna etykieta w całym
-          serwisie) — nie tworzymy tu wariantu „Skontaktuj się z nami".
+      {/* STOPKA STAŁA w lewym dolnym rogu (prośba Karola 2026-09-14:
+          „w lewym dolnym rogu zawsze widoczną stopkę, przycisk zachęcający do
+          kontaktu z nami").
 
-          Na telefonie zakładka pionowa przy krawędzi byłaby pułapką dotykową
-          na krawędzi gestu wstecz, więc tam schodzi do dolnego paska (CSS). */}
-      <button type="button" className="pr-contact" onClick={onBook}>
-        <span className="pr-contact-text">{kontakt}</span>
-      </button>
+          Jest tu przycisk i telefon, i nic poza tym. Stała stopka rywalizuje
+          o uwagę z treścią przez całą długość strony, więc każdy dołożony
+          element kosztuje podwójnie: raz miejscem, raz rozproszeniem.
+
+          ETYKIETA PRZYCISKU przychodzi z `MESSAGING` (reguła `copy-cta-labels`:
+          jedna intencja, jedna etykieta w całym serwisie) — nie tworzymy tu
+          wariantu „Skontaktuj się z nami". Telefon z jedynego źródła NAP
+          (`data/contact.ts`), żeby numer nie rozjechał się z resztą serwisu. */}
+      <div className="pr-footer">
+        <button type="button" className="btn btn-primary pr-footer-cta" onClick={onBook}>
+          {kontakt}
+        </button>
+        <a className="pr-footer-tel" href={PHONE_HREF}>
+          {PHONE_DISPLAY}
+        </a>
+      </div>
     </div>
   );
 }

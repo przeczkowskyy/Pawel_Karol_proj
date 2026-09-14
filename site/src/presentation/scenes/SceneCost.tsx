@@ -2,6 +2,7 @@ import { pick, useLang } from "@/i18n";
 import { scene } from "@/data/presentation";
 import { SceneFigureBlock } from "./SceneFigure";
 import { SceneProse } from "./SceneProse";
+import { SceneHeadline } from "./SceneHeadline";
 import { SceneStep } from "./SceneStep";
 import type { SceneContentProps } from "./types";
 
@@ -34,7 +35,7 @@ export function SceneCost({ progress }: SceneContentProps) {
           <SceneFigureBlock figure={DATA.figure} />
         </SceneStep>
         <SceneStep progress={progress} step={1}>
-          <h2 className="pres-headline">{pick(lang, DATA.headline)}</h2>
+          <SceneHeadline text={pick(lang, DATA.headline)} />
         </SceneStep>
       </div>
       {/* Proza rusza krok później niż w innych scenach: nad nią stoją DWA

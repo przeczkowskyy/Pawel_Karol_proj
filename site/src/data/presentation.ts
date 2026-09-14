@@ -163,13 +163,13 @@ export const SCENES = [
       en: "Month-end close. Counted in weeks.",
     },
     body: {
-      pl: "Najdroższy nie jest czas ludzi, którzy zamykają miesiąc. Najdroższe jest to, że zanim liczby są gotowe, opisują sytuację sprzed kilku tygodni. Decyzja o zakupie, o zatrudnieniu albo o wstrzymaniu projektu zapada wtedy na podstawie obrazu, który zdążył się zmienić. Firma nie podejmuje więc złych decyzji, tylko spóźnione, co w praktyce wychodzi na to samo. I dopóki zestawienie powstaje ręcznie, nikt nie zrobi go częściej, bo każde powtórzenie kosztuje tyle samo pracy co poprzednie.",
-      en: "The expensive part is not the time of the people closing the month. The expensive part is that by the time the numbers are ready, they describe a situation from several weeks ago. A decision to buy, to hire or to halt a project is then made on a picture that has already moved. So the company does not make bad decisions, only late ones, which in practice comes to the same thing. And as long as the summary is assembled by hand, nobody will produce it more often, because every repeat costs as much work as the last.",
+      pl: "Najdroższy nie jest czas ludzi, którzy zamykają miesiąc. Najdroższe jest to, że zanim raport jest gotowy, opisuje sytuację sprzed kilku tygodni. Decyzja o zakupie, o zatrudnieniu albo o wstrzymaniu projektu zapada wtedy na obrazie, który zdążył się zmienić. Firma nie podejmuje więc złych decyzji, tylko spóźnione, co w praktyce wychodzi na to samo. Dotyczy to całej trójki naraz: raportowania zarządczego, kontroli budżetu i analiz finansowych. Dopóki powstają ręcznie, nikt nie zrobi ich częściej, bo każde powtórzenie kosztuje tyle samo pracy co poprzednie.",
+      en: "The expensive part is not the time of the people closing the month. The expensive part is that by the time the report is ready, it describes a situation from several weeks ago. A decision to buy, to hire or to halt a project is then made on a picture that has already moved. So the company does not make bad decisions, only late ones, which in practice comes to the same thing. This holds for all three at once: management reporting, budget control and financial analysis. As long as they are produced by hand, nobody will produce them more often, because every repeat costs as much work as the last.",
     },
     points: [
-      { pl: "Liczby opisują stan sprzed kilku tygodni", en: "The numbers describe a state from weeks ago" },
+      { pl: "Raport opisuje stan sprzed kilku tygodni", en: "The report describes a state from weeks ago" },
+      { pl: "Budżet i wykonanie rozjeżdżają się między zamknięciami", en: "Budget and actuals drift apart between closes" },
       { pl: "Powtórzenie raportu kosztuje tyle samo co pierwszy", en: "Repeating the report costs as much as the first one" },
-      { pl: "Częstsze zamknięcie jest niemożliwe bez zmiany procesu", en: "Closing more often is impossible without changing the process" },
     ],
   },
 
@@ -246,15 +246,16 @@ export const SCENES = [
       en: "Different departments. The same way of working.",
     },
     body: {
-      pl: "Nie mamy zamkniętego katalogu produktów, bo procesy w firmach nie są takie same. Jest za to sposób pracy, który powtarza się niezależnie od działu: znaleźć miejsce, w którym dane przechodzą z rąk do rąk, i zastąpić to przejście czymś, co liczy zawsze tak samo. Poniżej rodzaje zadań, które już tak przebudowaliśmy: w kontrolingu, finansach, produkcji i administracji. Jeśli Wasz proces przypomina którykolwiek z nich, prawdopodobnie umiemy go przejąć.",
-      en: "We do not have a closed product catalogue, because company processes are not alike. What repeats, regardless of department, is a way of working: find the place where data passes from hand to hand, and replace that passage with something that computes the same way every time. Below are the kinds of work we have already rebuilt this way: in controlling, finance, production and administration. If your process resembles any of them, we can probably take it over.",
+      pl: "Nie mamy zamkniętego katalogu produktów, bo procesy w firmach nie są takie same. Jest za to sposób pracy, który powtarza się niezależnie od działu: znaleźć miejsce, w którym dane przechodzą z rąk do rąk, i zastąpić to przejście czymś, co liczy zawsze tak samo. Najczęściej zaczynamy od raportowania, kontroli budżetu i analiz finansowych, bo tam rachunek jest najprostszy do sprawdzenia, a wynik widać po pierwszym zamknięciu. Poniżej rodzaje zadań, które już tak przebudowaliśmy: w kontrolingu, finansach, produkcji i administracji.",
+      en: "We do not have a closed product catalogue, because company processes are not alike. What repeats, regardless of department, is a way of working: find the place where data passes from hand to hand, and replace that passage with something that computes the same way every time. We usually start with reporting, budget control and financial analysis, because there the arithmetic is easiest to verify and the result shows after the first close. Below are the kinds of work we have already rebuilt this way: in controlling, finance, production and administration.",
     },
     points: [
+      { pl: "Raport zarządczy, który powstaje sam po zamknięciu", en: "A management report that builds itself after close" },
+      { pl: "Budżet kontra wykonanie, liczone na bieżąco", en: "Budget against actuals, computed continuously" },
+      { pl: "Analiza marży i kosztu projektu co do grosza", en: "Margin and project cost analysis to the last cent" },
       { pl: "Obieg dokumentów: od wpływu do zatwierdzenia", en: "Document flow: from arrival to approval" },
       { pl: "Uzgodnienie dwóch źródeł danych co do grosza", en: "Reconciling two data sources to the last cent" },
       { pl: "Przeniesienie danych między systemami bez przepisywania", en: "Moving data between systems without retyping" },
-      { pl: "Zestawienie zarządcze, które powstaje samo", en: "A management summary that assembles itself" },
-      { pl: "Prognoza z danych, które już macie", en: "A forecast from the data you already hold" },
       { pl: "Rejestry i terminy, których nie wolno przegapić", en: "Registers and deadlines you cannot afford to miss" },
     ],
   },

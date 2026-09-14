@@ -1,6 +1,7 @@
 import { pick, useLang } from "@/i18n";
 import { scene } from "@/data/presentation";
 import { SceneProse } from "./SceneProse";
+import { SceneHeadline } from "./SceneHeadline";
 import { SceneStep } from "./SceneStep";
 import type { SceneContentProps } from "./types";
 
@@ -37,7 +38,7 @@ export function SceneCraft({ progress }: SceneContentProps) {
     <div className="pres-scene">
       <div className="pres-lede">
         <SceneStep progress={progress} step={0}>
-          <h2 className="pres-headline">{pick(lang, DATA.headline)}</h2>
+          <SceneHeadline text={pick(lang, DATA.headline)} />
         </SceneStep>
       </div>
       {/* Akapit z SceneProse, ale lista WŁASNA: sześć pozycji układa się w dwie

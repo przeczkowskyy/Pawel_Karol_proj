@@ -674,6 +674,18 @@ html[data-theme="light"] .btn-primary:hover {
 
 /* Podlinia: tylko tam, gdzie scena bez niej nie ma sensu (dwie sceny na osiem).
    Miara 34 znaków trzyma ją przy jednym, najwyżej dwóch wierszach. */
+/* AKCENT NA DRUGIM FRAGMENCIE NAGŁÓWKA (2026-09-14).
+   Nagłówki są zbudowane z dwóch zdań: pierwsze stawia fakt, drugie go wywraca.
+   Kolor podkreśla ten zwrot, zamiast malować całość.
+
+   DLACZEGO KOLOR JEST DOPIERO TU: ilustracja jest monochromatyczna, bo granat
+   w kadrze czytał się jak błąd generacji. Akcent marki musi więc żyć
+   w typografii — to nadal JEDEN akcent, tylko przeniesiony z obrazu na tekst.
+   `--accent-text` ma na papierze 7,24:1, czyli AA także dla małego stopnia. */
+.pres-headline-turn {
+  color: var(--accent-text);
+}
+
 .pres-sub {
   margin: clamp(0.875rem, 2vw, 1.5rem) 0 0;
   max-width: 34ch;
