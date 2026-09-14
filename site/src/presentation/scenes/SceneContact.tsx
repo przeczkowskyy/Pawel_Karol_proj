@@ -1,6 +1,6 @@
 import { pick, useLang } from "@/i18n";
 import { scene } from "@/data/presentation";
-import { MAIL_HREF } from "@/data/contact";
+import { ContactBlock } from "./ContactBlock";
 import { SceneProse } from "./SceneProse";
 import { SceneHeadline } from "./SceneHeadline";
 import { SceneStep } from "./SceneStep";
@@ -29,10 +29,9 @@ const DATA = scene("contact");
 
 export function SceneContact({ progress, onBook }: SceneContentProps) {
   const { lang } = useLang();
-  const label = pick(lang, DATA.cta);
 
   return (
-    <div className="pres-scene pres-scene--center">
+    <div className="pres-scene">
       <SceneStep progress={progress} step={0}>
         <SceneHeadline text={pick(lang, DATA.headline)} />
       </SceneStep>
@@ -41,15 +40,7 @@ export function SceneContact({ progress, onBook }: SceneContentProps) {
       </SceneStep>
       <SceneProse progress={progress} body={DATA.body} from={2} />
       <SceneStep progress={progress} step={3}>
-        {onBook ? (
-          <button type="button" className="btn btn-primary pres-cta" onClick={onBook}>
-            {label}
-          </button>
-        ) : (
-          <a className="btn btn-primary pres-cta" href={MAIL_HREF}>
-            {label}
-          </a>
-        )}
+        <ContactBlock onBook={onBook} />
       </SceneStep>
     </div>
   );
