@@ -83,6 +83,12 @@ export function ScenePanel({ id }: { id: SceneId }) {
   const media = sceneMedia(id);
   const ref = useRef<HTMLDivElement>(null);
   const video = useRef<HTMLVideoElement>(null);
+  /* Ostatnia znana widoczność panelu. Trzymana TUTAJ, a nie tylko u dyrygenta,
+     bo obserwator melduje od montażu, a rejestracja u dyrygenta następuje
+     dopiero po `window.load` — bez tego zapisu meldunki sprzed rejestracji
+     przepadały i panel widoczny od początku nie zaczynał grać (patrz komentarz
+     przy `zglosPanel`). */
+  const ratio = useRef(0);
   const [enabled, setEnabled] = useState(false);
   const [ready, setReady] = useState(false);
 
@@ -123,7 +129,9 @@ export function ScenePanel({ id }: { id: SceneId }) {
     const io = new IntersectionObserver(
       (entries) => {
         const e = entries[0];
-        zglosWidocznosc(id, e?.isIntersecting ? e.intersectionRatio : 0);
+        const v = e?.isIntersecting ? e.intersectionRatio : 0;
+        ratio.current = v;
+        zglosWidocznosc(id, v);
       },
       /* Gęsta drabinka progów: bez niej obserwator melduje tylko przecięcie
          i dwa panele przy szwie mają identyczny wynik, więc zwycięzca migocze. */
@@ -138,6 +146,7 @@ export function ScenePanel({ id }: { id: SceneId }) {
     if (!enabled) return;
     return zglosPanel(
       id,
+      ratio.current,
       () => {
         const el = video.current;
         if (!el || !el.paused) return;

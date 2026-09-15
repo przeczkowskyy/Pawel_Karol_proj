@@ -117,9 +117,24 @@ function powiadomObecnosc() {
   for (const f of obecni) f(aktywne);
 }
 
-/** Zgłasza panel do dyrygenta. Zwraca funkcję sprzątającą (`motion-cleanup-required`). */
-export function zglosPanel(id: string, play: () => void, pause: () => void): () => void {
-  wpisy.set(id, { ratio: 0, play, pause });
+/* Zgłasza panel do dyrygenta. Zwraca funkcję sprzątającą (`motion-cleanup-required`).
+
+   `ratio` PRZYCHODZI Z ZEWNĄTRZ I TO JEST NAPRAWA BŁĘDU, nie wygoda.
+   Panel melduje widoczność od chwili montażu, ale rejestruje się tutaj dopiero
+   po `window.load` i bezczynności — a `IntersectionObserver` odzywa się raz przy
+   `observe()` i potem WYŁĄCZNIE przy zmianie przecięcia. Gdy rejestracja
+   zaczynała od zera, meldunki sprzed niej przepadały i panel widoczny od
+   początku miał u dyrygenta `ratio: 0` aż do pierwszego przewinięcia. Skutek:
+   PIERWSZA SCENA NIE ZACZYNAŁA GRAĆ, dopóki widz nie ruszył stroną — akurat ta,
+   która ma przywitać go ruchem. Wykryte nagraniem strony, bo test sprawdzający
+   „ile gra" robił to PO przewinięciu i dlatego pokazywał stan zdrowy. */
+export function zglosPanel(
+  id: string,
+  ratio: number,
+  play: () => void,
+  pause: () => void,
+): () => void {
+  wpisy.set(id, { ratio, play, pause });
   podepnij();
   powiadomObecnosc();
   zaplanuj();
