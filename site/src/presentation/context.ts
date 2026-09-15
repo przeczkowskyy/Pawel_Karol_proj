@@ -2,7 +2,7 @@ import { createContext, use } from "react";
 import type { MotionValue } from "motion/react";
 
 /* ── Konteksty silnika prezentacji ──────────────────────────────────────────
-   Dwa maleńkie konteksty w jednym pliku, żeby `Scene` i `SceneVideo` nie
+   Dwa maleńkie konteksty w jednym pliku, żeby `Scene` i `ScenePanel` nie
    importowały się nawzajem (cykl importów w bundlu = pusty moduł w czasie
    wykonania i awaria bez czytelnego błędu).
 

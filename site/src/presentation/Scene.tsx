@@ -106,6 +106,8 @@ type SceneProps = {
   entry?: boolean;
   /** treść sceny; funkcja dostaje lokalny postęp i stan bramki */
   children: SceneChildren;
+  /** kadr tej sceny: jeden panel pionowego pasa (`ScenePanel`) */
+  media?: ReactNode;
   className?: string;
 };
 
@@ -117,7 +119,7 @@ function countSubscription(delta: number) {
 }
 
 /** Jedna scena prezentacji: sekcja z torem, przyklejony ekran, lokalny postęp. */
-export function Scene({ id, entry = true, children, className }: SceneProps) {
+export function Scene({ id, entry = true, children, media, className }: SceneProps) {
   const stage = useStage();
   const reduce = Boolean(useReducedMotion());
   const ref = useRef<HTMLElement>(null);
@@ -225,25 +227,33 @@ export function Scene({ id, entry = true, children, className }: SceneProps) {
         data-scene={id}
         className={className ? `pr-scene ${className}` : "pr-scene"}
       >
-        {/* Zwykła sekcja w kolumnie czytania. Sticky zszedł stąd 2026-09-14
-            razem z ramą dzieloną: osiem scen sticky łamało regułę
-            `motion-no-pinning-no-scroll-hijack` §B p.1 (limit dwie na trasę),
-            a tekst leżący na ruchomym kadrze nie dawał się obronić kontrastowo
-            (pomiar: bezpieczna była tylko dolna ćwiartka kadru). Teraz kadr ma
-            własną kolumnę, a tekst własny, nieprzezroczysty papier.
+        {/* WIERSZ SIATKI: kolumna czytania po lewej, panel obrazu po prawej.
+
+            DLACZEGO PANEL LEŻY W SCENIE, A NIE W RAMIE (zmiana 2026-09-15):
+            do wczoraj kolumna medialna była JEDNA, przyklejona do okna, i
+            podmieniała kadry przenikaniem. Karol poprosił o coś innego: osiem
+            kadrów złączonych w jeden pionowy obraz, po którym po prostu jedzie
+            przewijanie. Taki pas musi kafelkować się CO DO PIKSELA — a to jest
+            możliwe tylko wtedy, gdy panel jest komórką tego samego wiersza co
+            tekst sceny. Wtedy wysokość panelu z definicji równa się wysokości
+            sceny i między panelami nie ma ani szpary, ani zakładki, niezależnie
+            od tego, ile tekstu urośnie w kolumnie obok.
 
             BEZ `overflow` nad treścią: sekcja dłuższa od ekranu po prostu
             rośnie, zamiast po cichu ucinać akapit. */}
-        <m.div
-          className="pr-scene-content"
-          style={
-            reduce || !entry
-              ? undefined
-              : { opacity: contentOpacity, y: contentY }
-          }
-        >
-          {typeof children === "function" ? children(api) : children}
-        </m.div>
+        <div className="pr-scene-text">
+          <m.div
+            className="pr-scene-content"
+            style={
+              reduce || !entry
+                ? undefined
+                : { opacity: contentOpacity, y: contentY }
+            }
+          >
+            {typeof children === "function" ? children(api) : children}
+          </m.div>
+        </div>
+        {media}
       </section>
     </SceneContext>
   );

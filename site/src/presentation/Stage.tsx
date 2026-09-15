@@ -2,9 +2,8 @@ import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } fro
 import { createPortal } from "react-dom";
 import { useScroll } from "motion/react";
 import { StageContext, type StageApi } from "./context";
-import { StageMedia } from "./StageMedia";
 import { PresentationChrome } from "./PresentationChrome";
-import { SCENES, type SceneId } from "@/data/presentation";
+import { SCENES } from "@/data/presentation";
 import "./presentation.css";
 
 /* ── Stage ──────────────────────────────────────────────────────────────────
@@ -111,16 +110,21 @@ export function Stage({ children, className, onBook }: StageProps) {
 
   return (
     <StageContext value={api}>
-      {/* RAMA DZIELONA (2026-09-14). Lewa kolumna to czytanie w zwykłym
-          przepływie, prawa to jedyny przyklejony element na stronie.
+      {/* RAMA (2026-09-15). Sceny leżą jedna pod drugą i każda sama nosi swój
+          panel obrazu — rama nie ma już własnej kolumny medialnej.
+
+          CO ZNIKŁO I DLACZEGO: do 2026-09-14 stała tu `StageMedia`, jeden
+          przyklejony do okna kadr podmieniany przenikaniem przy zmianie sceny.
+          Karol poprosił o coś innego: osiem kadrów złączonych w jeden pionowy
+          obraz, po którym po prostu jedzie przewijanie. Przyklejony kadr robi
+          dokładnie odwrotność tego — stoi w miejscu, gdy strona jedzie. Panele
+          wróciły więc do scen, a rama została bez ani jednego `position: sticky`.
+
           Rama NADAL bez `overflow`, `transform`, `filter` i `will-change`:
-          pierwsza własność zabiłaby sticky kolumny medialnej po cichu, każda
-          z pozostałych zrobiłaby z ramy blok zawierający dla `position: fixed`
-          i chroma przestałaby trzymać się krawędzi okna. */}
-      <div className={className ? `pr-stage ${className}` : "pr-stage"}>
-        <div className="pr-flow">{children}</div>
-        <StageMedia activeId={(activeId as SceneId | null) ?? null} />
-      </div>
+          każda z trzech ostatnich zrobiłaby z ramy blok zawierający dla
+          `position: fixed` i chroma przestałaby trzymać się krawędzi okna
+          (`media-video-placement`). */}
+      <div className={className ? `pr-stage ${className}` : "pr-stage"}>{children}</div>
 
       {mounted
         ? createPortal(

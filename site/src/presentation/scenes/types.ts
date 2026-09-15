@@ -5,7 +5,7 @@ import type { SceneApi } from "../context";
  * `Scene` przyjmuje dziecko jako FUNKCJĘ dostającą `SceneApi`, więc wpięcie sceny
  * w tor wygląda tak:
  *
- *   <Scene id="cost" media={<SceneFallbackMedia … />}>
+ *   <Scene id="cost" media={<ScenePanel id="cost" />}>
  *     {(s) => <SceneCost progress={s.progress} />}
  *   </Scene>
  *

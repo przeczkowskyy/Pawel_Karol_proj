@@ -164,6 +164,67 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
 
 ## Stan operacyjny (aktualizuj przy zmianach!)
 
+- **2026-09-15 (pionowy pas) — PRZELOTY DRONEM ODRZUCONE; STRONA GŁÓWNA TO JEDEN CIĄGŁY OBRAZ:**
+  - **Co odrzucił Karol i dlaczego to było strukturalne, nie jakościowe:** wygenerowaliśmy komplet
+    siedmiu przelotów łączących kadry sąsiednich scen (image→video ze start- i end-frame).
+    Werdykt: „Animacje nie są płynne. Wyglądają generatywnie. Podczas przejść, przejścia po
+    budynku są nierealne." Przyczyna: przelot KAŻE modelowi wymyślić przestrzeń między dwoma
+    kadrami, a wymyślona architektura nie ma prawa się zgadzać. W jednym klipie (Wan 3.0) model
+    dorobił drzwi, których nie było ani w klatce startowej, ani końcowej.
+  - **NOWY UKŁAD (decyzja Karola):** „Zrobimy jeden wielki obraz połączony z tych 8 faz (...)
+    Każde pojedyncze z tych zdjęć będzie POWTARZAJĄCYM SIĘ ŁAGODNIE GIFEM. Nie ma przejść po
+    korytarzach żadnych. (...) Scroll nie triggeruje jakichś dodatkowych animacji." Osiem kadrów
+    tego samego wnętrza leży jeden pod drugim jako jeden pionowy pas; **szwem jest pozioma
+    drewniana belka u góry każdego kadru**, a dół każdego kadru to celowo pusty pas podłogi.
+    Styk czyta się jako podłoga górnego pomieszczenia i belka, która ją niesie.
+  - **MECHANIKA JEST W UKŁADZIE, NIE W SKRYPCIE.** Każda scena to wiersz siatki (tekst | kadr),
+    sceny leżą bez przerw, więc prawe komórki kafelkują się w ciągły pas i jadą z dokumentem.
+    Zero nasłuchu scrolla, zero `transform` sterowanego scrollem, **zero `position: sticky` na
+    całej stronie**. Zweryfikowane w przeglądarce: sceny na 0, 900, 1800, 2840… px — styk co do
+    piksela. Skasowane: `StageMedia.tsx` (przyklejona kolumna), `SceneVideo.tsx` (film przewijany
+    scrollem), `SceneFallbackMedia.tsx` (martwy), stare kadry `scene-*-v4.webp`.
+  - **`object-position: center top` JEST WARUNKIEM CIĄGŁOŚCI, nie estetyką.** Komórka rzadko ma
+    dokładnie proporcję 1:1 mastera, więc `cover` musi coś uciąć; `center top` ucina wyłącznie
+    dół, czyli zaprojektowany pusty pas podłogi. Przy `center center` przycięcie zjadałoby
+    połowę belki i pas rozjeżdżałby się przy innej proporcji okna.
+  - **NAJDROŻSZA NAUCZKA O PĘTLACH (trzy próby po 6 kr):** model **powiększa to, co każe mu się
+    poruszyć**, i **pokazuje to, czego ruch nazwiesz**. Próba 1: „kolorowe wstążki przy uchwytach
+    skrzyń kołyszą się" → wstążki urosły w wiszące w powietrzu szarfy. Próba 2: „palce
+    poprawiają chwyt na skrzyni" → model **przeciął na wielkie zbliżenie dłoni**. Próba 3
+    (przyjęta): rusza się **wyłącznie powietrze, światło i para**, ludzie zamarzają zdaniem
+    twierdzącym („every person stays exactly as they are"). Zero wymyślonych obiektów, zero cięć.
+  - **PĘTLA DOMYKA SIĘ MONTAŻEM, NIE OBIETNICĄ MODELU.** Materiał generatywny nie wraca do klatki
+    startowej (zmierzone odchylenie do 178/255 lokalnie). Rozwiązanie za 0 kredytów: **przytnij
+    do fragmentu sprzed ucieczki** (profil odchylenia od klatki zerowej pokazuje, gdzie model
+    przestaje animować i zaczyna wymyślać — u nas para z czajnika rosnąca w chmurę i smuga
+    światła przejeżdżająca przez pokój), potem **zmontuj tam i z powrotem** (`reverse` z odciętą
+    zdublowaną klatką na zawrocie). Pętla domyka się wtedy matematycznie. Gotowe pliki: różnica
+    pierwszej i ostatniej klatki < 2,5/255, czyli sam dithering.
+  - **JEDEN DEKODER, NIE OSIEM** (`presentation/loopConductor.ts`): panele meldują widoczność,
+    dyrygent puszcza ten, którego widać najwięcej, i pauzuje resztę; karta w tle pauzuje
+    wszystkie. Zweryfikowane w Chromium: 8 `<video>` w DOM, **1 grające**. Plus przycisk pauzy
+    `.pr-pause` (WCAG 2.2.2), stan wspólny z `HeroMedia` przez `sessionStorage`.
+  - **Reguły strażnika PRZEPISANE, nie obejście** (jak przy jasnym motywie): `media-one-autoplay-per-route`
+    (limit z „jednego ELEMENTU w DOM" na „jeden GRAJĄCY dekoder"; wyjątek na pętle generatywne
+    **wyłącznie na trasie `/`**), `media-video-placement` (dopisany `.pr-panel` jako trzecie
+    dozwolone miejsce — nie tworzy ani kontekstu stackingu, ani bloku zawierającego dla `fixed`),
+    `media-video-budgets` (wiersze paneli + podbudżet 1,75 MB na trasę `/`). **146 reguł.**
+  - **Zmierzony transfer:** desktop pełna wizyta **2,15 MB** (webm) / 1,97 MB (mp4) wobec limitu
+    2,5 MB; mobile **262 KB** wobec 350 KB i **0 B wideo** — bo `.pr-panel` ma `display: none`
+    poniżej 64rem, a `<img loading="lazy">` w kontenerze `display: none` nie jest pobierany.
+    **Zamiana tego `display: none` na `visibility`/`opacity` cicho wysadziłaby budżet mobilny.**
+  - **Koszty Higgsfielda (zmierzone, nie z cennika):** `gpt_image_2_5` 2k high = **3 kr**,
+    `seedance1_5` 4 s 1080p = **6 kr** (choć `generate cost` podaje 12 — wierzyć saldu, nie
+    kalkulatorowi). Cała strona: 8 kadrów (24) + 8 pętli + 2 próbne (60) = **84 kr**.
+    **Zostało 10,5 kr** — na kolejne generacje potrzebne doładowanie.
+  - **`components/HeroMedia.tsx` jest MARTWY** — żadna trasa go nie renderuje od przebudowy na
+    prezentację. Zostawiony świadomie (referuje do niego `data/media.ts` i okno c1), ale to
+    znaczy, że **slot „jedno autoodtwarzanie hero" jest pusty** i pętle prezentacji go nie zajęły.
+  - **Nauczka narzędziowa:** heredoc `<<'EOF'` w tym środowisku potrafi zjeść cytaty i ukośniki
+    w dłuższych plikach TSX — do plików źródłowych używać Write/Edit, heredoc zostawić skryptom
+    powłoki. Do klatek z mp4 jest teraz **systemowy ffmpeg** (`Gyan.FFmpeg`, z libx264/libvpx/
+    libwebp) — nie trzeba już zrzucać klatek przeglądarką jak w sesji 2026-09-13.
+
 - **2026-09-14 (pakiet promptów) — OSIEM PROMPTÓW GOTOWYCH PO TRZECH RUNDACH KRYTYKI:**
   - `docs/plan/prezentacja-scenariusz.md` §4 (wersja 4) — komplet pod **jasną kreskówkę**,
     nie pod papierowy kolaż (banner korygujący na górze dokumentu; §1 jest historyczna).

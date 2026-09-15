@@ -19,13 +19,12 @@
 
 export { Stage } from "./Stage";
 export { Scene } from "./Scene";
-export { SceneVideo } from "./SceneVideo";
-export { SceneFallbackMedia } from "./SceneFallbackMedia";
+export { ScenePanel } from "./ScenePanel";
 export { useScene, useStage, type SceneApi, type StageApi } from "./context";
 export {
   SCENE_MEDIA,
   sceneMedia,
-  videoSources,
+  loopSources,
   type SceneMediaEntry,
-  type SceneVideoAsset,
+  type SceneLoopAsset,
 } from "./sceneMedia";

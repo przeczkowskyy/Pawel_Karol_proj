@@ -11,15 +11,46 @@ added: 2026-09-12
 
 Na każdej trasie (`/`, `/narzedzia`, `/narzedzia/:slug`, `/oferta`, `/faq`, `/rodo`, `404`) w DOM po starcie Reacta jest:
 
-- **≤ 1 element `<video>` z automatycznym odtwarzaniem, i to wyłącznie na trasie `/`** (`HeroMedia`), wyłącznie przy `pointer: fine` i wyłącznie po `window.load`; na **18 pozostałych trasach twarde 0** (samo „≤ 1 na trasę" formalnie dopuszczałoby klip na `/oferta`),
-- **treścią tego jedynego autoodtwarzania jest NAGRANIE PRAWDZIWEGO NARZĘDZIA** (`record-demos.mjs`), nie pętla generatywna (D37): pętla zajęłaby slot dowodu i zostawiła hero bez treści. Nagranie hero gra **raz**, bez `loop`, i zatrzymuje się na ostatniej klatce,
+- **≤ 1 element `<video>` GRAJĄCY JEDNOCZEŚNIE, i to wyłącznie na trasie `/`**, wyłącznie przy `pointer: fine` i wyłącznie po `window.load`; na **18 pozostałych trasach twarde 0** (samo „≤ 1 na trasę" formalnie dopuszczałoby klip na `/oferta`),
+
+  **ZMIANA 2026-09-15 (decyzja Karola, zastępuje D37 na trasie `/`).** Trasa `/`
+  jest prezentacją i niesie **osiem paneli z łagodnymi pętlami generatywnymi**,
+  po jednej na scenę: „Każde pojedyncze z tych zdjęć będzie POWTARZAJĄCYM SIĘ
+  ŁAGODNIE GIFEM." Limit zmienił się więc z „jednego ELEMENTU w DOM" na „jednego
+  GRAJĄCEGO dekodera", bo osiem paneli musi istnieć w układzie, żeby pas obrazu
+  był ciągły — ale grać wolno tylko temu, którego widać najwięcej.
+  Egzekwuje to `presentation/loopConductor.ts`: panele meldują widoczność,
+  dyrygent puszcza jeden i pauzuje resztę, a karta w tle pauzuje wszystkie.
+  **Mechanizm awarii, przed którym broni ten limit, jest ten sam co wcześniej**
+  (dwa dekodery = spadek fps i grzanie, na iOS dodatkowy kontekst GPU), więc
+  liczba „jeden naraz" NIE jest negocjowalna — negocjowalna była tylko liczba
+  elementów w DOM.
+- **treść tego odtwarzania zależy od trasy:**
+  - na `/` to **pętle prezentacji** (wyżej). Wymóg „nagranie prawdziwego
+    narzędzia" z D37 dotyczył hero starej strony głównej, a ta trasa już nie
+    istnieje — `components/HeroMedia.tsx` został w repo, ale **żadna trasa go nie
+    renderuje** (stan na 2026-09-15). Slot dowodu nie jest przez pętle zajęty,
+    bo dowodem na tej stronie są trzynaście podstron narzędzi z żywymi
+    dashboardami, nie jeden kadr w nagłówku,
+  - gdyby hero z nagraniem kiedyś wróciło: gra **raz**, bez `loop`, i zatrzymuje
+    się na ostatniej klatce — i wtedy **nie wolno go łączyć z pętlami**, bo to
+    byłyby dwa autoodtwarzania na jednej trasie,
 - ≤ 1 ruchome tło łącznie (wideo LUB canvas WebGL `GLSLHills` LUB nic); wideo hero i GLSL Hills nigdy razem. W v1 `three` jest poza `dependencies`, więc realnie: tylko wideo,
 - **klipy hover ściany S3 (v1: dokładnie cztery, pierwszy rząd po featured) nie liczą się jako autoplay**, bo startują wyłącznie z intencji użytkownika (`mouseenter` z progiem 120 ms albo `focus-visible`), ale **maksimum jeden gra jednocześnie** (singleton modułowy), a hero jest w tym czasie **zapauzowane** przez `IntersectionObserver`: nigdy dwa dekodery naraz,
-- pętle sekcyjne, tła podstron („tło-pętla /oferta", „/narzedzia") NIE POWSTAJĄ (synthesis §2.6.1 „Co NIE powstaje generatywnie").
+- pętle sekcyjne i tła PODSTRON („tło-pętla /oferta", „/narzedzia") NIE POWSTAJĄ (synthesis §2.6.1 „Co NIE powstaje generatywnie"). Wyjątek z 2026-09-15 dotyczy **wyłącznie trasy `/`** i wyłącznie paneli prezentacji; dopisanie pętli na jakiejkolwiek innej trasie pozostaje złamaniem reguły.
 
 Wideo nie jest treścią: `aria-hidden="true"`, `tabIndex={-1}`, zero NATYWNYCH kontrolek (`controls`), zero dźwięku, a strona bez niego niczego nie traci (test: zdejmij `<video>` → treść i CTA identyczne).
 
-Jedyny element sterujący, jaki przy wideo MUSI istnieć, to przycisk pauzy (`hero-media-toggle`, etykieta „Zatrzymaj podgląd / Pause preview": wideo hero nie jest tłem, tylko podglądem narzędzia) renderowany POZA kontenerem `aria-hidden` — wymóg WCAG 2.2.2 (Pause, Stop, Hide) dla pętli > 5 s i zapis planu (`docs/plan/strona-v2-plan.md:384`); pełna specyfikacja w `media-video-embed-spec` (p. „kontrola pauzy"). Przycisk nie jest kontrolką odtwarzacza (zero `controls`, zero paska postępu, zero dźwięku) i nie liczy się jako „druga kontrolka".
+Jedyny element sterujący, jaki przy wideo MUSI istnieć, to przycisk pauzy renderowany POZA kontenerem `aria-hidden` — wymóg WCAG 2.2.2 (Pause, Stop, Hide) dla ruchu > 5 s i zapis planu (`docs/plan/strona-v2-plan.md:384`); pełna specyfikacja w `media-video-embed-spec` (p. „kontrola pauzy"). Przycisk nie jest kontrolką odtwarzacza (zero `controls`, zero paska postępu, zero dźwięku) i nie liczy się jako „druga kontrolka".
+
+Dwa warianty tego przycisku, zależnie od tego, co gra na trasie:
+
+| Gdzie | Element | Etykieta |
+|---|---|---|
+| prezentacja `/` (osiem pętli) | `.pr-pause` w `PresentationChrome`, stan w `loopConductor` | „Zatrzymaj ruch / Stop motion", po pauzie „Wznów ruch / Resume motion" |
+| hero z nagraniem narzędzia (dziś nieaktywne) | `hero-media-toggle` | „Zatrzymaj podgląd / Pause preview" — bo to podgląd narzędzia, nie tło |
+
+Stan pauzy jest **jeden na całą witrynę** (`sessionStorage`, klucz `klarow:media:paused`): dla człowieka „zatrzymaj ruch" jest decyzją o stronie, a nie o pliku. Przycisk pojawia się WYŁĄCZNIE, gdy coś faktycznie gra — po odrzuceniu bramek (`pointer: coarse`, `prefers-reduced-motion`, `saveData`) nie ma go wcale, bo kontrolka URUCHAMIAJĄCA ruch po odrzuceniu bramek jest zakazana (`media-video-gating`).
 
 ## Mechanizm awarii (dlaczego)
 

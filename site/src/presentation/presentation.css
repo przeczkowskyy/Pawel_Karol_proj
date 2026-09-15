@@ -11,69 +11,81 @@
    Tam, gdzie potrzebna jest przezroczystość, składamy ją z tokenu `*-rgb`
    dokładnie tak, jak robi to sam `tokens.css` przy `--accent-a8`.
 
-   PUŁAPKA, KTÓREJ TEN PLIK UNIKA: `position: sticky` przestaje działać po cichu,
-   gdy KTÓRYKOLWIEK przodek ma `overflow` inny niż `visible`. Dlatego kadrowanie
-   (`overflow: hidden`) siedzi na SAMYM elemencie przyklejonym, nigdy na
-   `.pr-stage` ani na `.pr-scene`. Jeśli scena przestanie się kleić, szukaj
-   `overflow-x: hidden` dopisanego gdzieś wyżej w layoucie strony. */
+   PUŁAPKA, KTÓRA ZNIKŁA 2026-09-15: ten arkusz nie ma już ani jednego
+   `position: sticky`. Do 14 września obraz stał w przyklejonej kolumnie
+   i podmieniał kadry przenikaniem; od 15 września osiem kadrów jedzie razem
+   z dokumentem jako jeden pionowy pas. Zniknął z tym cały gatunek błędów,
+   w którym `overflow` dopisany gdziekolwiek wyżej w layoucie po cichu zabijał
+   przyklejanie. Jeśli kiedyś sticky tu wróci, wróci też tamta pułapka. */
 
-/* ── RAMA DZIELONA ───────────────────────────────────────────────────────
-   Lewa kolumna: czytanie w zwykłym przepływie dokumentu.
-   Prawa kolumna: jedyny przyklejony element na całej stronie — obraz.
+/* ── PAS PIONOWY ─────────────────────────────────────────────────────────
+   Decyzja Karola 2026-09-15: „Zrobimy jeden wielki obraz połączony z tych
+   8 faz i złączymy potem osobno te zdjęcia jedno pod drugim. (...) Po prostu
+   jak scrolujesz to przescrolowuje się to jedno duże złączone zdjęcie.
+   Scroll nie triggeruje jakichś dodatkowych animacji."
 
-   Proporcja wynika z prośby Karola („animacja musi stanowić większą część
-   strony") i z rachunku: przy 64 % kolumna tekstu schodzi do 422 px i akapit
-   łamie się co cztery słowa, przy 56 % animacja przestaje dominować. 60 % daje
-   na 1440×900 kadr 864×900 (proporcja 0,96, praktycznie kwadrat — stąd master
-   1:1) i 480 px użytecznego tekstu. */
+   MECHANIKA JEST CAŁA W UKŁADZIE, NIE W SKRYPCIE. Każda scena to wiersz
+   siatki: tekst w lewej komórce, kadr w prawej. Sceny leżą jedna pod drugą
+   bez przerw, więc prawe komórki kafelkują się w jeden ciągły pas i jadą
+   z dokumentem. Nie ma tu ani jednego nasłuchu przewijania, ani jednego
+   `transform` sterowanego scrollem i ani jednej klatki liczonej w JS.
+
+   DLACZEGO KADR LEŻY W SCENIE, A NIE W RAMIE: pas ma się kafelkować CO DO
+   PIKSELA. Gdyby kadry stały w osobnej kolumnie obok kolumny tekstu, ich
+   wysokości musiałyby zgadzać się z wysokościami scen przez przypadek —
+   wystarczyłby jeden akapit dłuższy o wiersz i pas rozjechałby się ze
+   scenami. W jednym wierszu siatki ta zgodność jest z definicji.
+
+   Proporcja 60 % wynika z prośby Karola („animacja musi stanowić większą
+   część strony") i z rachunku: przy 64 % kolumna tekstu schodzi do 422 px
+   i akapit łamie się co cztery słowa, przy 56 % obraz przestaje dominować.
+   60 % daje na 1440×900 kadr 864×900 (proporcja 0,96, praktycznie kwadrat —
+   stąd mastery 1:1) i 480 px użytecznego tekstu. */
 
 .pr-stage {
-  /* CELOWO bez `overflow`, `transform`, `filter` i `will-change`: pierwsza
-     własność zabiłaby `position: sticky` kolumny medialnej PO CICHU, bez błędu
-     w konsoli, a każda z trzech pozostałych zrobiłaby z ramy blok zawierający
-     dla `position: fixed` i chroma przestałaby trzymać się krawędzi okna. */
+  /* CELOWO bez `overflow`, `transform`, `filter` i `will-change`: każda
+     z trzech ostatnich zrobiłaby z ramy blok zawierający dla `position: fixed`
+     i chroma przestałaby trzymać się krawędzi okna (`media-video-placement`). */
   position: relative;
   width: 100%;
 }
 
-/* Kolumna czytania. Na wąskim ekranie jest całą stroną. */
-.pr-flow {
-  min-width: 0;
+/* ── scena = jeden wiersz pasa ────────────────────────────────────────────
+   BEZ `overflow`: sekcja dłuższa od ekranu rośnie, zamiast po cichu ucinać
+   akapit. Trójka vh -> dvh -> svh w tej kolejności: stary silnik bierze
+   pierwszą, nowy ostatnią. */
+.pr-scene {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-height: 100vh;
+  min-height: 100dvh;
+  min-height: 100svh;
 }
 
 @media (min-width: 64rem) {
-  .pr-stage {
-    display: grid;
-    /* tekst | animacja — animacja po prawej i szersza */
+  .pr-scene {
+    /* tekst | obraz — obraz po prawej i szerszy */
     grid-template-columns: minmax(0, 1fr) var(--_split, 60%);
-    align-items: start;
+    align-items: stretch;
   }
 }
 
 @media (min-width: 100rem) {
-  .pr-stage {
+  .pr-scene {
     --_split: 58%;
   }
 }
 
-/* ── scena: zwykła sekcja, już nie tor z przyklejonym ekranem ──────────────
-   Sticky zszedł stąd 2026-09-14. Dwa powody, oba twarde:
-   (1) osiem scen przyklejonych łamało `motion-no-pinning-no-scroll-hijack`
-       §B p.1 — limit to DWIE sceny sticky na trasę;
-   (2) tekst leżący na ruchomym kadrze nie dawał się obronić kontrastowo:
-       pomiar na gęstej ilustracji dał bezpieczną wyłącznie dolną ćwiartkę.
-   BEZ `overflow`: sekcja dłuższa od ekranu rośnie, zamiast po cichu uciąć
-   akapit — a przy węższej kolumnie tekstu to się będzie zdarzać. */
-.pr-scene {
-  position: relative;
+/* Kolumna czytania. Na wąskim ekranie jest całą sceną. */
+.pr-scene-text {
   display: grid;
   align-content: center;
-  min-height: 100vh;
-  min-height: 100dvh;
+  justify-items: start;
+  min-width: 0;
   padding-block: calc(var(--nav-h, 4rem) + 1.5rem) var(--gutter);
   /* miejsce na stałą zakładkę kontaktową przy lewej krawędzi */
   padding-inline: max(var(--gutter), 4.25rem) clamp(1.5rem, 3vw, 2.5rem);
-  justify-items: start;
 }
 
 .pr-scene-content {
@@ -81,44 +93,36 @@
   width: 100%;
 }
 
-/* ── kolumna medialna: JEDYNY sticky na stronie ───────────────────────────── */
-
-.pr-media-col {
-  position: sticky;
-  top: 0;
-  /* `align-self: start` jest OBOWIĄZKOWE: rozciągnięty element siatki nie ma
-     po czym się kleić i sticky umiera bez błędu. */
-  align-self: start;
-  /* Trójka vh -> dvh -> svh, w tej kolejności: stary silnik bierze pierwszą,
-     nowy ostatnią. `svh` jest tu właściwe, bo kolumna ma stać w najmniejszym
-     widocznym oknie i nie chować się pod paskiem adresu, gdy ten wyjedzie. */
-  height: 100vh;
-  height: 100dvh;
-  height: 100svh;
+/* ── panel: jeden kadr pasa ───────────────────────────────────────────────
+   `position: relative` + `overflow: hidden` + dziecko `absolute` to ten sam
+   układ, który `media-video-placement` dopuszcza dla kontenera hero i kafla
+   narzędzia: nie powstaje przez niego kontekst stackingu ani blok zawierający
+   dla `position: fixed`, więc nie wraca bug iOS „samo tło" z lipca. */
+.pr-panel {
+  position: relative;
   overflow: hidden;
   border-inline-start: 1px solid var(--border);
   background: var(--surface-muted);
 }
 
-/* Na wąskim ekranie kolumny medialnej NIE MA. To nie jest oszczędność,
-   tylko reguła `media-video-budgets`: mobile ma 358 KB całego transferu,
-   w tym 0 B mediów wideo. Telefon dostaje broszurę — samą typografię. */
+/* Na wąskim ekranie panelu NIE MA. To nie jest oszczędność, tylko reguła
+   `media-video-budgets`: mobile ma 358 KB całego transferu, w tym 0 B mediów
+   wideo. Telefon dostaje broszurę — samą typografię. Kadry też nie lecą:
+   `loading="lazy"` w kontenerze `display: none` nie jest pobierane. */
 @media (max-width: 63.999rem) {
-  .pr-media-col {
+  .pr-panel {
     display: none;
   }
 }
 
-.pr-media-frame {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-/* Wszystkie kadry są w DOM od razu i przełączają się samą nieprzezroczystością.
-   Podmiana `src` przy zmianie sceny kazałaby dekodować obraz w trakcie
-   przewijania, co widać jako przycięcie. */
-.pr-media-shot {
+/* KADROWANIE OD GÓRY, I TO JEST WARUNEK CIĄGŁOŚCI PASA, nie estetyka.
+   Komórka rzadko ma dokładnie proporcję 1:1 mastera, więc `cover` musi coś
+   uciąć. `center top` sprawia, że ucina WYŁĄCZNIE dół kadru — a dół każdego
+   kadru to celowo pusty pas podłogi. Belka u góry, która jest szwem z kadrem
+   leżącym wyżej, zostaje nietknięta przy każdej proporcji okna.
+   Przy `center center` przycięcie zjadałoby połowę belki i pas by się rozjechał. */
+.pr-panel-still,
+.pr-panel-clip {
   position: absolute;
   top: 0;
   right: 0;
@@ -127,21 +131,26 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* Kadr ma pustą dolną ćwiartkę (zaprojektowaną pod tekst w poprzednim
-     układzie). W kolumnie medialnej ta pustka jest już niepotrzebna, więc
-     kadrujemy ku pasmu akcji zamiast ku podłodze. */
-  object-position: center 38%;
+  object-position: center top;
+}
+
+/* Pętla wchodzi przenikaniem na kadr, który zostaje pod spodem. Kadr JEST
+   klatką zerową pętli, więc widać z tego wyłącznie moment, w którym obraz
+   zaczyna oddychać. */
+.pr-panel-clip {
   opacity: 0;
   transition: opacity var(--duration-media) var(--ease-std);
 }
 
-.pr-media-shot[data-active="true"] {
+.pr-panel-clip[data-ready="true"] {
   opacity: 1;
 }
 
-/* Szew: kadr ma wyglądać na wydrukowany na tym samym arkuszu co tekst,
-   a nie wklejony. Cień jest zakazany (Shape Lock). */
-.pr-media-seam {
+/* Wygaszenie przy krawędzi tekstu: kadr ma wyglądać na wydrukowany na tym
+   samym arkuszu co tekst, a nie wklejony. Gradient jest POZIOMY, więc panele
+   leżące jeden pod drugim składają się w jeden ciągły pas bez poprzecznego
+   szwu. Cień jest zakazany (Shape Lock). */
+.pr-panel-veil {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -216,6 +225,47 @@
   color: var(--foreground-muted);
 }
 
+/* ── PAUZA RUCHU (WCAG 2.2.2) ─────────────────────────────────────────────
+   Leży pod kolofonem, przy prawej krawędzi: daleko od stopki z CTA, żeby nie
+   konkurowała z akcją, i blisko obrazu, którego dotyczy. Wygląda jak drobny
+   druk, bo to kontrolka dostępności, a nie element oferty — ale ma pełne pole
+   dotyku 44 px (`a11y-touch-targets-44`), bo korzysta z niej ktoś, komu ruch
+   przeszkadza, często na tablecie. */
+.pr-pause {
+  position: fixed;
+  right: calc(var(--gutter) + env(safe-area-inset-right, 0px));
+  /* NAD kolofonem, nie na nim. Kolofon stoi w tym samym rogu i ma
+     `pointer-events: none`, więc nakładka nie byłaby nawet widoczna jako błąd
+     kliknięcia — byłaby po prostu dwoma napisami jeden na drugim. */
+  bottom: calc(var(--gutter) + 2.25rem + env(safe-area-inset-bottom, 0px));
+  z-index: 9;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-overlay);
+  color: var(--foreground-muted);
+  font-size: var(--text-xs);
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: color var(--duration-fast) var(--ease-std);
+}
+
+.pr-pause:hover {
+  color: var(--foreground);
+}
+
+/* Na wąskim ekranie pętli nie ma w ogóle (panel jest `display: none`), więc
+   przycisk i tak się nie renderuje; reguła stoi dla porządku, gdyby panel
+   kiedyś wrócił na telefon. */
+@media (max-width: 63.999rem) {
+  .pr-pause {
+    bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px));
+  }
+}
+
 /* STOPKA STAŁA w lewym dolnym rogu. Przycisk plus telefon, nic więcej. */
 .pr-footer {
   position: fixed;
@@ -261,123 +311,13 @@
     background: var(--surface-overlay);
   }
   /* miejsce pod stopkę, ustawione w CSS, nigdy w JS po hydracji (CLS) */
-  .pr-flow {
+  .pr-scene-text {
     padding-bottom: 5rem;
   }
   /* kolofon ustępuje stopce, żeby się nie nakładały */
   .pr-count {
     bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px));
   }
-}
-
-/* ── media sceny ──────────────────────────────────────────────────────────── */
-
-.pr-media {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-}
-
-/* kadr (poster albo zrzut): zawsze w DOM, zawsze pod nagraniem */
-.pr-media-still,
-.pr-media-clip {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* Nagranie wjeżdża dopiero, gdy ma klatki (`data-ready`). Do tego czasu widać
-   kadr. Przejście jest na samej nieprzezroczystości, więc nie rusza layoutu. */
-.pr-media-clip {
-  opacity: 0;
-  transition: opacity var(--duration-media) var(--ease-std);
-}
-.pr-media-clip[data-ready="true"] {
-  opacity: 1;
-}
-
-/* ── tło zastępcze ────────────────────────────────────────────────────────
-   Ma wyglądać jak decyzja, nie jak brak pliku: stal wstaje od dołu kadru,
-   winieta zamyka rogi, a opcjonalna siatka komórek (sceny „plikowe") jest
-   wygaszona maską, więc nie czyta się jak tapeta. Wszystko statyczne:
-   zero animacji, zero warstw kompozytora, zero kosztu na telefonie. */
-
-/* Podkład jest NIEPRZEZROCZYSTY i siedzi na ramce, a nie na warstwie stali.
-   Kolejność malowania: podkład, potem kadr, potem stal i winieta. Gdyby
-   nieprzezroczysty kolor był w `.pr-fallback-steel`, przykryłby kadr
-   w wariancie „shot" i nikt by go nie zobaczył. */
-.pr-fallback {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background: var(--background);
-}
-
-/* Wyłącznie warstwy PRZEZROCZYSTE: stalowa łuna od dołu plus winieta. */
-.pr-fallback-steel {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background:
-    radial-gradient(
-      120% 85% at 50% 100%,
-      rgba(var(--media-tint-rgb), 0.14) 0%,
-      rgba(var(--media-tint-rgb), 0.05) 45%,
-      rgba(var(--veil-rgb), 0) 75%
-    ),
-    radial-gradient(
-      100% 70% at 50% 50%,
-      rgba(var(--veil-rgb), 0) 40%,
-      rgba(var(--veil-rgb), 0.55) 100%
-    );
-}
-
-.pr-fallback-grid {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background-image:
-    repeating-linear-gradient(
-      to right,
-      rgba(var(--media-tint-rgb), 0.13) 0 1px,
-      transparent 1px 72px
-    ),
-    repeating-linear-gradient(
-      to bottom,
-      rgba(var(--media-tint-rgb), 0.13) 0 1px,
-      transparent 1px 72px
-    );
-  /* maska używa koloru wyłącznie jako kanału alfa; i tak składamy ją z tokenu,
-     żeby w całym pliku nie było ani jednego literału koloru */
-  -webkit-mask-image: radial-gradient(
-    90% 70% at 50% 45%,
-    rgba(var(--veil-rgb), 1) 0%,
-    transparent 100%
-  );
-  mask-image: radial-gradient(
-    90% 70% at 50% 45%,
-    rgba(var(--veil-rgb), 1) 0%,
-    transparent 100%
-  );
-}
-
-/* Kadr pod gradientem (wariant „shot"): wygaszony, żeby był fakturą, a nie
-   drugą treścią konkurującą z tekstem sceny. */
-.pr-fallback .pr-media-still {
-  opacity: 0.35;
 }
 
 /* ── ograniczony ruch ─────────────────────────────────────────────────────
@@ -388,17 +328,9 @@
    bo prezentacja jest wtedy zwykłym ciągiem sekcji.
    Wymóg reguły `motion-no-pinning-no-scroll-hijack` §B p.3. */
 @media (prefers-reduced-motion: reduce) {
-  .pr-scene {
-    height: auto;
-  }
-  .pr-scene-sticky {
-    position: static;
-    height: auto;
-    min-height: 100vh;
-    min-height: 100dvh;
-    overflow: visible;
-  }
-  .pr-media-clip {
+  /* Pętla nie powstaje już w JS (bramka w `ScenePanel`); to jest DRUGIE
+     zabezpieczenie, na wypadek gdyby ustawienie zmieniło się po montażu. */
+  .pr-panel-clip {
     display: none;
     transition: none;
   }

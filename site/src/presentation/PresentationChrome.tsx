@@ -1,8 +1,10 @@
+import { useEffect, useState } from "react";
 import * as m from "motion/react-m";
 import { useReducedMotion, type MotionValue } from "motion/react";
 import { pick, useLang } from "@/i18n";
 import { MESSAGING } from "@/data/messaging";
 import { PHONE_DISPLAY, PHONE_HREF } from "@/data/contact";
+import { czyPauza, subskrybujObecnosc, subskrybujPauze, ustawPauze } from "./loopConductor";
 
 /* ── PresentationChrome ─────────────────────────────────────────────────────
    Komponenty STAŁE prezentacji: widoczne niezależnie od tego, gdzie stoi
@@ -35,11 +37,31 @@ type ChromeProps = {
   onBook?: () => void;
 };
 
+/* Etykieta przełącznika. Mówi, CO SIĘ STANIE po kliknięciu, nie jaki jest stan:
+   to jest przycisk, nie wskaźnik. */
+const PAUZA = {
+  zatrzymaj: { pl: "Zatrzymaj ruch", en: "Stop motion" },
+  wznow: { pl: "Wznów ruch", en: "Resume motion" },
+};
+
 export function PresentationChrome({ progress, index, total, label, onBook }: ChromeProps) {
   const reduce = useReducedMotion();
   const { lang } = useLang();
 
   const kontakt = pick(lang, MESSAGING.cta.primary);
+
+  /* Stan pauzy żyje w `loopConductor`, nie tutaj: ta sama decyzja obowiązuje
+     wszystkie osiem paneli i przeżywa przejście między trasami (sessionStorage,
+     wspólny klucz z `HeroMedia`). Chroma jest tylko jego widokiem. */
+  const [paused, setPaused] = useState(false);
+  const [saPetle, setSaPetle] = useState(false);
+
+  useEffect(() => {
+    setPaused(czyPauza());
+    return subskrybujPauze(setPaused);
+  }, []);
+
+  useEffect(() => subskrybujObecnosc(setSaPetle), []);
 
   return (
     <div className="pr-chrome">
@@ -85,6 +107,26 @@ export function PresentationChrome({ progress, index, total, label, onBook }: Ch
           {PHONE_DISPLAY}
         </a>
       </div>
+
+      {/* PAUZA RUCHU (WCAG 2.2.2 Pause, Stop, Hide). Osiem paneli oddycha samo
+          z siebie przez całą długość strony, czyli znacznie dłużej niż 5 s,
+          więc mechanizm zatrzymania jest WYMAGANY — także dla osoby, która nie
+          ma włączonego `prefers-reduced-motion`, ale ruch obok tekstu jej
+          przeszkadza. Norma zna tylko wyjątek „essential", a tło nim nie jest.
+
+          Przycisk pojawia się WYŁĄCZNIE, gdy pętle faktycznie grają. Gdy bramki
+          je odrzuciły (telefon, ograniczony ruch, Data Saver), nie ma go wcale:
+          kontrolka URUCHAMIAJĄCA ruch po odrzuceniu bramek jest zakazana
+          (`media-video-gating`). */}
+      {saPetle ? (
+        <button
+          type="button"
+          className="pr-pause"
+          onClick={() => ustawPauze(!paused)}
+        >
+          {pick(lang, paused ? PAUZA.wznow : PAUZA.zatrzymaj)}
+        </button>
+      ) : null}
     </div>
   );
 }

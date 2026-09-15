@@ -3842,15 +3842,46 @@ Impact: **BLOCKER** · Tagi: media, video, autoplay, background, performance · 
 
 Na każdej trasie (`/`, `/narzedzia`, `/narzedzia/:slug`, `/oferta`, `/faq`, `/rodo`, `404`) w DOM po starcie Reacta jest:
 
-- **≤ 1 element `<video>` z automatycznym odtwarzaniem, i to wyłącznie na trasie `/`** (`HeroMedia`), wyłącznie przy `pointer: fine` i wyłącznie po `window.load`; na **18 pozostałych trasach twarde 0** (samo „≤ 1 na trasę" formalnie dopuszczałoby klip na `/oferta`),
-- **treścią tego jedynego autoodtwarzania jest NAGRANIE PRAWDZIWEGO NARZĘDZIA** (`record-demos.mjs`), nie pętla generatywna (D37): pętla zajęłaby slot dowodu i zostawiła hero bez treści. Nagranie hero gra **raz**, bez `loop`, i zatrzymuje się na ostatniej klatce,
+- **≤ 1 element `<video>` GRAJĄCY JEDNOCZEŚNIE, i to wyłącznie na trasie `/`**, wyłącznie przy `pointer: fine` i wyłącznie po `window.load`; na **18 pozostałych trasach twarde 0** (samo „≤ 1 na trasę" formalnie dopuszczałoby klip na `/oferta`),
+
+  **ZMIANA 2026-09-15 (decyzja Karola, zastępuje D37 na trasie `/`).** Trasa `/`
+  jest prezentacją i niesie **osiem paneli z łagodnymi pętlami generatywnymi**,
+  po jednej na scenę: „Każde pojedyncze z tych zdjęć będzie POWTARZAJĄCYM SIĘ
+  ŁAGODNIE GIFEM." Limit zmienił się więc z „jednego ELEMENTU w DOM" na „jednego
+  GRAJĄCEGO dekodera", bo osiem paneli musi istnieć w układzie, żeby pas obrazu
+  był ciągły — ale grać wolno tylko temu, którego widać najwięcej.
+  Egzekwuje to `presentation/loopConductor.ts`: panele meldują widoczność,
+  dyrygent puszcza jeden i pauzuje resztę, a karta w tle pauzuje wszystkie.
+  **Mechanizm awarii, przed którym broni ten limit, jest ten sam co wcześniej**
+  (dwa dekodery = spadek fps i grzanie, na iOS dodatkowy kontekst GPU), więc
+  liczba „jeden naraz" NIE jest negocjowalna — negocjowalna była tylko liczba
+  elementów w DOM.
+- **treść tego odtwarzania zależy od trasy:**
+  - na `/` to **pętle prezentacji** (wyżej). Wymóg „nagranie prawdziwego
+    narzędzia" z D37 dotyczył hero starej strony głównej, a ta trasa już nie
+    istnieje — `components/HeroMedia.tsx` został w repo, ale **żadna trasa go nie
+    renderuje** (stan na 2026-09-15). Slot dowodu nie jest przez pętle zajęty,
+    bo dowodem na tej stronie są trzynaście podstron narzędzi z żywymi
+    dashboardami, nie jeden kadr w nagłówku,
+  - gdyby hero z nagraniem kiedyś wróciło: gra **raz**, bez `loop`, i zatrzymuje
+    się na ostatniej klatce — i wtedy **nie wolno go łączyć z pętlami**, bo to
+    byłyby dwa autoodtwarzania na jednej trasie,
 - ≤ 1 ruchome tło łącznie (wideo LUB canvas WebGL `GLSLHills` LUB nic); wideo hero i GLSL Hills nigdy razem. W v1 `three` jest poza `dependencies`, więc realnie: tylko wideo,
 - **klipy hover ściany S3 (v1: dokładnie cztery, pierwszy rząd po featured) nie liczą się jako autoplay**, bo startują wyłącznie z intencji użytkownika (`mouseenter` z progiem 120 ms albo `focus-visible`), ale **maksimum jeden gra jednocześnie** (singleton modułowy), a hero jest w tym czasie **zapauzowane** przez `IntersectionObserver`: nigdy dwa dekodery naraz,
-- pętle sekcyjne, tła podstron („tło-pętla /oferta", „/narzedzia") NIE POWSTAJĄ (synthesis §2.6.1 „Co NIE powstaje generatywnie").
+- pętle sekcyjne i tła PODSTRON („tło-pętla /oferta", „/narzedzia") NIE POWSTAJĄ (synthesis §2.6.1 „Co NIE powstaje generatywnie"). Wyjątek z 2026-09-15 dotyczy **wyłącznie trasy `/`** i wyłącznie paneli prezentacji; dopisanie pętli na jakiejkolwiek innej trasie pozostaje złamaniem reguły.
 
 Wideo nie jest treścią: `aria-hidden="true"`, `tabIndex={-1}`, zero NATYWNYCH kontrolek (`controls`), zero dźwięku, a strona bez niego niczego nie traci (test: zdejmij `<video>` → treść i CTA identyczne).
 
-Jedyny element sterujący, jaki przy wideo MUSI istnieć, to przycisk pauzy (`hero-media-toggle`, etykieta „Zatrzymaj podgląd / Pause preview": wideo hero nie jest tłem, tylko podglądem narzędzia) renderowany POZA kontenerem `aria-hidden` — wymóg WCAG 2.2.2 (Pause, Stop, Hide) dla pętli > 5 s i zapis planu (`docs/plan/strona-v2-plan.md:384`); pełna specyfikacja w `media-video-embed-spec` (p. „kontrola pauzy"). Przycisk nie jest kontrolką odtwarzacza (zero `controls`, zero paska postępu, zero dźwięku) i nie liczy się jako „druga kontrolka".
+Jedyny element sterujący, jaki przy wideo MUSI istnieć, to przycisk pauzy renderowany POZA kontenerem `aria-hidden` — wymóg WCAG 2.2.2 (Pause, Stop, Hide) dla ruchu > 5 s i zapis planu (`docs/plan/strona-v2-plan.md:384`); pełna specyfikacja w `media-video-embed-spec` (p. „kontrola pauzy"). Przycisk nie jest kontrolką odtwarzacza (zero `controls`, zero paska postępu, zero dźwięku) i nie liczy się jako „druga kontrolka".
+
+Dwa warianty tego przycisku, zależnie od tego, co gra na trasie:
+
+| Gdzie | Element | Etykieta |
+|---|---|---|
+| prezentacja `/` (osiem pętli) | `.pr-pause` w `PresentationChrome`, stan w `loopConductor` | „Zatrzymaj ruch / Stop motion", po pauzie „Wznów ruch / Resume motion" |
+| hero z nagraniem narzędzia (dziś nieaktywne) | `hero-media-toggle` | „Zatrzymaj podgląd / Pause preview" — bo to podgląd narzędzia, nie tło |
+
+Stan pauzy jest **jeden na całą witrynę** (`sessionStorage`, klucz `klarow:media:paused`): dla człowieka „zatrzymaj ruch" jest decyzją o stronie, a nie o pliku. Przycisk pojawia się WYŁĄCZNIE, gdy coś faktycznie gra — po odrzuceniu bramek (`pointer: coarse`, `prefers-reduced-motion`, `saveData`) nie ma go wcale, bo kontrolka URUCHAMIAJĄCA ruch po odrzuceniu bramek jest zakazana (`media-video-gating`).
 
 #### Mechanizm awarii (dlaczego)
 
@@ -4083,7 +4114,8 @@ Media ruchome mają DOKŁADNIE dwa dozwolone miejsca:
 
 1. **Kontener hero**: `.hero { position: relative; overflow: hidden }` + `.hero-media { position: absolute; inset: 0; overflow: hidden }` z `<img>` posterem (kadr produktu), opcjonalnym `<img>` gruntu i `<video>` (`object-fit: cover`); ewentualny overlay jako `::after` w tym samym kontenerze. Kolejność malowania wynika z **kolejności w DOM**, nie z `z-index`: grunt → poster → wideo → `::after` → `.hero-content` (`position: relative`, bez `z-index`); przycisk pauzy stoi PO `.hero-media`, więc maluje się wyżej bez `z-index`.
 2. **Kafel ściany S3** dla klipów hover: `.tool-tile { position: relative; overflow: hidden }` + `<video>` `position: absolute` z longhandami, `pointer-events: none`. Nigdy `fixed`, nigdy poza kafel.
-3. **`.bg-layer`** (tylko plan B: `GLSLHills` canvas na desktopie; w v1 nieaktywny, bo `three` jest poza `dependencies`).
+3. **Panel prezentacji** (`.pr-panel`, od 2026-09-15): `position: relative; overflow: hidden` + `<img>` kadru i `<video>` pętli jako `position: absolute` z longhandami, `aria-hidden` na kontenerze. Dopisane, bo trasa `/` jest teraz pionowym pasem ośmiu kadrów, a nie hero (decyzja Karola, patrz `media-one-autoplay-per-route`). Panel spełnia ten sam warunek konstrukcyjny co dwa punkty wyżej — **nie tworzy ani kontekstu stackingu, ani bloku zawierającego dla `position: fixed`** — i to jest jedyny powód, dla którego wolno go dopisać: `overflow: hidden` sam w sobie nie robi żadnej z tych dwóch rzeczy, a `transform`, `filter` i `will-change` robią obie i dlatego na `.pr-panel` ich NIE MA.
+4. **`.bg-layer`** (tylko plan B: `GLSLHills` canvas na desktopie; w v1 nieaktywny, bo `three` jest poza `dependencies`).
 
 Zakazane w `.content-layer` i jego potomkach: nowe `position: fixed` (poza `Navbar` i `<dialog>` natywnym), `z-index` na wrapperach sekcji, `transform`/`filter`/`backdrop-filter`/`perspective`/`will-change` na przodkach elementów `fixed`/`sticky`, `mix-blend-mode` na elemencie zawierającym treść, nieprzezroczyste tło na wrapperze roota (`#121212` na `.content-layer` zasłoniło tło w commicie 640a6f9: „Fix: tło znów widoczne").
 
@@ -4471,10 +4503,19 @@ Każdy plik w `site/public/media/` spełnia:
 | `hero-ground-v<N>.webp` (grunt, still Higgsfield) | ≤ 71 680 B (70 KB); wariant 800 px ≤ 30 720 B | `loading="lazy"`, nigdy preload (`perf-images-policy`) |
 | `hero-production-v<N>.lqip.webp` (opcjonalny) | ≤ 2 048 B | 48 px szerokości |
 | klipy hover `tools/<slug>-v<N>.webm` (**v1, dokładnie 4**) | ≤ 327 680 B (320 KB) | 960×600, 6–7 s, 24 fps, `-an`, `loop`, `preload="none"`; suma na trasie ≤ 1 331 200 B |
+| **pętla panelu** `presentation/panel-<scena>-v<N>.webm` (VP9) — **dokładnie 8, tylko trasa `/`** | ≤ 286 720 B (280 KB) | 800×800, 2,5–5 s, 18 fps CFR, `-an`, `loop`, `preload="none"`, `crf 44`, `-g 36`, dithering `noise=alls=3:allf=t+u` |
+| **pętla panelu** `presentation/panel-<scena>-v<N>.mp4` (H.264) | ≤ 245 760 B (240 KB) | `profile high`, `level 4.1`, `crf 32`, `+faststart`, `-an` |
+| **kadr panelu** `presentation/panel-<scena>-v<N>.webp` | ≤ 61 440 B (60 KB) | 800×800, q ≈ 72, **KLATKA 0 pliku pętli**; jest zarazem `poster` i obrazem pod pętlą |
 | zrzuty dem `tools/<slug>-v<N>-1280.webp` | ≤ 122 880 B (120 KB) | 1280×800, q 80 (patrz `perf-images-policy`) |
 | miniatury `thumbs/<slug>-v<N>-640.webp` | ≤ 40 960 B (40 KB) | 640×400 |
 
-Długość: nagranie hero 8 s (dopuszczalne 6–10 s), klip hover 6–7 s. Zawsze stałe 24 fps (`-r 24`), zawsze bez ścieżki audio, zawsze dithering `noise=alls=3:allf=t+u` na ciemnych gradientach (anty-banding na OLED). **Transfer `/` desktop: ≤ 716 800 B (700 KB) do zdarzenia `load`** (bramka przeciw przemyceniu wideo przed LCP) **i ≤ 2 621 440 B (2,5 MB) na pełną wizytę bez klipów hover**; mobile ≤ 358 400 B (350 KB), w tym **0 B** mediów wideo.
+Długość: nagranie hero 8 s (dopuszczalne 6–10 s), klip hover 6–7 s, pętla panelu 2,5–5 s. Zawsze stała klatka (`-r`), zawsze bez ścieżki audio, zawsze dithering `noise=alls=3:allf=t+u` na gładkich płaszczyznach (anty-banding na OLED — dotyczy tak samo ciemnych gradientów, jak jasnego tynku w panelach prezentacji).
+
+**PĘTLA PANELU MUSI DOMYKAĆ SIĘ MONTAŻEM, NIE OBIETNICĄ MODELU** (2026-09-15). Materiał generatywny prawie nigdy nie wraca do klatki startowej: zmierzone odchylenie ostatniej klatki od pierwszej sięgało 72–178/255 lokalnie, co na zapętleniu widać jako przeskok światła. Dlatego plik powstaje jako **tam i z powrotem**: fragment w przód, potem ten sam fragment w tył, z odciętą zdublowaną klatką na każdym zawrocie (`reverse,trim=start_frame=1:end_frame=<N-1>`). Pętla domyka się wtedy matematycznie, niezależnie od tego, co zrobił model. Sprawdzian: pierwsza i ostatnia klatka gotowego pliku różnią się średnio < 2,5/255 (resztą jest sam dithering).
+
+**PRZYCINAJ DO FRAGMENTU PRZED UCIECZKĄ.** Profil odchylenia od klatki zerowej pokazuje, gdzie model przestaje animować, a zaczyna wymyślać (para z czajnika rosnąca w chmurę, smuga światła przejeżdżająca przez pokój). Fragment bierzemy sprzed tego punktu — to jest jedyny sposób naprawy takiej wady, który nie kosztuje kredytów. **Transfer `/` desktop: ≤ 716 800 B (700 KB) do zdarzenia `load`** (bramka przeciw przemyceniu wideo przed LCP) **i ≤ 2 621 440 B (2,5 MB) na pełną wizytę bez klipów hover**; mobile ≤ 358 400 B (350 KB), w tym **0 B** mediów wideo.
+
+Osiem paneli prezentacji mieści się w tej wizycie z zapasem, ale tylko dlatego, że **suma ośmiu pętli plus ośmiu kadrów nie przekracza 1 835 008 B (1,75 MB)** — to jest twardy podbudżet trasy `/` i przy dokładaniu dziewiątej sceny trzeba go przeliczyć, a nie podnieść. Mobile dostaje z tego **0 B**: `.pr-panel` ma `display: none` poniżej 64rem, a `<img loading="lazy">` w kontenerze `display: none` nie jest pobierany przez żadną przeglądarkę — to jest mechanizm, na którym stoi zerowy budżet wideo na telefonie, więc zamiana tego `display: none` na `visibility` albo `opacity` cicho wysadziłaby budżet mobilny.
 
 **Gdyby wrócił wariant D37(b)** (pętla generatywna jako tekstura pod scrimem `.88` zamiast nagrania): obowiązuje inny zestaw, bo pod scrimem nie widać szczegółu: WebM ≤ 737 280 B, MP4 ≤ 1 003 520 B, AV1 ≤ 573 440 B, kadr 1440×616, plus osobny poster pętli ≤ 46 080 B, który **nigdy nie jest preloadowany**. Zestawów nie wolno mieszać: obowiązuje ten zgodny z wybranym wariantem D37.
 
