@@ -75,7 +75,7 @@ export function videoSources(asset: SceneVideoAsset): { src: string; type: strin
    const S = (name: string): SceneVideoAsset => ({
      webm: `/media/presentation/${name}-v1.webm`,
      mp4: `/media/presentation/${name}-v1.mp4`,
-     poster: `/media/presentation/${name}-v2.webp`,
+     poster: `/media/presentation/${name}-v3.webp`,
    });
    // scene-hook, scene-handover, scene-time, scene-cost,
    // scene-turn, scene-craft, scene-outcome, scene-contact
@@ -96,7 +96,7 @@ export const SCENE_MEDIA: Record<SceneId, SceneMediaEntry> = {
   /* 1. Hak: firma urosła, proces został ten sam. Docelowo S1. */
   hook: {
     id: "hook",
-    still: "/media/presentation/scene-hook-v2.webp",
+    still: "/media/presentation/scene-hook-v3.webp",
     fallback: "shot",
   },
 
@@ -105,7 +105,7 @@ export const SCENE_MEDIA: Record<SceneId, SceneMediaEntry> = {
      `SceneFallbackMedia`, nie tutaj: to decyzja wizualna sceny, nie materiału. */
   handover: {
     id: "handover",
-    still: "/media/presentation/scene-handover-v2.webp",
+    still: "/media/presentation/scene-handover-v3.webp",
     fallback: "shot",
   },
 
@@ -114,14 +114,14 @@ export const SCENE_MEDIA: Record<SceneId, SceneMediaEntry> = {
      więc materiał tła musi być SPOKOJNY — dwa ruchy naraz się zabijają. */
   time: {
     id: "time",
-    still: "/media/presentation/scene-time-v2.webp",
+    still: "/media/presentation/scene-time-v3.webp",
     fallback: "shot",
   },
 
   /* 4. Koszt pieniędzy: rozbicie działania na ekranie. Docelowo S4. */
   cost: {
     id: "cost",
-    still: "/media/presentation/scene-cost-v2.webp",
+    still: "/media/presentation/scene-cost-v3.webp",
     fallback: "shot",
   },
 
@@ -130,7 +130,7 @@ export const SCENE_MEDIA: Record<SceneId, SceneMediaEntry> = {
      (scenariusz §4.5, S5) — reszta scen ma być spokojna, żeby ta jedna zagrała. */
   turn: {
     id: "turn",
-    still: "/media/presentation/scene-turn-v2.webp",
+    still: "/media/presentation/scene-turn-v3.webp",
     fallback: "shot",
   },
 
@@ -139,21 +139,21 @@ export const SCENE_MEDIA: Record<SceneId, SceneMediaEntry> = {
      Materiał ma pokazywać rodzaje pracy, nie nasze interfejsy. */
   craft: {
     id: "craft",
-    still: "/media/presentation/scene-craft-v2.webp",
+    still: "/media/presentation/scene-craft-v3.webp",
     fallback: "shot",
   },
 
   /* 7. Efekt: plątanina rozplątuje się w równoległe linie. Docelowo S7. */
   outcome: {
     id: "outcome",
-    still: "/media/presentation/scene-outcome-v2.webp",
+    still: "/media/presentation/scene-outcome-v3.webp",
     fallback: "shot",
   },
 
   /* 8. Kontakt: scena pustoszeje, zostaje jedna karta. Docelowo S8. */
   contact: {
     id: "contact",
-    still: "/media/presentation/scene-contact-v2.webp",
+    still: "/media/presentation/scene-contact-v3.webp",
     fallback: "shot",
   },
 };
