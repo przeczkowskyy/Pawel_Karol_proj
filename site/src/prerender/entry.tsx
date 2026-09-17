@@ -4,7 +4,7 @@ import { getToolsWithSeo } from "@/data/toolsSeo";
 import { FAQ_I18N } from "@/data/faq";
 import { NOT_FOUND_COPY, PAGES_SEO, SKIP_LINK } from "@/data/pagesSeo";
 import { MESSAGING } from "@/data/messaging";
-import { SCENES, type SceneData } from "@/data/presentation";
+import { HOME_CLOSING, HOME_SECTIONS } from "@/data/homeSections";
 import { RODO, type RodoObjection, type RodoSection } from "@/data/rodo";
 import { EMAIL, MAIL_HREF, ORIGIN, PHONE_DISPLAY, PHONE_E164, PHONE_HREF } from "@/data/contact";
 import { ORG_JSONLD, toolJsonLd, faqPageJsonLd } from "@/components/Seo";
@@ -129,83 +129,67 @@ function H2({ children }: { children: React.ReactNode }) {
 
 /* ── shell strony głównej (/) ───────────────────────────────────────── */
 
-/* Punkty sceny: „rzeczy sprawdzalne" z `data/presentation.ts`. Osobny komponent,
-   bo używa go i nagłówek strony, i każda sekcja niżej; typ `SceneData` jest
-   krotką, więc nie każda scena ma `points` i bez `in` TypeScript słusznie
-   protestuje. */
-function ScenePoints({ scene }: { scene: SceneData }) {
-  if (!("points" in scene) || !scene.points) return null;
-  return (
-    <ul className="mt-2 flex flex-col gap-1.5 text-sm" style={BODY}>
-      {scene.points.map((pt) => <li key={pt.pl}>{pt.pl}</li>)}
-    </ul>
-  );
-}
-
 function HomeShell() {
-  /* SHELL STRONY GŁÓWNEJ = PREZENTACJA, nie dawne hero (poprawka 2026-09-13).
-     Trasa `/` renderuje `<Presentation>` od chwili, gdy strona stała się
-     broszurą. Shell nadal wypisywał stare hero z kadrem produktu, więc crawler
-     bez JavaScriptu dostawał INNĄ stronę niż człowiek — dokładnie ta awaria,
-     przed którą ostrzega komentarz na górze tego pliku, tyle że popełniona
-     u siebie.
+  /* SHELL STRONY GŁÓWNEJ CZYTA TO SAMO ŹRÓDŁO CO KLIENT: `data/homeSections.ts`.
 
-     Teraz shell odtwarza osiem scen z `data/presentation.ts`: to samo źródło,
-     te same zdania, ta sama kolejność. Żadnego copy pisanego tutaj.
+     TO NIE JEST OSTROŻNOŚĆ, TYLKO NAPRAWIONA AWARIA. 13 września trasa `/`
+     renderowała prezentację, a ten shell wypisywał jeszcze poprzednie hero.
+     Crawler bez JavaScriptu dostawał INNĄ stronę niż człowiek przez kilka dni
+     i nikt tego nie zauważył, bo build był zielony. Dopóki obie warstwy czytają
+     jeden moduł, ta awaria nie może wrócić. Po każdej zmianie tego, co renderuje
+     trasa, sprawdź jej shell.
 
-     TO JEST WARSTWA, KTÓRA ROBI SEO. Akapity (`body`) i punkty (`points`)
-     istnieją właśnie po to, żeby tu wylądować: wersja 1 prezentacji miała
-     65 słów na osiem ekranów i nie było czego indeksować. Jeśli ktoś usunie
-     `body` z danych, ta strona przestanie mieć treść. */
-  const [first, ...rest] = SCENES;
+     TO JEST WARSTWA, KTÓRA ROBI SEO. Akapity (`body`) i rzeczy sprawdzalne
+     (`points`) istnieją właśnie po to, żeby tu wylądować. Pierwsza wersja
+     prezentacji miała 65 słów na osiem ekranów i nie było czego indeksować.
+     Jeśli ktoś usunie `body` z danych, ta strona przestanie mieć treść. */
   return (
     <ShellChrome>
-      <h1 className="hero-title" style={HEAD}>{first.headline.pl}</h1>
-      <p className="mt-4 max-w-3xl text-sm" style={BODY}>{first.body.pl}</p>
-      <ScenePoints scene={first} />
+      {/* H1 to jedno zdanie marki z `messaging.ts`, nigdy kopia
+          (`copy-one-liner-single-source`): to samo zdanie stoi w meta,
+          w JSON-LD, w llms.txt, w promptcie bota i na LinkedInie founderów. */}
+      <h1 className="hero-title" style={HEAD}>{MESSAGING.oneLiner.pl}</h1>
+      <p className="mt-4 max-w-3xl text-sm" style={BODY}>{MESSAGING.subtext.pl}</p>
 
-      {rest.map((s) => (
-        <section key={s.id}>
+      {HOME_SECTIONS.map((s) => (
+        <section key={s.id} id={s.id}>
           <H2>{s.headline.pl}</H2>
-          {"sub" in s && s.sub ? (
-            <p className="mt-2 max-w-3xl text-sm" style={BODY}>{s.sub.pl}</p>
-          ) : null}
-          {s.body ? (
-            <p className="mt-2 max-w-3xl text-sm" style={BODY}>{s.body.pl}</p>
-          ) : null}
-          <ScenePoints scene={s} />
-          {"figure" in s && s.figure ? (
-            /* Liczba razem z DZIAŁANIEM, z którego wynika: czytelnik i crawler
-               dostają rachunek do sprawdzenia, nie samą kwotę. */
-            <p className="mt-2 text-sm" style={BODY}>
-              {"\u2248"}
-              {s.figure.to.toLocaleString("pl-PL")} zł: {s.figure.caption.pl}
-              {" ("}{s.figure.math.pl}{")"}
-            </p>
-          ) : null}
-          {"source" in s && s.source ? (
-            <p className="mt-1 text-xs" style={MUTED}>Źródło: {s.source}</p>
-          ) : null}
-          {"beats" in s && s.beats ? (
+          <p className="mt-2 max-w-3xl text-sm" style={BODY}>{s.lead.pl}</p>
+          <p className="mt-2 max-w-3xl text-sm" style={BODY}>{s.body.pl}</p>
+          {s.points ? (
             <ul className="mt-2 flex flex-col gap-1.5 text-sm" style={BODY}>
-              {s.beats.map((b) => <li key={b.icon}>{b.pl}</li>)}
+              {s.points.map((pt) => <li key={pt.pl}>{pt.pl}</li>)}
             </ul>
           ) : null}
         </section>
       ))}
 
-      <p className="mt-6">
-        <a className="btn btn-primary" href={MAIL_HREF}>{MESSAGING.cta.primary.pl}</a>
-      </p>
+      {/* KOMPLET LINKÓW DO TRZYNASTU NARZĘDZI. Klient renderuje je w spisie pod
+          zakładkami; shell musi mieć je tak samo, bo `seo-links-in-dom` wymaga
+          adresów w DOM, a nie po kliknięciu. Usunięcie tego bloku odcina
+          trzynaście stron od przepływu linków. */}
+      <H2>Narzędzia, które możesz uruchomić</H2>
+      <ul className="mt-2 flex flex-col gap-1.5 text-sm" style={BODY}>
+        {getToolsWithSeo("pl").map((t) => (
+          <li key={t.slug}>
+            <a href={`/narzedzia/${t.slug}`} style={LINK}>{t.name}</a>: {t.tagline}
+          </li>
+        ))}
+      </ul>
+
+      <section>
+        <H2>{HOME_CLOSING.headline.pl}</H2>
+        <p className="mt-2 max-w-3xl text-sm" style={BODY}>{HOME_CLOSING.lead.pl}</p>
+        <p className="mt-6">
+          <a className="btn btn-primary" href={MAIL_HREF}>{MESSAGING.cta.primary.pl}</a>
+        </p>
+      </section>
+
       <p className="mt-4 max-w-3xl text-sm" style={MUTED}>
         {MESSAGING.zeroVendorCloud.pl}
       </p>
       <ContactLine />
 
-      {/* Linkowanie wewnętrzne. Podstrony narzędzi zniknęły z nawigacji i z samej
-          prezentacji (decyzja D-39), ale nadal łapią ruch z wyszukiwarki i muszą
-          być z czegoś osiągalne — ten blok jest ich jedynym linkiem ze strony
-          głównej. Usunięcie go odcina trzynaście stron od przepływu linków. */}
       <H2>Zobacz konkrety</H2>
       <ul className="mt-2 flex flex-col gap-1.5 text-sm" style={BODY}>
         <li>
@@ -225,8 +209,13 @@ function HomeShell() {
       <section lang="en">
         <H2>Klarow in English</H2>
         <p className="mt-2 max-w-3xl text-sm" style={BODY}>
-          {first.headline.en} {first.body.en}
+          {MESSAGING.oneLiner.en} {MESSAGING.subtext.en}
         </p>
+        {HOME_SECTIONS.map((s) => (
+          <p key={s.id} className="mt-2 max-w-3xl text-sm" style={BODY}>
+            <strong>{s.headline.en}.</strong> {s.body.en}
+          </p>
+        ))}
         <p className="mt-2 max-w-3xl text-sm" style={MUTED}>
           {MESSAGING.determinism.en} See the{" "}
           <a href="/narzedzia" style={LINK}>work we've done</a>, the{" "}
@@ -236,8 +225,8 @@ function HomeShell() {
       </section>
 
       <p className="mt-8 text-xs" style={MUTED}>
-        Interaktywna wersja strony (pełna prezentacja) uruchamia się z JavaScriptem.
-        {"\u00a0"}© 2026 Klarow · Polska / USA
+        Narzędzia na tej stronie uruchamiają się z JavaScriptem i liczą w Twojej przeglądarce.
+        {" "}© 2026 Klarow · Polska / USA
       </p>
     </ShellChrome>
   );

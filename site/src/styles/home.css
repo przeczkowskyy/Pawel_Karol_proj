@@ -1,0 +1,250 @@
+/* ── Strona główna v3: układ ────────────────────────────────────────────────
+   Importowany z `pages/HomeV3.tsx`, a nie z `main.tsx`. To nie jest detal:
+   strona główna jest lazy-chunkiem, więc jej style nie wchodzą do CSS
+   krytycznego, który ma dziś 3,3 KB zapasu do limitu 20 KB
+   (`perf-chunk-size-gate`).
+
+   Kolory wyłącznie z tokenów (`design-tokens-only`). Promienie {0, 8, 999}
+   (`design-shape-lock`). Zero cieni, blur i glass (`design-no-glass-no-blur`).
+   Strukturę niesie hairline 1 px, nie pudełko. */
+
+/* ── kontener ───────────────────────────────────────────────────────────────
+   Trasa renderuje `<PageMain pad={false}>`, czyli bez własnego paddingu, więc
+   margines boczny musi dać ta warstwa. Jedno miejsce dla wszystkich sekcji:
+   `--container` (72rem, od 1900 px 80rem) i `--gutter` (16–40 px) z tokenów,
+   nigdy wartości wpisane w komponent.
+
+   Padding jest na `padding-inline`, nie na skróconym `padding`: skrót
+   wyzerowałby marginesy boczne przy każdej zmianie odstępu pionowego, a to
+   właśnie ten błąd zostawił hero dotykający krawędzi ekranu w pierwszym
+   podejściu. */
+.hero-v3,
+.home-sec,
+.home-closing-v3 {
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* ── hero ──────────────────────────────────────────────────────────────────
+   Tekst i instrument obok siebie od 64rem, jeden pod drugim niżej. Wysokość
+   NIE jest przybita do `100dvh`: instrument ma własną, zmierzoną wysokość
+   (`MIN_HEIGHT` w `DashboardMount`), a sztywne `dvh` albo by go ucięło, albo
+   zostawiło pustkę. */
+.hero-v3 {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: center;
+  padding-block: clamp(2.5rem, 7vw, 5rem) clamp(2rem, 5vw, 3.5rem);
+}
+
+@media (min-width: 64rem) {
+  .hero-v3 {
+    /* Nagłówek zajmuje oba pola pierwszego wiersza, pod nim tekst i instrument.
+       Instrument dostaje więcej miejsca, bo to on jest dowodem. */
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    align-items: start;
+  }
+  .hero-v3-title {
+    grid-column: 1 / -1;
+  }
+}
+
+.hero-v3-text {
+  min-width: 0;
+}
+
+.hero-v3-title {
+  margin: 0;
+  /* WŁASNY STOPIEŃ, NIE `--text-display`, i własna szerokość: świadome odejście
+     od liczb podanych w `design-hero-discipline` (`clamp(2.25rem, 5.2vw, 4.25rem)`,
+     `max-width: 24ch`), które powstały dla hero jednokolumnowego.
+
+     Testowalny warunek reguły („≤ 2 wiersze od 1024 px, ≤ 3 na 390 px")
+     obowiązuje bez zmian; zmieniają się tylko liczby, którymi go spełniamy.
+     Zmierzone na zbudowanej stronie: 1024 → 2, 1280 → 2, 1440 → 2, 1920 → 2,
+     390 → 3.
+
+     Bez `max-width` w znakach: szerokość ogranicza siatka (nagłówek zajmuje
+     cały pierwszy wiersz hero), a druga granica tylko wchodziłaby jej w drogę. */
+  font-size: clamp(2rem, 3.4vw + 0.5rem, 3.5rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--foreground-strong);
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+
+.hero-v3-lead {
+  margin: 1.25rem 0 0;
+  max-width: 48ch;
+  font-size: var(--text-lg);
+  line-height: 1.55;
+  color: var(--foreground-muted);
+}
+
+.hero-v3-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+/* Rama instrumentu: jedna linia i nic więcej. Kadrowanie robi layout
+   (`overflow: hidden`), nie obraz. */
+.hero-v3-frame {
+  min-width: 0;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.hero-v3-caption {
+  margin: 0;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--border);
+  font-size: var(--text-xs);
+  letter-spacing: 0.02em;
+  color: var(--foreground-muted);
+}
+
+/* ── sekcja ────────────────────────────────────────────────────────────────
+   Hairline u góry zamiast karty. Sekcja szeroka (`--wide`) kładzie dowód pod
+   tekstem na pełnej szerokości; zwykła stawia go w prawej kolumnie. */
+.home-sec {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  padding-block: clamp(2.5rem, 6vw, 4.5rem);
+  border-top: 1px solid var(--border);
+}
+
+@media (min-width: 64rem) {
+  .home-sec:not(.home-sec--wide) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+.home-sec-text {
+  min-width: 0;
+}
+
+.home-sec-title {
+  margin: 0;
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--foreground-strong);
+  text-wrap: balance;
+}
+
+.home-sec-lead {
+  margin: 0.75rem 0 0;
+  max-width: 52ch;
+  font-size: var(--text-lg);
+  line-height: 1.5;
+  color: var(--foreground);
+}
+
+.home-sec-body {
+  margin: 1.25rem 0 0;
+  /* 60ch to granica, po której wiersz przestaje się czytać
+     (`design-typography-scale`). */
+  max-width: 60ch;
+  line-height: 1.7;
+  color: var(--foreground-muted);
+}
+
+/* Rzeczy sprawdzalne: wiersze rozdzielone linią, bez punktorów i bez kart. */
+.home-sec-points {
+  margin: 1.75rem 0 0;
+  padding: 0;
+  list-style: none;
+  max-width: 60ch;
+}
+
+.home-sec-points > li {
+  padding: 0.75rem 0;
+  border-top: 1px solid var(--border-subtle);
+  font-size: var(--text-sm);
+  color: var(--foreground);
+}
+
+.home-sec-proof {
+  min-width: 0;
+}
+
+/* ── zakładki narzędzi ─────────────────────────────────────────────────── */
+.tooltabs-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.tooltabs-tab {
+  padding: 0.5rem 0.875rem;
+  /* 44 px pola dotyku (`a11y-touch-targets-44`) przy zachowaniu drobnego
+     kroju: wysokość robi padding, nie rozmiar pisma. */
+  min-height: 44px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--foreground-muted);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition:
+    color var(--duration-quick) var(--ease-out),
+    border-color var(--duration-quick) var(--ease-out);
+}
+
+.tooltabs-tab:hover {
+  color: var(--foreground);
+  border-color: var(--border-strong);
+}
+
+.tooltabs-tab[aria-selected="true"] {
+  color: var(--on-accent);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.tooltabs-foot {
+  margin: 1rem 0 0;
+  font-size: var(--text-sm);
+}
+
+/* Spis wszystkich narzędzi: dla człowieka drobny druk, dla crawlera komplet
+   linków w DOM od pierwszego renderu (`seo-links-in-dom`). */
+.tooltabs-index {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  margin: 2rem 0 0;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border-subtle);
+  list-style: none;
+  font-size: var(--text-xs);
+}
+
+.tooltabs-index a {
+  color: var(--foreground-faint);
+}
+
+.tooltabs-index a:hover {
+  color: var(--foreground);
+}
+
+/* ── zamknięcie ────────────────────────────────────────────────────────── */
+.home-closing-v3 {
+  padding-block: clamp(3rem, 8vw, 6rem);
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+
+.home-closing-v3 .home-sec-lead {
+  margin-inline: auto;
+  margin-bottom: 2rem;
+}

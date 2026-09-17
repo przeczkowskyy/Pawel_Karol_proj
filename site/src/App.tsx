@@ -36,7 +36,7 @@ import { EMAIL, MAIL_HREF, PHONE_DISPLAY, PHONE_HREF } from "@/data/contact";
    - okno rezerwacji dopiero po kliknięciu „Umów rozmowę”.
    Ścieżki literalne, inaczej Rollup nie zrobi z nich osobnych chunków. */
 const ToolPage = lazy(() => import("@/pages/ToolPage"));
-const Presentation = lazy(() => import("@/pages/Presentation"));
+const HomeV3 = lazy(() => import("@/pages/HomeV3"));
 const BookingModal = lazy(() => import("@/components/BookingModal"));
 
 /* Czy renderować ozdobne tło WebGL (animowane wzgórza).
@@ -451,15 +451,22 @@ function HomePage({ onBook }: { onBook: () => void }) {
         path="/"
         jsonLd={[ORG_JSONLD]}
       />
-      {/* STRONA GŁÓWNA TO PREZENTACJA (decyzja Karola 2026-09-13): osiem scen
-          w jednym ciągu, bez zakładek, bez sekcji do wyboru. Scenariusz:
-          docs/plan/prezentacja-scenariusz.md. Hero, kafle i listy zdjęte: ich rolę
-          przejęły sceny, bo „za dużo tekstu" padło trzy razy z rzędu.
-          Prezentacja wchodzi leniwie: osiem scen z biblioteką ruchu to realne
-          obciążenie budżetu pierwszego chunku (perf-js-budget-home). */}
+      {/* STRONA GŁÓWNA URUCHAMIA NARZĘDZIA (decyzja Karola 2026-09-17).
+          Zastąpiła prezentację z ośmioma scenami, bo ta budowała wrażenie
+          z materiału generatywnego i została odrzucona razem z całym tym
+          kierunkiem: „te gify zupełnie nam nie wyszły".
+
+          Teraz dowodem jest samo narzędzie: pulpit produkcji liczy w hero,
+          raport zarządczy liczy plik odwiedzającego, a zakładki niżej
+          uruchamiają dwanaście kolejnych. Treść: data/homeSections.ts
+          (to samo źródło czyta shell prerendera).
+
+          Wchodzi leniwie, bo poza hero wszystko jest poniżej pierwszego
+          ekranu, a budżet chunku wejściowego ma 49 KB zapasu
+          (perf-js-budget-home). */}
       <PageMain pad={false}>
         <Suspense fallback={<div style={{ minHeight: "100dvh" }} aria-hidden />}>
-          <Presentation onBook={onBook} />
+          <HomeV3 onBook={onBook} />
         </Suspense>
       </PageMain>
       <Footer />

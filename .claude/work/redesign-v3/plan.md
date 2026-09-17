@@ -42,21 +42,21 @@ Do przestrzegania bez zmian: `design-tokens-only`, `design-shape-lock`,
 ## Kroki
 
 ### F1 · Sprzątanie i motyw
-- [ ] usunąć martwy kod bez importerów (`pages/Home.tsx`, `HeroMedia.tsx`,
+- [x] usunąć martwy kod bez importerów (`pages/Home.tsx`, `HeroMedia.tsx`,
       `Differentiators.tsx`, `ui/glsl-hills.tsx`, `BgBoundary.tsx`)
-- [ ] usunąć zależności `three`, `@types/three`, `@formkit/auto-animate`
-- [ ] motyw ciemny: `index.html` (atrybut + `theme-color`), zdjąć nadpisania
+- [x] usunąć zależności `three`, `@types/three`, `@formkit/auto-animate`
+- [x] motyw ciemny: `index.html` (atrybut + `theme-color`), zdjąć nadpisania
       `html[data-theme="light"]` z `globals.css` i `company-ui.css`
-- [ ] usunąć martwy CSS `globals.css:369-963` (`.home-*`, `.wall-*`, `.scene-*`,
+- [x] usunąć martwy CSS `globals.css:369-963` (`.home-*`, `.wall-*`, `.scene-*`,
       `.pres-*`) — **warunek wstępny**, bo CSS ma tylko 2,4 KB zapasu
-- [ ] bramka: tsc + build + verify-site + audit
+- [x] bramka: tsc + build + verify-site + audit
 
 ### F2 · Nowa strona główna (szkielet)
-- [ ] `data/homeSections.ts` — jedno źródło copy dla klienta i prerenderu
-- [ ] `pages/HomeV3.tsx` + `components/home/*`
+- [x] `data/homeSections.ts` — jedno źródło copy dla klienta i prerenderu
+- [x] `pages/HomeV3.tsx` + `components/home/*`
 - [ ] `SectionMount` (lazy poniżej folda)
-- [ ] synchronizacja `HomeShell` w `prerender/entry.tsx` + bramka słów
-- [ ] usunąć `src/presentation/**`, `pages/Presentation.tsx`,
+- [x] synchronizacja `HomeShell` w `prerender/entry.tsx` + bramka słów
+- [x] usunąć `src/presentation/**`, `pages/Presentation.tsx`,
       `data/presentation.ts`, `public/media/presentation/**`
 - [ ] lazy-routing `ToolsPage`, `OfferPage`, `FaqPage`, `RodoPage`
 
@@ -80,12 +80,30 @@ Do przestrzegania bez zmian: `design-tokens-only`, `design-shape-lock`,
    jako format wyjściowy.
 2. Dane administratora do `/rodo` — bloker publikacji od 2026-09-12.
 3. Los 13 podstron narzędzi w nawigacji (decyzja D-39, wciąż otwarta).
+5. **Dług zastany, nie regresja:** `find-integrations` zgłasza 13 HIGH i 14
+   niezarejestrowanych połączeń, wszystkie w skryptach budowania
+   (`og.mjs`, `record-demos.mjs`, `shoot-tools.mjs`) oraz w `ui-kit/.../base.html`.
+   To zmienne środowiskowe i `127.0.0.1` w narzędziach Node, nie połączenia
+   strony. Do rozstrzygnięcia: albo rejestr dostaje sekcję na narzędzia
+   deweloperskie, albo skrypt przestaje je skanować.
 4. Planer zdalny: przepisanie `integ-no-llm-api-in-client-tools` (BLOCKER)
    — dopiero po punkcie kontrolnym „dzień 9".
 
 ## Porażki
 
-(uzupełniane w trakcie: FAIL → fix → PASS)
+- **FAIL** skrypt podmieniający `index.html` wkleił komentarz przed `<!doctype>`
+  i zostawił stary blok preloadu (`indexOf` na fragmencie, którego nie było).
+  **fix** `git checkout` pliku i podmiana liniowa zamiast na tekście. **PASS**
+- **FAIL** przy cięciu martwego CSS wyleciał sam selektor `.sr-only`, bo offset
+  w skrypcie policzył komentarz na 4 linie zamiast 2. **fix** dopisany selektor,
+  weryfikacja gregiem. **PASS**
+- **FAIL** H1 łamał się na 3 wiersze od 1024 px przy limicie 2
+  (`design-hero-discipline`): w kolumnie 5/12 nie było na to miejsca przy żadnym
+  sensownym stopniu pisma. **fix** nagłówek na pełną szerokość pierwszego wiersza
+  siatki. **PASS** (zmierzone: 1024/1280/1440/1920 → 2 wiersze, 390 → 3)
+- **FAIL** pierwszy pomiar wierszy H1 przez `getClientRects().length` zawsze dawał
+  1, bo element blokowy ma jeden prostokąt niezależnie od zawijania. **fix** pomiar
+  wysokością podzieloną przez `line-height`. **PASS**
 
 ## Wynik
 
