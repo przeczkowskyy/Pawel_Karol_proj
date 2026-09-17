@@ -147,24 +147,29 @@
   color: var(--foreground-faint); /* 4,59:1 na karcie (--surface) */
 }
 
-/* ── Główne CTA w motywie jasnym ──────────────────────────────────────────
+/* ── Główne CTA: płaska powierzchnia z tokenu, nigdy gradient ─────────────
    `company-ui.css` ma `.btn-primary` wpisany na stałe jako stalowy gradient
-   (#B9C4D1 → #96A3B3). Zaprojektowano go pod czerń; na jasnej stronie wychodzi
-   wyblakły szary guzik, który nie czyta się jak główna akcja, a biały tekst na
-   nim ma 1,9:1, czyli daleko poniżej AA.
+   (#B9C4D1 → #96A3B3). Reguła marki mówi „primary CTA = płaska biel na czerni",
+   a `design-no-glass-no-blur` zakazuje gradientu na przycisku — kit łamie więc
+   obie, i to NIEZALEŻNIE od motywu.
 
-   Reguła marki mówi „primary CTA = płaska biel na czerni". W motywie jasnym
-   ta sama zasada odwraca się: płaska czerń na papierze. Stąd `--cta`/`--on-cta`
-   (17,74:1) i zero gradientu — kit ładuje się PO tym arkuszu, więc nadpisanie
-   wymaga wyższej specyficzności (`html[data-theme=...]`). Znika razem z kitem. */
-html[data-theme="light"] .btn-primary,
-html[data-theme="light"] .btn-primary:hover {
+   Do 2026-09-17 nadpisanie stało pod `html[data-theme="light"]`, bo powstało przy
+   migracji na jasny papier (tam gradient dawał 1,9:1 na białym tekście, daleko
+   poniżej AA). Po powrocie na ciemną stal zdjęcie selektora motywu jest
+   poprawką, nie cofnięciem: `--cta`/`--on-cta` rozwiązują się same w obie strony
+   (ciemny: #FAFAFA na #121212 = 17,95:1; jasny: #111827 na papierze = 17,74:1),
+   więc jedna reguła obsługuje oba kierunki i gradient znika wszędzie.
+
+   Kit ładuje się PO tym arkuszu, więc nadpisanie potrzebuje wyższej
+   specyficzności: `html` przed klasą wystarcza. Znika razem z kitem. */
+html .btn-primary,
+html .btn-primary:hover {
   background: var(--cta);
   color: var(--on-cta);
   border-color: var(--cta);
   box-shadow: none;
 }
-html[data-theme="light"] .btn-primary:hover {
+html .btn-primary:hover {
   background: var(--cta-hover);
   border-color: var(--cta-hover);
 }
@@ -358,193 +363,9 @@ html[data-theme="light"] .btn-primary:hover {
   }
 }
 
-/* ══════════════════════════════════════════════════════════════════════════
-   STRONA GŁÓWNA v2 (2026-09-13)
-   Sekcje-karty z akapitami zastąpione scenami sterowanymi przewijaniem.
-   Zasada układu: sekcja to pełna szerokość kadru i dużo powietrza, a nie
-   siatka pudełek. Tekst jest podpisem pod ruchem, więc typografia nagłówka
-   robi robotę, którą wcześniej robił akapit.
-   ══════════════════════════════════════════════════════════════════════════ */
-
-.home-scene,
-.home-wall,
-.home-outcomes,
-.home-people,
-.home-closing {
-  width: 100%;
-  max-width: 72rem;
-  margin-inline: auto;
-  padding-inline: clamp(1rem, 4vw, 2.5rem);
-  padding-block: clamp(4rem, 9vw, 8rem);
-}
-
-/* Nagłówek sceny: jedna kolumna, wąska miara, żeby linia nie rozjeżdżała się
-   na szerokim ekranie i nie zachęcała do dopisywania kolejnych zdań. */
-.scene-head {
-  max-width: 44rem;
-  margin-bottom: clamp(2rem, 4vw, 3.5rem);
-}
-
-.scene-title {
-  margin: 0;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  line-height: 1.06;
-  font-size: clamp(1.75rem, 1.1rem + 2.6vw, 3.25rem);
-  color: var(--heading);
-  overflow-wrap: anywhere;
-}
-
-.scene-line {
-  margin: 0.75rem 0 0;
-  max-width: 40rem;
-  font-size: clamp(0.9375rem, 0.9rem + 0.2vw, 1.0625rem);
-  line-height: 1.6;
-  color: var(--muted-foreground);
-}
-
-/* Zapas na czas ładowania sceny: trzyma wysokość, żeby treść pod spodem nie
-   skakała (CLS), i nie udaje treści. */
-.scene-skeleton {
-  /* para vh + dvh: na telefonie pasek adresu zmienia wysokość okna, a zapas
-     ma trzymać dokładnie tyle miejsca, ile zajmie scena (reguła overflow) */
-  min-height: min(60vh, 32rem);
-  min-height: min(60dvh, 32rem);
-  border: 1px solid var(--border);
-  background: var(--surface-muted);
-}
-
-/* ── ściana narzędzi ─────────────────────────────────────────────────────
-   Trzynaście zrzutów. Kafle wchodzą kaskadą po wejściu w widok: to CSS,
-   bez biblioteki ruchu, bo ta sekcja nie potrzebuje sterowania postępem.
-   `animation-fill-mode: backwards`, NIGDY `both`: wypełniony transform
-   czyni element kontenerem dla `position: fixed` i modale lądują poza
-   ekranem (błąd Chromium, sprawdzony bólem w kicie). */
-.wall-grid {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  /* Odstęp zamiast hairline'ów: przy jasnym obrysie kafla siatka 1 px robiła się
-     szumem. Tło sceny widoczne między ekranami czyta się spokojniej. */
-  gap: clamp(0.75rem, 1.5vw, 1.25rem);
-  background: transparent;
-  border: 0;
-  grid-template-columns: 1fr;
-}
-
-@media (min-width: 640px) {
-  .wall-grid { grid-template-columns: repeat(2, 1fr); }
-}
-@media (min-width: 1024px) {
-  .wall-grid { grid-template-columns: repeat(3, 1fr); }
-}
-
-.wall-cell {
-  background: var(--background);
-  min-width: 0; /* bez tego długa nazwa rozpycha kolumnę siatki */
-}
-
-.wall-link {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  padding: 0.875rem;
-  text-decoration: none;
-  color: inherit;
-  transition: background var(--duration-quick) var(--ease-out);
-}
-
-.wall-link:hover,
-.wall-link:focus-visible {
-  background: var(--surface-raised);
-}
-
-.wall-shot {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 16 / 10;
-  object-fit: cover;
-  border: 1px solid var(--border);
-  transition: transform var(--duration-base) var(--ease-out);
-}
-
-.wall-link:hover .wall-shot {
-  transform: scale(1.015);
-}
-
-.wall-name {
-  font-weight: 700;
-  font-size: 0.9375rem;
-  color: var(--heading);
-}
-
-.wall-more {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 1.5rem;
-  font-weight: 700;
-  font-size: 0.9375rem;
-  color: var(--accent);
-  text-decoration: none;
-}
-
-.wall-more:hover,
-.wall-more:focus-visible {
-  text-decoration: underline;
-  text-underline-offset: 4px;
-}
-
-/* ── co zyskujesz ────────────────────────────────────────────────────────
-   Cztery linie rozdzielone hairline'ami. Bez kart, bez ramek, bez ikon
-   w kółkach: to lista, nie galeria. */
-.outcomes-list {
-  list-style: none;
-  margin: clamp(2rem, 4vw, 3rem) 0 0;
-  padding: 0;
-  border-top: 1px solid var(--border);
-}
-
-.outcome {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding-block: clamp(1rem, 2vw, 1.5rem);
-  border-bottom: 1px solid var(--border);
-  font-size: clamp(1rem, 0.95rem + 0.5vw, 1.375rem);
-  font-weight: 600;
-  line-height: 1.3;
-  color: var(--heading);
-}
-
-.outcome svg {
-  flex: none;
-  color: var(--accent);
-}
-
-/* ── zamknięcie ──────────────────────────────────────────────────────────── */
-.home-closing {
-  text-align: center;
-  border-top: 1px solid var(--border);
-}
-
-.closing-title {
-  margin: 0;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  line-height: 1.05;
-  font-size: clamp(2rem, 1.2rem + 3.4vw, 4rem);
-  color: var(--heading);
-}
-
-.home-closing .scene-line {
-  margin-inline: auto;
-  margin-bottom: 2rem;
-}
-
-/* Tekst tylko dla czytników ekranu: nagłówek sceny, która mówi ruchem.
+/* Tekst tylko dla czytników ekranu. Utrzymywany świadomie mimo braku
+   konsumenta po skasowaniu strony głównej v2: to narzędzie dostępności,
+   a nie styl sekcji, i wraca przy pierwszym `role="status"`.
    Nie `display: none`, bo wtedy czytnik też go nie zobaczy. */
 .sr-only {
   position: absolute;
@@ -556,30 +377,6 @@ html[data-theme="light"] .btn-primary:hover {
   clip-path: inset(50%);
   white-space: nowrap;
   border: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .wall-link,
-  .wall-shot {
-    transition: none;
-  }
-  .wall-link:hover .wall-shot {
-    transform: none;
-  }
-}
-
-/* Kafel bez zrzutu (KSeF: wdrożenie, nie demo) mieści diagram zamiast obrazu.
-   Ta sama proporcja i ta sama ramka, żeby siatka nie drgnęła. */
-.wall-shot--diagram {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.75rem;
-  background: var(--surface-muted);
-}
-.wall-shot--diagram svg {
-  width: 100%;
-  height: auto;
 }
 
 /* ══════════════════════════════════════════════════════════════════════════

@@ -1,22 +1,13 @@
 <!doctype html>
-<html lang="pl" data-theme="light">
+<html lang="pl">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#f7f5f1" />
-    <!-- Kadr produktu w hero = element LCP na „/” (perf-lcp-poster-preload).
-         Preload PRZED skryptami, z `imagesrcset`/`imagesizes` identycznym jak
-         `srcset`/`sizes` w src/data/media.ts: rozjazd tych dwóch = dwa pobrania
-         zamiast jednego. Nagranie hero NIE jest preloadowane nigdy.
-         scripts/prerender.mjs zdejmuje ten tag na trasach bez hero. -->
-    <link
-      rel="preload"
-      as="image"
-      href="/media/hero-production-v1.webp"
-      imagesrcset="/media/hero-production-v1-800.webp 800w, /media/hero-production-v1.webp 1600w"
-      imagesizes="(max-width: 1023px) 100vw, 50vw"
-      fetchpriority="high"
-    />
+    <meta name="theme-color" content="#121212" />
+    <!-- Preload elementu LCP wraca razem z kadrem nowego instrumentu
+         (perf-lcp-poster-preload). Poprzedni wskazywał obraz, którego od
+         usunięcia HeroMedia nie renderuje już żaden komponent: przeglądarka
+         pobierała 64 KB na nic i konkurowała o pasmo z prawdziwym LCP. -->
     <meta
       name="description"
       content="Narzędzia pod Twój proces. Działają w dni, dane zostają u Ciebie. Kontroling, integracje (KSeF), importy z ERP, obieg dokumentów, panele."
