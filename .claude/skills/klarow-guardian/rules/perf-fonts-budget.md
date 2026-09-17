@@ -1,6 +1,6 @@
 ---
 id: perf-fonts-budget
-title: Fonty self-hosted w public/fonts, zero CDN, ≤ 100 KB w fazie 1 (Nunito Sans solo) / ≤ 150 KB po ewentualnym drugim kroju, preload latin, font-display swap + size-adjust
+title: Fonty self-hosted w public/fonts, zero CDN, ≤ 100 KB w fazie 1 (Geist solo) / ≤ 150 KB po ewentualnym drugim kroju, preload latin, font-display swap + size-adjust
 impact: HIGH
 tags: [perf, fonts, privacy, cls, lcp]
 source: synthesis §1.5 R4/§2.4.9/§2.5 (Nunito solo) · feasibility-perf §3.2/§9 p.5 · ui-kit-habits C3 (N3) · site-audit §1.8 (brak preload) · rozstrzygnięcie (2): PDF zostaje na Roboto
@@ -9,9 +9,9 @@ added: 2026-09-12
 
 ## Zasada
 
-1. Wszystkie kroje w `site/public/fonts/*.woff2` (dziś: `NunitoSans-var-latin.woff2` 49,6 KB + `NunitoSans-var-latin-ext.woff2` 43,7 KB = 93,3 KB). Zero `fonts.googleapis.com`, `fonts.gstatic.com`, `rsms.me`, `cdn.jsdelivr.net`, `@fontsource` ładowanych z sieci.
-2. Budżet `dist/fonts`: **≤ 102 400 B (100 KB)** w fazie 1 (Nunito Sans solo, `--font-display` = alias `--font-sans`). Drugi krój (Geist) TYLKO po (a) teście 2 mockupów zaakceptowanym przez founderów i (b) osadzeniu w PDF w tej samej fazie (statyczne TTF 400/600; decyzja o foncie v2); wtedy budżet **≤ 153 600 B (150 KB)** i transfer mobile `/` ≤ 350 KB musi się nadal domykać.
-3. `@font-face` z `unicode-range` (latin, latin-ext osobno), `font-display: swap`, fallback systemowy z `size-adjust`/`ascent-override` dopasowanym do Nunito (CLS przy swapie ≈ 0): `@font-face { font-family: "Nunito Sans Fallback"; src: local("Segoe UI"), local("Arial"); size-adjust: 104%; ascent-override: 100%; descent-override: 35%; line-gap-override: 0% }`.
+1. Wszystkie kroje w `site/public/fonts/*.woff2` (dziś: `Geist-var-latin.woff2` 32,7 KB + `Geist-var-latin-ext.woff2` 17,2 KB = **49,9 KB**; do 2026-09-17 Nunito Sans, 93,3 KB - krój WYMIENIONY, nie dodany, więc budżet zszedł o 47 %). Zero `fonts.googleapis.com`, `fonts.gstatic.com`, `rsms.me`, `cdn.jsdelivr.net`, `@fontsource` ładowanych z sieci.
+2. Budżet `dist/fonts`: **≤ 102 400 B (100 KB)** w fazie 1 (Geist solo, `--font-display` = alias `--font-sans`). Drugi krój TYLKO po (a) teście 2 mockupów zaakceptowanym przez founderów i (b) osadzeniu w PDF w tej samej fazie (statyczne TTF 400/600; decyzja o foncie v2); wtedy budżet **≤ 153 600 B (150 KB)** i transfer mobile `/` ≤ 350 KB musi się nadal domykać.
+3. `@font-face` z `unicode-range` (latin, latin-ext osobno), `font-display: swap`, fallback systemowy z `size-adjust`/`ascent-override` dopasowanym do Geist (CLS przy swapie ≈ 0): `@font-face { font-family: "Geist Fallback"; src: local("Segoe UI"), local("Arial"); size-adjust: 104%; ascent-override: 100%; descent-override: 35%; line-gap-override: 0% }`.
 4. `<link rel="preload" as="font" type="font/woff2" crossorigin>` TYLKO dla pliku latin (nie latin-ext, nie dla wagi nieużywanej nad foldem).
 5. Wagi: variable font (jeden plik na subset); żadnych dodatkowych statycznych plików wag; UI używa 400/600/700 (nagłówki 600–700, nie 800).
 6. PDF (`lib/pdf.ts`): Roboto wbudowane w pdfmake (decyzja B, okno c1); API `pdfDoc({ font })` przyjmuje parametr, ale osadzenie kroju UI w vfs dopiero po decyzji founderów o foncie v2. Nie kopiować woff2 do vfs (pdfmake potrzebuje TTF).
@@ -41,8 +41,8 @@ added: 2026-09-12
   src: url("/fonts/NunitoSans-var-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
 @font-face { font-family: "Nunito Sans"; font-style: normal; font-weight: 200 1000; font-display: swap;
   src: url("/fonts/NunitoSans-var-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF; }
-@font-face { font-family: "Nunito Sans Fallback"; src: local("Segoe UI"), local("Arial"); size-adjust: 104%; ascent-override: 100%; descent-override: 35%; line-gap-override: 0%; }
-:root { --font-sans: "Nunito Sans", "Nunito Sans Fallback", system-ui, sans-serif; --font-display: var(--font-sans); }
+@font-face { font-family: "Geist Fallback"; src: local("Segoe UI"), local("Arial"); size-adjust: 104%; ascent-override: 100%; descent-override: 35%; line-gap-override: 0%; }
+:root { --font-sans: "Nunito Sans", "Geist Fallback", system-ui, sans-serif; --font-display: var(--font-sans); }
 ```
 
 ```html

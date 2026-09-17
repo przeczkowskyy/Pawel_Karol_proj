@@ -1,250 +1,175 @@
 /* ── Strona główna v3: układ ────────────────────────────────────────────────
-   Importowany z `pages/HomeV3.tsx`, a nie z `main.tsx`. To nie jest detal:
-   strona główna jest lazy-chunkiem, więc jej style nie wchodzą do CSS
-   krytycznego, który ma dziś 3,3 KB zapasu do limitu 20 KB
-   (`perf-chunk-size-gate`).
+   Importowany z `pages/HomeV3.tsx`, nie z `main.tsx`: strona główna jest
+   lazy-chunkiem, więc te style nie wchodzą do CSS krytycznego (limit 20 KB gz).
 
-   Kolory wyłącznie z tokenów (`design-tokens-only`). Promienie {0, 8, 999}
-   (`design-shape-lock`). Zero cieni, blur i glass (`design-no-glass-no-blur`).
-   Strukturę niesie hairline 1 px, nie pudełko. */
+   Prefiks `hm-` na wszystkim, bo `hero-title` istnieje już w arkuszu
+   krytycznym dla shella prerendera i kolizja dałaby dwa różne wyglądy tego
+   samego nagłówka przed i po starcie Reacta.
 
-/* ── kontener ───────────────────────────────────────────────────────────────
-   Trasa renderuje `<PageMain pad={false}>`, czyli bez własnego paddingu, więc
-   margines boczny musi dać ta warstwa. Jedno miejsce dla wszystkich sekcji:
-   `--container` (72rem, od 1900 px 80rem) i `--gutter` (16–40 px) z tokenów,
-   nigdy wartości wpisane w komponent.
+   ŚWIATŁO JEST TREŚCIĄ. Research o odbiorze „premium" wskazuje whitespace jako
+   drugi czynnik po typografii i tłumaczy go tak: marka, która nie musi zapełnić
+   każdego piksela, wygląda na taką, która ma czym płacić za miejsce. Odstępy
+   w tym pliku są więc liczone od 4 do 9 rem, nie od 2,5 do 4,5 jak w wersji
+   sprzed cięcia tekstu.
 
-   Padding jest na `padding-inline`, nie na skróconym `padding`: skrót
-   wyzerowałby marginesy boczne przy każdej zmianie odstępu pionowego, a to
-   właśnie ten błąd zostawił hero dotykający krawędzi ekranu w pierwszym
-   podejściu. */
-.hero-v3,
-.home-sec,
-.home-closing-v3 {
+   Kolory wyłącznie z tokenów (`design-tokens-only`), promienie {0, 8, 999}
+   (`design-shape-lock`), zero cieni i blur (`design-no-glass-no-blur`),
+   strukturę niesie hairline 1 px. */
+
+.hm-hero,
+.hm-beat,
+.hm-examples,
+.hm-closing {
   max-width: var(--container);
   margin-inline: auto;
+  /* `padding-inline`, nigdy skrót `padding`: skrót zerowałby marginesy boczne
+     przy każdej zmianie odstępu pionowego. */
   padding-inline: var(--gutter);
 }
 
-/* ── hero ──────────────────────────────────────────────────────────────────
-   Tekst i instrument obok siebie od 64rem, jeden pod drugim niżej. Wysokość
-   NIE jest przybita do `100dvh`: instrument ma własną, zmierzoną wysokość
-   (`MIN_HEIGHT` w `DashboardMount`), a sztywne `dvh` albo by go ucięło, albo
-   zostawiło pustkę. */
-.hero-v3 {
+/* ── hero ──────────────────────────────────────────────────────────────── */
+.hm-hero {
   display: grid;
-  gap: clamp(1.5rem, 4vw, 3rem);
-  align-items: center;
-  padding-block: clamp(2.5rem, 7vw, 5rem) clamp(2rem, 5vw, 3.5rem);
+  gap: clamp(2rem, 5vw, 3.5rem);
+  padding-block: clamp(4rem, 10vw, 8rem) clamp(3rem, 7vw, 6rem);
 }
 
 @media (min-width: 64rem) {
-  .hero-v3 {
-    /* Nagłówek zajmuje oba pola pierwszego wiersza, pod nim tekst i instrument.
-       Instrument dostaje więcej miejsca, bo to on jest dowodem. */
+  .hm-hero {
     grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
     align-items: start;
   }
-  .hero-v3-title {
+  .hm-hero-title {
     grid-column: 1 / -1;
   }
 }
 
-.hero-v3-text {
-  min-width: 0;
-}
-
-.hero-v3-title {
+.hm-hero-title {
   margin: 0;
-  /* WŁASNY STOPIEŃ, NIE `--text-display`, i własna szerokość: świadome odejście
-     od liczb podanych w `design-hero-discipline` (`clamp(2.25rem, 5.2vw, 4.25rem)`,
-     `max-width: 24ch`), które powstały dla hero jednokolumnowego.
-
+  /* Własny stopień zamiast `--text-display`: świadome odejście od liczb
+     z `design-hero-discipline`, które powstały dla hero jednokolumnowego.
      Testowalny warunek reguły („≤ 2 wiersze od 1024 px, ≤ 3 na 390 px")
-     obowiązuje bez zmian; zmieniają się tylko liczby, którymi go spełniamy.
-     Zmierzone na zbudowanej stronie: 1024 → 2, 1280 → 2, 1440 → 2, 1920 → 2,
-     390 → 3.
-
-     Bez `max-width` w znakach: szerokość ogranicza siatka (nagłówek zajmuje
-     cały pierwszy wiersz hero), a druga granica tylko wchodziłaby jej w drogę. */
+     obowiązuje bez zmian i jest spełniony — zmierzone na zbudowanej stronie. */
   font-size: clamp(2rem, 3.4vw + 0.5rem, 3.5rem);
-  font-weight: 700;
-  line-height: 1.05;
-  letter-spacing: -0.02em;
+  font-weight: 600;
+  line-height: 1.04;
+  /* Geist ma ciaśniejsze światła niż Nunito Sans, więc ujemny tracking może być
+     mniejszy: przy -0.02em nagłówek zaczynał się zlepiać. */
+  letter-spacing: -0.015em;
   color: var(--foreground-strong);
   text-wrap: balance;
   overflow-wrap: anywhere;
 }
 
-.hero-v3-lead {
-  margin: 1.25rem 0 0;
-  max-width: 48ch;
+.hm-hero-text {
+  min-width: 0;
+}
+
+.hm-hero-lead {
+  margin: 0;
+  max-width: 44ch;
   font-size: var(--text-lg);
-  line-height: 1.55;
+  line-height: 1.6;
   color: var(--foreground-muted);
 }
 
-.hero-v3-cta {
+.hm-hero-cta {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
-  margin-top: 2rem;
+  margin-top: 2.5rem;
 }
 
-/* Rama instrumentu: jedna linia i nic więcej. Kadrowanie robi layout
-   (`overflow: hidden`), nie obraz. */
-.hero-v3-frame {
+.hm-hero-frame,
+.hm-beat-frame {
   min-width: 0;
   border: 1px solid var(--border);
   background: var(--surface);
   overflow: hidden;
 }
 
-.hero-v3-caption {
-  margin: 0;
-  padding: 0.75rem 1rem;
-  border-top: 1px solid var(--border);
-  font-size: var(--text-xs);
-  letter-spacing: 0.02em;
-  color: var(--foreground-muted);
-}
-
-/* ── sekcja ────────────────────────────────────────────────────────────────
-   Hairline u góry zamiast karty. Sekcja szeroka (`--wide`) kładzie dowód pod
-   tekstem na pełnej szerokości; zwykła stawia go w prawej kolumnie. */
-.home-sec {
-  display: grid;
-  gap: clamp(1.5rem, 4vw, 3rem);
-  padding-block: clamp(2.5rem, 6vw, 4.5rem);
+/* ── uderzenie dowodu ──────────────────────────────────────────────────── */
+.hm-beat {
+  padding-block: clamp(4rem, 9vw, 7.5rem);
   border-top: 1px solid var(--border);
 }
 
-@media (min-width: 64rem) {
-  .home-sec:not(.home-sec--wide) {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    align-items: start;
-  }
+.hm-beat-head {
+  max-width: 34ch;
+  margin-bottom: clamp(2rem, 4vw, 3rem);
 }
 
-.home-sec-text {
-  min-width: 0;
-}
-
-.home-sec-title {
+.hm-beat-title {
   margin: 0;
-  font-size: var(--text-2xl);
-  font-weight: 700;
+  font-size: clamp(1.5rem, 1.8vw + 0.6rem, 2.25rem);
+  font-weight: 600;
   line-height: 1.15;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.015em;
   color: var(--foreground-strong);
   text-wrap: balance;
 }
 
-.home-sec-lead {
-  margin: 0.75rem 0 0;
-  max-width: 52ch;
-  font-size: var(--text-lg);
-  line-height: 1.5;
-  color: var(--foreground);
-}
-
-.home-sec-body {
-  margin: 1.25rem 0 0;
-  /* 60ch to granica, po której wiersz przestaje się czytać
-     (`design-typography-scale`). */
-  max-width: 60ch;
-  line-height: 1.7;
+.hm-beat-line {
+  margin: 0.875rem 0 0;
+  font-size: var(--text-base);
+  line-height: 1.6;
   color: var(--foreground-muted);
 }
 
-/* Rzeczy sprawdzalne: wiersze rozdzielone linią, bez punktorów i bez kart. */
-.home-sec-points {
-  margin: 1.75rem 0 0;
+/* ── przykłady: same nazwy ─────────────────────────────────────────────────
+   Lista wierszowa rozdzielona hairline'em, bez kart i bez punktorów. Nazwa
+   narzędzia ma być jedyną treścią wiersza, więc wiersz nie ma nic poza nią. */
+.hm-examples {
+  padding-block: clamp(4rem, 9vw, 7.5rem);
+  border-top: 1px solid var(--border);
+}
+
+.hm-examples-list {
+  margin: 0;
   padding: 0;
   list-style: none;
-  max-width: 60ch;
-}
-
-.home-sec-points > li {
-  padding: 0.75rem 0;
   border-top: 1px solid var(--border-subtle);
-  font-size: var(--text-sm);
+}
+
+.hm-examples-item {
+  display: block;
+  padding: 1.125rem 0;
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: var(--text-lg);
   color: var(--foreground);
+  transition: color var(--duration-quick) var(--ease-out);
 }
 
-.home-sec-proof {
-  min-width: 0;
+.hm-examples-item:hover {
+  color: var(--accent-text);
 }
 
-/* ── zakładki narzędzi ─────────────────────────────────────────────────── */
-.tooltabs-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 1.25rem;
-}
-
-.tooltabs-tab {
-  padding: 0.5rem 0.875rem;
-  /* 44 px pola dotyku (`a11y-touch-targets-44`) przy zachowaniu drobnego
-     kroju: wysokość robi padding, nie rozmiar pisma. */
-  min-height: 44px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: transparent;
-  color: var(--foreground-muted);
-  font-size: var(--text-sm);
-  cursor: pointer;
-  transition:
-    color var(--duration-quick) var(--ease-out),
-    border-color var(--duration-quick) var(--ease-out);
-}
-
-.tooltabs-tab:hover {
-  color: var(--foreground);
-  border-color: var(--border-strong);
-}
-
-.tooltabs-tab[aria-selected="true"] {
-  color: var(--on-accent);
-  background: var(--accent);
-  border-color: var(--accent);
-}
-
-.tooltabs-foot {
-  margin: 1rem 0 0;
-  font-size: var(--text-sm);
-}
-
-/* Spis wszystkich narzędzi: dla człowieka drobny druk, dla crawlera komplet
-   linków w DOM od pierwszego renderu (`seo-links-in-dom`). */
-.tooltabs-index {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 1.25rem;
+.hm-examples-more {
   margin: 2rem 0 0;
-  padding-top: 1.25rem;
-  border-top: 1px solid var(--border-subtle);
-  list-style: none;
-  font-size: var(--text-xs);
-}
-
-.tooltabs-index a {
-  color: var(--foreground-faint);
-}
-
-.tooltabs-index a:hover {
-  color: var(--foreground);
+  font-size: var(--text-sm);
 }
 
 /* ── zamknięcie ────────────────────────────────────────────────────────── */
-.home-closing-v3 {
-  padding-block: clamp(3rem, 8vw, 6rem);
+.hm-closing {
+  padding-block: clamp(5rem, 11vw, 9rem);
   border-top: 1px solid var(--border);
-  text-align: center;
 }
 
-.home-closing-v3 .home-sec-lead {
-  margin-inline: auto;
-  margin-bottom: 2rem;
+.hm-closing-title {
+  margin: 0;
+  max-width: 20ch;
+  font-size: clamp(1.75rem, 2.4vw + 0.6rem, 2.75rem);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  color: var(--foreground-strong);
+  text-wrap: balance;
+}
+
+.hm-closing-line {
+  margin: 1rem 0 2.5rem;
+  max-width: 46ch;
+  font-size: var(--text-lg);
+  line-height: 1.6;
+  color: var(--foreground-muted);
 }

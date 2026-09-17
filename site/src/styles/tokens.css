@@ -253,10 +253,10 @@
    Typografia, geometria, ruch i layout nie zależą od motywu, więc nie mają
    (i nie potrzebują) pary w `[data-theme="light"]`. */
 :root {
-  /* Krój: Nunito Sans solo (self-hosted, `@font-face` w company-ui.css).
+  /* Krój: Geist solo (self-hosted, `@font-face` w globals.css).
      `--font-display` jest ALIASEM `--font-sans`: zmiana kroju nagłówków
      to jedna linia, bez ruszania komponentów (decyzja D-06). */
-  --font-sans: "Nunito Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-sans: "Geist", "Segoe UI", system-ui, -apple-system, sans-serif;
   --font-display: var(--font-sans);
 
   /* Skala pisma w rem: 7 stopni + display. Minimum w UI to 0.75rem (12 px);

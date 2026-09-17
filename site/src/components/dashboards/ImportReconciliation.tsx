@@ -153,10 +153,14 @@ function kindChip(kind: DiffKind, t: (typeof T)["pl"]) {
   );
 }
 
-export default function ImportReconciliation() {
+/* `autoStart`: pomija kurtynę „Uruchom import (TEST)" i pokazuje od razu
+   baner PASS z rozpisanym równaniem. Domyślnie WYŁĄCZONY — na podstronie
+   kurtyna jest częścią demonstracji (widz świadomie uruchamia import), na
+   stronie głównej byłaby pustym prostokątem w miejscu dowodu. */
+export default function ImportReconciliation({ autoStart = false }: { autoStart?: boolean } = {}) {
   const { lang } = useLang();
   const t = T[lang];
-  const [ran, setRan] = useState(false);
+  const [ran, setRan] = useState(autoStart);
 
   const diff = useMemo(() => computeDiff(PREV, CURR), []);
   const sumPrev = PREV.reduce((s, r) => s + gr(r.amount), 0);

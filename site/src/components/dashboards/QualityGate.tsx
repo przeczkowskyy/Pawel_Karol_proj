@@ -155,10 +155,16 @@ function sevChip(sev: Severity, t: (typeof T)["pl"]) {
   );
 }
 
-export default function QualityGate() {
+/* `autoStart`: startuje od razu na wbudowanej próbce z zasianymi błędami,
+   zamiast czekać na kliknięcie „Załaduj przykład". Domyślnie WYŁĄCZONY, więc
+   podstrona narzędzia zachowuje się dokładnie jak dotąd (pusty stan i decyzja
+   użytkownika). Używa tego wyłącznie strona główna, gdzie werdykt jest
+   dowodem, a nie ćwiczeniem: bramka czekająca na klik niczego nie dowodzi
+   komuś, kto tylko przewija. */
+export default function QualityGate({ autoStart = false }: { autoStart?: boolean } = {}) {
   const { lang } = useLang();
   const t = pick(lang, T);
-  const [csv, setCsv] = useState<string | null>(null);
+  const [csv, setCsv] = useState<string | null>(autoStart ? SAMPLE : null);
   const [src, setSrc] = useState("");
   const [pasteOpen, setPasteOpen] = useState(false);
   const [pasteText, setPasteText] = useState("");

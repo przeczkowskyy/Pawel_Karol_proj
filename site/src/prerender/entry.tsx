@@ -4,7 +4,7 @@ import { getToolsWithSeo } from "@/data/toolsSeo";
 import { FAQ_I18N } from "@/data/faq";
 import { NOT_FOUND_COPY, PAGES_SEO, SKIP_LINK } from "@/data/pagesSeo";
 import { MESSAGING } from "@/data/messaging";
-import { HOME_CLOSING, HOME_SECTIONS } from "@/data/homeSections";
+import { HOME_BEATS, HOME_CLOSING, HOME_EXAMPLES } from "@/data/homeSections";
 import { RODO, type RodoObjection, type RodoSection } from "@/data/rodo";
 import { EMAIL, MAIL_HREF, ORIGIN, PHONE_DISPLAY, PHONE_E164, PHONE_HREF } from "@/data/contact";
 import { ORG_JSONLD, toolJsonLd, faqPageJsonLd } from "@/components/Seo";
@@ -130,102 +130,73 @@ function H2({ children }: { children: React.ReactNode }) {
 /* ── shell strony głównej (/) ───────────────────────────────────────── */
 
 function HomeShell() {
-  /* SHELL STRONY GŁÓWNEJ CZYTA TO SAMO ŹRÓDŁO CO KLIENT: `data/homeSections.ts`.
+  /* SHELL CZYTA TO SAMO ŹRÓDŁO CO KLIENT (`data/homeSections.ts`) I WYPISUJE
+     DOKŁADNIE TE SAME ZDANIA.
 
-     TO NIE JEST OSTROŻNOŚĆ, TYLKO NAPRAWIONA AWARIA. 13 września trasa `/`
-     renderowała prezentację, a ten shell wypisywał jeszcze poprzednie hero.
-     Crawler bez JavaScriptu dostawał INNĄ stronę niż człowiek przez kilka dni
-     i nikt tego nie zauważył, bo build był zielony. Dopóki obie warstwy czytają
-     jeden moduł, ta awaria nie może wrócić. Po każdej zmianie tego, co renderuje
-     trasa, sprawdź jej shell.
-
-     TO JEST WARSTWA, KTÓRA ROBI SEO. Akapity (`body`) i rzeczy sprawdzalne
-     (`points`) istnieją właśnie po to, żeby tu wylądować. Pierwsza wersja
-     prezentacji miała 65 słów na osiem ekranów i nie było czego indeksować.
-     Jeśli ktoś usunie `body` z danych, ta strona przestanie mieć treść. */
+     To nie jest ostrożność, tylko dwie naprawione awarie. Pierwsza: 13 września
+     trasa `/` renderowała co innego niż shell i crawler przez kilka dni
+     dostawał inną stronę niż człowiek, przy zielonym buildzie. Druga byłaby
+     świeża: po cięciu tekstu o 90 % kuszące jest zostawienie gęstego shella
+     „dla Google". To się nazywa cloaking i nie robimy tego — strona główna ma
+     tyle samo słów dla crawlera co dla człowieka, a długi ogon żyje na
+     podstronach, które i tak go mają (`toolsSeo.ts`, `/oferta`, `/faq`). */
+  const przyklady = getToolsWithSeo("pl").filter((t) =>
+    (HOME_EXAMPLES.slugs as readonly string[]).includes(t.slug),
+  );
   return (
     <ShellChrome>
       {/* H1 to jedno zdanie marki z `messaging.ts`, nigdy kopia
-          (`copy-one-liner-single-source`): to samo zdanie stoi w meta,
-          w JSON-LD, w llms.txt, w promptcie bota i na LinkedInie founderów. */}
+          (`copy-one-liner-single-source`). */}
       <h1 className="hero-title" style={HEAD}>{MESSAGING.oneLiner.pl}</h1>
       <p className="mt-4 max-w-3xl text-sm" style={BODY}>{MESSAGING.subtext.pl}</p>
 
-      {HOME_SECTIONS.map((s) => (
-        <section key={s.id} id={s.id}>
-          <H2>{s.headline.pl}</H2>
-          <p className="mt-2 max-w-3xl text-sm" style={BODY}>{s.lead.pl}</p>
-          <p className="mt-2 max-w-3xl text-sm" style={BODY}>{s.body.pl}</p>
-          {s.points ? (
-            <ul className="mt-2 flex flex-col gap-1.5 text-sm" style={BODY}>
-              {s.points.map((pt) => <li key={pt.pl}>{pt.pl}</li>)}
-            </ul>
-          ) : null}
+      {HOME_BEATS.map((b) => (
+        <section key={b.id} id={b.id}>
+          <H2>{b.headline.pl}</H2>
+          <p className="mt-2 max-w-3xl text-sm" style={BODY}>{b.line.pl}</p>
         </section>
       ))}
 
-      {/* KOMPLET LINKÓW DO TRZYNASTU NARZĘDZI. Klient renderuje je w spisie pod
-          zakładkami; shell musi mieć je tak samo, bo `seo-links-in-dom` wymaga
-          adresów w DOM, a nie po kliknięciu. Usunięcie tego bloku odcina
-          trzynaście stron od przepływu linków. */}
-      <H2>Narzędzia, które możesz uruchomić</H2>
-      <ul className="mt-2 flex flex-col gap-1.5 text-sm" style={BODY}>
-        {getToolsWithSeo("pl").map((t) => (
-          <li key={t.slug}>
-            <a href={`/narzedzia/${t.slug}`} style={LINK}>{t.name}</a>: {t.tagline}
+      <section>
+        <H2>{HOME_EXAMPLES.headline.pl}</H2>
+        <p className="mt-2 max-w-3xl text-sm" style={BODY}>{HOME_EXAMPLES.line.pl}</p>
+        <ul className="mt-2 flex flex-col gap-1.5 text-sm" style={BODY}>
+          {przyklady.map((t) => (
+            <li key={t.slug}>
+              <a href={`/narzedzia/${t.slug}`} style={LINK}>{t.name}</a>
+            </li>
+          ))}
+          <li>
+            <a href="/narzedzia" style={LINK}>{HOME_EXAMPLES.more.pl}</a>
           </li>
-        ))}
-      </ul>
+        </ul>
+      </section>
 
       <section>
         <H2>{HOME_CLOSING.headline.pl}</H2>
-        <p className="mt-2 max-w-3xl text-sm" style={BODY}>{HOME_CLOSING.lead.pl}</p>
+        <p className="mt-2 max-w-3xl text-sm" style={BODY}>{HOME_CLOSING.line.pl}</p>
         <p className="mt-6">
           <a className="btn btn-primary" href={MAIL_HREF}>{MESSAGING.cta.primary.pl}</a>
         </p>
       </section>
 
-      <p className="mt-4 max-w-3xl text-sm" style={MUTED}>
-        {MESSAGING.zeroVendorCloud.pl}
-      </p>
       <ContactLine />
-
-      <H2>Zobacz konkrety</H2>
-      <ul className="mt-2 flex flex-col gap-1.5 text-sm" style={BODY}>
-        <li>
-          <a href="/narzedzia" style={LINK}>Przykłady realizacji</a>: klikalne dema i wdrożenia
-          u klienta (m.in. integracja z KSeF); to próbki, a Twoje narzędzie budujemy pod Twój proces.
-        </li>
-        <li>
-          <a href="/oferta" style={LINK}>Oferta: pilot na kopii</a>, czyli jeden proces, efekt w dni,
-          płatność 50/50; wycena po bezpłatnej diagnozie.
-        </li>
-        <li>
-          <a href="/faq" style={LINK}>Najczęstsze pytania</a>: bezpieczeństwo danych, koszt,
-          zgodność z ERP, los działających makr.
-        </li>
-      </ul>
 
       <section lang="en">
         <H2>Klarow in English</H2>
         <p className="mt-2 max-w-3xl text-sm" style={BODY}>
           {MESSAGING.oneLiner.en} {MESSAGING.subtext.en}
         </p>
-        {HOME_SECTIONS.map((s) => (
-          <p key={s.id} className="mt-2 max-w-3xl text-sm" style={BODY}>
-            <strong>{s.headline.en}.</strong> {s.body.en}
-          </p>
-        ))}
         <p className="mt-2 max-w-3xl text-sm" style={MUTED}>
           {MESSAGING.determinism.en} See the{" "}
-          <a href="/narzedzia" style={LINK}>work we've done</a>, the{" "}
+          <a href="/narzedzia" style={LINK}>tools</a>, the{" "}
           <a href="/oferta" style={LINK}>offer</a>, the <a href="/faq" style={LINK}>FAQ</a> and our{" "}
           <a href="/rodo" style={LINK}>privacy notice</a>.
         </p>
       </section>
 
       <p className="mt-8 text-xs" style={MUTED}>
-        Narzędzia na tej stronie uruchamiają się z JavaScriptem i liczą w Twojej przeglądarce.
+        Narzędzia na tej stronie liczą w Twojej przeglądarce i uruchamiają się z JavaScriptem.
         {" "}© 2026 Klarow · Polska / USA
       </p>
     </ShellChrome>

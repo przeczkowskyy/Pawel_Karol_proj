@@ -14,7 +14,7 @@ xl 1.25 / 2xl clamp / 3xl clamp / display clamp(2.25rem, 5.2vw, 4.25rem)`): maks
 + display. **Minimum w UI = `.75rem` (12 px)**; 10 px tylko dla osi wykresów w dashboardach.
 Zakazane: `px` z ułamkami (12.5 / 13.5 / 14.5), `text-[Npx]`, rozmiary „na oko" w klasach kitu,
 więcej niż jedna waga display (nagłówki 600–700, nigdy 800+ poza wordmarkiem), `letter-spacing`
-inne niż `-.02em` w nagłówkach i `.14em` w wordmarku. Krój: **Nunito Sans solo** (self-hosted
+inne niż `-.015em` w nagłówkach i `.14em` w wordmarku. Krój: **Geist solo** (self-hosted
 `woff2`, `unicode-range` latin + latin-ext, `font-display: swap`, preload pliku latin);
 `--font-display` = alias `--font-sans` do decyzji D-06. Zero serif (w tym Instrument Serif /
 Fraunces), zero mono w UI, zero Google Fonts CDN, zero Inter / Roboto / Arial jako kroju UI.
@@ -25,8 +25,23 @@ Nagłówki: `text-wrap: balance`, `overflow-wrap: anywhere`. Tekst akapitu `max-
 Kit ma 9 stopni px z ułamkami plus ~12 wartości ad hoc (9.5 / 10.5 / 11.5 / 16.5 / 22 / 23 px):
 brak skali, brak skalowania ustawień użytkownika (px ignoruje preferencje), 9,5–10 px nie przechodzi
 czytelności mobile. Strona ma 140 `text-[Npx]`. Serif to „the single most-tested AI tell" (taste §4.1),
-a mono w UI to rejestr dev-tool, nie CFO. Drugi krój (Geist) rozsadza budżet fontów (Nunito 93 KB
-+ Geist ~70 KB > 150 KB; feasibility-perf §3.2) i wymaga osadzenia w PDF w tej samej fazie.
+a mono w UI to rejestr dev-tool, nie CFO.
+
+**ZMIANA KROJU 2026-09-17 (decyzja Karola).** Do 17 września ta reguła mówiła „Nunito Sans solo"
+i odrzucała Geist zdaniem: „drugi krój rozsadza budżet fontów (Nunito 93 KB + Geist ~70 KB
+> 150 KB)". Tamto zastrzeżenie dotyczyło **dodania** drugiego kroju i było słuszne. Tutaj krój
+został **wymieniony**, więc rachunek jest odwrotny: **49 880 B wobec 93 304 B, czyli o 47 % mniej**.
+PDF zostaje na Roboto (decyzja B), więc osadzanie w PDF w ogóle nie wchodzi w grę.
+
+Powód zmiany nazwał founder wprost: „strona jest bardziej prestiżowa, ale nie wygląda premium".
+Nunito Sans jest krojem humanistycznym o miękkich końcówkach i szerokich światłach — czyta się
+przyjaźnie, czyli odwrotnie do „precyzyjny, inżynierski". Geist ma cięte końcówki i ciaśniejsze
+światła. Przy ciaśniejszych światłach ujemny tracking nagłówków musiał zejść z `-.02em`
+na `-.015em`, bo przy starej wartości nagłówek zaczynał się zlepiać; stąd zmiana w „Zasadzie".
+
+Podzbiory zrobione z fontu zmiennego przez `fontTools.subset`, te same dwa zakresy znaków co
+wcześniej, komplet 18/18 polskich znaków sprawdzony po kodach, nie po wyglądzie w terminalu.
+Licencja SIL OFL 1.1 wymaga dystrybucji tekstu licencji: `site/public/fonts/Geist-OFL-LICENSE.txt`.
 
 ## Niepoprawnie
 
@@ -44,14 +59,14 @@ h1 { font-family: "Instrument Serif", serif; font-size: 72px; }
 ## Poprawnie
 
 ```css
-@font-face { font-family: "Nunito Sans"; src: url("/fonts/nunito-sans-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; font-display: swap; font-weight: 200 1000; }
-:root { --font-sans: "Nunito Sans", "Segoe UI", system-ui, -apple-system, sans-serif; --font-display: var(--font-sans); --text-xs: .75rem; --text-sm: .875rem; --text-base: 1rem; --text-lg: 1.125rem; --text-xl: 1.25rem; }
-h1 { font: 700 var(--text-display)/1.05 var(--font-display); letter-spacing: -.02em; text-wrap: balance; overflow-wrap: anywhere; }
+@font-face { font-family: "Geist"; src: url("/fonts/Geist-var-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; font-display: swap; font-weight: 100 900; }
+:root { --font-sans: "Geist", "Segoe UI", system-ui, -apple-system, sans-serif; --font-display: var(--font-sans); --text-xs: .75rem; --text-sm: .875rem; --text-base: 1rem; --text-lg: 1.125rem; --text-xl: 1.25rem; }
+h1 { font: 600 var(--text-display)/1.05 var(--font-display); letter-spacing: -.015em; text-wrap: balance; overflow-wrap: anywhere; }
 .lbl { font-size: var(--text-xs); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
 ```
 
 ```html
-<link rel="preload" as="font" type="font/woff2" href="/fonts/nunito-sans-latin.woff2" crossorigin />
+<link rel="preload" as="font" type="font/woff2" href="/fonts/Geist-var-latin.woff2" crossorigin />
 ```
 
 ## Test
@@ -64,7 +79,7 @@ grep -rnoE "text-\[[0-9.]+px\]" site/src --include=*.tsx
 grep -rniE "serif\b|font-mono|font-family:\s*\"?(Inter|Roboto|Arial|Geist Mono|JetBrains)|fonts\.googleapis|fonts\.gstatic" site/src site/index.html | grep -v "sans-serif"
 # fonty self-hosted i preload
 ls site/public/fonts/*.woff2; grep -n 'rel="preload" as="font"' site/index.html
-# budżet fontów ≤ 100 KB (Nunito solo)
+# budżet fontów ≤ 100 KB (Geist solo; dziś 49 880 B)
 du -k site/public/fonts/*.woff2
 ```
 

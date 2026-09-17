@@ -1,62 +1,55 @@
 import { pick, useLang } from "@/i18n";
-import { HOME_CLOSING, HOME_SECTIONS } from "@/data/homeSections";
+import { HOME_BEATS, HOME_CLOSING } from "@/data/homeSections";
 import { MESSAGING } from "@/data/messaging";
 import { HeroV3 } from "@/components/home/HeroV3";
-import { SectionBlock } from "@/components/home/SectionBlock";
-import { ToolTabs } from "@/components/home/ToolTabs";
-import { DashboardMount } from "@/motion/DashboardMount";
+import { Beat } from "@/components/home/Beat";
+import { Examples } from "@/components/home/Examples";
 import "@/styles/home.css";
 
 /* ── Strona główna v3 ───────────────────────────────────────────────────────
-   Decyzja Karola 2026-09-17: „Efekt wow ma brać się z tego, że strona
-   URUCHAMIA prawdziwe narzędzia." Poprzednie dwa podejścia (kreskówkowe sceny,
-   pionowy pas z pętlami) budowały wrażenie z materiału generatywnego i oba
-   zostały odrzucone: „te gify zupełnie nam nie wyszły".
+   Jedna rzecz do udowodnienia, dwa uderzenia, kilka nazw, jedno zamknięcie.
 
-   CZTERY SEKCJE, DWA ŻYWE NARZĘDZIA, ZERO WYGENEROWANYCH OBRAZÓW.
-   Dowodem nie jest to, co mówimy o narzędziach, tylko to, że działają pod
-   palcem odwiedzającego, na jego własnym pliku.
+   OŚ (Karol 2026-09-17: „scrolując próbujmy coś udowodnić"):
+   audyt pokazuje CZERWONY werdykt na danych z zasianymi błędami, uzgodnienie
+   pokazuje ZIELONE PASS z równaniem zgadzającym się co do grosza. Dowodzi tego
+   narzędzie, nie zdanie obok.
 
-   Ten plik jest WYŁĄCZNIE montażem: copy siedzi w `data/homeSections.ts`
-   (to samo źródło czyta shell prerendera, więc crawler i człowiek nie mogą
-   zobaczyć dwóch różnych stron), mechanika montażu w `motion/DashboardMount`,
-   a wygląd w `styles/home.css`.
+   DWA RÓŻNE NARZĘDZIA I TAK SĄ PODPISANE. Napisanie „te same dane przed i po"
+   byłoby mocniejsze dramaturgicznie i nieprawdziwe, a `brand-honest-labels`
+   nie pozwala kupować dramaturgii kłamstwem.
 
-   ARKUSZ WCHODZI PRZEZ IMPORT Z TEGO PLIKU, nie z `main.tsx`: strona główna
-   jest lazy-chunkiem, więc jej style nie liczą się do CSS krytycznego, a ten
-   ma dziś tylko 3,3 KB zapasu do limitu 20 KB (`perf-chunk-size-gate`). */
+   TEKSTU JEST OKOŁO 120 SŁÓW, było 1272. Długi ogon przeniesiony na podstrony,
+   które już go mają (`toolsSeo.ts`, `/oferta`, `/faq`). Shell prerendera
+   wypisuje dokładnie te same zdania — inaczej byłby to cloaking.
+
+   Ten plik jest wyłącznie montażem: copy w `data/homeSections.ts`, mechanika
+   montażu w `motion/DashboardMount`, wygląd w `styles/home.css`. */
 
 export default function HomeV3({ onBook }: { onBook: () => void }) {
   const { lang } = useLang();
-  const [plik, dowod, narzedzia, jak] = HOME_SECTIONS;
+  const [audyt, uzgodnienie] = HOME_BEATS;
 
   return (
     <>
       <HeroV3 onBook={onBook} />
 
-      {/* SEKCJA PLIKU. `DemoReport` przyjmuje wklejkę i wgrany plik CSV i liczy
-          go w całości lokalnie, więc obietnica „nie wychodzi z przeglądarki"
-          jest tu dosłownie prawdziwa i sprawdzalna w narzędziach programisty.
-          Rozpoznawanie pokracznych arkuszy (scalone nagłówki, sumy pośrednie)
-          dochodzi w następnym kroku i nie zmienia tej granicy. */}
-      <SectionBlock section={plik} wide>
-        <DashboardMount dashboard="report" />
-      </SectionBlock>
+      {/* CZERWONE: audyt jakości startuje na zestawie z czterema zasianymi
+          błędami (ujemna estymata, saldo kontrolne, data poza tygodniem),
+          więc werdykt „nie publikuj" widać bez jednego kliknięcia. */}
+      <Beat beat={audyt} dashboard="quality" />
 
-      <SectionBlock section={dowod} />
+      {/* ZIELONE: uzgodnienie kończy się banerem PASS i równaniem rozpisanym
+          na prawdziwych kwotach. To jedyny ekran na stronie, który mówi
+          „sprawdź nas". */}
+      <Beat beat={uzgodnienie} dashboard="reconciliation" />
 
-      <SectionBlock section={narzedzia} wide>
-        <ToolTabs />
-      </SectionBlock>
+      <Examples />
 
-      <SectionBlock section={jak} />
-
-      {/* ZAMKNIĘCIE: jedno zdanie i jeden przycisk (`design-one-cta-per-screen`). */}
-      <section className="home-closing-v3" aria-labelledby="closing-title">
-        <h2 id="closing-title" className="home-sec-title">
+      <section className="hm-closing" aria-labelledby="closing-title">
+        <h2 id="closing-title" className="hm-closing-title">
           {pick(lang, HOME_CLOSING.headline)}
         </h2>
-        <p className="home-sec-lead">{pick(lang, HOME_CLOSING.lead)}</p>
+        <p className="hm-closing-line">{pick(lang, HOME_CLOSING.line)}</p>
         <button type="button" className="btn btn-primary" onClick={onBook}>
           {pick(lang, MESSAGING.cta.primary)}
         </button>

@@ -9,7 +9,9 @@ import { MediaBoundary } from "./MediaBoundary";
 
 /* Ścieżki muszą być LITERALNE, inaczej Rollup nie zrobi z nich osobnych chunków.
    Klucze dokładnie jak unia DashboardKey w src/data/tools.ts. */
-const LOADERS: Record<DashboardKey, () => Promise<{ default: ComponentType }>> = {
+type DashProps = { autoStart?: boolean };
+
+const LOADERS: Record<DashboardKey, () => Promise<{ default: ComponentType<DashProps> }>> = {
   report: () => import("@/components/DemoReport"),
   production: () => import("@/components/dashboards/ProductionDashboard"),
   quality: () => import("@/components/dashboards/QualityGate"),
@@ -43,9 +45,9 @@ const MIN_HEIGHT: Record<DashboardKey, number> = {
 
 /* Komponenty lazy tworzone raz na klucz i zapamiętane: React wymaga stabilnej referencji,
    inaczej każdy render montowałby dashboard od nowa. */
-const LAZY = new Map<DashboardKey, ComponentType>();
+const LAZY = new Map<DashboardKey, ComponentType<DashProps>>();
 
-function lazyDashboard(key: DashboardKey): ComponentType {
+function lazyDashboard(key: DashboardKey): ComponentType<DashProps> {
   const cached = LAZY.get(key);
   if (cached) return cached;
   const created = lazy(LOADERS[key]);
@@ -108,9 +110,12 @@ type DashboardMountProps = {
   minHeight?: number;
   /** zmiana wartości montuje dashboard od nowa (przycisk „Odtwórz") */
   replayKey?: number;
+  /** dashboard startuje od razu na wbudowanej próbce zamiast czekać na klik;
+   *  obsługują to QualityGate i ImportReconciliation, reszta ignoruje */
+  autoStart?: boolean;
 };
 
-export function DashboardMount({ dashboard, minHeight, replayKey = 0 }: DashboardMountProps) {
+export function DashboardMount({ dashboard, minHeight, replayKey = 0, autoStart }: DashboardMountProps) {
   const { lang } = useLang();
   const ref = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
@@ -179,7 +184,7 @@ export function DashboardMount({ dashboard, minHeight, replayKey = 0 }: Dashboar
       {mounted ? (
         <MediaBoundary fallback={failed}>
           <Suspense fallback={skeleton}>
-            <Dashboard key={replayKey} />
+            <Dashboard key={replayKey} autoStart={autoStart} />
             <ReadyFlag host={ref} />
           </Suspense>
         </MediaBoundary>

@@ -82,7 +82,7 @@
 | 5.2 | `perf-build-target` | HIGH | Kod zgodny z build.target es2019/safari13: bez toSorted/at/structuredClone/Array.findLast/Object.hasOwn/oklch/color-mix bez fallbacku; komentarz w vite.config prawdziwy | [rules/perf-build-target.md](rules/perf-build-target.md) |
 | 5.3 | `perf-chunk-size-gate` | HIGH | verify-site.mjs porównuje rozmiary chunków z baseline: wzrost > 5 % lub nowy chunk krytyczny = fail; baseline zmienia tylko świadomy commit | [rules/perf-chunk-size-gate.md](rules/perf-chunk-size-gate.md) |
 | 5.4 | `perf-code-split-dashboards` | HIGH | Dashboardy przez React.lazy per klucz + DashboardMount (IntersectionObserver, requestIdleCallback, kolejka) + skeleton z minHeight | [rules/perf-code-split-dashboards.md](rules/perf-code-split-dashboards.md) |
-| 5.5 | `perf-fonts-budget` | HIGH | Fonty self-hosted w public/fonts, zero CDN, ≤ 100 KB w fazie 1 (Nunito Sans solo) / ≤ 150 KB po ewentualnym drugim kroju, preload latin, font-display swap + size-adjust | [rules/perf-fonts-budget.md](rules/perf-fonts-budget.md) |
+| 5.5 | `perf-fonts-budget` | HIGH | Fonty self-hosted w public/fonts, zero CDN, ≤ 100 KB w fazie 1 (Geist solo) / ≤ 150 KB po ewentualnym drugim kroju, preload latin, font-display swap + size-adjust | [rules/perf-fonts-budget.md](rules/perf-fonts-budget.md) |
 | 5.6 | `perf-images-policy` | HIGH | Obrazy: WebP (AVIF opcjonalnie), srcset dla ram i portretów, jawne width/height (CLS 0), loading lazy poniżej folda, limity rozmiarów, zero PNG/JPG w treści | [rules/perf-images-policy.md](rules/perf-images-policy.md) |
 | 5.7 | `perf-js-budget-home` | HIGH | JS krytyczny na / ≤ 175 KB gz (react-dom ~58 + router ~15 + motion ~34 + app ~25 + warstwa scroll-narracyjna ~35); podstrona narzędzia ≤ +60 KB gz lazy | [rules/perf-js-budget-home.md](rules/perf-js-budget-home.md) |
 | 5.8 | `perf-lcp-poster-preload` | HIGH | LCP = kadr produktu w hero (bramka ELEMENTOWA, nie tylko czasowa): preload z fetchpriority high, H1 w shellu, wideo nigdy preloadowane i montowane dopiero po load i rIC; bramki CWV: LCP mobile < 2,5 s / desktop < 1,8 s, CLS < 0,05 na / i < 0,1 na podstronach, INP < 200 ms | [rules/perf-lcp-poster-preload.md](rules/perf-lcp-poster-preload.md) |
@@ -1970,7 +1970,7 @@ xl 1.25 / 2xl clamp / 3xl clamp / display clamp(2.25rem, 5.2vw, 4.25rem)`): maks
 + display. **Minimum w UI = `.75rem` (12 px)**; 10 px tylko dla osi wykresów w dashboardach.
 Zakazane: `px` z ułamkami (12.5 / 13.5 / 14.5), `text-[Npx]`, rozmiary „na oko" w klasach kitu,
 więcej niż jedna waga display (nagłówki 600–700, nigdy 800+ poza wordmarkiem), `letter-spacing`
-inne niż `-.02em` w nagłówkach i `.14em` w wordmarku. Krój: **Nunito Sans solo** (self-hosted
+inne niż `-.015em` w nagłówkach i `.14em` w wordmarku. Krój: **Geist solo** (self-hosted
 `woff2`, `unicode-range` latin + latin-ext, `font-display: swap`, preload pliku latin);
 `--font-display` = alias `--font-sans` do decyzji D-06. Zero serif (w tym Instrument Serif /
 Fraunces), zero mono w UI, zero Google Fonts CDN, zero Inter / Roboto / Arial jako kroju UI.
@@ -1981,8 +1981,23 @@ Nagłówki: `text-wrap: balance`, `overflow-wrap: anywhere`. Tekst akapitu `max-
 Kit ma 9 stopni px z ułamkami plus ~12 wartości ad hoc (9.5 / 10.5 / 11.5 / 16.5 / 22 / 23 px):
 brak skali, brak skalowania ustawień użytkownika (px ignoruje preferencje), 9,5–10 px nie przechodzi
 czytelności mobile. Strona ma 140 `text-[Npx]`. Serif to „the single most-tested AI tell" (taste §4.1),
-a mono w UI to rejestr dev-tool, nie CFO. Drugi krój (Geist) rozsadza budżet fontów (Nunito 93 KB
-+ Geist ~70 KB > 150 KB; feasibility-perf §3.2) i wymaga osadzenia w PDF w tej samej fazie.
+a mono w UI to rejestr dev-tool, nie CFO.
+
+**ZMIANA KROJU 2026-09-17 (decyzja Karola).** Do 17 września ta reguła mówiła „Nunito Sans solo"
+i odrzucała Geist zdaniem: „drugi krój rozsadza budżet fontów (Nunito 93 KB + Geist ~70 KB
+> 150 KB)". Tamto zastrzeżenie dotyczyło **dodania** drugiego kroju i było słuszne. Tutaj krój
+został **wymieniony**, więc rachunek jest odwrotny: **49 880 B wobec 93 304 B, czyli o 47 % mniej**.
+PDF zostaje na Roboto (decyzja B), więc osadzanie w PDF w ogóle nie wchodzi w grę.
+
+Powód zmiany nazwał founder wprost: „strona jest bardziej prestiżowa, ale nie wygląda premium".
+Nunito Sans jest krojem humanistycznym o miękkich końcówkach i szerokich światłach — czyta się
+przyjaźnie, czyli odwrotnie do „precyzyjny, inżynierski". Geist ma cięte końcówki i ciaśniejsze
+światła. Przy ciaśniejszych światłach ujemny tracking nagłówków musiał zejść z `-.02em`
+na `-.015em`, bo przy starej wartości nagłówek zaczynał się zlepiać; stąd zmiana w „Zasadzie".
+
+Podzbiory zrobione z fontu zmiennego przez `fontTools.subset`, te same dwa zakresy znaków co
+wcześniej, komplet 18/18 polskich znaków sprawdzony po kodach, nie po wyglądzie w terminalu.
+Licencja SIL OFL 1.1 wymaga dystrybucji tekstu licencji: `site/public/fonts/Geist-OFL-LICENSE.txt`.
 
 #### Niepoprawnie
 
@@ -2000,14 +2015,14 @@ h1 { font-family: "Instrument Serif", serif; font-size: 72px; }
 #### Poprawnie
 
 ```css
-@font-face { font-family: "Nunito Sans"; src: url("/fonts/nunito-sans-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; font-display: swap; font-weight: 200 1000; }
-:root { --font-sans: "Nunito Sans", "Segoe UI", system-ui, -apple-system, sans-serif; --font-display: var(--font-sans); --text-xs: .75rem; --text-sm: .875rem; --text-base: 1rem; --text-lg: 1.125rem; --text-xl: 1.25rem; }
-h1 { font: 700 var(--text-display)/1.05 var(--font-display); letter-spacing: -.02em; text-wrap: balance; overflow-wrap: anywhere; }
+@font-face { font-family: "Geist"; src: url("/fonts/Geist-var-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; font-display: swap; font-weight: 100 900; }
+:root { --font-sans: "Geist", "Segoe UI", system-ui, -apple-system, sans-serif; --font-display: var(--font-sans); --text-xs: .75rem; --text-sm: .875rem; --text-base: 1rem; --text-lg: 1.125rem; --text-xl: 1.25rem; }
+h1 { font: 600 var(--text-display)/1.05 var(--font-display); letter-spacing: -.015em; text-wrap: balance; overflow-wrap: anywhere; }
 .lbl { font-size: var(--text-xs); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
 ```
 
 ```html
-<link rel="preload" as="font" type="font/woff2" href="/fonts/nunito-sans-latin.woff2" crossorigin />
+<link rel="preload" as="font" type="font/woff2" href="/fonts/Geist-var-latin.woff2" crossorigin />
 ```
 
 #### Test
@@ -2020,7 +2035,7 @@ grep -rnoE "text-\[[0-9.]+px\]" site/src --include=*.tsx
 grep -rniE "serif\b|font-mono|font-family:\s*\"?(Inter|Roboto|Arial|Geist Mono|JetBrains)|fonts\.googleapis|fonts\.gstatic" site/src site/index.html | grep -v "sans-serif"
 # fonty self-hosted i preload
 ls site/public/fonts/*.woff2; grep -n 'rel="preload" as="font"' site/index.html
-# budżet fontów ≤ 100 KB (Nunito solo)
+# budżet fontów ≤ 100 KB (Geist solo; dziś 49 880 B)
 du -k site/public/fonts/*.woff2
 ```
 
@@ -5245,15 +5260,15 @@ ls site/dist/assets | grep -cE '^(DemoReport|ProductionDashboard|QualityGate|Tas
 
 ### 5.5 perf-fonts-budget
 
-**Fonty self-hosted w public/fonts, zero CDN, ≤ 100 KB w fazie 1 (Nunito Sans solo) / ≤ 150 KB po ewentualnym drugim kroju, preload latin, font-display swap + size-adjust**
+**Fonty self-hosted w public/fonts, zero CDN, ≤ 100 KB w fazie 1 (Geist solo) / ≤ 150 KB po ewentualnym drugim kroju, preload latin, font-display swap + size-adjust**
 
 Impact: **HIGH** · Tagi: perf, fonts, privacy, cls, lcp · Źródło: synthesis §1.5 R4/§2.4.9/§2.5 (Nunito solo) · feasibility-perf §3.2/§9 p.5 · ui-kit-habits C3 (N3) · site-audit §1.8 (brak preload) · rozstrzygnięcie (2): PDF zostaje na Roboto · Dodano: 2026-09-12 · Plik: `rules/perf-fonts-budget.md`
 
 #### Zasada
 
-1. Wszystkie kroje w `site/public/fonts/*.woff2` (dziś: `NunitoSans-var-latin.woff2` 49,6 KB + `NunitoSans-var-latin-ext.woff2` 43,7 KB = 93,3 KB). Zero `fonts.googleapis.com`, `fonts.gstatic.com`, `rsms.me`, `cdn.jsdelivr.net`, `@fontsource` ładowanych z sieci.
-2. Budżet `dist/fonts`: **≤ 102 400 B (100 KB)** w fazie 1 (Nunito Sans solo, `--font-display` = alias `--font-sans`). Drugi krój (Geist) TYLKO po (a) teście 2 mockupów zaakceptowanym przez founderów i (b) osadzeniu w PDF w tej samej fazie (statyczne TTF 400/600; decyzja o foncie v2); wtedy budżet **≤ 153 600 B (150 KB)** i transfer mobile `/` ≤ 350 KB musi się nadal domykać.
-3. `@font-face` z `unicode-range` (latin, latin-ext osobno), `font-display: swap`, fallback systemowy z `size-adjust`/`ascent-override` dopasowanym do Nunito (CLS przy swapie ≈ 0): `@font-face { font-family: "Nunito Sans Fallback"; src: local("Segoe UI"), local("Arial"); size-adjust: 104%; ascent-override: 100%; descent-override: 35%; line-gap-override: 0% }`.
+1. Wszystkie kroje w `site/public/fonts/*.woff2` (dziś: `Geist-var-latin.woff2` 32,7 KB + `Geist-var-latin-ext.woff2` 17,2 KB = **49,9 KB**; do 2026-09-17 Nunito Sans, 93,3 KB - krój WYMIENIONY, nie dodany, więc budżet zszedł o 47 %). Zero `fonts.googleapis.com`, `fonts.gstatic.com`, `rsms.me`, `cdn.jsdelivr.net`, `@fontsource` ładowanych z sieci.
+2. Budżet `dist/fonts`: **≤ 102 400 B (100 KB)** w fazie 1 (Geist solo, `--font-display` = alias `--font-sans`). Drugi krój TYLKO po (a) teście 2 mockupów zaakceptowanym przez founderów i (b) osadzeniu w PDF w tej samej fazie (statyczne TTF 400/600; decyzja o foncie v2); wtedy budżet **≤ 153 600 B (150 KB)** i transfer mobile `/` ≤ 350 KB musi się nadal domykać.
+3. `@font-face` z `unicode-range` (latin, latin-ext osobno), `font-display: swap`, fallback systemowy z `size-adjust`/`ascent-override` dopasowanym do Geist (CLS przy swapie ≈ 0): `@font-face { font-family: "Geist Fallback"; src: local("Segoe UI"), local("Arial"); size-adjust: 104%; ascent-override: 100%; descent-override: 35%; line-gap-override: 0% }`.
 4. `<link rel="preload" as="font" type="font/woff2" crossorigin>` TYLKO dla pliku latin (nie latin-ext, nie dla wagi nieużywanej nad foldem).
 5. Wagi: variable font (jeden plik na subset); żadnych dodatkowych statycznych plików wag; UI używa 400/600/700 (nagłówki 600–700, nie 800).
 6. PDF (`lib/pdf.ts`): Roboto wbudowane w pdfmake (decyzja B, okno c1); API `pdfDoc({ font })` przyjmuje parametr, ale osadzenie kroju UI w vfs dopiero po decyzji founderów o foncie v2. Nie kopiować woff2 do vfs (pdfmake potrzebuje TTF).
@@ -5283,8 +5298,8 @@ Impact: **HIGH** · Tagi: perf, fonts, privacy, cls, lcp · Źródło: synthesis
   src: url("/fonts/NunitoSans-var-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
 @font-face { font-family: "Nunito Sans"; font-style: normal; font-weight: 200 1000; font-display: swap;
   src: url("/fonts/NunitoSans-var-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF; }
-@font-face { font-family: "Nunito Sans Fallback"; src: local("Segoe UI"), local("Arial"); size-adjust: 104%; ascent-override: 100%; descent-override: 35%; line-gap-override: 0%; }
-:root { --font-sans: "Nunito Sans", "Nunito Sans Fallback", system-ui, sans-serif; --font-display: var(--font-sans); }
+@font-face { font-family: "Geist Fallback"; src: local("Segoe UI"), local("Arial"); size-adjust: 104%; ascent-override: 100%; descent-override: 35%; line-gap-override: 0%; }
+:root { --font-sans: "Nunito Sans", "Geist Fallback", system-ui, sans-serif; --font-display: var(--font-sans); }
 ```
 
 ```html
