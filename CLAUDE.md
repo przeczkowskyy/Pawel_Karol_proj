@@ -164,6 +164,59 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
 
 ## Stan operacyjny (aktualizuj przy zmianach!)
 
+- **2026-09-17 (redesign v3) — STRONA GŁÓWNA URUCHAMIA NARZĘDZIA; KONIEC MATERIAŁU GENERATYWNEGO:**
+  - **Decyzja Karola, wiążąca:** efekt „wow" bierze się z tego, że strona URUCHAMIA prawdziwe
+    narzędzia, nie z wygenerowanej ilustracji. Dwa podejścia odrzucone pod rząd: kreskówkowe
+    sceny (13.09) i pionowy pas z pętlami (15.09) — „te gify zupełnie nam nie wyszły. Źle
+    wyglądają, zupełnie źle mi się to czyta". **Diagnoza:** oba budowały wrażenie z rzeczy bez
+    związku z produktem, więc nawet wykonane bezbłędnie byłyby dekoracją obok treści.
+  - **TO BYŁO PRZEWIDZIANE I ZIGNOROWANE.** `docs/plan/strona-v2-plan.md` (180 KB, 17 agentów,
+    trzech sędziów, 11–12.09) w decyzji **D37** odrzucił pętlę generatywną słowami: „pętla
+    abstrakcyjna jest tylko ruchem i przy tej personie (kalkulator, nie wróżka) niesie ryzyko
+    »widać, że to AI« oraz efektu stocku". Odwrócenie tej rekomendacji wieczorem 12.09
+    kosztowało cztery dni i 84 kredyty. **Nauczka: gdy adwersaryjnie zrecenzowany plan mówi
+    „nie rób X", a founder prosi o X, to jest moment na rozmowę, nie na wykonanie.**
+  - **Rynek potwierdza kierunek liczbowo** (research 09.2026): odwiedzający, który dotknie
+    interaktywnego dema, konwertuje **24,35 %** wobec **3,05 %**; taki hero ma **18 %** stron
+    B2B. Konkurent MALINSKI.AI sprzedaje „32 narzędzia w produkcji", ale je **opisuje** —
+    Klarow ma dwanaście liczących na żywo i trzymał je schowane na podstronach.
+  - **Motyw wrócił na ciemną stal.** Tanie, bo ciemny jest wartością domyślną `:root`
+    w `tokens.css`, a jasny był nadpisaniem `[data-theme="light"]`. Reguła
+    `design-page-theme-lock` przepisana po raz trzeci (z datą i cytatem, jak zawsze) i przy
+    okazji **scalona wewnętrznie**: od 13.09 jej nagłówek mówił „jasna", a sekcje „Poprawnie"
+    i „Test" nigdy nie zostały zaktualizowane i opisywały ciemną.
+  - **Nadpisanie `.btn-primary` uogólnione** z `html[data-theme="light"]` na `html`: kit ma
+    gradient stalowy wpisany na stałe, co łamie `brand-single-accent-steel`
+    i `design-no-glass-no-blur` w OBU motywach, nie tylko w jasnym.
+  - **Nowa `/`:** `pages/HomeV3.tsx` + `components/home/{HeroV3,SectionBlock,ToolTabs}`,
+    copy w `data/homeSections.ts`. Hero = żywy pulpit produkcji z działającym suwakiem;
+    sekcja pliku = `DemoReport` przyjmujący wklejkę i CSV; zakładki = 12 dashboardów,
+    **jeden montowany naraz** (dwanaście drzew Reacta zjadłoby INP na telefonie).
+  - **SEO URÓSŁ, nie spadł:** statyczny HTML `/` ma **1272 słowa** (było 1062) i **13 linków**
+    do podstron narzędzi (było 0 poza blokiem „Zobacz konkrety"). `HomeShell` czyta ten sam
+    moduł co klient, więc cicha awaria z 13.09 nie może wrócić.
+  - **Budżety:** strona główna to **4,5 KB gz JS + 0,8 KB gz CSS**, oba lazy. CSS krytyczny
+    **18,05 → 16,3 KB gz** (zapas do limitu 4,2 KB). **CSS, nie JS, jest tu najciaśniejszy** —
+    JS ma 49 KB zapasu przy 126,0 z 175 KB.
+  - **PUŁAPKA ZMIERZONA, NIE PRZECZYTANA:** bramka `motion-bundle-budget-motion` sprawdza chunk
+    z „motion" **w nazwie pliku** (`verify-site.mjs:297`), a Vite takiego chunku nie emituje —
+    Motion siedzi w `index-*.js`. **Bramka nigdy nie wystrzeliła i dziś nie chroni niczego.**
+    Do naprawy: detekcja po treści chunku + `manualChunks`. Nie sugerować się nią jako
+    zabezpieczeniem budżetu.
+  - **Usunięte:** `src/presentation/**` (25 plików), `pages/Presentation.tsx`,
+    `data/presentation.ts`, `public/media/presentation/**` (24 pliki), `pages/Home.tsx`,
+    `HeroMedia.tsx`, `Differentiators.tsx`, `ui/glsl-hills.tsx`, `BgBoundary.tsx`,
+    589 linii martwego CSS, zależności `three`, `@types/three`, `@formkit/auto-animate`.
+  - **Dalej (plan: `.claude/work/redesign-v3/plan.md` i `~/.claude/plans/gentle-tickling-squid.md`):**
+    F3 pipeline lokalny brudnych arkuszy (maskowanie struktury, plan czyszczenia, zwrot
+    uporządkowanego pliku), F4 UI instrumentu, F5 podstrony narzędzi dashboard-first.
+    **Planer zdalny (Pages Function + Anthropic) NIE wchodzi**, dopóki wersja w 100 % lokalna
+    nie będzie działać; wtedy wymaga przepisania `integ-no-llm-api-in-client-tools` (BLOCKER,
+    zakazuje wywołania **każdego** serwera Klarow, nie tylko API modelu) w kolejności:
+    rejestr → `/rodo` → decyzja → status i CSP → kod.
+  - **Otwarte decyzje:** `.xlsx` w fazie 1 (+2 dni) czy tylko CSV i wklejka; dane administratora
+    do `/rodo` (bloker publikacji od 12.09); los 13 podstron w nawigacji (D-39).
+
 - **2026-09-15 (pionowy pas) — PRZELOTY DRONEM ODRZUCONE; STRONA GŁÓWNA TO JEDEN CIĄGŁY OBRAZ:**
   - **Co odrzucił Karol i dlaczego to było strukturalne, nie jakościowe:** wygenerowaliśmy komplet
     siedmiu przelotów łączących kadry sąsiednich scen (image→video ze start- i end-frame).
