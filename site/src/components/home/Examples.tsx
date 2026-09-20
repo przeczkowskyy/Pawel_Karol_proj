@@ -45,6 +45,29 @@ export function Examples() {
         <p className="hm-beat-line">{pick(lang, HOME_EXAMPLES.line)}</p>
       </div>
 
+      {/* TRZY ZRZUTY BEZ PODPISÓW. Mają pokazać, jak te narzędzia wyglądają,
+          i nic więcej — opis pod obrazem zamieniłby próbkę z powrotem w katalog.
+          `alt` jest puste, bo obok stoi lista nazw: czytnik ekranu usłyszałby
+          tę samą informację dwa razy (`a11y-images-alt-svg-role` p.1).
+          Jawne `width`/`height` trzymają CLS, `loading="lazy"` bo sekcja jest
+          głęboko pod pierwszym ekranem. */}
+      <ul className="hm-examples-shots" aria-hidden="true">
+        {HOME_EXAMPLES.shots.map((slug) => (
+          <li key={slug}>
+            <img
+              src={`/thumbs/${slug}-v1-640.webp`}
+              srcSet={`/thumbs/${slug}-v1-320.webp 320w, /thumbs/${slug}-v1-640.webp 640w`}
+              sizes="(max-width: 48rem) 100vw, 33vw"
+              alt=""
+              width={640}
+              height={400}
+              loading="lazy"
+              decoding="async"
+            />
+          </li>
+        ))}
+      </ul>
+
       <ul className="hm-examples-list">
         {picked.map((t) => (
           <li key={t.slug}>

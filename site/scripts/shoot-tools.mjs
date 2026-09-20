@@ -219,8 +219,16 @@ const SCENES = [
     ],
     /* Kadr celowo ciaśniejszy niż cała karta: pełna tabela SOV to tyle drobnego tekstu,
        że WebP 1280×800 nie schodzi poniżej 30 KB bez rozmycia cyfr (a rozmycie cyfr jest
-       zakazane: media-asset-review-gate N1). Cztery wiersze wystarczą, żeby pokazać typ obrazu. */
-    anchors: [`${ROOT} table.data-table thead`, `${ROOT} table.data-table tbody tr >> nth=3`],
+       zakazane: media-asset-review-gate N1).
+
+       2026-09-17: z czterech wierszy na SZEŚĆ, czyli kadr SZERSZY, nie ciaśniejszy.
+       Po wymianie kroju na Geist ten sam kadr wychodził 38,4 KB przy limicie 38 i bramka
+       słusznie odmówiła zapisu. Pierwsza próba poszła za komunikatem dosłownie („zaciaśnij
+       kadr") i dała 39,5 KB, czyli GORZEJ — bo kadr jest skalowany do 1280×800, więc
+       mniejszy wycinek znaczy większe cyfry w wyniku, a większe cyfry to więcej krawędzi
+       do zakodowania. Zależność jest odwrotna, niż sugeruje komunikat: szerszy wycinek
+       zmniejsza tekst w kadrze i plik schodzi. Sześć wierszy pokazuje ten sam typ obrazu. */
+    anchors: [`${ROOT} table.data-table thead`, `${ROOT} table.data-table tbody tr >> nth=5`],
   },
   {
     slug: "kontroling-kosztow",

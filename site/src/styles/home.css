@@ -124,6 +124,34 @@
   border-top: 1px solid var(--border);
 }
 
+/* Trzy zrzuty w rzędzie, bez podpisów i bez ramek poza hairline'em.
+   Na wąskim ekranie jeden pod drugim: trzy zrzuty pulpitu obok siebie na
+   telefonie byłyby nieczytelne, a nieczytelny dowód nie jest dowodem. */
+.hm-examples-shots {
+  display: grid;
+  gap: 1px;
+  margin: 0 0 clamp(2rem, 4vw, 3rem);
+  padding: 0;
+  list-style: none;
+  /* Odstęp 1 px na tle krawędzi daje siatkę hairline'ów bez rysowania ramek
+     na każdym kafelku (`design-no-glass-no-blur`: linie, nie pudełka). */
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+
+@media (min-width: 48rem) {
+  .hm-examples-shots {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.hm-examples-shots img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--surface);
+}
+
 .hm-examples-list {
   margin: 0;
   padding: 0;

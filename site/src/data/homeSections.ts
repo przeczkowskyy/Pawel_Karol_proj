@@ -78,6 +78,16 @@ export const HOME_EXAMPLES = {
     pl: "Katalogu nie mamy. Budujemy pod proces.",
     en: "We have no catalogue. We build around the process.",
   },
+  /* TRZY ZRZUTY, NIE TRZYNAŚCIE. Karol: „jedynie parę screenów max z nich,
+     bez opisów, bez historii". Wybrane pod RÓŻNORODNOŚĆ OBRAZU, nie pod
+     ważność narzędzia: oś czasu to wykres Gantta, kontroling to paski
+     i bramka, obieg to macierz czternastu dni. Trzynaście dashboardów dzieli
+     ten sam kit, więc zrzuty dobrane po nazwie dałyby trzy podobne ciemne
+     prostokąty i cała sekcja wyglądałaby na powielony jeden obraz.
+
+     Świadomie NIE pokazujemy tu audytu ani uzgodnienia: te dwa liczą wyżej
+     na żywo, więc zrzut byłby powtórzeniem tego, co widz właśnie widział. */
+  shots: ["os-czasu-zadan", "kontroling-kosztow", "obieg-przelewow"],
   /** slugi z `tools.ts`; nazwy bierzemy stamtąd, żeby nie powstała druga lista */
   slugs: [
     "raport-zarzadczy",
