@@ -209,16 +209,24 @@ function ToolsShell({ pl, en }: { pl: ToolItem[]; en: ToolItem[] }) {
   return (
     <ShellChrome>
       <ShellNav />
+      {/* Nagłówek i lead muszą zgadzać się ZNAK W ZNAK z `TOOLS_TXT` w `App.tsx`,
+          bo shell i klient renderują tę samą trasę. Etykieta „Realizacje" zeszła
+          2026-09-17 na decyzję D31: klientów płacących jest zero, więc słowo
+          „realizacja" (zlecenie wykonane dla klienta) było nadinterpretacją
+          na granicy `brand-honest-labels`.
+
+          Akapit o poprzedniej firmie zdjęty razem z nim. Opisywał ekosystem
+          kilkunastu narzędzi i liczby z projektów, których NIE WOLNO publikować
+          przed umową IP (CLAUDE.md zasada #3) — a „~30 równoległych projektów"
+          i „~10 000 wierszy miesięcznie" to dokładnie takie liczby, nawet bez
+          nazwy firmy. Nie miały też pokrycia w rejestrze dozwolonych liczb. */}
       <h1 className="mt-4 text-4xl font-extrabold tracking-tight" style={HEAD}>
-        Przykłady realizacji: dema i wdrożenia
+        Narzędzia, które zbudowaliśmy
       </h1>
       <p className="mt-4 max-w-3xl text-sm" style={MUTED}>
-        To nie pełna lista usług, tylko próbki tego, co już zbudowaliśmy. Większość odpalisz na
-        żywo na danych przykładowych (bez logowania); część to realne wdrożenia u klienta, jak
-        kontroling na danych z KSeF. Twoje narzędzie budujemy pod Twój proces. Wcześniej
-        zbudowaliśmy od środka ekosystem kilkunastu narzędzi dla firmy produkcyjno-budowlanej
-        (~30 równoległych projektów, klienci w USA): ~10 000 wierszy kosztów z ERP miesięcznie,
-        raport zarządczy w kilkanaście sekund i kontrola sum co do grosza.
+        Nie mamy zamkniętego katalogu. Budujemy pod proces. Poniżej narzędzia
+        w pięciu działach; dwanaście z nich liczy na żywo w przeglądarce, na danych
+        przykładowych i bez logowania.
       </p>
       {DEPTS.map((d) => (
         <section key={d.key}>

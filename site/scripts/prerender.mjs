@@ -30,6 +30,26 @@ const esc = (s) =>
 /* JSON-LD wolno mu siedzieć w <script>, ale nie wolno mu domknąć taga */
 const jsonLdSafe = (o) => JSON.stringify(o).replace(/</g, "\\u003c");
 
+/* Karta społecznościowa trasy: `public/og/<klucz>.png` (generator: scripts/og.mjs).
+   Klucz wynika ze ścieżki, więc nowa trasa dostaje kartę bez zmian tutaj:
+   „/” → home, „/narzedzia/<slug>” → <slug>, reszta → ostatni segment.
+   Gdy pliku nie ma, NIE emitujemy tagu: odesłanie podglądu do nieistniejącego
+   obrazu daje pustą ramkę, co wygląda gorzej niż brak karty. */
+const ogKey = (r) =>
+  r.file === "404.html" ? "404" : r.path === "/" ? "home" : r.path.split("/").filter(Boolean).pop();
+
+function ogImageTag(r) {
+  const key = ogKey(r);
+  const file = path.join(dist, "og", `${key}.png`);
+  if (!existsSync(file)) return "";
+  return [
+    `<meta property="og:image" content="https://klarow.com/og/${key}.png" />`,
+    `<meta property="og:image:width" content="1200" />`,
+    `<meta property="og:image:height" content="630" />`,
+    `<meta name="twitter:image" content="https://klarow.com/og/${key}.png" />`,
+  ].join("\n    ");
+}
+
 for (const r of routes) {
   let html = template;
 
@@ -40,7 +60,11 @@ for (const r of routes) {
     .replace(/<link[^>]*rel="canonical"[^>]*>/, "")
     .replace(/<meta[^>]*property="og:title"[^>]*>/, "")
     .replace(/<meta[^>]*property="og:description"[^>]*>/, "")
-    .replace(/<meta[^>]*property="og:url"[^>]*>/, "");
+    .replace(/<meta[^>]*property="og:url"[^>]*>/, "")
+    /* og:image z szablonu też schodzi, RAZEM z wymiarami: inaczej trasa miałaby
+       dwa obrazy karty i dwie pary wymiarów, a podglądy biorą pierwszy
+       napotkany tag. Flaga `g`, bo tagów wymiarów jest kilka. */
+    .replace(/<meta[^>]*property="og:image(:width|:height)?"[^>]*>\s*/g, "");
 
   /* Preload kadru hero ma sens wyłącznie na „/”: na 18 pozostałych trasach
      to 64 KB zabrane fontowi i CSS-owi na ścieżce krytycznej, a sam obraz
@@ -63,11 +87,20 @@ for (const r of routes) {
     isErrorPage ? "" : `<meta property="og:url" content="${url}" />`,
     isErrorPage ? "" : `<meta property="og:locale" content="pl_PL" />`,
     isErrorPage ? "" : `<meta property="og:locale:alternate" content="en_US" />`,
+    /* KARTA SPOŁECZNOŚCIOWA PER TRASA (2026-09-17). Karty 1200×630 leżały
+       w `public/og/` od dnia powstania i NIE BYŁY UŻYWANE: `og:image` wskazywał
+       kwadratowe logo 512×512, więc każdy link wysłany na LinkedInie, Slacku czy
+       w Teams pokazywał szary kwadrat zamiast zaprojektowanej karty. Dla marki
+       to jest najczęściej oglądany obraz firmy, częściej niż sama strona.
+
+       Nazwa pliku wynika ze ścieżki, więc nowa trasa dostaje kartę bez zmiany
+       tego pliku; brak pliku = brak tagu, nigdy ścieżka do nieistniejącego
+       obrazu (pusta karta wygląda gorzej niż jej brak). */
+    isErrorPage ? "" : ogImageTag(r),
     /* twitter:* musi być w STATYCZNYM HTML: LinkedIn, Slack i Teams czytają
        kartę bez wykonywania JS (klientowy Seo.tsx ustawia to samo po nawigacji).
-       Karta „summary”, bo og:image jest kwadratowe 512×512; „summary_large_image”
-       dopiero z obrazem 1200×630 (scripts/og.mjs, faza assetów). */
-    isErrorPage ? "" : `<meta name="twitter:card" content="summary" />`,
+       `summary_large_image` dopiero teraz, gdy obraz naprawdę ma 1200×630. */
+    isErrorPage ? "" : `<meta name="twitter:card" content="summary_large_image" />`,
     isErrorPage ? "" : `<meta name="twitter:title" content="${esc(r.title)}" />`,
     isErrorPage ? "" : `<meta name="twitter:description" content="${esc(r.description)}" />`,
     /* id=seo-jsonld: klientowy Seo.tsx zdejmuje ten blok przy montażu i wstawia

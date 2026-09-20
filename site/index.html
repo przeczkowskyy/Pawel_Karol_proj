@@ -20,7 +20,14 @@
       content="Narzędzia pod Twój proces. Działają w dni, dane zostają u Ciebie. Kontroling, integracje (KSeF), importy z ERP, obieg dokumentów, panele."
     />
     <meta property="og:url" content="https://klarow.com/" />
-    <meta property="og:image" content="https://klarow.com/klarow-logo-512.png" />
+    <!-- Karta 1200×630 zamiast kwadratowego logo (2026-09-17). Ten tag jest
+         wartością DOMYŚLNĄ dla trasy „/” w trybie dev i awaryjną, gdy prerender
+         nie znajdzie pliku karty; na zbudowanych stronach prerender podmienia go
+         na kartę właściwą dla trasy (scripts/prerender.mjs, ogImageTag).
+         Generator kart: scripts/og.mjs, wynik w public/og/. -->
+    <meta property="og:image" content="https://klarow.com/og/home.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <link rel="canonical" href="https://klarow.com/" />
     <!-- ?v=2: przeglądarki agresywnie cache'ują favicony; buster wymusza świeżą ikonę -->
     <link rel="icon" href="/favicon.ico?v=2" sizes="16x16 32x32 48x48" />

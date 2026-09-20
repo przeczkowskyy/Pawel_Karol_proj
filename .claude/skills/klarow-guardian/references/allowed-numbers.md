@@ -55,11 +55,11 @@
 
 | Liczba | Sformułowanie | Gdzie jest dziś | Status |
 |---|---|---|---|
-| „kilkanaście" | „kilkanaście narzędzi w jednej firmie produkcyjno-budowlanej" | dziś `App.tsx:240` (pasek, **kasowany razem z paskiem w v2**), `faq.ts:41` | ZAMROŻONE; po v2 zostaje **wyłącznie w `faq.ts`**; „15" dopiero po umowie IP i potwierdzeniu (D7) |
-| ≈ 10 000 wierszy / „~10 tys." | „wierszy kosztów z ERP miesięcznie" | `App.tsx:241`, `entry.tsx:135, 206`, `toolsSeo.ts:474`, `faq.ts:41` | ZAMROŻONE; z `/` usunąć w v2 (pasek liczb = tylko liczby własne) |
-| ~30 | „równoległych projektów" | `entry.tsx:135, 206`, `toolsSeo.ts:36, 60, 86, 110, 136` | ZAMROŻONE (opisy podstron) |
-| „kilkanaście sekund zamiast godzin" (galeria: „z ~6 godz.") | czas raportu zarządczego | `entry.tsx:136, 207`, `toolsSeo.ts:19, 24, 36`, `faq.ts:41` | ZAMROŻONE |
-| „klienci w USA" | rynek poprzedniej firmy | `entry.tsx:135, 206` | ZAMROŻONE; nie mylić z klientami Klarow (`brand-honest-labels`) |
+| „kilkanaście" | „kilkanaście narzędzi w jednej firmie produkcyjno-budowlanej" | **wyłącznie `faq.ts:41`** (pasek liczb skasowany zgodnie z D30) | ZAMROŻONE; po v2 zostaje **wyłącznie w `faq.ts`**; „15" dopiero po umowie IP i potwierdzeniu (D7) |
+| ≈ 10 000 wierszy / „~10 tys." | „wierszy kosztów z ERP miesięcznie" | `toolsSeo.ts:474`, `faq.ts:41` | ZAMROŻONE; **ZDJĘTE z `/` i z `/narzedzia` 2026-09-17** (shelle `HomeShell` i `ToolsShell` w `entry.tsx`) |
+| ~30 | „równoległych projektów" | `toolsSeo.ts:36, 60, 86, 110, 136` | ZAMROŻONE (opisy podstron); **ZDJĘTE z shelli `/` i `/narzedzia` 2026-09-17** |
+| „kilkanaście sekund zamiast godzin" (galeria: „z ~6 godz.") | czas raportu zarządczego | `toolsSeo.ts:19, 24, 36`, `faq.ts:41` | ZAMROŻONE; **ZDJĘTE z shelli 2026-09-17** |
+| „klienci w USA" | rynek poprzedniej firmy | **nigdzie w `site/src` po 2026-09-17** | ZAMROŻONE; nie mylić z klientami Klarow (`brand-honest-labels`) |
 | „mniej niż dwa miesięczne koszty etatu kontrolera"; „moduł raportowy ERP 6+ miesięcy i od 100 tys. zł" | kotwice porównawcze w FAQ (nie cennik) | `faq.ts:16` | ZAMROŻONE (kotwica, nie kwota usługi) |
 | API KSeF 2.0, FA(3), prognoza 13 tyg., raporty XLSX, Flask + SQLite + React | fakty techniczne własnego produktu | `tools.ts:640–644`, `toolsSeo.ts:615–663` | OK (własny produkt; bez nazwy produktu i domeny) |
 

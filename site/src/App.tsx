@@ -92,14 +92,19 @@ function Section({
 /* ── NARZĘDZIA (interaktywne dashboardy) ── */
 const TOOLS_TXT = {
   pl: {
-    title: "Przykłady realizacji: kliknij i sprawdź",
-    sub: "Próbki tego, co zbudowaliśmy. To nie jest pełna lista: Twoje narzędzie robimy pod Twój proces.",
-    proof: "Większość odpalisz na żywo; część to wdrożenia u klienta (np. KSeF). Dane fikcyjne.",
+    /* ETYKIETA POPRAWIONA 2026-09-17 na decyzję D31, która nigdy nie weszła
+       do kodu. „Realizacja" w polszczyźnie biznesowej znaczy „zlecenie wykonane
+       dla klienta", a płacących klientów jest zero: to nadinterpretacja
+       na granicy `brand-honest-labels`. Trzy linijki objaśnień zeszły do jednej,
+       bo reszta i tak powtarzała to, co widać na kaflach niżej. */
+    title: "Narzędzia, które zbudowaliśmy",
+    sub: "Nie mamy zamkniętego katalogu. Budujemy pod proces.",
+    proof: "",
   },
   en: {
-    title: "Examples of what we've built: click and try",
-    sub: "Samples of what we've built. Not a full list: we build your tool around your process.",
-    proof: "Most run live; some are client deployments (e.g. KSeF). Fictional data.",
+    title: "Tools we have built",
+    sub: "We have no fixed catalogue. We build around the process.",
+    proof: "",
   },
 };
 
@@ -108,12 +113,18 @@ function Tools() {
   const t = pick(lang, TOOLS_TXT);
   return (
     <Section as="h1" title={t.title} sub={t.sub}>
-      <p
-        className="mb-6 max-w-3xl text-[13px] leading-relaxed -mt-3"
-        style={{ color: "var(--accent-foreground)" }}
-      >
-        {t.proof}
-      </p>
+      {/* Trzecia linijka objaśnień renderuje się tylko wtedy, gdy istnieje.
+          Pusty `<p>` zostawiałby po sobie margines, czyli dziurę w układzie
+          bez treści — a przy cięciu tekstu to właśnie takie resztki najłatwiej
+          przeoczyć. */}
+      {t.proof ? (
+        <p
+          className="mb-6 max-w-3xl text-[13px] leading-relaxed -mt-3"
+          style={{ color: "var(--accent-foreground)" }}
+        >
+          {t.proof}
+        </p>
+      ) : null}
       <ToolsGrid />
     </Section>
   );
@@ -349,8 +360,14 @@ function FaqSection() {
 
 /* ── STOPKA ── */
 const FOOT = {
-  pl: { tagline: "Automatyzacja i porządek w danych dla MŚP · Polska / USA", note: "© 2026 Klarow · strona robocza v0.8" },
-  en: { tagline: "Automation and order in SME data · Poland / USA", note: "© 2026 Klarow · working draft v0.8" },
+  /* NOTA BEZ NUMERU WERSJI (2026-09-17). Było „strona robocza v0.8".
+     Numer wersji w stopce mówi odwiedzającemu, że patrzy na coś niegotowego,
+     i jest zakazany wprost: `design-hero-discipline` wyklucza znaczniki „BETA"
+     i wersji, a `brand-honest-labels` każe etykietom opisywać rzecz, nie stan
+     jej budowy. Firma, która sama siebie podpisuje „robocza", nie wygląda na
+     taką, której można powierzyć dane finansowe. */
+  pl: { tagline: "Automatyzacja i porządek w danych dla MŚP · Polska / USA", note: "© 2026 Klarow · Polska / USA" },
+  en: { tagline: "Automation and order in SME data · Poland / USA", note: "© 2026 Klarow · Poland / USA" },
 };
 
 /* Link „RODO i prywatność” stoi w stopce na KAŻDEJ trasie: to adres klauzuli
