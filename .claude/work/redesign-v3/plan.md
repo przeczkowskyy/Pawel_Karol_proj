@@ -107,4 +107,16 @@ Do przestrzegania bez zmian: `design-tokens-only`, `design-shape-lock`,
 
 ## Wynik
 
-(uzupełniane na koniec)
+**Zamknięte 2026-09-20.** Strona główna uruchamia narzędzia, motyw wrócił na ciemną
+stal, krój wymieniony na Geist (49,9 KB wobec 93,3 KB), tekst na `/` zszedł z 1272
+do 182 słów, osią strony jest dowód czerwone → zielone, a powierzchnie marki (karty
+OG, zrzuty, stopka, etykiety) doprowadzone do tego samego stanu.
+
+Zmierzone: CSS krytyczny 18,05 → 16,3 KB gz, chunk strony głównej 1,4 KB gz JS
++ 0,7 KB gz CSS, fonty 49,9 KB z limitu 100 KB, 19 plików HTML, bramki bez BLOCKER
+i bez nowych HIGH.
+
+**Do dokończenia w następnym oknie:** układ `/oferta` i `/faq` (karty na hairline'y,
+więcej światła; copy NIE ruszać — tam mieszka gęstość SEO przeniesiona ze strony
+głównej), decyzja o nawigacji (`/oferta` nie ma dziś wejścia poza stopką),
+fazy F3–F5 pipeline'u plikowego.

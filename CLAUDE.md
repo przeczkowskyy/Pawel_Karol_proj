@@ -164,6 +164,52 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
 
 ## Stan operacyjny (aktualizuj przy zmianach!)
 
+- **2026-09-20 (marka) — POWIERZCHNIE MARKI DOPROWADZONE DO STANU STRONY GŁÓWNEJ:**
+  - **KARTY OG BYŁY MARTWE OD DNIA POWSTANIA.** Dziewiętnaście kart 1200×630 leżało
+    w `public/og/`, a `og:image` wskazywał **kwadratowe logo 512×512**, więc każdy link
+    wysłany na LinkedInie, Slacku czy w Teams pokazywał szary kwadrat. **Dla marki to jest
+    najczęściej oglądany obraz firmy — częściej niż sama strona.** Teraz każda trasa ma
+    własną kartę (nazwa z klucza ścieżki, więc nowa trasa dostaje ją bez zmian w kodzie;
+    brak pliku = brak tagu), `twitter:card` = `summary_large_image`, ta sama logika
+    w `prerender.mjs` (`ogImageTag`) i w `Seo.tsx` (nawigacja wewnątrz aplikacji).
+  - **Generator kart czytał skasowane fonty** (`NunitoSans-*.woff2`) po wymianie kroju.
+    Tutaj kończyło się to błędem, ale gdyby nazwa tylko się rozjechała, karty renderowałyby
+    się krojem systemowym **przy zielonym wyniku skryptu** — dlatego przy nazwach plików
+    w `og.mjs` stoi teraz komentarz wiążący je z `@font-face` w `globals.css`.
+  - **„strona robocza v0.8" w stopce KAŻDEJ trasy.** Zakazane wprost
+    (`design-hero-discipline` wyklucza „BETA" i wersje, `brand-honest-labels` każe opisywać
+    rzecz, nie stan budowy). Firma, która sama siebie podpisuje „robocza", nie wygląda na
+    taką, której powierza się dane finansowe.
+  - **Etykieta huba na decyzję D31, która nigdy nie weszła do kodu:** „Przykłady realizacji"
+    → „Narzędzia, które zbudowaliśmy". Płacących klientów jest zero, więc „realizacja"
+    (zlecenie wykonane dla klienta) była nadinterpretacją.
+  - **Shell huba publikował liczby z poprzedniej firmy** („~30 równoległych projektów",
+    „~10 000 wierszy z ERP miesięcznie", „kilkanaście narzędzi", „klienci w USA").
+    Rejestr oznacza je jako ZAMROŻONE z adnotacją „z `/` usunąć w v2" i wymieniał dokładnie
+    tę lokalizację — czyli to była **zaległa robota, nie samowola**. Rejestr zaktualizowany
+    o stan faktyczny; zostają wyłącznie w `faq.ts` i `toolsSeo.ts` (tam dozwolone).
+  - **Zrzuty narzędzi przegenerowane w Geist** (13 pozycji × 4 rozmiary). Poprzednie były
+    z 12 września, czyli w Nunito Sans; mieszanka dwóch krojów w zrzutach wygląda na awarię.
+    Do przykładów na `/` weszły **trzy zrzuty bez podpisów**, dobrane pod RÓŻNORODNOŚĆ
+    OBRAZU (Gantt, paski z bramką, macierz 14 dni), bo trzynaście dashboardów dzieli ten sam
+    kit i dobór po nazwie dałby trzy podobne ciemne prostokąty.
+  - **NAUCZKA O BRAMCE ROZMIARU ZRZUTÓW (kosztowała dwa przebiegi).** Komunikat brzmi
+    „zaciaśnij kadr, nie rozmywaj pliku" i **prowadzi w złą stronę**: kadr jest skalowany
+    do 1280×800, więc mniejszy wycinek = większe cyfry w wyniku = więcej krawędzi =
+    **większy plik**. Przy `billing-us-g703` zejście z 4 wierszy na 3 dało 39,5 KB zamiast
+    38,4; dopiero SZERSZY kadr (6 wierszy) zszedł pod limit.
+  - **PUŁAPKA ZRZUTÓW STRAŻNIKA:** `screenshots.mjs` robi zrzut pełnej strony BEZ przewijania,
+    więc wszystko montowane leniwie (`DashboardMount`, `loading="lazy"`) wychodzi **puste**.
+    Na `home--mobile--normal.png` wyglądało to jak martwe sekcje dowodowe. **To artefakt,
+    nie awaria** — sprawdzone przewijaniem na 390 px: 3 dashboardy `data-ready`, 3 zrzuty
+    załadowane, sekcje 1590 i 1180 px. Nie „naprawiać" tego zdejmowaniem lazy-montażu.
+  - **Nawigacja zostaje PUSTA** (decyzja Karola 2026-09-13, z zapisem „dopisanie pozycji
+    cofa tę decyzję, więc wymaga rozmowy"). **Ale to znaczy, że `/oferta` nie ma dziś żadnego
+    wejścia poza stopką** — do rozstrzygnięcia z founderem.
+  - **Nie zrobione, świadomie:** `/oferta` i `/faq` zostały w gęstym układzie kart. Copy tam
+    NIE tniemy (to tam przeniosła się gęstość SEO ze strony głównej); do zrobienia jest sam
+    **układ**: karty na hairline'y i więcej światła.
+
 - **2026-09-17 (redesign v3) — STRONA GŁÓWNA URUCHAMIA NARZĘDZIA; KONIEC MATERIAŁU GENERATYWNEGO:**
   - **Decyzja Karola, wiążąca:** efekt „wow" bierze się z tego, że strona URUCHAMIA prawdziwe
     narzędzia, nie z wygenerowanej ilustracji. Dwa podejścia odrzucone pod rząd: kreskówkowe
