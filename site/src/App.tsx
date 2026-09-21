@@ -609,8 +609,8 @@ function HomeNext() {
 
 /* ── STOPKA ── */
 const FOOT = {
-  pl: { tagline: "Automatyzacja i porządek w danych dla MŚP · Polska / USA", note: "© 2026 Klarow · strona robocza v0.8" },
-  en: { tagline: "Automation and order in SME data · Poland / USA", note: "© 2026 Klarow · working draft v0.8" },
+  pl: { tagline: "Automatyzacja i porządek w danych dla MŚP · Polska / USA", note: "© 2026 Klarow" },
+  en: { tagline: "Automation and order in SME data · Poland / USA", note: "© 2026 Klarow" },
 };
 
 /* Link „RODO i prywatność” stoi w stopce na KAŻDEJ trasie: to adres klauzuli
