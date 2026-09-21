@@ -13,7 +13,7 @@
 | `ui-kit/` | **Company UI kit (marka KLAROW)** — obowiązkowy design-system wszystkich narzędzi i stron: `ui-kit/skills/company-ui/` (SKILL.md + app.css + fonty + komponenty React) |
 | `site/` | **Landing klarow.com** — Vite + React 19 + TS + Tailwind (tylko layout), dwujęzyczny PL/EN |
 | `demo/` | Statyczna prezentacja modułu M2 (Raport zarządczy) — pokaz kitu, dane fikcyjne |
-| `.claude/skills/klarow-guardian/` | **STRAŻNIK ZASAD (nadrzędny nad wszystkimi skillami wizualnymi)** — 144 reguły z ID/severity/testem mechanicznym (`rules/`), `AGENTS.md` generowany, rejestry (dozwolone liczby, integracje, przekierowania, tokeny), zwendorowane wytyczne (WIG, writing, locki taste), checklisty, 8 skryptów bramek (`node`, nigdy `npx`), baseline długu. Wejście: `SKILL.md` (115 linii) |
+| `.claude/skills/klarow-guardian/` | **STRAŻNIK ZASAD (nadrzędny nad wszystkimi skillami wizualnymi)** — 146 reguł z ID/severity/testem mechanicznym (`rules/`), `AGENTS.md` generowany, rejestry (dozwolone liczby, integracje, przekierowania, tokeny), zwendorowane wytyczne (WIG, writing, locki taste), checklisty, 8 skryptów bramek (`node`, nigdy `npx`), baseline długu. Wejście: `SKILL.md` (115 linii) |
 | `.claude/agents/`, `.claude/workflows/`, `.claude/skills/ui-audit/` | **Audyt automatyczny** — 7 audytorów read-only + orkiestrator, workflow `/ui-audit` (bramki → audytorzy → weryfikacja adwersaryjna → naprawy mechaniczne → re-audyt → `INDEX.md`) |
 | `.claude/skills/` (reszta) | `motion` (Motion AI Kit), `design-taste-frontend` + `minimalist-ui`/`high-end-visual-design`/`redesign-existing-projects`/`brandkit`/`imagegen-frontend-web`/`full-output-enforcement` (pakiet taste-skill), `react-best-practices`/`composition-patterns`/`react-view-transitions`/`web-design-guidelines`/`writing-guidelines` (Vercel), `bklit-ui`, `auto-animate`, `aceternity-ui`, `motion-design`, `lead-scout` |
 | `.claude/skills/higgsfield-*` + `HIGGSFIELD-README.md` | **Skille i CLI Higgsfielda** (zainstalowane 2026-09-14). **Czytaj README PIERWSZE**: używamy `higgsfield-generate`; `higgsfield-websites` jest ZAKAZANY dla klarow.com (przepisałby stronę na infrastrukturę Higgsfielda), `higgsfield-soul-id` zakazany (trenuje na twarzy). CLI: `higgsfield` (`npm i -g @higgsfield/cli`) |
@@ -121,8 +121,9 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
     `ORG_JSONLD` na /, /narzedzia, /oferta; `FAQPage` na /faq; `toolJsonLd`+FAQPage per
     narzędzie), title/description stron w `src/data/pagesSeo.ts` (jedno źródło dla klienta
     i prerenderu), `public/robots.txt`, meta w `index.html`; **prerender**
-    `src/prerender/entry.tsx` + `scripts/prerender.mjs` (**17 statycznych HTML**: `/`,
-    `/narzedzia`, `/oferta`, `/faq` + 13 × `dist/narzedzia/<slug>.html` — osobny shell z H1 i
+    `src/prerender/entry.tsx` + `scripts/prerender.mjs` (**19 statycznych HTML**: `/`,
+    `/narzedzia`, `/oferta`, `/faq`, `/rodo`, `/404` + 13 × `dist/narzedzia/<slug>.html`
+    — 17 w sitemapie, `/rodo` i `/404` poza nią — osobny shell z H1 i
     pełną treścią per strona, treść ROZDZIELONA między trasy bez duplikacji; `sitemap.xml` i
     `llms.txt` GENEROWANE z `tools.ts`+trasy przy buildzie — ręcznego `public/sitemap.xml`
     NIE MA, nie odtwarzać); treści long-tail + FAQ per narzędzie w `src/data/toolsSeo.ts`
@@ -163,6 +164,82 @@ Weryfikacja przed pushem zmian w `site/`: `npx tsc --noEmit` + `npx vite build` 
 - Docelowo (plan §4.2): treść do YAML w `site/content/` + trasy `/pl/` `/en/` build-time.
 
 ## Stan operacyjny (aktualizuj przy zmianach!)
+
+> **CZYTAJ TO PIERWSZE.** Wpisy z **2026-09-13, 09-14, 09-15, 09-17 i 09-20** opisują warstwę
+> wizualną, która **już nie istnieje** — została cofnięta 21 września. Zostają, bo zawierają
+> nauczki (promptowanie wideo, pętle, budżety, pułapki bramek), ale **nie są opisem dzisiejszej
+> strony** i nie wolno na nich budować. Stan faktyczny opisuje wpis poniżej.
+
+- **2026-09-21 (powrót do punktu wyjścia) — TRZY TYGODNIE WARSTWY WIZUALNEJ COFNIĘTE:**
+  - **Decyzja Karola:** „Musimy wrócić do punktu wyjścia. Wracamy ze stroną sprzed commita
+    z przed tygodnia." Powód podany przez foundera: chce najpierw lepiej rozumieć, jak stawia się
+    dobre strony i wizytówki, zanim strona znów pójdzie do przebudowy. **To nie jest prośba
+    o kolejny redesign — to jest prośba o pauzę.** Nie proponować następnej przebudowy z własnej
+    inicjatywy.
+  - **Co dokładnie zrobione:** całe `site/` przywrócone do `1604b6b` (2026-09-12 23:05), czyli do
+    **rodzica commita `b5e1f40`**, który 13 września przepisał `/` na sceny sterowane przewijaniem.
+    Wypadły trzy odrzucone podejścia z rzędu: prezentacja ośmioscenowa (13.09), pionowy pas z pętlami
+    generatywnymi (15.09), strona uruchamiająca narzędzia (17–20.09).
+  - **DZISIEJSZA STRONA:** zwykły landing, trasy `/` `/narzedzia` `/oferta` `/faq` `/rodo` `/404`
+    + 13 podstron narzędzi. **Menu w Navbarze ma znów pozycje** (Narzędzia / Oferta / FAQ) — problem
+    „`/oferta` bez wejścia poza stopką" z 20.09 **rozwiązał się sam**. Hero: nagranie prawdziwego
+    narzędzia (`HeroMedia`, `hero-production-v1.webm`) + animowane wzgórza WebGL. Motyw ciemny,
+    **Nunito Sans** (93,3 KB), sekcje: Hero → Co możemy zbudować → Co już zrobiliśmy → Ból →
+    Dwa wyróżniki → Gotowe narzędzia → Zobacz konkrety → stopka.
+  - **NIC NIE PRZEPADŁO.** Odrzucony stan: gałąź **`archiwum/redesign-v3`** i tag
+    **`stan-2026-09-20`**. Pojedynczy plik z tamtej wersji: `git checkout stan-2026-09-20 -- <ścieżka>`.
+    Cała strona z powrotem: `git checkout stan-2026-09-20 -- site`. Tam leży m.in. krój Geist,
+    `HomeV3`, `homeSections.ts`, karty OG w Geist i 13 zrzutów narzędzi.
+  - **CO ZOSTAŁO POZA COFNIĘCIEM (zasada #7 — cofamy wygląd, nie wiedzę):** strażnik `klarow-guardian`
+    ze 146 regułami, rejestry, dokumenty planistyczne, `leadscout/`, ten plik. Z warstwy wizualnej
+    przeniesiona **jedna rzecz**: zdjęty znacznik „strona robocza v0.8" ze stopki (osobny commit,
+    `git revert` cofa). Powód: `design-hero-discipline` wyklucza numery wersji, a firma, która sama
+    siebie podpisuje „robocza", nie wygląda na taką, której powierza się dane finansowe.
+  - **⚠️ ZNALEZIONE PRZY OKAZJI, WYMAGA DECYZJI KAROLA — na `/` grają DWIE ruchome warstwy naraz.**
+    Zmierzone w Chromium na `dist`, 1440×900: jedno grające `<video>` (`hero-production-v1.webm`,
+    `currentTime` 3,2 s) **oraz** canvas WebGL 1440×900. `media-one-autoplay-per-route` (BLOCKER)
+    zabrania tego wprost: „wideo hero i GLSL Hills nigdy razem".
+    **To dług zastany, nie skutek powrotu:** kombinacja powstała 12 września wieczorem (`c7635a2`,
+    `2d99c54` — „wideo wraca do v1"). Reguła jej nie złapała przez dziewięć dni, bo tłumaczyła się
+    zdaniem „w v1 `three` jest poza `dependencies`" — **które nigdy nie było prawdziwe**.
+    **Nauczka ogólna: reguła, która opisuje stan ZAMIERZONY zamiast ZMIERZONEGO, nie chroni
+    niczego.** Dwie drogi, obie jednoliniowe: albo tło WebGL schodzi z `/` (zostaje gradient
+    `.bg-layer`), albo hero pokazuje kadr statyczny (`HeroPoster` jest już wyeksportowany).
+    Rekomendacja: druga — kadr i tak jest elementem LCP, a wzgórza niosą charakter strony.
+    Wariant B stoi jako „Poprawnie" w samej regule od 12 września i nigdy nie został wdrożony.
+    Na telefonie konfliktu nie ma (canvas nie renderuje się przy `pointer: coarse`, wideo jest
+    odcięte tym samym warunkiem).
+  - **WRÓCIŁO PIĘĆ ZAMROŻONYCH LICZB z poprzedniej firmy** na `/` i `/narzedzia`: „kilkanaście
+    narzędzi" (`App.tsx:213`), „≈10 000 wierszy z ERP" (`App.tsx:214`), „~30 równoległych projektów",
+    „raport w kilkanaście sekund", **„klienci w USA"** (shelle `prerender/entry.tsx:191, 264`).
+    Były zdjęte 17–20.09. Rejestr `allowed-numbers.md` ma teraz zmierzone lokalizacje i adnotację,
+    że **to zdjęcie trzeba będzie powtórzyć przy następnej przebudowie**. Najostrzejszy jest wpis
+    „klienci w USA", bo mówi o RYNKU poprzedniej firmy, nie o skali pracy (zasada #3).
+  - **Reguły przepisane, nie obejścia** (wpis w `references/decisions-log.md` §4):
+    `design-typography-scale` (krój wraca na Nunito Sans, tracking `-.02em`; epizod Geist zapisany
+    jako historia), `perf-fonts-budget` (**zapas to 9 KB ze 100 KB, nie połowa budżetu jak przy
+    Geist**; dopisany dług: brak `size-adjust` i brak preloadu fontu — nie było ich w ŻADNYM
+    z dwóch stanów), `media-one-autoplay-per-route` (wyjątek na osiem paneli WYGASŁ, wraca D37),
+    `media-video-placement` (`.pr-panel` wykreślony), `media-video-budgets` (podbudżet 1,75 MB
+    wygasł; **zostaje nauczka: `display: none` kontra `visibility`/`opacity` decyduje o tym, czy
+    plik w ogóle leci po sieci** — trzy własności wyglądają w przeglądzie kodu tak samo).
+  - **Zmierzone po powrocie:** tsc 0, lint 0, testy 15/15, build **19 plików HTML** (17 w sitemapie,
+    poza nią `/rodo` i `/404`), verify-site **0 BLOCKER / 0 HIGH** (1 LOW: brak `lastmod`
+    w sitemapie), audit-static 0 na każdym poziomie, check-secrets czysty. JS wejściowy
+    **132,5 KB gz** ze 175, CSS **16,0 KB gz**, lazy `glsl-hills` 116,1 KB gz. `find-integrations`
+    13 HIGH — zastany dług skryptów budowania (`og.mjs`, `shoot-tools.mjs`, `record-demos.mjs`,
+    `ui-kit/.../base.html`), nie połączenia strony.
+  - **BLOKER PUBLIKACJI BEZ ZMIAN:** prerender ostrzega, że `/rodo` ma jeszcze marker
+    `[DECYZJA FOUNDERÓW]` — brakuje danych administratora w `src/data/rodo.ts`. Ten build **nie
+    nadaje się pod outbound**. To wisi od 12 września.
+  - **Nauczka procesowa, najdroższa z całego miesiąca:** trzy przebudowy strony głównej w dziewięć
+    dni, każda odrzucona, zakończyły się powrotem do stanu sprzed pierwszej. Plan `strona-v2-plan.md`
+    (17 agentów, trzech sędziów) w decyzji **D37** odradził materiał generatywny i miał rację
+    — odwrócenie tej rekomendacji 12 września wieczorem kosztowało dziewięć dni i 84 kredyty.
+    **Gdy adwersaryjnie zrecenzowany plan mówi „nie rób X", a founder prosi o X, to jest moment
+    na rozmowę, nie na wykonanie.** Zapisane już 17 września i **powtórzone, bo się sprawdziło
+    drugi raz**.
+
 
 - **2026-09-20 (marka) — POWIERZCHNIE MARKI DOPROWADZONE DO STANU STRONY GŁÓWNEJ:**
   - **KARTY OG BYŁY MARTWE OD DNIA POWSTANIA.** Dziewiętnaście kart 1200×630 leżało

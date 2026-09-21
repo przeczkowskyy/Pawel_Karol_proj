@@ -13,31 +13,39 @@ Na każdej trasie (`/`, `/narzedzia`, `/narzedzia/:slug`, `/oferta`, `/faq`, `/r
 
 - **≤ 1 element `<video>` GRAJĄCY JEDNOCZEŚNIE, i to wyłącznie na trasie `/`**, wyłącznie przy `pointer: fine` i wyłącznie po `window.load`; na **18 pozostałych trasach twarde 0** (samo „≤ 1 na trasę" formalnie dopuszczałoby klip na `/oferta`),
 
-  **ZMIANA 2026-09-15 (decyzja Karola, zastępuje D37 na trasie `/`).** Trasa `/`
-  jest prezentacją i niesie **osiem paneli z łagodnymi pętlami generatywnymi**,
-  po jednej na scenę: „Każde pojedyncze z tych zdjęć będzie POWTARZAJĄCYM SIĘ
-  ŁAGODNIE GIFEM." Limit zmienił się więc z „jednego ELEMENTU w DOM" na „jednego
-  GRAJĄCEGO dekodera", bo osiem paneli musi istnieć w układzie, żeby pas obrazu
-  był ciągły — ale grać wolno tylko temu, którego widać najwięcej.
-  Egzekwuje to `presentation/loopConductor.ts`: panele meldują widoczność,
-  dyrygent puszcza jeden i pauzuje resztę, a karta w tle pauzuje wszystkie.
-  **Mechanizm awarii, przed którym broni ten limit, jest ten sam co wcześniej**
-  (dwa dekodery = spadek fps i grzanie, na iOS dodatkowy kontekst GPU), więc
-  liczba „jeden naraz" NIE jest negocjowalna — negocjowalna była tylko liczba
-  elementów w DOM.
-- **treść tego odtwarzania zależy od trasy:**
-  - na `/` to **pętle prezentacji** (wyżej). Wymóg „nagranie prawdziwego
-    narzędzia" z D37 dotyczył hero starej strony głównej, a ta trasa już nie
-    istnieje — `components/HeroMedia.tsx` został w repo, ale **żadna trasa go nie
-    renderuje** (stan na 2026-09-15). Slot dowodu nie jest przez pętle zajęty,
-    bo dowodem na tej stronie są trzynaście podstron narzędzi z żywymi
-    dashboardami, nie jeden kadr w nagłówku,
-  - gdyby hero z nagraniem kiedyś wróciło: gra **raz**, bez `loop`, i zatrzymuje
-    się na ostatniej klatce — i wtedy **nie wolno go łączyć z pętlami**, bo to
-    byłyby dwa autoodtwarzania na jednej trasie,
-- ≤ 1 ruchome tło łącznie (wideo LUB canvas WebGL `GLSLHills` LUB nic); wideo hero i GLSL Hills nigdy razem. W v1 `three` jest poza `dependencies`, więc realnie: tylko wideo,
+  **POWRÓT DO D37 2026-09-21 (decyzja Karola: „Musimy wrócić do punktu wyjścia").**
+  Wyjątek z 15 września na osiem paneli z pętlami generatywnymi **WYGASŁ razem
+  z prezentacją**: `src/presentation/**` i `loopConductor.ts` nie istnieją, trasa `/`
+  jest znów zwykłym landingiem. Obowiązuje pierwotne brzmienie: na `/` gra
+  **jedno nagranie prawdziwego narzędzia w hero** (`components/HeroMedia.tsx`,
+  `hero-production-v1.webm/mp4`), raz, bez `loop`, zatrzymane na ostatniej klatce.
+  **Mechanizm awarii jest niezmienny od pierwszej wersji reguły** (dwa dekodery =
+  spadek fps i grzanie, na iOS dodatkowy kontekst GPU), więc „jeden naraz" nigdy
+  nie było negocjowalne — negocjowalna była tylko liczba elementów w DOM i ta
+  negocjacja właśnie się skończyła.
+- **treść tego odtwarzania:** wyłącznie nagranie prawdziwego narzędzia (D37).
+  Pętla generatywna na jakiejkolwiek trasie jest złamaniem reguły — trzy podejścia
+  (13.09 kreskówka, 15.09 pętle, 17.09 instrument) founder odrzucił, a materiał
+  generatywny został wycofany ze strony w całości.
+- ≤ 1 ruchome tło łącznie (wideo LUB canvas WebGL `GLSLHills` LUB nic); wideo hero i GLSL Hills nigdy razem.
+
+  **⚠️ TEN PUNKT JEST DZIŚ ZŁAMANY I JEST TO DŁUG ZASTANY, NIE REGRESJA.**
+  Zmierzone w Chromium 2026-09-21 na `dist`, 1440×900: `/` ma **jedno grające
+  `<video>` (`hero-production-v1.webm`, `currentTime` 3,2 s) ORAZ jeden canvas
+  WebGL 1440×900** — dwie ruchome warstwy naraz, dokładnie to, czego punkt
+  zabrania. Wcześniejsze brzmienie tej reguły tłumaczyło się zdaniem „w v1 `three`
+  jest poza `dependencies`, więc realnie: tylko wideo" — **to zdanie nigdy nie było
+  prawdziwe**: `three` stoi w `site/package.json` i `App.tsx` renderuje `<GLSLHills>`
+  przy `pointer: fine`. Reguła opisywała stan zamierzony, nie zmierzony, i dlatego
+  nie złapała tego przez dziewięć dni.
+  Na `pointer: coarse` konfliktu nie ma: canvas się nie renderuje (bug kompozytora
+  iOS, `useAnimatedBg`), a wideo jest odcięte przez `(pointer: fine)`.
+  **Do rozstrzygnięcia przez foundera, bo to wybór wyglądu, nie usterka do cichej
+  naprawy:** albo tło WebGL schodzi z `/` (zostaje gradient `.bg-layer`, wideo hero
+  gra), albo wideo hero schodzi do kadru statycznego (`HeroPoster`, wzgórza zostają).
+  Tańsza i mniej widoczna jest druga droga — kadr i tak jest elementem LCP.
 - **klipy hover ściany S3 (v1: dokładnie cztery, pierwszy rząd po featured) nie liczą się jako autoplay**, bo startują wyłącznie z intencji użytkownika (`mouseenter` z progiem 120 ms albo `focus-visible`), ale **maksimum jeden gra jednocześnie** (singleton modułowy), a hero jest w tym czasie **zapauzowane** przez `IntersectionObserver`: nigdy dwa dekodery naraz,
-- pętle sekcyjne i tła PODSTRON („tło-pętla /oferta", „/narzedzia") NIE POWSTAJĄ (synthesis §2.6.1 „Co NIE powstaje generatywnie"). Wyjątek z 2026-09-15 dotyczy **wyłącznie trasy `/`** i wyłącznie paneli prezentacji; dopisanie pętli na jakiejkolwiek innej trasie pozostaje złamaniem reguły.
+- pętle sekcyjne i tła PODSTRON („tło-pętla /oferta", „/narzedzia") NIE POWSTAJĄ (synthesis §2.6.1 „Co NIE powstaje generatywnie"). Wyjątek z 2026-09-15 na panele prezentacji **wygasł 2026-09-21 razem z prezentacją**; dopisanie pętli na JAKIEJKOLWIEK trasie, włącznie z `/`, jest dziś złamaniem reguły.
 
 Wideo nie jest treścią: `aria-hidden="true"`, `tabIndex={-1}`, zero NATYWNYCH kontrolek (`controls`), zero dźwięku, a strona bez niego niczego nie traci (test: zdejmij `<video>` → treść i CTA identyczne).
 
@@ -47,8 +55,7 @@ Dwa warianty tego przycisku, zależnie od tego, co gra na trasie:
 
 | Gdzie | Element | Etykieta |
 |---|---|---|
-| prezentacja `/` (osiem pętli) | `.pr-pause` w `PresentationChrome`, stan w `loopConductor` | „Zatrzymaj ruch / Stop motion", po pauzie „Wznów ruch / Resume motion" |
-| hero z nagraniem narzędzia (dziś nieaktywne) | `hero-media-toggle` | „Zatrzymaj podgląd / Pause preview" — bo to podgląd narzędzia, nie tło |
+| hero z nagraniem narzędzia (`/`, aktywne od 2026-09-21) | `hero-media-toggle` w `HeroMedia.tsx` | „Zatrzymaj podgląd / Pause preview" — bo to podgląd narzędzia, nie tło |
 
 Stan pauzy jest **jeden na całą witrynę** (`sessionStorage`, klucz `klarow:media:paused`): dla człowieka „zatrzymaj ruch" jest decyzją o stronie, a nie o pliku. Przycisk pojawia się WYŁĄCZNIE, gdy coś faktycznie gra — po odrzuceniu bramek (`pointer: coarse`, `prefers-reduced-motion`, `saveData`) nie ma go wcale, bo kontrolka URUCHAMIAJĄCA ruch po odrzuceniu bramek jest zakazana (`media-video-gating`).
 

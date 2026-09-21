@@ -112,3 +112,51 @@ glass nav, Instrument Serif, reveal 1100 ms, Title Case w nagłówkach nawigacji
 `&` zamiast „i" w copy PL, `autocomplete="off"` na polach nieautoryzacyjnych (`web-design-guidelines`),
 React 19.3 `<ViewTransition>` w fazie 1 (`react-view-transitions`). Mapowanie i uzasadnienia:
 `references/audit-checklist.md` §4.
+
+---
+
+## 4. Powrót do punktu wyjścia (2026-09-21)
+
+### 4.1 Decyzja
+
+**Karol, 2026-09-21:** „Musimy wrócić do punktu wyjścia. Wracamy ze stroną sprzed commita
+z przed tygodnia." Uzasadnienie foundera: chce najpierw lepiej rozumieć, jak stawia się dobre
+strony i wizytówki, zanim strona znów pójdzie do przebudowy.
+
+**Co zrobione:** całe `site/` przywrócone do stanu `1604b6b` (2026-09-12 23:05), czyli do rodzica
+commita `b5e1f40`, który 13 września przepisał `/` na sceny sterowane przewijaniem. Trzy tygodnie
+warstwy wizualnej wypadają: prezentacja ośmioscenowa (13.09), pionowy pas z pętlami
+generatywnymi (15.09), strona uruchamiająca narzędzia (17–20.09). Materiał: gałąź
+`archiwum/redesign-v3`, tag `stan-2026-09-20`.
+
+**Czego decyzja NIE obejmuje:** strażnika, rejestrów, dokumentów planistycznych, `leadscout/`
+i `CLAUDE.md`. Wiedza kumuluje się między oknami (zasada #7) — cofamy wygląd, nie nauczki.
+
+### 4.2 Reguły przepisane tą decyzją (nie obejścia)
+
+| Reguła | Co się zmieniło |
+|---|---|
+| `design-typography-scale` | krój wraca na **Nunito Sans solo** (93 304 B), tracking nagłówków `-.02em`; epizod Geist zapisany jako historia wraz z nauczką, że wymiana kroju zawsze pociąga przeliczenie trackingu |
+| `perf-fonts-budget` | stan i budżet liczone dla Nunito Sans; **zapas to 9 KB ze 100 KB, nie połowa budżetu**; dopisany dług: brak `size-adjust` i brak preloadu fontu |
+| `media-one-autoplay-per-route` | **wyjątek z 15.09 na osiem paneli z pętlami WYGASŁ**; wraca pierwotne D37 (jedno nagranie prawdziwego narzędzia w hero) |
+| `media-video-placement` | `.pr-panel` wykreślony z dozwolonych miejsc; warunek konstrukcyjny zostaje jako wiedza na przyszłość |
+| `media-video-budgets` | podbudżet 1,75 MB na panele wygasł; zostaje nauczka o `display: none` kontra `visibility`/`opacity` przy budżecie mobilnym |
+
+### 4.3 Dług otwarty, zmierzony przy tej okazji
+
+**Na `/` grają jednocześnie dwie ruchome warstwy.** Zmierzone w Chromium na `dist`, 1440×900:
+jedno grające `<video>` (`hero-production-v1.webm`) **oraz** canvas WebGL 1440×900.
+`media-one-autoplay-per-route` (BLOCKER) zabrania tego wprost.
+
+To **dług zastany, nie regresja po powrocie**: kombinacja powstała 12 września wieczorem
+(commity `c7635a2` i `2d99c54`, „wideo wraca do v1"), a reguła jej nie złapała, bo tłumaczyła się
+zdaniem „w v1 `three` jest poza `dependencies`" — które nigdy nie było prawdziwe. Reguła opisywała
+stan zamierzony zamiast zmierzonego.
+
+**Decyzja należy do foundera, bo to wybór wyglądu:** albo tło WebGL schodzi z `/` (zostaje gradient
+`.bg-layer`), albo hero pokazuje kadr statyczny (`HeroPoster` jest już wyeksportowany, zmiana
+jednoliniowa). Druga droga jest tańsza — kadr i tak jest elementem LCP. Wariant B stoi jako
+„Poprawnie" w samej regule od 12 września i nigdy nie został wdrożony.
+
+Na telefonie konfliktu nie ma: canvas się nie renderuje (`useAnimatedBg`, bug kompozytora iOS),
+a wideo jest odcięte przez `(pointer: fine)`.

@@ -5,7 +5,11 @@
 > (`{ value, pl, en, source }`) w `site/src/data/messaging.ts`; oba miejsca zmieniają się w tym samym commicie.
 > Nowa liczba = decyzja founderów (wpis w `docs/DECISIONS.md`) + wiersz tutaj z datą i źródłem.
 > Statusy: **OK** = wolno używać; **DO POTWIERDZENIA** = wolno dopiero po potwierdzeniu founderów (do tego czasu
-> zostaje dotychczasowe sformułowanie); **ZAMROŻONE** = tylko tam, gdzie już jest, nie na `/`, nie dodawać nowych.
+> zostaje dotychczasowe sformułowanie); **ZAMROŻONE** = tylko tam, gdzie już jest, nie dodawać nowych.
+>
+> **UWAGA 2026-09-21:** pięć wpisów ZAMROŻONYCH wróciło na `/` i `/narzedzia` razem z powrotem strony
+> do punktu wyjścia. Były zdjęte między 17 a 20 września i to zdjęcie trzeba będzie **powtórzyć** przy
+> następnej przebudowie strony głównej — ta kolumna mówi, gdzie dokładnie one dziś stoją.
 >
 > **Korekta 2026-09-12 (reframe, D30 i §10 p. 7 planu).** Pasek „W liczbach" na `/` został **usunięty jako sekcja**,
 > więc kolumna „gdzie używana" nie wskazuje już na niego. Na stronie głównej zostają dokładnie trzy pozycje z tego
@@ -55,11 +59,11 @@
 
 | Liczba | Sformułowanie | Gdzie jest dziś | Status |
 |---|---|---|---|
-| „kilkanaście" | „kilkanaście narzędzi w jednej firmie produkcyjno-budowlanej" | **wyłącznie `faq.ts:41`** (pasek liczb skasowany zgodnie z D30) | ZAMROŻONE; po v2 zostaje **wyłącznie w `faq.ts`**; „15" dopiero po umowie IP i potwierdzeniu (D7) |
-| ≈ 10 000 wierszy / „~10 tys." | „wierszy kosztów z ERP miesięcznie" | `toolsSeo.ts:474`, `faq.ts:41` | ZAMROŻONE; **ZDJĘTE z `/` i z `/narzedzia` 2026-09-17** (shelle `HomeShell` i `ToolsShell` w `entry.tsx`) |
-| ~30 | „równoległych projektów" | `toolsSeo.ts:36, 60, 86, 110, 136` | ZAMROŻONE (opisy podstron); **ZDJĘTE z shelli `/` i `/narzedzia` 2026-09-17** |
-| „kilkanaście sekund zamiast godzin" (galeria: „z ~6 godz.") | czas raportu zarządczego | `toolsSeo.ts:19, 24, 36`, `faq.ts:41` | ZAMROŻONE; **ZDJĘTE z shelli 2026-09-17** |
-| „klienci w USA" | rynek poprzedniej firmy | **nigdzie w `site/src` po 2026-09-17** | ZAMROŻONE; nie mylić z klientami Klarow (`brand-honest-labels`) |
+| „kilkanaście" | „kilkanaście narzędzi w jednej firmie produkcyjno-budowlanej" | `App.tsx:213` (pasek „Co już zrobiliśmy" na `/`), `faq.ts:41`, `messaging.ts:197`, `prerender/entry.tsx:192` | ZAMROŻONE; **wróciło na `/` przy powrocie do punktu wyjścia 2026-09-21** (było zdjęte 17–20.09); docelowo zostaje wyłącznie w `faq.ts`; „15" dopiero po umowie IP i potwierdzeniu (D7) |
+| ≈ 10 000 wierszy / „~10 tys." | „wierszy kosztów z ERP miesięcznie" | `App.tsx:214` (pasek na `/`), `toolsSeo.ts:475`, `faq.ts:41`, `prerender/entry.tsx:191` (`/`) i `:264` (`/narzedzia`) | ZAMROŻONE; **wróciło na `/` i `/narzedzia` 2026-09-21** wraz z całym `site/` |
+| ~30 | „równoległych projektów" | `toolsSeo.ts:37, 61, 87, 111, 137`, `prerender/entry.tsx:191, 264` | ZAMROŻONE (opisy podstron); **wróciło do shelli `/` i `/narzedzia` 2026-09-21** |
+| „kilkanaście sekund zamiast godzin" (galeria: „z ~6 godz.") | czas raportu zarządczego | `toolsSeo.ts:20, 25, 37`, `faq.ts:41`, `prerender/entry.tsx:192` | ZAMROŻONE; **wróciło do shella `/` 2026-09-21** |
+| „klienci w USA" | rynek poprzedniej firmy | `prerender/entry.tsx:191` (`/`) i `:264` (`/narzedzia`) | ZAMROŻONE; **wróciło 2026-09-21**; nie mylić z klientami Klarow (`brand-honest-labels`) — to jest najostrzejszy z tych pięciu wpisów, bo mówi o RYNKU, nie o skali pracy |
 | „mniej niż dwa miesięczne koszty etatu kontrolera"; „moduł raportowy ERP 6+ miesięcy i od 100 tys. zł" | kotwice porównawcze w FAQ (nie cennik) | `faq.ts:16` | ZAMROŻONE (kotwica, nie kwota usługi) |
 | API KSeF 2.0, FA(3), prognoza 13 tyg., raporty XLSX, Flask + SQLite + React | fakty techniczne własnego produktu | `tools.ts:640–644`, `toolsSeo.ts:615–663` | OK (własny produkt; bez nazwy produktu i domeny) |
 

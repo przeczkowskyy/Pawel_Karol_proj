@@ -82,7 +82,7 @@
 | 5.2 | `perf-build-target` | HIGH | Kod zgodny z build.target es2019/safari13: bez toSorted/at/structuredClone/Array.findLast/Object.hasOwn/oklch/color-mix bez fallbacku; komentarz w vite.config prawdziwy | [rules/perf-build-target.md](rules/perf-build-target.md) |
 | 5.3 | `perf-chunk-size-gate` | HIGH | verify-site.mjs porównuje rozmiary chunków z baseline: wzrost > 5 % lub nowy chunk krytyczny = fail; baseline zmienia tylko świadomy commit | [rules/perf-chunk-size-gate.md](rules/perf-chunk-size-gate.md) |
 | 5.4 | `perf-code-split-dashboards` | HIGH | Dashboardy przez React.lazy per klucz + DashboardMount (IntersectionObserver, requestIdleCallback, kolejka) + skeleton z minHeight | [rules/perf-code-split-dashboards.md](rules/perf-code-split-dashboards.md) |
-| 5.5 | `perf-fonts-budget` | HIGH | Fonty self-hosted w public/fonts, zero CDN, ≤ 100 KB w fazie 1 (Geist solo) / ≤ 150 KB po ewentualnym drugim kroju, preload latin, font-display swap + size-adjust | [rules/perf-fonts-budget.md](rules/perf-fonts-budget.md) |
+| 5.5 | `perf-fonts-budget` | HIGH | Fonty self-hosted w public/fonts, zero CDN, ≤ 100 KB w fazie 1 (Nunito Sans solo) / ≤ 150 KB po ewentualnym drugim kroju, preload latin, font-display swap + size-adjust | [rules/perf-fonts-budget.md](rules/perf-fonts-budget.md) |
 | 5.6 | `perf-images-policy` | HIGH | Obrazy: WebP (AVIF opcjonalnie), srcset dla ram i portretów, jawne width/height (CLS 0), loading lazy poniżej folda, limity rozmiarów, zero PNG/JPG w treści | [rules/perf-images-policy.md](rules/perf-images-policy.md) |
 | 5.7 | `perf-js-budget-home` | HIGH | JS krytyczny na / ≤ 175 KB gz (react-dom ~58 + router ~15 + motion ~34 + app ~25 + warstwa scroll-narracyjna ~35); podstrona narzędzia ≤ +60 KB gz lazy | [rules/perf-js-budget-home.md](rules/perf-js-budget-home.md) |
 | 5.8 | `perf-lcp-poster-preload` | HIGH | LCP = kadr produktu w hero (bramka ELEMENTOWA, nie tylko czasowa): preload z fetchpriority high, H1 w shellu, wideo nigdy preloadowane i montowane dopiero po load i rIC; bramki CWV: LCP mobile < 2,5 s / desktop < 1,8 s, CLS < 0,05 na / i < 0,1 na podstronach, INP < 200 ms | [rules/perf-lcp-poster-preload.md](rules/perf-lcp-poster-preload.md) |
@@ -1970,7 +1970,7 @@ xl 1.25 / 2xl clamp / 3xl clamp / display clamp(2.25rem, 5.2vw, 4.25rem)`): maks
 + display. **Minimum w UI = `.75rem` (12 px)**; 10 px tylko dla osi wykresów w dashboardach.
 Zakazane: `px` z ułamkami (12.5 / 13.5 / 14.5), `text-[Npx]`, rozmiary „na oko" w klasach kitu,
 więcej niż jedna waga display (nagłówki 600–700, nigdy 800+ poza wordmarkiem), `letter-spacing`
-inne niż `-.015em` w nagłówkach i `.14em` w wordmarku. Krój: **Geist solo** (self-hosted
+inne niż `-.02em` w nagłówkach i `.14em` w wordmarku. Krój: **Nunito Sans solo** (self-hosted
 `woff2`, `unicode-range` latin + latin-ext, `font-display: swap`, preload pliku latin);
 `--font-display` = alias `--font-sans` do decyzji D-06. Zero serif (w tym Instrument Serif /
 Fraunces), zero mono w UI, zero Google Fonts CDN, zero Inter / Roboto / Arial jako kroju UI.
@@ -1983,21 +1983,28 @@ brak skali, brak skalowania ustawień użytkownika (px ignoruje preferencje), 9,
 czytelności mobile. Strona ma 140 `text-[Npx]`. Serif to „the single most-tested AI tell" (taste §4.1),
 a mono w UI to rejestr dev-tool, nie CFO.
 
-**ZMIANA KROJU 2026-09-17 (decyzja Karola).** Do 17 września ta reguła mówiła „Nunito Sans solo"
-i odrzucała Geist zdaniem: „drugi krój rozsadza budżet fontów (Nunito 93 KB + Geist ~70 KB
-> 150 KB)". Tamto zastrzeżenie dotyczyło **dodania** drugiego kroju i było słuszne. Tutaj krój
-został **wymieniony**, więc rachunek jest odwrotny: **49 880 B wobec 93 304 B, czyli o 47 % mniej**.
-PDF zostaje na Roboto (decyzja B), więc osadzanie w PDF w ogóle nie wchodzi w grę.
+**POWRÓT DO NUNITO SANS 2026-09-21 (decyzja Karola: „Musimy wrócić do punktu wyjścia.
+Wracamy ze stroną sprzed commita z przed tygodnia").** Krój wrócił razem z całym `site/`
+przywróconym do stanu z 12 września. Stan dzisiejszy: **Nunito Sans solo, 93 304 B**,
+`@font-face` w `site/src/styles/company-ui.css` (nie w `globals.css`), tracking nagłówków
+`-.02em`.
 
-Powód zmiany nazwał founder wprost: „strona jest bardziej prestiżowa, ale nie wygląda premium".
-Nunito Sans jest krojem humanistycznym o miękkich końcówkach i szerokich światłach — czyta się
-przyjaźnie, czyli odwrotnie do „precyzyjny, inżynierski". Geist ma cięte końcówki i ciaśniejsze
-światła. Przy ciaśniejszych światłach ujemny tracking nagłówków musiał zejść z `-.02em`
-na `-.015em`, bo przy starej wartości nagłówek zaczynał się zlepiać; stąd zmiana w „Zasadzie".
+**Epizod Geist (17–20 września) — zapis, żeby nie odkrywać tego drugi raz.** Między 17 a 20
+września krój był **wymieniony** na Geist: 49 880 B wobec 93 304 B, czyli o 47 % mniej, bo to
+była wymiana, a nie dodanie drugiego kroju. Powód nazwał founder wprost: „strona jest bardziej
+prestiżowa, ale nie wygląda premium". Nunito Sans jest krojem humanistycznym o miękkich
+końcówkach i szerokich światłach — czyta się przyjaźnie, czyli odwrotnie do „precyzyjny,
+inżynierski"; Geist ma cięte końcówki i ciaśniejsze światła. **Przy ciaśniejszych światłach
+ujemny tracking nagłówków musiał zejść na `-.015em`, bo przy `-.02em` nagłówek zaczynał się
+zlepiać** — czyli wymiana kroju zawsze pociąga za sobą przeliczenie trackingu, w obie strony.
+Zdjęte nie dlatego, że krój był zły, tylko dlatego, że cała strona wróciła do punktu wyjścia.
+Materiał leży pod tagiem `stan-2026-09-20`, podzbiory były robione `fontTools.subset` z fontu
+zmiennego, licencja SIL OFL 1.1 wymagała dystrybucji `Geist-OFL-LICENSE.txt`.
 
-Podzbiory zrobione z fontu zmiennego przez `fontTools.subset`, te same dwa zakresy znaków co
-wcześniej, komplet 18/18 polskich znaków sprawdzony po kodach, nie po wyglądzie w terminalu.
-Licencja SIL OFL 1.1 wymaga dystrybucji tekstu licencji: `site/public/fonts/Geist-OFL-LICENSE.txt`.
+**Zastrzeżenie, które zostaje prawdziwe niezależnie od kroju:** drugi krój OBOK obecnego
+rozsadza budżet fontów (93 KB + ~70 KB > 150 KB). Wymiana jest tania, dodanie nie jest.
+
+Komplet 18/18 polskich znaków sprawdzać po kodach, nie po wyglądzie w terminalu.
 
 #### Niepoprawnie
 
@@ -2015,14 +2022,14 @@ h1 { font-family: "Instrument Serif", serif; font-size: 72px; }
 #### Poprawnie
 
 ```css
-@font-face { font-family: "Geist"; src: url("/fonts/Geist-var-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; font-display: swap; font-weight: 100 900; }
-:root { --font-sans: "Geist", "Segoe UI", system-ui, -apple-system, sans-serif; --font-display: var(--font-sans); --text-xs: .75rem; --text-sm: .875rem; --text-base: 1rem; --text-lg: 1.125rem; --text-xl: 1.25rem; }
-h1 { font: 600 var(--text-display)/1.05 var(--font-display); letter-spacing: -.015em; text-wrap: balance; overflow-wrap: anywhere; }
+@font-face { font-family: "Nunito Sans"; src: url("/fonts/NunitoSans-var-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; font-display: swap; font-weight: 200 1000; }
+:root { --font-sans: "Nunito Sans", "Segoe UI", system-ui, -apple-system, sans-serif; --font-display: var(--font-sans); --text-xs: .75rem; --text-sm: .875rem; --text-base: 1rem; --text-lg: 1.125rem; --text-xl: 1.25rem; }
+h1 { font: 600 var(--text-display)/1.05 var(--font-display); letter-spacing: -.02em; text-wrap: balance; overflow-wrap: anywhere; }
 .lbl { font-size: var(--text-xs); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
 ```
 
 ```html
-<link rel="preload" as="font" type="font/woff2" href="/fonts/Geist-var-latin.woff2" crossorigin />
+<link rel="preload" as="font" type="font/woff2" href="/fonts/NunitoSans-var-latin.woff2" crossorigin />
 ```
 
 #### Test
@@ -2032,10 +2039,10 @@ h1 { font: 600 var(--text-display)/1.05 var(--font-display); letter-spacing: -.0
 grep -rnE "font-size:\s*[0-9.]+px" site/src --include=*.css | grep -vE "styles/tokens.css|axis|chart"
 grep -rnoE "text-\[[0-9.]+px\]" site/src --include=*.tsx
 # serif / mono / CDN: 0 trafień
-grep -rniE "serif\b|font-mono|font-family:\s*\"?(Inter|Roboto|Arial|Geist Mono|JetBrains)|fonts\.googleapis|fonts\.gstatic" site/src site/index.html | grep -v "sans-serif"
+grep -rniE "serif\b|font-mono|font-family:\s*\"?(Inter|Roboto|Arial|Geist|Geist Mono|JetBrains)|fonts\.googleapis|fonts\.gstatic" site/src site/index.html | grep -v "sans-serif"
 # fonty self-hosted i preload
 ls site/public/fonts/*.woff2; grep -n 'rel="preload" as="font"' site/index.html
-# budżet fontów ≤ 100 KB (Geist solo; dziś 49 880 B)
+# budżet fontów ≤ 100 KB (Nunito Sans solo; dziś 93 304 B)
 du -k site/public/fonts/*.woff2
 ```
 
@@ -3870,31 +3877,39 @@ Na każdej trasie (`/`, `/narzedzia`, `/narzedzia/:slug`, `/oferta`, `/faq`, `/r
 
 - **≤ 1 element `<video>` GRAJĄCY JEDNOCZEŚNIE, i to wyłącznie na trasie `/`**, wyłącznie przy `pointer: fine` i wyłącznie po `window.load`; na **18 pozostałych trasach twarde 0** (samo „≤ 1 na trasę" formalnie dopuszczałoby klip na `/oferta`),
 
-  **ZMIANA 2026-09-15 (decyzja Karola, zastępuje D37 na trasie `/`).** Trasa `/`
-  jest prezentacją i niesie **osiem paneli z łagodnymi pętlami generatywnymi**,
-  po jednej na scenę: „Każde pojedyncze z tych zdjęć będzie POWTARZAJĄCYM SIĘ
-  ŁAGODNIE GIFEM." Limit zmienił się więc z „jednego ELEMENTU w DOM" na „jednego
-  GRAJĄCEGO dekodera", bo osiem paneli musi istnieć w układzie, żeby pas obrazu
-  był ciągły — ale grać wolno tylko temu, którego widać najwięcej.
-  Egzekwuje to `presentation/loopConductor.ts`: panele meldują widoczność,
-  dyrygent puszcza jeden i pauzuje resztę, a karta w tle pauzuje wszystkie.
-  **Mechanizm awarii, przed którym broni ten limit, jest ten sam co wcześniej**
-  (dwa dekodery = spadek fps i grzanie, na iOS dodatkowy kontekst GPU), więc
-  liczba „jeden naraz" NIE jest negocjowalna — negocjowalna była tylko liczba
-  elementów w DOM.
-- **treść tego odtwarzania zależy od trasy:**
-  - na `/` to **pętle prezentacji** (wyżej). Wymóg „nagranie prawdziwego
-    narzędzia" z D37 dotyczył hero starej strony głównej, a ta trasa już nie
-    istnieje — `components/HeroMedia.tsx` został w repo, ale **żadna trasa go nie
-    renderuje** (stan na 2026-09-15). Slot dowodu nie jest przez pętle zajęty,
-    bo dowodem na tej stronie są trzynaście podstron narzędzi z żywymi
-    dashboardami, nie jeden kadr w nagłówku,
-  - gdyby hero z nagraniem kiedyś wróciło: gra **raz**, bez `loop`, i zatrzymuje
-    się na ostatniej klatce — i wtedy **nie wolno go łączyć z pętlami**, bo to
-    byłyby dwa autoodtwarzania na jednej trasie,
-- ≤ 1 ruchome tło łącznie (wideo LUB canvas WebGL `GLSLHills` LUB nic); wideo hero i GLSL Hills nigdy razem. W v1 `three` jest poza `dependencies`, więc realnie: tylko wideo,
+  **POWRÓT DO D37 2026-09-21 (decyzja Karola: „Musimy wrócić do punktu wyjścia").**
+  Wyjątek z 15 września na osiem paneli z pętlami generatywnymi **WYGASŁ razem
+  z prezentacją**: `src/presentation/**` i `loopConductor.ts` nie istnieją, trasa `/`
+  jest znów zwykłym landingiem. Obowiązuje pierwotne brzmienie: na `/` gra
+  **jedno nagranie prawdziwego narzędzia w hero** (`components/HeroMedia.tsx`,
+  `hero-production-v1.webm/mp4`), raz, bez `loop`, zatrzymane na ostatniej klatce.
+  **Mechanizm awarii jest niezmienny od pierwszej wersji reguły** (dwa dekodery =
+  spadek fps i grzanie, na iOS dodatkowy kontekst GPU), więc „jeden naraz" nigdy
+  nie było negocjowalne — negocjowalna była tylko liczba elementów w DOM i ta
+  negocjacja właśnie się skończyła.
+- **treść tego odtwarzania:** wyłącznie nagranie prawdziwego narzędzia (D37).
+  Pętla generatywna na jakiejkolwiek trasie jest złamaniem reguły — trzy podejścia
+  (13.09 kreskówka, 15.09 pętle, 17.09 instrument) founder odrzucił, a materiał
+  generatywny został wycofany ze strony w całości.
+- ≤ 1 ruchome tło łącznie (wideo LUB canvas WebGL `GLSLHills` LUB nic); wideo hero i GLSL Hills nigdy razem.
+
+  **⚠️ TEN PUNKT JEST DZIŚ ZŁAMANY I JEST TO DŁUG ZASTANY, NIE REGRESJA.**
+  Zmierzone w Chromium 2026-09-21 na `dist`, 1440×900: `/` ma **jedno grające
+  `<video>` (`hero-production-v1.webm`, `currentTime` 3,2 s) ORAZ jeden canvas
+  WebGL 1440×900** — dwie ruchome warstwy naraz, dokładnie to, czego punkt
+  zabrania. Wcześniejsze brzmienie tej reguły tłumaczyło się zdaniem „w v1 `three`
+  jest poza `dependencies`, więc realnie: tylko wideo" — **to zdanie nigdy nie było
+  prawdziwe**: `three` stoi w `site/package.json` i `App.tsx` renderuje `<GLSLHills>`
+  przy `pointer: fine`. Reguła opisywała stan zamierzony, nie zmierzony, i dlatego
+  nie złapała tego przez dziewięć dni.
+  Na `pointer: coarse` konfliktu nie ma: canvas się nie renderuje (bug kompozytora
+  iOS, `useAnimatedBg`), a wideo jest odcięte przez `(pointer: fine)`.
+  **Do rozstrzygnięcia przez foundera, bo to wybór wyglądu, nie usterka do cichej
+  naprawy:** albo tło WebGL schodzi z `/` (zostaje gradient `.bg-layer`, wideo hero
+  gra), albo wideo hero schodzi do kadru statycznego (`HeroPoster`, wzgórza zostają).
+  Tańsza i mniej widoczna jest druga droga — kadr i tak jest elementem LCP.
 - **klipy hover ściany S3 (v1: dokładnie cztery, pierwszy rząd po featured) nie liczą się jako autoplay**, bo startują wyłącznie z intencji użytkownika (`mouseenter` z progiem 120 ms albo `focus-visible`), ale **maksimum jeden gra jednocześnie** (singleton modułowy), a hero jest w tym czasie **zapauzowane** przez `IntersectionObserver`: nigdy dwa dekodery naraz,
-- pętle sekcyjne i tła PODSTRON („tło-pętla /oferta", „/narzedzia") NIE POWSTAJĄ (synthesis §2.6.1 „Co NIE powstaje generatywnie"). Wyjątek z 2026-09-15 dotyczy **wyłącznie trasy `/`** i wyłącznie paneli prezentacji; dopisanie pętli na jakiejkolwiek innej trasie pozostaje złamaniem reguły.
+- pętle sekcyjne i tła PODSTRON („tło-pętla /oferta", „/narzedzia") NIE POWSTAJĄ (synthesis §2.6.1 „Co NIE powstaje generatywnie"). Wyjątek z 2026-09-15 na panele prezentacji **wygasł 2026-09-21 razem z prezentacją**; dopisanie pętli na JAKIEJKOLWIEK trasie, włącznie z `/`, jest dziś złamaniem reguły.
 
 Wideo nie jest treścią: `aria-hidden="true"`, `tabIndex={-1}`, zero NATYWNYCH kontrolek (`controls`), zero dźwięku, a strona bez niego niczego nie traci (test: zdejmij `<video>` → treść i CTA identyczne).
 
@@ -3904,8 +3919,7 @@ Dwa warianty tego przycisku, zależnie od tego, co gra na trasie:
 
 | Gdzie | Element | Etykieta |
 |---|---|---|
-| prezentacja `/` (osiem pętli) | `.pr-pause` w `PresentationChrome`, stan w `loopConductor` | „Zatrzymaj ruch / Stop motion", po pauzie „Wznów ruch / Resume motion" |
-| hero z nagraniem narzędzia (dziś nieaktywne) | `hero-media-toggle` | „Zatrzymaj podgląd / Pause preview" — bo to podgląd narzędzia, nie tło |
+| hero z nagraniem narzędzia (`/`, aktywne od 2026-09-21) | `hero-media-toggle` w `HeroMedia.tsx` | „Zatrzymaj podgląd / Pause preview" — bo to podgląd narzędzia, nie tło |
 
 Stan pauzy jest **jeden na całą witrynę** (`sessionStorage`, klucz `klarow:media:paused`): dla człowieka „zatrzymaj ruch" jest decyzją o stronie, a nie o pliku. Przycisk pojawia się WYŁĄCZNIE, gdy coś faktycznie gra — po odrzuceniu bramek (`pointer: coarse`, `prefers-reduced-motion`, `saveData`) nie ma go wcale, bo kontrolka URUCHAMIAJĄCA ruch po odrzuceniu bramek jest zakazana (`media-video-gating`).
 
@@ -4140,7 +4154,7 @@ Media ruchome mają DOKŁADNIE dwa dozwolone miejsca:
 
 1. **Kontener hero**: `.hero { position: relative; overflow: hidden }` + `.hero-media { position: absolute; inset: 0; overflow: hidden }` z `<img>` posterem (kadr produktu), opcjonalnym `<img>` gruntu i `<video>` (`object-fit: cover`); ewentualny overlay jako `::after` w tym samym kontenerze. Kolejność malowania wynika z **kolejności w DOM**, nie z `z-index`: grunt → poster → wideo → `::after` → `.hero-content` (`position: relative`, bez `z-index`); przycisk pauzy stoi PO `.hero-media`, więc maluje się wyżej bez `z-index`.
 2. **Kafel ściany S3** dla klipów hover: `.tool-tile { position: relative; overflow: hidden }` + `<video>` `position: absolute` z longhandami, `pointer-events: none`. Nigdy `fixed`, nigdy poza kafel.
-3. **Panel prezentacji** (`.pr-panel`, od 2026-09-15): `position: relative; overflow: hidden` + `<img>` kadru i `<video>` pętli jako `position: absolute` z longhandami, `aria-hidden` na kontenerze. Dopisane, bo trasa `/` jest teraz pionowym pasem ośmiu kadrów, a nie hero (decyzja Karola, patrz `media-one-autoplay-per-route`). Panel spełnia ten sam warunek konstrukcyjny co dwa punkty wyżej — **nie tworzy ani kontekstu stackingu, ani bloku zawierającego dla `position: fixed`** — i to jest jedyny powód, dla którego wolno go dopisać: `overflow: hidden` sam w sobie nie robi żadnej z tych dwóch rzeczy, a `transform`, `filter` i `will-change` robią obie i dlatego na `.pr-panel` ich NIE MA.
+3. ~~**Panel prezentacji** (`.pr-panel`, 2026-09-15 – 2026-09-21)~~ — **WYGASŁO**. Punkt dopisano, gdy trasa `/` była pionowym pasem ośmiu kadrów; po powrocie do punktu wyjścia 2026-09-21 klasa `.pr-panel` nie istnieje w żadnym pliku, więc dozwolone miejsca wracają do dwóch powyżej. **Warunek konstrukcyjny, dla którego wolno było ten punkt dopisać, zostaje jako wiedza na przyszłość i obowiązuje każde nowe miejsce na wideo:** kontener nie może tworzyć ani kontekstu stackingu, ani bloku zawierającego dla `position: fixed` — `overflow: hidden` nie robi żadnej z tych dwóch rzeczy, a `transform`, `filter` i `will-change` robią obie.
 4. **`.bg-layer`** (tylko plan B: `GLSLHills` canvas na desktopie; w v1 nieaktywny, bo `three` jest poza `dependencies`).
 
 Zakazane w `.content-layer` i jego potomkach: nowe `position: fixed` (poza `Navbar` i `<dialog>` natywnym), `z-index` na wrapperach sekcji, `transform`/`filter`/`backdrop-filter`/`perspective`/`will-change` na przodkach elementów `fixed`/`sticky`, `mix-blend-mode` na elemencie zawierającym treść, nieprzezroczyste tło na wrapperze roota (`#121212` na `.content-layer` zasłoniło tło w commicie 640a6f9: „Fix: tło znów widoczne").
@@ -4529,19 +4543,20 @@ Każdy plik w `site/public/media/` spełnia:
 | `hero-ground-v<N>.webp` (grunt, still Higgsfield) | ≤ 71 680 B (70 KB); wariant 800 px ≤ 30 720 B | `loading="lazy"`, nigdy preload (`perf-images-policy`) |
 | `hero-production-v<N>.lqip.webp` (opcjonalny) | ≤ 2 048 B | 48 px szerokości |
 | klipy hover `tools/<slug>-v<N>.webm` (**v1, dokładnie 4**) | ≤ 327 680 B (320 KB) | 960×600, 6–7 s, 24 fps, `-an`, `loop`, `preload="none"`; suma na trasie ≤ 1 331 200 B |
-| **pętla panelu** `presentation/panel-<scena>-v<N>.webm` (VP9) — **dokładnie 8, tylko trasa `/`** | ≤ 286 720 B (280 KB) | 800×800, 2,5–5 s, 18 fps CFR, `-an`, `loop`, `preload="none"`, `crf 44`, `-g 36`, dithering `noise=alls=3:allf=t+u` |
-| **pętla panelu** `presentation/panel-<scena>-v<N>.mp4` (H.264) | ≤ 245 760 B (240 KB) | `profile high`, `level 4.1`, `crf 32`, `+faststart`, `-an` |
+| ~~**pętla panelu** `presentation/panel-*`~~ — **WIERSZ WYGASŁ 2026-09-21** (prezentacja usunięta; gdyby kiedyś wróciła pętla 800×800: ≤ 280 KB VP9 `crf 44` / ≤ 240 KB H.264 `crf 32`, 18 fps CFR, `-an`, `preload="none"`) | — | — |
 | **kadr panelu** `presentation/panel-<scena>-v<N>.webp` | ≤ 61 440 B (60 KB) | 800×800, q ≈ 72, **KLATKA 0 pliku pętli**; jest zarazem `poster` i obrazem pod pętlą |
 | zrzuty dem `tools/<slug>-v<N>-1280.webp` | ≤ 122 880 B (120 KB) | 1280×800, q 80 (patrz `perf-images-policy`) |
 | miniatury `thumbs/<slug>-v<N>-640.webp` | ≤ 40 960 B (40 KB) | 640×400 |
 
-Długość: nagranie hero 8 s (dopuszczalne 6–10 s), klip hover 6–7 s, pętla panelu 2,5–5 s. Zawsze stała klatka (`-r`), zawsze bez ścieżki audio, zawsze dithering `noise=alls=3:allf=t+u` na gładkich płaszczyznach (anty-banding na OLED — dotyczy tak samo ciemnych gradientów, jak jasnego tynku w panelach prezentacji).
+Długość: nagranie hero 8 s (dopuszczalne 6–10 s), klip hover 6–7 s. (Wiersz „pętla panelu 2,5–5 s" wygasł 2026-09-21 razem z prezentacją.) Zawsze stała klatka (`-r`), zawsze bez ścieżki audio, zawsze dithering `noise=alls=3:allf=t+u` na gładkich płaszczyznach (anty-banding na OLED — dotyczy tak samo ciemnych gradientów, jak jasnych płaszczyzn).
 
 **PĘTLA PANELU MUSI DOMYKAĆ SIĘ MONTAŻEM, NIE OBIETNICĄ MODELU** (2026-09-15). Materiał generatywny prawie nigdy nie wraca do klatki startowej: zmierzone odchylenie ostatniej klatki od pierwszej sięgało 72–178/255 lokalnie, co na zapętleniu widać jako przeskok światła. Dlatego plik powstaje jako **tam i z powrotem**: fragment w przód, potem ten sam fragment w tył, z odciętą zdublowaną klatką na każdym zawrocie (`reverse,trim=start_frame=1:end_frame=<N-1>`). Pętla domyka się wtedy matematycznie, niezależnie od tego, co zrobił model. Sprawdzian: pierwsza i ostatnia klatka gotowego pliku różnią się średnio < 2,5/255 (resztą jest sam dithering).
 
 **PRZYCINAJ DO FRAGMENTU PRZED UCIECZKĄ.** Profil odchylenia od klatki zerowej pokazuje, gdzie model przestaje animować, a zaczyna wymyślać (para z czajnika rosnąca w chmurę, smuga światła przejeżdżająca przez pokój). Fragment bierzemy sprzed tego punktu — to jest jedyny sposób naprawy takiej wady, który nie kosztuje kredytów. **Transfer `/` desktop: ≤ 716 800 B (700 KB) do zdarzenia `load`** (bramka przeciw przemyceniu wideo przed LCP) **i ≤ 2 621 440 B (2,5 MB) na pełną wizytę bez klipów hover**; mobile ≤ 358 400 B (350 KB), w tym **0 B** mediów wideo.
 
-Osiem paneli prezentacji mieści się w tej wizycie z zapasem, ale tylko dlatego, że **suma ośmiu pętli plus ośmiu kadrów nie przekracza 1 835 008 B (1,75 MB)** — to jest twardy podbudżet trasy `/` i przy dokładaniu dziewiątej sceny trzeba go przeliczyć, a nie podnieść. Mobile dostaje z tego **0 B**: `.pr-panel` ma `display: none` poniżej 64rem, a `<img loading="lazy">` w kontenerze `display: none` nie jest pobierany przez żadną przeglądarkę — to jest mechanizm, na którym stoi zerowy budżet wideo na telefonie, więc zamiana tego `display: none` na `visibility` albo `opacity` cicho wysadziłaby budżet mobilny.
+**PODBUDŻET PANELI PREZENTACJI (1,75 MB na `/`) WYGASŁ 2026-09-21** razem z prezentacją — zostaje wyłącznie budżet całej wizyty wyżej. Stan dzisiejszy na `/`: **jedno nagranie hero** (`hero-production-v1.webm/mp4` + kadry), zero paneli.
+
+**Nauczka, która przeżyła prezentację i jest warta więcej niż jej budżet:** mobile dostawało z paneli **0 B**, bo `<img loading="lazy">` w kontenerze z `display: none` nie jest pobierany przez żadną przeglądarkę. To znaczy, że **zamiana `display: none` na `visibility: hidden` albo `opacity: 0` w dowolnym miejscu z mediami cicho wysadza budżet mobilny** — trzy własności wyglądają w przeglądzie kodu tak samo, a różnią się tym, czy plik w ogóle leci po sieci.
 
 **Gdyby wrócił wariant D37(b)** (pętla generatywna jako tekstura pod scrimem `.88` zamiast nagrania): obowiązuje inny zestaw, bo pod scrimem nie widać szczegółu: WebM ≤ 737 280 B, MP4 ≤ 1 003 520 B, AV1 ≤ 573 440 B, kadr 1440×616, plus osobny poster pętli ≤ 46 080 B, który **nigdy nie jest preloadowany**. Zestawów nie wolno mieszać: obowiązuje ten zgodny z wybranym wariantem D37.
 
@@ -5260,30 +5275,31 @@ ls site/dist/assets | grep -cE '^(DemoReport|ProductionDashboard|QualityGate|Tas
 
 ### 5.5 perf-fonts-budget
 
-**Fonty self-hosted w public/fonts, zero CDN, ≤ 100 KB w fazie 1 (Geist solo) / ≤ 150 KB po ewentualnym drugim kroju, preload latin, font-display swap + size-adjust**
+**Fonty self-hosted w public/fonts, zero CDN, ≤ 100 KB w fazie 1 (Nunito Sans solo) / ≤ 150 KB po ewentualnym drugim kroju, preload latin, font-display swap + size-adjust**
 
 Impact: **HIGH** · Tagi: perf, fonts, privacy, cls, lcp · Źródło: synthesis §1.5 R4/§2.4.9/§2.5 (Nunito solo) · feasibility-perf §3.2/§9 p.5 · ui-kit-habits C3 (N3) · site-audit §1.8 (brak preload) · rozstrzygnięcie (2): PDF zostaje na Roboto · Dodano: 2026-09-12 · Plik: `rules/perf-fonts-budget.md`
 
 #### Zasada
 
-1. Wszystkie kroje w `site/public/fonts/*.woff2` (dziś: `Geist-var-latin.woff2` 32,7 KB + `Geist-var-latin-ext.woff2` 17,2 KB = **49,9 KB**; do 2026-09-17 Nunito Sans, 93,3 KB - krój WYMIENIONY, nie dodany, więc budżet zszedł o 47 %). Zero `fonts.googleapis.com`, `fonts.gstatic.com`, `rsms.me`, `cdn.jsdelivr.net`, `@fontsource` ładowanych z sieci.
-2. Budżet `dist/fonts`: **≤ 102 400 B (100 KB)** w fazie 1 (Geist solo, `--font-display` = alias `--font-sans`). Drugi krój TYLKO po (a) teście 2 mockupów zaakceptowanym przez founderów i (b) osadzeniu w PDF w tej samej fazie (statyczne TTF 400/600; decyzja o foncie v2); wtedy budżet **≤ 153 600 B (150 KB)** i transfer mobile `/` ≤ 350 KB musi się nadal domykać.
-3. `@font-face` z `unicode-range` (latin, latin-ext osobno), `font-display: swap`, fallback systemowy z `size-adjust`/`ascent-override` dopasowanym do Geist (CLS przy swapie ≈ 0): `@font-face { font-family: "Geist Fallback"; src: local("Segoe UI"), local("Arial"); size-adjust: 104%; ascent-override: 100%; descent-override: 35%; line-gap-override: 0% }`.
-4. `<link rel="preload" as="font" type="font/woff2" crossorigin>` TYLKO dla pliku latin (nie latin-ext, nie dla wagi nieużywanej nad foldem).
+1. Wszystkie kroje w `site/public/fonts/*.woff2` (dziś: `NunitoSans-var-latin.woff2` + `NunitoSans-var-latin-ext.woff2` = **93 304 B**, `@font-face` w `site/src/styles/company-ui.css`). Zero `fonts.googleapis.com`, `fonts.gstatic.com`, `rsms.me`, `cdn.jsdelivr.net`, `@fontsource` ładowanych z sieci.
+   **Epizod Geist (17–20.09):** krój był wymieniony na Geist (49 880 B, o 47 % mniej) i wrócił razem z całym `site/` przy powrocie do punktu wyjścia 2026-09-21. Szczegóły i nauczka o trackingu: `design-typography-scale`. Materiał pod tagiem `stan-2026-09-20`.
+2. Budżet `dist/fonts`: **≤ 102 400 B (100 KB)** w fazie 1 (jeden krój, `--font-display` = alias `--font-sans`). Nunito Sans zjada z tego 91 % — **zapas to 9 KB, nie połowa budżetu jak w epizodzie Geist**. Drugi krój TYLKO po (a) teście 2 mockupów zaakceptowanym przez founderów i (b) osadzeniu w PDF w tej samej fazie (statyczne TTF 400/600; decyzja o foncie v2); wtedy budżet **≤ 153 600 B (150 KB)** i transfer mobile `/` ≤ 350 KB musi się nadal domykać.
+3. `@font-face` z `unicode-range` (latin, latin-ext osobno), `font-display: swap`, fallback systemowy z `size-adjust`/`ascent-override` dopasowanym do kroju (CLS przy swapie ≈ 0). **Dziś tego fallbacku NIE MA** — `--font-sans` schodzi wprost na `"Segoe UI", system-ui`, bez `size-adjust`. To dług zastany (był nieobecny w obu stanach, przed i po epizodzie Geist), nie regresja po powrocie; bramka go nie łapie, bo mierzy wyłącznie bajty.
+4. `<link rel="preload" as="font" type="font/woff2" crossorigin>` TYLKO dla pliku latin (nie latin-ext, nie dla wagi nieużywanej nad foldem). **Dziś w `site/index.html` NIE MA tego tagu** (jedyny preload wskazuje kadr hero, `perf-lcp-poster-preload`) — dług zastany, obecny również przed epizodem Geist; punkt 4 jest więc wymaganiem do spełnienia, a nie opisem stanu.
 5. Wagi: variable font (jeden plik na subset); żadnych dodatkowych statycznych plików wag; UI używa 400/600/700 (nagłówki 600–700, nie 800).
 6. PDF (`lib/pdf.ts`): Roboto wbudowane w pdfmake (decyzja B, okno c1); API `pdfDoc({ font })` przyjmuje parametr, ale osadzenie kroju UI w vfs dopiero po decyzji founderów o foncie v2. Nie kopiować woff2 do vfs (pdfmake potrzebuje TTF).
 
 #### Mechanizm awarii (dlaczego)
 
 - CDN fontów = zewnętrzne żądanie na ścieżce krytycznej (DNS + TLS ~300 ms), dane o użytkowniku u dostawcy (persona „dane zostają u Ciebie"; narzędzia chodzą w LAN bez internetu), ryzyko blokera treści → brak fontu.
-- Budżet transferu mobile `/` bez wideo ≤ 350 KB: 60 (poster) + 135 (JS) + 20 (CSS) + 93 (font) + 10 (HTML) ≈ 320 przy Nunito solo; Geist (+70 KB) wysadza go (feasibility-perf §3.2).
+- Budżet transferu mobile `/` bez wideo ≤ 350 KB: 60 (poster) + 135 (JS) + 20 (CSS) + 93 (font) + 10 (HTML) ≈ 320 przy Nunito solo; drugi krój (+70 KB) wysadza go (feasibility-perf §3.2).
 - Bez preloadu latin przeglądarka odkrywa font po CSS → FOUT na pierwszym wejściu (site-audit §3.1 p.7); bez `size-adjust` swap fallback → Nunito przesuwa H1 o 1–2 linie (CLS 0,1+).
 - Dwa kroje = dwa pliki na ścieżce krytycznej i niespójność z PDF (dziś PDF na Roboto, UI na Nunito: świadomy dług).
 
 #### Niepoprawnie
 
 ```html
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
 ```
 
 ```css
@@ -5298,8 +5314,8 @@ Impact: **HIGH** · Tagi: perf, fonts, privacy, cls, lcp · Źródło: synthesis
   src: url("/fonts/NunitoSans-var-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
 @font-face { font-family: "Nunito Sans"; font-style: normal; font-weight: 200 1000; font-display: swap;
   src: url("/fonts/NunitoSans-var-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF; }
-@font-face { font-family: "Geist Fallback"; src: local("Segoe UI"), local("Arial"); size-adjust: 104%; ascent-override: 100%; descent-override: 35%; line-gap-override: 0%; }
-:root { --font-sans: "Nunito Sans", "Geist Fallback", system-ui, sans-serif; --font-display: var(--font-sans); }
+@font-face { font-family: "Nunito Fallback"; src: local("Segoe UI"), local("Arial"); size-adjust: 104%; ascent-override: 100%; descent-override: 35%; line-gap-override: 0%; }
+:root { --font-sans: "Nunito Sans", "Nunito Fallback", system-ui, sans-serif; --font-display: var(--font-sans); }
 ```
 
 ```html
@@ -5310,7 +5326,7 @@ Impact: **HIGH** · Tagi: perf, fonts, privacy, cls, lcp · Źródło: synthesis
 
 ```bash
 # budżet (Git Bash)
-du -cb site/public/fonts/*.woff2 | tail -1        # ≤ 102400 (faza 1) / ≤ 153600 (po decyzji Geist)
+du -cb site/public/fonts/*.woff2 | tail -1        # ≤ 102400 (faza 1) / ≤ 153600 (po decyzji o drugim kroju)
 ls site/public/fonts | wc -l                       # = 2 w fazie 1
 # zero CDN
 grep -rnE 'fonts\.googleapis|fonts\.gstatic|rsms\.me|@fontsource|cdn\.jsdelivr|unpkg' site/src site/index.html site/package.json   # = 0
