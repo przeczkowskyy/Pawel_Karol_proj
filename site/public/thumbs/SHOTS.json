@@ -2,42 +2,42 @@
   "engine": "webkit",
   "shots": {
     "audyt-jakosci-danych": {
-      "crop": "1104×385 css px @2x",
+      "crop": "1104×382 css px @2x",
       "files": [
         {
-          "bytes": 36814,
+          "bytes": 33254,
           "h": 800,
           "path": "/thumbs/audyt-jakosci-danych-v1-1280.webp",
           "quality": 82,
           "role": "rama huba / S3",
-          "sha256": "7cdff8a4959bc9910751840908d209c1d298277e9ae98a3e75c6c3bcce7855f3",
+          "sha256": "8b26404a0864fe5ff49dd8eb82d26fdc73eb5485bc8ca8166b4258441744290b",
           "w": 1280
         },
         {
-          "bytes": 13314,
+          "bytes": 11366,
           "h": 400,
           "path": "/thumbs/audyt-jakosci-danych-v1-640.webp",
           "quality": 82,
           "role": "srcset ramy",
-          "sha256": "822672b34b780c2f652e3ba50fda2f9bf0e064e334741ad4cea340a985a5de8e",
+          "sha256": "03df66bf8f845d0d459010b5003342b7c8bebbbf95828edb66549f5e863ec8a8",
           "w": 640
         },
         {
-          "bytes": 7824,
+          "bytes": 7218,
           "h": 300,
           "path": "/thumbs/audyt-jakosci-danych-v1-480.webp",
           "quality": 82,
           "role": "kafel ściany",
-          "sha256": "74f13acd0000fdb40f62e13352485ab17c53b6749b72d4efb1da96da8415f923",
+          "sha256": "6baee93dc4522610367b1bc70ff61d0df57c683a5fce9bfc6e856e7786a16403",
           "w": 480
         },
         {
-          "bytes": 3968,
+          "bytes": 3338,
           "h": 200,
           "path": "/thumbs/audyt-jakosci-danych-v1-320.webp",
           "quality": 82,
           "role": "srcset kafla",
-          "sha256": "c067ea4ce196791437fd55a6c20462e8a77d0b0853ece5022222f718e0f6ca90",
+          "sha256": "5c0fa96a18d59f91d9d0b13585fa7cad709886257e085a19cae67268fa9523ef",
           "w": 320
         }
       ],
@@ -46,42 +46,42 @@
       "source": "/narzedzia/audyt-jakosci-danych"
     },
     "billing-us-g703": {
-      "crop": "1082×432 css px @2x",
+      "crop": "1068×292 css px @2x",
       "files": [
         {
-          "bytes": 37970,
+          "bytes": 38038,
           "h": 800,
           "path": "/thumbs/billing-us-g703-v1-1280.webp",
-          "quality": 66,
+          "quality": 70,
           "role": "rama huba / S3",
-          "sha256": "08f16af4a11b931cc2b95252bda5f51408b08f6b4c3f3730a7fb1b2cd66364fd",
+          "sha256": "44014372f7501cf28a2f7f49b769044d147179e3ab527955440cdadf911294ce",
           "w": 1280
         },
         {
-          "bytes": 15870,
+          "bytes": 14374,
           "h": 400,
           "path": "/thumbs/billing-us-g703-v1-640.webp",
           "quality": 78,
           "role": "srcset ramy",
-          "sha256": "13ac34e9e219686b1a72509b6025c3eb0da42a6fc21b4485d4a75ac8b7643547",
+          "sha256": "9527c22e15c07385f42cef00d025d1fcb5f7a5dfe276811f3c3d7e94e1a6a608",
           "w": 640
         },
         {
-          "bytes": 11412,
+          "bytes": 9736,
           "h": 300,
           "path": "/thumbs/billing-us-g703-v1-480.webp",
           "quality": 82,
           "role": "kafel ściany",
-          "sha256": "649fc56718b274cb9fd6a44b3776dc11290b1cb9afbc0991537bbb72cbcffb58",
+          "sha256": "14fab3fd656733f49c228525a2a6195124bc13ecd63101b43ca1b598c7a6f242",
           "w": 480
         },
         {
-          "bytes": 5898,
+          "bytes": 4918,
           "h": 200,
           "path": "/thumbs/billing-us-g703-v1-320.webp",
           "quality": 82,
           "role": "srcset kafla",
-          "sha256": "4a550e36bffd0fdaeb7fb7eae52e6f5f5ead344f334a76102ec3ed2fe76e4b01",
+          "sha256": "38850361dac82e5575cbfb6802645c48c14df7640c0d4343860758fccb8a0d28",
           "w": 320
         }
       ],
@@ -90,42 +90,42 @@
       "source": "/narzedzia/billing-us-g703"
     },
     "dashboard-produkcji": {
-      "crop": "1104×633 css px @2x",
+      "crop": "1104×628 css px @2x",
       "files": [
         {
-          "bytes": 38208,
+          "bytes": 35896,
           "h": 800,
           "path": "/thumbs/dashboard-produkcji-v1-1280.webp",
           "quality": 82,
           "role": "rama huba / S3",
-          "sha256": "1d27d5b01b1b5e9156f77c82e754576a14b4cfd874c5edc1d5167dbdcc5d3300",
+          "sha256": "6c9e84ca2da17478c923137e0263a998e067957c1d5bb22e765888dcb1015a61",
           "w": 1280
         },
         {
-          "bytes": 14720,
+          "bytes": 13016,
           "h": 400,
           "path": "/thumbs/dashboard-produkcji-v1-640.webp",
           "quality": 82,
           "role": "srcset ramy",
-          "sha256": "10241293c82e0528cf2f5e7774dc80f6f867518dfd22464442f067f09f281542",
+          "sha256": "5db26223c794184f806c205d47ea4d686e6d1cce22c2d9a9b7098495e87f6415",
           "w": 640
         },
         {
-          "bytes": 8828,
+          "bytes": 8052,
           "h": 300,
           "path": "/thumbs/dashboard-produkcji-v1-480.webp",
           "quality": 82,
           "role": "kafel ściany",
-          "sha256": "d603ad7b5e2caa264e30f349a8c1b8bc188d1ce91279fa3350e9b709b80114f3",
+          "sha256": "1ce27269cf695937b5a0eada000f5d1527cf48376d6045c678eb63721448cf00",
           "w": 480
         },
         {
-          "bytes": 4808,
+          "bytes": 4240,
           "h": 200,
           "path": "/thumbs/dashboard-produkcji-v1-320.webp",
           "quality": 82,
           "role": "srcset kafla",
-          "sha256": "8457cbec4537bc1dac937c3454603d445a01f9064473433c6c2e539c1f2b47e7",
+          "sha256": "7c4cf1e291610a0147002599c78e72931df5688e69b912d01b9298e6a8d0de4c",
           "w": 320
         }
       ],
@@ -134,42 +134,42 @@
       "source": "/narzedzia/dashboard-produkcji"
     },
     "hero-production-still": {
-      "crop": "1104×492 css px @2x",
+      "crop": "1104×489 css px @2x",
       "files": [
         {
-          "bytes": 67640,
+          "bytes": 61644,
           "h": 1080,
           "path": "/media/hero-production-still-v1-1920.webp",
           "quality": 82,
           "role": "kadr hero 16:9 (zadanie F1)",
-          "sha256": "199311cf96cba1251403377f2b14eec584cc2ad1a9610ea2c2d0d1bba69b4308",
+          "sha256": "50de4183c26bc41b356e7de809691c9590b5582d159757a72b22a45fbfd75896",
           "w": 1920
         },
         {
-          "bytes": 28708,
+          "bytes": 25256,
           "h": 540,
           "path": "/media/hero-production-still-v1-960.webp",
           "quality": 82,
           "role": "srcset hero 16:9",
-          "sha256": "864f9126137f67aa86d4c1176740f15beb7bc45d70317acef34e25fbe6fa9bf2",
+          "sha256": "88da114cbbf8b763e28e1f26b1853fdc5ea7c73d3cfc6ee35071d6e817731d27",
           "w": 960
         },
         {
-          "bytes": 56258,
+          "bytes": 50974,
           "h": 1000,
           "path": "/media/hero-production-still-v1-1600.webp",
           "quality": 82,
           "role": "kadr hero 16:10 (perf-images-policy)",
-          "sha256": "4b89a81c9445ccd8e7811d7d1149730941efbca81c1ac67b48d3d43ba45f8ad0",
+          "sha256": "fbb8a3fa9a64e8ea3f95990b92fcaada9a1b9b7f7f97f1f33c5759ee358fabc7",
           "w": 1600
         },
         {
-          "bytes": 22956,
+          "bytes": 20034,
           "h": 500,
           "path": "/media/hero-production-still-v1-800.webp",
           "quality": 82,
           "role": "srcset hero 16:10",
-          "sha256": "45f9f45003eb9420702041cf881349ece4424028cd97ce8bfa85d0791b66d2b3",
+          "sha256": "ec1d4319267a881157fefdca602d9d3056a2723e23bc2000e02e6463019f40fa",
           "w": 800
         }
       ],
@@ -178,42 +178,42 @@
       "source": "/narzedzia/dashboard-produkcji"
     },
     "import-z-rekoncyliacja": {
-      "crop": "1104×517 css px @2x",
+      "crop": "1104×513 css px @2x",
       "files": [
         {
-          "bytes": 37320,
+          "bytes": 38020,
           "h": 800,
           "path": "/thumbs/import-z-rekoncyliacja-v1-1280.webp",
-          "quality": 74,
+          "quality": 82,
           "role": "rama huba / S3",
-          "sha256": "12f8bc5de5ed3c312e1444d158019312936fdcaa56fb495c0632ee44c32fbbd4",
+          "sha256": "03bbd81ad7b684fcfcebfbe9984ad0530b188691e4aaf88249b7ccb4cdca1693",
           "w": 1280
         },
         {
-          "bytes": 15102,
+          "bytes": 13102,
           "h": 400,
           "path": "/thumbs/import-z-rekoncyliacja-v1-640.webp",
-          "quality": 78,
+          "quality": 82,
           "role": "srcset ramy",
-          "sha256": "c13b9de679ab5f1eaaa518ede890e1b21a11a0c729a972c1b6f87a9dd07240a7",
+          "sha256": "40701950a22c2429b5491a755d3aedf96c67c58c17b9bcf562b4acc0b597bb2e",
           "w": 640
         },
         {
-          "bytes": 10350,
+          "bytes": 8320,
           "h": 300,
           "path": "/thumbs/import-z-rekoncyliacja-v1-480.webp",
           "quality": 82,
           "role": "kafel ściany",
-          "sha256": "01a0a2a055f743963290e5beb298d80bf7793aabc60ac9717156dad98015e954",
+          "sha256": "f6d696bca0ec7501b2890ba6b4e72fe16fcefeb84aec1de5cdbd4986686a9dc7",
           "w": 480
         },
         {
-          "bytes": 5168,
+          "bytes": 3826,
           "h": 200,
           "path": "/thumbs/import-z-rekoncyliacja-v1-320.webp",
           "quality": 82,
           "role": "srcset kafla",
-          "sha256": "be106fa68bc5f48c3d44cb42da14a29e384492ffc0f2a52ad82b627a9f624ebb",
+          "sha256": "6cf2089613f8721cd4ebcaa2a6426ebd96fd8ec24344b5fbce2804d81854ee5d",
           "w": 320
         }
       ],
@@ -222,42 +222,42 @@
       "source": "/narzedzia/import-z-rekoncyliacja"
     },
     "importy-erp": {
-      "crop": "1104×451 css px @2x",
+      "crop": "1104×447 css px @2x",
       "files": [
         {
-          "bytes": 36008,
+          "bytes": 35194,
           "h": 800,
           "path": "/thumbs/importy-erp-v1-1280.webp",
-          "quality": 78,
+          "quality": 82,
           "role": "rama huba / S3",
-          "sha256": "36ccb10e329c8d48e7075e7b3eb386458e0412cdd7603b21685a8aa9e1f8a933",
+          "sha256": "5b2046a081e82ab3e7286265dc1f5dd1da025cd4e0b5034a8ad03de1c2bee867",
           "w": 1280
         },
         {
-          "bytes": 14770,
+          "bytes": 12244,
           "h": 400,
           "path": "/thumbs/importy-erp-v1-640.webp",
           "quality": 82,
           "role": "srcset ramy",
-          "sha256": "e66cc54f64de87e3cf10c95aed5e5c6dec2ca05206d55c9b7d1baf68fcd6136a",
+          "sha256": "c7d8c61cb00bd2cf104a58e64ce76a23f581f9c3131352750813096b9690829c",
           "w": 640
         },
         {
-          "bytes": 8874,
+          "bytes": 7174,
           "h": 300,
           "path": "/thumbs/importy-erp-v1-480.webp",
           "quality": 82,
           "role": "kafel ściany",
-          "sha256": "248d2e58ff486cc040bef2407c0ee92a3ddf700f8b099573b9d6e8264e2ee444",
+          "sha256": "c9773bec3cf1e54c7a73f277b3e84b3d0081a6bd5713b51d500269e07bbe8845",
           "w": 480
         },
         {
-          "bytes": 4064,
+          "bytes": 3218,
           "h": 200,
           "path": "/thumbs/importy-erp-v1-320.webp",
           "quality": 82,
           "role": "srcset kafla",
-          "sha256": "f50be7b69c99d559fc14327cedbb841044af1a416e27b4e96ecefa16ae98f66e",
+          "sha256": "25d4ab80d38b7a8388601a0bf4cb6a6821cc3ecf70836a5e820d8d864a98aeae",
           "w": 320
         }
       ],
@@ -266,42 +266,42 @@
       "source": "/narzedzia/importy-erp"
     },
     "kalkulator-transz": {
-      "crop": "1104×322 css px @2x",
+      "crop": "1104×317 css px @2x",
       "files": [
         {
-          "bytes": 28836,
+          "bytes": 25490,
           "h": 800,
           "path": "/thumbs/kalkulator-transz-v1-1280.webp",
           "quality": 82,
           "role": "rama huba / S3",
-          "sha256": "badf9ed1c58fa6fce6700812a38b47645fe58c9e5ac5a1034a985744d2feb6a8",
+          "sha256": "b2eb071742db8b6eba973cfc71fc81035c6b3ec3ad0df8d9fbcbe305a8939ad9",
           "w": 1280
         },
         {
-          "bytes": 10728,
+          "bytes": 8962,
           "h": 400,
           "path": "/thumbs/kalkulator-transz-v1-640.webp",
           "quality": 82,
           "role": "srcset ramy",
-          "sha256": "f8bbd135e24091f5781af08cbca7fbaa97ea3ea43e9c736cb88c03d30d432dde",
+          "sha256": "f563a46921dc7d5e09002b9732b86fd7aa3fdffc05c674a5d26d743c50becb59",
           "w": 640
         },
         {
-          "bytes": 7016,
+          "bytes": 5940,
           "h": 300,
           "path": "/thumbs/kalkulator-transz-v1-480.webp",
           "quality": 82,
           "role": "kafel ściany",
-          "sha256": "d835a4145779be5f8141c9358998fcd91ccc0fc7e6d5e82d4f1395707252d6f6",
+          "sha256": "08828ce3ab0528979026a8aa61d84e008c48c8c06895a2aefb52902f87e1ff2a",
           "w": 480
         },
         {
-          "bytes": 3208,
+          "bytes": 2606,
           "h": 200,
           "path": "/thumbs/kalkulator-transz-v1-320.webp",
           "quality": 82,
           "role": "srcset kafla",
-          "sha256": "87e671fde9357e3f74d966c74932bb1d7bba8230e2778da2c01b8696934d4fa5",
+          "sha256": "796070e1c38ffcb1a4b73091e4c4316b53a842a29f70a201c370a4448eda9d31",
           "w": 320
         }
       ],
@@ -310,42 +310,42 @@
       "source": "/narzedzia/kalkulator-transz"
     },
     "kontroling-kosztow": {
-      "crop": "357×646 css px @2x",
+      "crop": "357×643 css px @2x",
       "files": [
         {
-          "bytes": 36660,
+          "bytes": 31162,
           "h": 800,
           "path": "/thumbs/kontroling-kosztow-v1-1280.webp",
           "quality": 82,
           "role": "rama huba / S3",
-          "sha256": "44401780b5308ca3f23451dd004bea34b04c19a5dfa907cbcd1ba4c74e7dfa14",
+          "sha256": "993d1f8e725445f100ed2a99303f4b921431d0b9f71d863264bcd29ec19c00f7",
           "w": 1280
         },
         {
-          "bytes": 13918,
+          "bytes": 11366,
           "h": 400,
           "path": "/thumbs/kontroling-kosztow-v1-640.webp",
           "quality": 82,
           "role": "srcset ramy",
-          "sha256": "3faf8ee26a4e67c9c3c896117672ea2e319b110b8aaed8868d9a9530288f2afb",
+          "sha256": "3cd4afdb18d1dcb32036a6e4f632951c8cf92d7451423b221fd27516a33713c8",
           "w": 640
         },
         {
-          "bytes": 8982,
+          "bytes": 7270,
           "h": 300,
           "path": "/thumbs/kontroling-kosztow-v1-480.webp",
           "quality": 82,
           "role": "kafel ściany",
-          "sha256": "be316a789682545b3cfd66b0ca3bf496cf18292e8ec0f7feb1787aec1147649c",
+          "sha256": "6920ae9c1f03aa22da03a6f9a7c04fce3e0a3fc267182affece8254099f59a2f",
           "w": 480
         },
         {
-          "bytes": 4548,
+          "bytes": 3572,
           "h": 200,
           "path": "/thumbs/kontroling-kosztow-v1-320.webp",
           "quality": 82,
           "role": "srcset kafla",
-          "sha256": "725afcac34826898f0c7a597d25758204d96ce277d6ee1a32ee554455d729634",
+          "sha256": "763396c0ee311692fef3deb9711bfc1ecf8db2ba841c3e11212442ddf5ebd39d",
           "w": 320
         }
       ],
@@ -360,42 +360,42 @@
       "skipped": "brak dashboardu (kind: case): kadr powstaje z diagramu SVG KsefFlow"
     },
     "obieg-przelewow": {
-      "crop": "1104×789 css px @2x",
+      "crop": "1104×778 css px @2x",
       "files": [
         {
-          "bytes": 36156,
+          "bytes": 32772,
           "h": 800,
           "path": "/thumbs/obieg-przelewow-v1-1280.webp",
           "quality": 82,
           "role": "rama huba / S3",
-          "sha256": "f6a97b8a3047e67a16b98a377f01cf04c2ddcaac44082d93c43267bbd8e29dc1",
+          "sha256": "0e3d98b9d46aedf09b698005087ccfea78552b180ea3b35408b1421b13570742",
           "w": 1280
         },
         {
-          "bytes": 13666,
+          "bytes": 11596,
           "h": 400,
           "path": "/thumbs/obieg-przelewow-v1-640.webp",
           "quality": 82,
           "role": "srcset ramy",
-          "sha256": "b97d8e29f4b01bac92792f6fc6eafe12dd37cfd71cedd13093cf6f7ea98d979b",
+          "sha256": "6b43a58e952349ae5a8bd6f73031f852243f0f4cce75de06708afb2005c677ec",
           "w": 640
         },
         {
-          "bytes": 8612,
+          "bytes": 7192,
           "h": 300,
           "path": "/thumbs/obieg-przelewow-v1-480.webp",
           "quality": 82,
           "role": "kafel ściany",
-          "sha256": "544fa00ded9672709614891556ba7f3f19c6f61610a857644418e084a9ee294f",
+          "sha256": "269347bfac5a163df2621cf350066ec67afe55836e59946875798dd592e17e65",
           "w": 480
         },
         {
-          "bytes": 4024,
+          "bytes": 3512,
           "h": 200,
           "path": "/thumbs/obieg-przelewow-v1-320.webp",
           "quality": 82,
           "role": "srcset kafla",
-          "sha256": "f01eacadfa675eb2c32e18fa83d344395b89c40340978e1a631b5256ff239780",
+          "sha256": "5ce9371ae8630e3a8ff76af9c0549b41f8de4c82078dd38eda1197cfe2315874",
           "w": 320
         }
       ],
@@ -407,39 +407,39 @@
       "crop": "1104×504 css px @2x",
       "files": [
         {
-          "bytes": 21056,
+          "bytes": 19046,
           "h": 800,
           "path": "/thumbs/os-czasu-zadan-v1-1280.webp",
           "quality": 82,
           "role": "rama huba / S3",
-          "sha256": "88c60cb347ae8c4f694202dd2eb64d7ef3156c9bbfeaedbc291a8548760803f1",
+          "sha256": "bf2b3b74314825b55f607f1da17785a124ec31912532d0e4a08f4613b4bef21d",
           "w": 1280
         },
         {
-          "bytes": 7506,
+          "bytes": 6726,
           "h": 400,
           "path": "/thumbs/os-czasu-zadan-v1-640.webp",
           "quality": 82,
           "role": "srcset ramy",
-          "sha256": "7a579e7bad407240d2558c4b5e23f3744737090c578e612cc8812745487e43f0",
+          "sha256": "7093b493c602ca8eba7b89ed721f31de7a3a50545ae145bf601fde8f7a0a2072",
           "w": 640
         },
         {
-          "bytes": 4906,
+          "bytes": 4390,
           "h": 300,
           "path": "/thumbs/os-czasu-zadan-v1-480.webp",
           "quality": 82,
           "role": "kafel ściany",
-          "sha256": "fd3e84e63f985fff7ddae830ce08915fd3cec6f824e320c9df1f614546e58b25",
+          "sha256": "450e8e66d4c96e6551515db45966f39b788bdb03ccdeb60afeb5d4371734cdcd",
           "w": 480
         },
         {
-          "bytes": 2792,
+          "bytes": 2450,
           "h": 200,
           "path": "/thumbs/os-czasu-zadan-v1-320.webp",
           "quality": 82,
           "role": "srcset kafla",
-          "sha256": "1c65e9a51a7280a891d9bbd91430cca2f2ef81891e2faeb73cac3091833835c9",
+          "sha256": "a09c47f3f70ce219af796c0a52e55581fb8478c4acd633f686545d59f7f3cda4",
           "w": 320
         }
       ],
@@ -448,42 +448,42 @@
       "source": "/narzedzia/os-czasu-zadan"
     },
     "protokoly-robocizny": {
-      "crop": "1104×501 css px @2x",
+      "crop": "1104×495 css px @2x",
       "files": [
         {
-          "bytes": 37894,
+          "bytes": 35892,
           "h": 800,
           "path": "/thumbs/protokoly-robocizny-v1-1280.webp",
-          "quality": 74,
+          "quality": 78,
           "role": "rama huba / S3",
-          "sha256": "f851c362ec58a12f9b183de899d59e528ca61c89d88778001f4557952b14d744",
+          "sha256": "e1f19424eb32eaca6ca30c6e7cf49a82f94f52874c4165cd6126d3339054e5af",
           "w": 1280
         },
         {
-          "bytes": 15662,
+          "bytes": 12910,
           "h": 400,
           "path": "/thumbs/protokoly-robocizny-v1-640.webp",
           "quality": 82,
           "role": "srcset ramy",
-          "sha256": "970d3e97fa19175e5937780180c63ee4b5767fd5b7acea816c1c0e75418c875b",
+          "sha256": "a1714d695fae1e626df8b53e2c3e9f944cae44dbefc2f5f4202229ba07834a00",
           "w": 640
         },
         {
-          "bytes": 9668,
+          "bytes": 7464,
           "h": 300,
           "path": "/thumbs/protokoly-robocizny-v1-480.webp",
           "quality": 82,
           "role": "kafel ściany",
-          "sha256": "45a15e992f42430f4bb63c6f897348da57322e034ae724c26f57d0dbca0c060b",
+          "sha256": "6dc5cafa42d9d364810de9f46cc9ba3bbed17b3f91982eb0c9f40850a4fc9237",
           "w": 480
         },
         {
-          "bytes": 4448,
+          "bytes": 3282,
           "h": 200,
           "path": "/thumbs/protokoly-robocizny-v1-320.webp",
           "quality": 82,
           "role": "srcset kafla",
-          "sha256": "0bc7d500efb79610030dddc15ec198ef8f1438b06863246d8897ba02ef64a917",
+          "sha256": "4a5f897e1a7ab58d60a99102b64bb0ccbb71cfd861cb5ec78620991666960605",
           "w": 320
         }
       ],
@@ -492,42 +492,42 @@
       "source": "/narzedzia/protokoly-robocizny"
     },
     "raport-zarzadczy": {
-      "crop": "1104×961 css px @2x",
+      "crop": "1104×953 css px @2x",
       "files": [
         {
-          "bytes": 29394,
+          "bytes": 25628,
           "h": 800,
           "path": "/thumbs/raport-zarzadczy-v1-1280.webp",
           "quality": 82,
           "role": "rama huba / S3",
-          "sha256": "192435262eabc5283b51815cdde828b3d1e5f88b2c6e6f892e875e7db4a21f3f",
+          "sha256": "b7988b61ecce0ef370131e9dde5be8dc1b44bdc77f55a41cfc7a39cf49f3885c",
           "w": 1280
         },
         {
-          "bytes": 10782,
+          "bytes": 9286,
           "h": 400,
           "path": "/thumbs/raport-zarzadczy-v1-640.webp",
           "quality": 82,
           "role": "srcset ramy",
-          "sha256": "f9979d1f7d1a5b796c527cba313eda5c9bbb3c8273ddad7636d9719b720aa212",
+          "sha256": "30f8305337bd0d7770bb6b218502aab472ed078575040555229dac2f57e4cdf7",
           "w": 640
         },
         {
-          "bytes": 6740,
+          "bytes": 5770,
           "h": 300,
           "path": "/thumbs/raport-zarzadczy-v1-480.webp",
           "quality": 82,
           "role": "kafel ściany",
-          "sha256": "bbfa411a8526535984e0a921173207393f0e22c0d0ad5699adba1f2ffe7d671d",
+          "sha256": "814d8c742ae567c3cc4838cb3c0f7ef44feb9452e0b97b8f44b1718c4d9ca670",
           "w": 480
         },
         {
-          "bytes": 3698,
+          "bytes": 3088,
           "h": 200,
           "path": "/thumbs/raport-zarzadczy-v1-320.webp",
           "quality": 82,
           "role": "srcset kafla",
-          "sha256": "0e3b8cc17e02d165e0f899e0da523b6e0f4db4544e7c57a1e7a6faab4dac213d",
+          "sha256": "fac006e23d373c1432e0691b0cb3cb304f09d67f99bc9b2e05e26776c78d3b4e",
           "w": 320
         }
       ],
@@ -539,39 +539,39 @@
       "crop": "1104×450 css px @2x",
       "files": [
         {
-          "bytes": 38394,
+          "bytes": 37776,
           "h": 800,
           "path": "/thumbs/rejestr-umow-v1-1280.webp",
-          "quality": 58,
+          "quality": 74,
           "role": "rama huba / S3",
-          "sha256": "636e9b71bad32a4d44443d2ed16e795701d929d5a9f3c8dcea742e4e55b4ffbf",
+          "sha256": "6fb7803c5ecf4f21f75b8552b97c207c536f30f757cb2c2851b705f49f3479d2",
           "w": 1280
         },
         {
-          "bytes": 15664,
+          "bytes": 14766,
           "h": 400,
           "path": "/thumbs/rejestr-umow-v1-640.webp",
-          "quality": 78,
+          "quality": 82,
           "role": "srcset ramy",
-          "sha256": "ab60242129468563dd8cd174905b17e2183100f5830052ccc5bb67440976c5df",
+          "sha256": "3753abfcb8be278b33a406fe2e114c28e30935d0e4766fa3cea919f6c391a309",
           "w": 640
         },
         {
-          "bytes": 10920,
+          "bytes": 9286,
           "h": 300,
           "path": "/thumbs/rejestr-umow-v1-480.webp",
           "quality": 82,
           "role": "kafel ściany",
-          "sha256": "8efdf8e3c915f873b7fa415afa320fd6d67c3a10b7dcab3242de3316e3360453",
+          "sha256": "364832a75649d2265dcfec806d9f4770c639f69ebf8c2043974e5ac59aae66d0",
           "w": 480
         },
         {
-          "bytes": 5194,
+          "bytes": 4046,
           "h": 200,
           "path": "/thumbs/rejestr-umow-v1-320.webp",
           "quality": 82,
           "role": "srcset kafla",
-          "sha256": "50d9cf1317f3d24ff03390777112728a3401abdaae51b454635e413d1f617f83",
+          "sha256": "5a1f3c2f9849b7a95fe843f42240e4171c4cda4c85e407daf2b30ecb8853925a",
           "w": 320
         }
       ],

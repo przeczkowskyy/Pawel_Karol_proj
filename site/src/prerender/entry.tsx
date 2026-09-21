@@ -4,9 +4,16 @@ import { getToolsWithSeo } from "@/data/toolsSeo";
 import { FAQ_I18N } from "@/data/faq";
 import { NOT_FOUND_COPY, PAGES_SEO, SKIP_LINK } from "@/data/pagesSeo";
 import { MESSAGING } from "@/data/messaging";
-import { HOME_BEATS, HOME_CLOSING, HOME_EXAMPLES } from "@/data/homeSections";
 import { RODO, type RodoObjection, type RodoSection } from "@/data/rodo";
 import { EMAIL, MAIL_HREF, ORIGIN, PHONE_DISPLAY, PHONE_E164, PHONE_HREF } from "@/data/contact";
+import {
+  HERO_ALT,
+  HERO_H,
+  HERO_POSTER,
+  HERO_POSTER_SIZES,
+  HERO_POSTER_SRCSET,
+  HERO_W,
+} from "@/data/media";
 import { ORG_JSONLD, toolJsonLd, faqPageJsonLd } from "@/components/Seo";
 
 /* Prerender (SSG): budowany osobno przez `vite build --ssr` i odpalany
@@ -130,57 +137,94 @@ function H2({ children }: { children: React.ReactNode }) {
 /* ── shell strony głównej (/) ───────────────────────────────────────── */
 
 function HomeShell() {
-  /* SHELL CZYTA TO SAMO ŹRÓDŁO CO KLIENT (`data/homeSections.ts`) I WYPISUJE
-     DOKŁADNIE TE SAME ZDANIA.
-
-     To nie jest ostrożność, tylko dwie naprawione awarie. Pierwsza: 13 września
-     trasa `/` renderowała co innego niż shell i crawler przez kilka dni
-     dostawał inną stronę niż człowiek, przy zielonym buildzie. Druga byłaby
-     świeża: po cięciu tekstu o 90 % kuszące jest zostawienie gęstego shella
-     „dla Google". To się nazywa cloaking i nie robimy tego — strona główna ma
-     tyle samo słów dla crawlera co dla człowieka, a długi ogon żyje na
-     podstronach, które i tak go mają (`toolsSeo.ts`, `/oferta`, `/faq`). */
-  const przyklady = getToolsWithSeo("pl").filter((t) =>
-    (HOME_EXAMPLES.slugs as readonly string[]).includes(t.slug),
-  );
   return (
     <ShellChrome>
-      {/* H1 to jedno zdanie marki z `messaging.ts`, nigdy kopia
-          (`copy-one-liner-single-source`). */}
+      {/* HERO bez JS (plan §3 S1): ten sam H1, ten sam lead z messaging.ts,
+          oba CTA jako zwykłe linki i kadr produktu jako obraz. Zero nagrania
+          i zero przycisku pauzy: nagranie montuje wyłącznie React po `load`
+          (bramka: zero wystąpień elementu video w plikach HTML z dist).
+          Kadr jest elementem LCP także tutaj, więc ma fetchPriority="high",
+          jawne wymiary i ten sam `srcset`, co preload w index.html. */}
       <h1 className="hero-title" style={HEAD}>{MESSAGING.oneLiner.pl}</h1>
-      <p className="mt-4 max-w-3xl text-sm" style={BODY}>{MESSAGING.subtext.pl}</p>
-
-      {HOME_BEATS.map((b) => (
-        <section key={b.id} id={b.id}>
-          <H2>{b.headline.pl}</H2>
-          <p className="mt-2 max-w-3xl text-sm" style={BODY}>{b.line.pl}</p>
-        </section>
-      ))}
-
-      <section>
-        <H2>{HOME_EXAMPLES.headline.pl}</H2>
-        <p className="mt-2 max-w-3xl text-sm" style={BODY}>{HOME_EXAMPLES.line.pl}</p>
-        <ul className="mt-2 flex flex-col gap-1.5 text-sm" style={BODY}>
-          {przyklady.map((t) => (
-            <li key={t.slug}>
-              <a href={`/narzedzia/${t.slug}`} style={LINK}>{t.name}</a>
-            </li>
-          ))}
-          <li>
-            <a href="/narzedzia" style={LINK}>{HOME_EXAMPLES.more.pl}</a>
-          </li>
-        </ul>
-      </section>
-
-      <section>
-        <H2>{HOME_CLOSING.headline.pl}</H2>
-        <p className="mt-2 max-w-3xl text-sm" style={BODY}>{HOME_CLOSING.line.pl}</p>
-        <p className="mt-6">
-          <a className="btn btn-primary" href={MAIL_HREF}>{MESSAGING.cta.primary.pl}</a>
-        </p>
-      </section>
-
+      <p className="hero-lead" style={BODY}>{MESSAGING.subtext.pl}</p>
+      <div className="hero-cta">
+        <a className="btn btn-primary" href={MAIL_HREF}>{MESSAGING.cta.primary.pl}</a>
+        <a className="btn btn-secondary" href="/narzedzia">{MESSAGING.cta.secondary.pl}</a>
+      </div>
+      <div className="hero-frame" style={{ marginTop: 32 }}>
+        <div className="hero-media">
+          <img
+            className="hero-shot"
+            src={HERO_POSTER}
+            srcSet={HERO_POSTER_SRCSET}
+            sizes={HERO_POSTER_SIZES}
+            alt={HERO_ALT.pl}
+            width={HERO_W}
+            height={HERO_H}
+            fetchPriority="high"
+            decoding="async"
+          />
+        </div>
+      </div>
+      <p className="mt-6 max-w-3xl text-sm" style={MUTED}>
+        {MESSAGING.zeroVendorCloud.pl}
+      </p>
       <ContactLine />
+
+      <H2>Co możemy zbudować</H2>
+      <p className="mt-2 max-w-3xl text-sm" style={MUTED}>
+        Nie mamy zamkniętego katalogu: jeśli proces żyje w plikach albo w ERP, zwykle da się go
+        zautomatyzować. Rodzaje narzędzi, które robimy:
+      </p>
+      <ul className="mt-2 flex flex-col gap-1.5 text-sm" style={BODY}>
+        <li><strong>Raporty i kontroling</strong>: panele zarządcze, marża i estymaty na żywo, zamknięcie miesiąca.</li>
+        <li><strong>Integracje i e-dokumenty</strong>: KSeF, e-faktury, API urzędowe, wymiana z ERP i systemami.</li>
+        <li><strong>Importy i scalanie danych</strong>: ERP ↔ Excel, łączenie źródeł, rekoncyliacja co do grosza.</li>
+        <li><strong>Obieg dokumentów</strong>: akceptacje, protokoły, rejestry, koniec obiegu w mailu.</li>
+        <li><strong>Panele i dashboardy</strong>: produkcja, KPI, płynność w jednym kadrze.</li>
+        <li><strong>Porządek w danych</strong>: audyt jakości, deduplikacja, czyszczenie i migracje.</li>
+      </ul>
+
+      <H2>Co już zrobiliśmy</H2>
+      <p className="mt-2 max-w-3xl text-sm" style={BODY}>
+        Zbudowaliśmy od środka ekosystem kilkunastu narzędzi dla firmy produkcyjno-budowlanej
+        (~30 równoległych projektów, klienci w USA): ~10 000 wierszy kosztów z ERP miesięcznie,
+        raport zarządczy w kilkanaście sekund zamiast godzin, kontrola sum co do grosza.
+        Osobnym wdrożeniem jest <a href="/narzedzia/kontroling-ksef" style={LINK}>kontroling na
+        danych z KSeF</a>: read-only integracja z oficjalnym API Ministerstwa Finansów.
+      </p>
+
+      <H2>To działa, więc boisz się ruszać. I słusznie</H2>
+      <p className="mt-2 max-w-3xl text-sm" style={MUTED}>
+        Nie każemy Ci migrować z Excela ani zmieniać sposobu pracy. Wchodzimy obok Twoich plików.
+        Makro po kimś, kto odszedł; ręczne przeklejanie tysięcy wierszy między ERP a arkuszami;
+        ciche pomyłki wychodzące u zarządu; raport składany godzinami; wszystko na jednej osobie:
+        te bóle znamy i to je usuwamy.
+      </p>
+
+      <H2>Dwa twarde wyróżniki: zero chmury i zero wróżenia</H2>
+      <p className="mt-2 max-w-3xl text-sm" style={BODY}>
+        „On-premise” deklaruje dziś każdy, my idziemy krok dalej. Narzędzia Klarow nie mają nawet
+        którędy wysłać Twoich danych: działają lokalnie, bez API, bez serwera, a dema na tej
+        stronie liczą w 100% w przeglądarce. Druga rzecz: {MESSAGING.determinism.pl} Każdą liczbę
+        możesz sprawdzić ręcznie dzięki jawnej ścieżce wyliczenia.
+      </p>
+
+      <H2>Zobacz konkrety</H2>
+      <ul className="mt-2 flex flex-col gap-1.5 text-sm" style={BODY}>
+        <li>
+          <a href="/narzedzia" style={LINK}>Przykłady realizacji</a>: klikalne dema i wdrożenia
+          u klienta (m.in. integracja z KSeF); to próbki, a Twoje narzędzie budujemy pod Twój proces.
+        </li>
+        <li>
+          <a href="/oferta" style={LINK}>Oferta: pilot na kopii</a>, czyli jeden proces, efekt w dni,
+          płatność 50/50; wycena po bezpłatnej diagnozie.
+        </li>
+        <li>
+          <a href="/faq" style={LINK}>Najczęstsze pytania</a>: bezpieczeństwo danych, koszt,
+          zgodność z ERP, los działających makr.
+        </li>
+      </ul>
 
       <section lang="en">
         <H2>Klarow in English</H2>
@@ -189,15 +233,15 @@ function HomeShell() {
         </p>
         <p className="mt-2 max-w-3xl text-sm" style={MUTED}>
           {MESSAGING.determinism.en} See the{" "}
-          <a href="/narzedzia" style={LINK}>tools</a>, the{" "}
+          <a href="/narzedzia" style={LINK}>work we've done</a>, the{" "}
           <a href="/oferta" style={LINK}>offer</a>, the <a href="/faq" style={LINK}>FAQ</a> and our{" "}
           <a href="/rodo" style={LINK}>privacy notice</a>.
         </p>
       </section>
 
       <p className="mt-8 text-xs" style={MUTED}>
-        Narzędzia na tej stronie liczą w Twojej przeglądarce i uruchamiają się z JavaScriptem.
-        {" "}© 2026 Klarow · Polska / USA
+        Interaktywna wersja strony (żywe dema) uruchamia się z JavaScriptem.
+        © 2026 Klarow · Polska / USA
       </p>
     </ShellChrome>
   );
@@ -209,24 +253,16 @@ function ToolsShell({ pl, en }: { pl: ToolItem[]; en: ToolItem[] }) {
   return (
     <ShellChrome>
       <ShellNav />
-      {/* Nagłówek i lead muszą zgadzać się ZNAK W ZNAK z `TOOLS_TXT` w `App.tsx`,
-          bo shell i klient renderują tę samą trasę. Etykieta „Realizacje" zeszła
-          2026-09-17 na decyzję D31: klientów płacących jest zero, więc słowo
-          „realizacja" (zlecenie wykonane dla klienta) było nadinterpretacją
-          na granicy `brand-honest-labels`.
-
-          Akapit o poprzedniej firmie zdjęty razem z nim. Opisywał ekosystem
-          kilkunastu narzędzi i liczby z projektów, których NIE WOLNO publikować
-          przed umową IP (CLAUDE.md zasada #3) — a „~30 równoległych projektów"
-          i „~10 000 wierszy miesięcznie" to dokładnie takie liczby, nawet bez
-          nazwy firmy. Nie miały też pokrycia w rejestrze dozwolonych liczb. */}
       <h1 className="mt-4 text-4xl font-extrabold tracking-tight" style={HEAD}>
-        Narzędzia, które zbudowaliśmy
+        Przykłady realizacji: dema i wdrożenia
       </h1>
       <p className="mt-4 max-w-3xl text-sm" style={MUTED}>
-        Nie mamy zamkniętego katalogu. Budujemy pod proces. Poniżej narzędzia
-        w pięciu działach; dwanaście z nich liczy na żywo w przeglądarce, na danych
-        przykładowych i bez logowania.
+        To nie pełna lista usług, tylko próbki tego, co już zbudowaliśmy. Większość odpalisz na
+        żywo na danych przykładowych (bez logowania); część to realne wdrożenia u klienta, jak
+        kontroling na danych z KSeF. Twoje narzędzie budujemy pod Twój proces. Wcześniej
+        zbudowaliśmy od środka ekosystem kilkunastu narzędzi dla firmy produkcyjno-budowlanej
+        (~30 równoległych projektów, klienci w USA): ~10 000 wierszy kosztów z ERP miesięcznie,
+        raport zarządczy w kilkanaście sekund i kontrola sum co do grosza.
       </p>
       {DEPTS.map((d) => (
         <section key={d.key}>

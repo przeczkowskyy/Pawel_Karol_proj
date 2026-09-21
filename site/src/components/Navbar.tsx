@@ -24,15 +24,13 @@ import { useLang, pick, type Lang } from "@/i18n";
    NAP (telefon) przychodzi z data/contact.ts; literał numeru w tym pliku
    byłby drugim źródłem prawdy (code-contact-single-source). */
 
-/* PUSTA LISTA I TAK MA ZOSTAĆ. Decyzja Karola z 2026-09-13: „bez zakładek, bez
-   niczego". Strona główna jest prezentacją: wszystko, co odwiedzający ma zobaczyć,
-   widzi przewijając, więc menu tylko rozpraszałoby od historii.
-
-   Adresy /narzedzia, /oferta, /faq i trzynaście podstron narzędzi ŻYJĄ dalej, są
-   w mapie strony i łapią ruch z wyszukiwarki na zapytania długiego ogona. Po prostu
-   nie zabierają uwagi. Dopisanie tu pozycji COFA tę decyzję, więc wymaga rozmowy
-   z founderami, a nie jednej linijki w przelocie. */
-const LINKS: readonly { to: string; label: { pl: string; en: string } }[] = [];
+const LINKS = [
+  // D31: „Narzędzia", nie „Realizacje". „Realizacja" znaczy „zlecenie dla klienta",
+  // a klientów jest zero; URL /narzedzia zostaje bez zmian (inwestycja SEO od lipca).
+  { to: "/narzedzia", label: { pl: "Narzędzia", en: "Tools" } },
+  { to: "/oferta", label: { pl: "Oferta", en: "Offer" } },
+  { to: "/faq", label: { pl: "FAQ", en: "FAQ" } },
+] as const;
 
 const T = {
   pl: {

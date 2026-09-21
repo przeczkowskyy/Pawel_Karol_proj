@@ -166,14 +166,10 @@ function readTokens() {
 function fontFace() {
   /* font wbudowany: rasteryzacja nie może zależeć od tego, co jest zainstalowane w systemie */
   const dir = path.join(SITE, "public", "fonts");
-  /* Krój wymieniony na Geist 2026-09-17. Nazwy plików MUSZĄ zgadzać się
-     z `@font-face` w `src/styles/globals.css`: przy rozjeździe karty renderują
-     się krojem systemowym i odchodzą od marki, a skrypt i tak kończy się
-     sukcesem, więc nikt tego nie zauważa do czasu wysłania linku. */
-  return ["Geist-var-latin.woff2", "Geist-var-latin-ext.woff2"]
+  return ["NunitoSans-var-latin.woff2", "NunitoSans-var-latin-ext.woff2"]
     .map((file) => {
       const b64 = fs.readFileSync(path.join(dir, file)).toString("base64");
-      return `@font-face{font-family:"Geist";font-style:normal;font-weight:100 900;
+      return `@font-face{font-family:"Nunito Sans";font-style:normal;font-weight:200 1000;
       src:url(data:font/woff2;base64,${b64}) format("woff2")}`;
     })
     .join("\n");
@@ -201,7 +197,7 @@ ${fonts}
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{width:${W}px;height:${H}px;overflow:hidden}
 body{background:linear-gradient(180deg,var(--steel-900) 0%,var(--background) 58%,var(--background) 100%);
-  font-family:"Geist",sans-serif;-webkit-font-smoothing:antialiased;
+  font-family:"Nunito Sans",sans-serif;-webkit-font-smoothing:antialiased;
   display:flex;flex-direction:column;padding:60px 72px}
 .wordmark{font-weight:800;font-size:27px;letter-spacing:.15em;color:var(--foreground-strong)}
 .rule{height:1px;background:var(--border);margin:26px 0 0}

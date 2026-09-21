@@ -14,50 +14,6 @@
    zwykłe podstrony ze standardowym scrollem (react-router): /, /narzedzia,
    /oferta, /faq oraz /narzedzia/:slug. */
 
-/* ── Krój: Geist (SIL OFL 1.1) ──────────────────────────────────────────
-   DEKLARACJA STOI TUTAJ, NIE W `company-ui.css`, i to jest celowe: kit jest
-   zwendorowaną kopią i jego aktualizacja polega na nadpisaniu pliku świeżą
-   wersją, więc wszystko, co w nim dopiszemy, ginie przy najbliższej
-   synchronizacji. Ten arkusz ładuje się przed kitem, więc `@font-face` działa
-   tak samo, a przeżywa.
-
-   DLACZEGO ZMIANA (decyzja Karola 2026-09-17): „strona jest bardziej
-   prestiżowa, ale nie wygląda premium". Research zgodnie wskazuje typografię
-   jako czynnik numer jeden tego wrażenia. Nunito Sans jest krojem humanistycznym
-   o miękkich końcówkach i szerokich światłach — czyta się przyjaźnie, czyli
-   dokładnie odwrotnie do „precyzyjny, inżynierski, drogi".
-
-   Geist ma cięte końcówki, ciasne światła i mocniejszy kontrast grubości.
-   Zaprojektowany przez Vercel z basement.studio pod interfejsy techniczne.
-
-   BUDŻET POSZEDŁ W DÓŁ, NIE W GÓRĘ: 49 880 B wobec 93 304 B Nunito Sans
-   (limit `perf-fonts-budget` to 102 400 B). Podzbiory zrobione z fontu
-   zmiennego przez `fontTools.subset`, te same dwa zakresy znaków co wcześniej,
-   komplet 18/18 polskich znaków sprawdzony po kodach.
-
-   Licencja OFL wymaga dystrybucji tekstu licencji razem z fontem:
-   `public/fonts/Geist-OFL-LICENSE.txt`. */
-@font-face {
-  font-family: "Geist";
-  font-style: normal;
-  font-weight: 100 900;
-  font-display: swap;
-  src: url(/fonts/Geist-var-latin.woff2) format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
-    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
-    U+2212, U+2215, U+FEFF, U+FFFD;
-}
-@font-face {
-  font-family: "Geist";
-  font-style: normal;
-  font-weight: 100 900;
-  font-display: swap;
-  src: url(/fonts/Geist-var-latin-ext.woff2) format("woff2");
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
-    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
-    U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-
 /* ── Szkielet strony BEZ zależności od Tailwinda ────────────────────────
    Warstwa tła i warstwa treści na czystym CSS: na starych WebKitach
    (iPhone bez świeżego iOS) nowoczesne konstrukcje Tailwinda v4 potrafią
@@ -77,22 +33,15 @@
   pointer-events: none;
   /* statyczny „awaryjny pejzaż": delikatna stalowa łuna od dołu, widoczna wtedy,
      gdy WebGL padnie (Lockdown Mode / limit kontekstów / bloker) i canvas
-     się nie narysuje; z canvasem siedzi pod nim i nie przeszkadza.
-
-     MOTYW JASNY (2026-09-13): wartości były wpisane na stałe pod czerń
-     #121212, więc po przejściu na ciepły papier zostawały czarnym prostokątem
-     pod całą stroną. Teraz łuna idzie z tokenu motywu, a podkład z `--background`.
-     Bez literału-fallbacku: `tokens.css` jest importowany PRZED tym plikiem
-     (kolejność wymuszona na górze arkusza), więc `--background` istnieje zawsze,
-     a literał tylko łamałby `design-tokens-only`. */
+     się nie narysuje; z canvasem siedzi pod nim i nie przeszkadza */
   background:
     radial-gradient(
       120% 85% at 50% 100%,
-      rgba(var(--media-tint-rgb), 0.1) 0%,
-      rgba(var(--media-tint-rgb), 0.04) 45%,
-      rgba(var(--veil-rgb), 0) 75%
+      rgba(168, 180, 194, 0.14) 0%,
+      rgba(168, 180, 194, 0.05) 45%,
+      rgba(18, 18, 18, 0) 75%
     ),
-    var(--background);
+    #121212;
   isolation: isolate;
 }
 .content-layer {
@@ -189,33 +138,6 @@
 }
 :root .e-ico {
   color: var(--foreground-faint); /* 4,59:1 na karcie (--surface) */
-}
-
-/* ── Główne CTA: płaska powierzchnia z tokenu, nigdy gradient ─────────────
-   `company-ui.css` ma `.btn-primary` wpisany na stałe jako stalowy gradient
-   (#B9C4D1 → #96A3B3). Reguła marki mówi „primary CTA = płaska biel na czerni",
-   a `design-no-glass-no-blur` zakazuje gradientu na przycisku — kit łamie więc
-   obie, i to NIEZALEŻNIE od motywu.
-
-   Do 2026-09-17 nadpisanie stało pod `html[data-theme="light"]`, bo powstało przy
-   migracji na jasny papier (tam gradient dawał 1,9:1 na białym tekście, daleko
-   poniżej AA). Po powrocie na ciemną stal zdjęcie selektora motywu jest
-   poprawką, nie cofnięciem: `--cta`/`--on-cta` rozwiązują się same w obie strony
-   (ciemny: #FAFAFA na #121212 = 17,95:1; jasny: #111827 na papierze = 17,74:1),
-   więc jedna reguła obsługuje oba kierunki i gradient znika wszędzie.
-
-   Kit ładuje się PO tym arkuszu, więc nadpisanie potrzebuje wyższej
-   specyficzności: `html` przed klasą wystarcza. Znika razem z kitem. */
-html .btn-primary,
-html .btn-primary:hover {
-  background: var(--cta);
-  color: var(--on-cta);
-  border-color: var(--cta);
-  box-shadow: none;
-}
-html .btn-primary:hover {
-  background: var(--cta-hover);
-  border-color: var(--cta-hover);
 }
 
 /* Skalowanie dużych ekranów NIE idzie już przez powiększanie całego dokumentu
@@ -406,20 +328,3 @@ html .btn-primary:hover {
     transition: none;
   }
 }
-
-/* Tekst tylko dla czytników ekranu. Utrzymywany świadomie mimo braku
-   konsumenta po skasowaniu strony głównej v2: to narzędzie dostępności,
-   a nie styl sekcji, i wraca przy pierwszym `role="status"`.
-   Nie `display: none`, bo wtedy czytnik też go nie zobaczy. */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-  border: 0;
-}
-

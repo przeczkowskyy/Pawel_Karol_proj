@@ -78,17 +78,7 @@ export default function Seo({
     setMeta("property", "og:site_name", ORG_NAME);
     setMeta("property", "og:locale", "pl_PL");
     setMeta("property", "og:locale:alternate", "en_US");
-    /* KARTA SPOŁECZNOŚCIOWA PER TRASA. Ta sama logika co w `scripts/prerender.mjs`
-       (funkcja `ogImageTag`), bo po nawigacji wewnątrz aplikacji prerender już
-       nie działa, a użytkownik może skopiować adres z paska z dowolnej podstrony.
-       Klucz wynika ze ścieżki: „/” → home, „/narzedzia/<slug>" → <slug>. */
-    const ogKey = path === "/" ? "home" : path.split("/").filter(Boolean).pop();
-    const ogUrl = `${ORIGIN}/og/${ogKey}.png`;
-    setMeta("property", "og:image", ogUrl);
-    setMeta("property", "og:image:width", "1200");
-    setMeta("property", "og:image:height", "630");
-    setMeta("name", "twitter:image", ogUrl);
-    setMeta("name", "twitter:card", "summary_large_image");
+    setMeta("name", "twitter:card", "summary");
     setMeta("name", "twitter:title", title);
     setMeta("name", "twitter:description", description);
 
