@@ -108,31 +108,45 @@ Pętli jeszcze nie ma? Wtedy do Claude Design idzie sam PNG ze stilla: `_mastery
 
 ## H. Tło statyczne na stronę (jedyny krok potrzebny w v1)
 
-Master 4K z Higgsfield zostaje w `_mastery/`. Na stronę idzie plik źródłowy w `site/src/assets/`,
-a warianty AVIF i WebP w kilku szerokościach generuje **Astro w buildzie** (komponent `<Picture>`), więc
-nie robimy tego ręcznie.
+Master z Higgsfield zostaje w `_mastery/`. Na stronę idzie plik źródłowy w `site/src/assets/`, a warianty AVIF
+i WebP w kilku szerokościach generuje **Astro w buildzie** (`<Picture>`).
+
+### H1. Przyciemnienie i skalowanie (zmierzone na masterze z 22.09)
+Generator daje tło jaśniejsze niż nasz token: zmierzone `#15181D` zamiast `#0D1014`. Mnożnik **0,62** naprawia
+dwie rzeczy naraz — tło trafia w `#0D0F12`, a najjaśniejszy piksel w strefie tekstu spada z 98 do 68, czyli
+kontrast dla `--papier` rośnie z **5,4:1 do 9,3:1**. Dzięki temu pod nagłówkiem nie jest potrzebna żadna tabliczka.
 
 ```bash
-# 1. przycięcie do dokładnych proporcji i rozsądnego rozmiaru źródła
-ffmpeg -i _mastery/tlo-m-master-4k.png \
-  -vf "crop=w='min(iw,ih*9/16)':h='min(ih,iw*16/9)':x='(iw-ow)/2':y='(ih-oh)/2',scale=1440:2560:flags=lanczos" \
-  -frames:v 1 site/src/assets/tlo-m.v1.png
+ffmpeg -i _mastery/tlo-m-master.png   -vf "colorchannelmixer=rr=0.62:gg=0.62:bb=0.62,scale=1440:-1:flags=lanczos"   site/src/assets/tlo-m.v1.png
+```
+Mnożnik dobieramy pod konkretną generację: celem jest narożnik `#0D1014` ±2 i `YMAX` w strefie tekstu poniżej 70.
 
-ffmpeg -i _mastery/tlo-d-master-4k.png \
-  -vf "crop=w='min(iw,ih*16/9)':h='min(ih,iw*9/16)':x='(iw-ow)/2':y='(ih-oh)/2',scale=2560:1440:flags=lanczos" \
-  -frames:v 1 site/src/assets/tlo-d.v1.png
-
-# 2. kontrola: kolor tła w czterech narożnikach (ma być zbliżony do #0D1014)
-for xy in "0:0" "1432:0" "0:2552" "1432:2552"; do
-  ffmpeg -v error -i site/src/assets/tlo-m.v1.png -vf "crop=8:8:${xy},scale=1:1:flags=area,format=rgb24" \
-    -frames:v 1 -f rawvideo - | od -An -tu1
-done
+### H2. Kontrola (obie komendy muszą przejść przed commitem)
+```bash
+# kolor tła w narożniku — oczekujemy ok. 13 15 18
+ffmpeg -v error -i site/src/assets/tlo-m.v1.png -vf "crop=8:8:0:0,scale=1:1:flags=area,format=rgb24"   -frames:v 1 -f rawvideo - | od -An -tu1
+# najjaśniejszy piksel w strefie tekstu (górne 55%) — oczekujemy YMAX < 70
+ffmpeg -i site/src/assets/tlo-m.v1.png -vf "crop=1440:1419:0:0,signalstats,metadata=print" -f null - 2>&1 | grep YMAX
 ```
 
-**Wygaszanie do czerni robi CSS, nie obraz.** Nad tłem leży jedna warstwa:
-`linear-gradient(to bottom, transparent 0%, rgba(13,16,20,.6) 35%, #0D1014 75%)`, a przy tekście dodatkowo
-płaskie przyciemnienie. Dzięki temu siłę wygaszenia regulujemy bez nowej generacji, a przy okazji mamy pewność,
-że kontrast tekstu wychodzi ponad 7:1.
+### H3. Kontynuacja przy przewijaniu: odbicie w pionie
+Strona jest dłuższa niż jeden kadr, więc tło **powtarzamy z odbiciem**: kadr, ten sam kadr obrócony w pionie,
+kadr, i tak dalej. Sprawdzone 22.09 na tym masterze: **szew jest niewidoczny**, bo ścieżki przechodzą przez linię
+odbicia bez przerwania. Zero dodatkowych generacji i zero dodatkowych kilobajtów.
 
-**Budżet:** źródło do 2 MB, wariant AVIF serwowany na telefon do 180 KB. Jeśli AVIF wychodzi większy,
-zmniejszamy szerokość źródła, a nie jakość.
+W CSS wystarczy druga warstwa z `transform: scaleY(-1)` ustawiona pod pierwszą (albo `background-repeat: repeat-y`
+na kaflu złożonym z kadru i jego odbicia). Wygaszanie do czerni i tak przykrywa dolne powtórzenia.
+
+Podgląd szwu do oceny:
+```bash
+ffmpeg -y -i site/src/assets/tlo-m.v1.png -vf "crop=1440:500:0:2080" _mastery/_a.png
+ffmpeg -y -i site/src/assets/tlo-m.v1.png -vf "vflip,crop=1440:500:0:0" _mastery/_b.png
+ffmpeg -y -i _mastery/_a.png -i _mastery/_b.png -filter_complex "[0:v][1:v]vstack=inputs=2" _mastery/_szew.png
+```
+
+### H4. Rozdzielczość
+- **Nie potrzebujemy 4K.** Telefon 390 px przy DPR 3 to 1170 px, więc źródło 1440 px w pełni wystarcza.
+- Desktop potrzebuje osobnego kadru poziomego (TLO-D), a nie powiększenia pionowego.
+- Po 4K sięgamy dopiero wtedy, gdy na telefonie widać miękkość linii.
+
+**Budżet:** źródło do 2 MB, wariant AVIF serwowany na telefon do 180 KB.
