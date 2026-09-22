@@ -1,0 +1,43 @@
+<!-- @dsCard group="Podstawy" -->
+<!DOCTYPE html>
+<html lang="pl"><head><meta charset="utf-8"><title>Klarow — tło strony</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=JetBrains+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="../tokens.css">
+<style>
+body{margin:0;padding:32px;background:var(--tlo);color:var(--papier);font-family:var(--font-display)}
+.lead{color:var(--papier-2);font-size:14px;max-width:64ch;margin:0 0 24px}
+.warstwy{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.demo{position:relative;height:420px;border:1px solid var(--powierzchnia-2);border-radius:var(--promien-m);overflow:hidden}
+.obraz{position:absolute;inset:0;background-image:url("https://klarow.com/podglad/tlo-m.webp");background-size:cover;background-position:top center}
+.grad{position:absolute;inset:0;background:var(--wygaszenie)}
+.tekst{position:absolute;inset:0;padding:18px;display:flex;flex-direction:column;justify-content:flex-start}
+.tekst h3{font-size:22px;line-height:1.05;letter-spacing:-.02em;margin:0}
+.tekst p{font-size:14px;line-height:1.45;margin:10px 0 0}
+.podpis{font-family:var(--font-mono);font-size:11px;color:var(--papier-2);margin-top:8px}
+h2{font-size:15px;margin:32px 0 10px;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.08em;color:var(--papier-2)}
+ul{font-size:14px;line-height:1.6;max-width:70ch;padding-left:18px}
+code{font-family:var(--font-mono);font-size:12px;color:var(--sygnal)}
+</style></head><body>
+<h1 style="font-size:24px;margin:0 0 6px">Tło strony</h1>
+<p class="lead">Jedna grafika pod całą treścią: sieć kabli i połączeń neuronowych, wygaszana do czerni. To jedyny element dekoracyjny na stronie — nie ma drugiego. Grafika jest nieruchoma, przewija się razem z treścią i powtarza przez odbicie w pionie, więc puste pole kadru przepływa i nie zostaje w jednym miejscu ekranu.</p>
+
+<div class="warstwy">
+  <div class="demo"><div class="obraz"></div><div class="tekst"><p class="podpis">1 · sama grafika</p></div></div>
+  <div class="demo"><div class="obraz"></div><div class="grad"></div><div class="tekst"><p class="podpis">2 · grafika + wygaszenie</p></div></div>
+  <div class="demo"><div class="obraz"></div><div class="grad"></div><div class="tekst">
+    <h3>Automatyzujemy to, co ktoś u&nbsp;Was dziś przepisuje ręcznie.</h3>
+    <p>Łączymy magazyn, księgowość, Excel i&nbsp;dokumenty, żeby dane płynęły same.</p>
+    <p class="podpis">3 · z tekstem — tak wygląda hero</p>
+  </div></div>
+</div>
+
+<h2>Zasady</h2>
+<ul>
+  <li><b>Przyciemnienie robimy w eksporcie</b>, nie w CSS: mnożnik ok. <code>0.62</code> sprowadza tło grafiki do <code>#0D0F12</code> i ścina najjaśniejszy piksel strefy tekstu poniżej 70 jasności. Dzięki temu nagłówek nie potrzebuje pod sobą tabliczki.</li>
+  <li><b>Wygaszanie robi CSS</b>, warstwą <code>--wygaszenie</code>. Siłę regulujemy bez nowej generacji.</li>
+  <li><b>Kontrast mierzymy na grafice</b>, w najjaśniejszym możliwym miejscu, nie na czystym kolorze. Próg: 7:1 dla tekstu ciągłego.</li>
+  <li><b>Powtórzenie przez odbicie w pionie</b> — szew jest niewidoczny, bo ścieżki przechodzą przez linię odbicia.</li>
+  <li><b>Podstrony dostają inny fragment kadru</b> (<code>background-position</code>), żeby nie wyglądały jak kopia strony głównej.</li>
+  <li><b>Tło nigdy nie jest elementem interfejsu.</b> Nic się na nim nie dzieje, nic nie miga, nie ma paralaksy.</li>
+</ul>
+</body></html>

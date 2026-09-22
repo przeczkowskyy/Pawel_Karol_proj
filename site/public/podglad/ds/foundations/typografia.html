@@ -1,0 +1,37 @@
+<!-- @dsCard group="Podstawy" -->
+<!DOCTYPE html>
+<html lang="pl"><head><meta charset="utf-8"><meta name="robots" content="noindex, nofollow"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Klarow — typografia</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=JetBrains+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="../tokens.css">
+<style>
+body{margin:0;padding:32px;background:var(--tlo);color:var(--papier);font-family:var(--font-display)}
+.lead{color:var(--papier-2);font-size:14px;max-width:62ch;margin:0 0 28px}
+.wiersz{border-top:1px solid var(--powierzchnia-2);padding:18px 0;display:grid;grid-template-columns:150px 1fr;gap:20px;align-items:baseline}
+.meta{font-family:var(--font-mono);font-size:11px;color:var(--papier-2);line-height:1.6}
+.h1{font-size:40px;line-height:1.02;letter-spacing:-.02em;font-weight:700}
+.h1d{font-size:64px;line-height:1.02;letter-spacing:-.02em;font-weight:700}
+.h2{font-size:30px;line-height:1.08;letter-spacing:-.02em;font-weight:700}
+.tekst{font-size:17px;line-height:1.5}
+.eyebrow{font-family:var(--font-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--papier-2)}
+.etykieta{font-family:var(--font-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--papier-2)}
+.cyfry{font-family:var(--font-mono);font-size:34px;color:var(--sygnal);font-variant-numeric:tabular-nums}
+.znak-wodny{font-size:17px;line-height:1.5;color:var(--papier-2)}
+</style></head><body>
+<h1 style="font-size:24px;margin:0 0 6px">Typografia</h1>
+<p class="lead">Dwa kroje. Bricolage Grotesque niesie treść, JetBrains Mono wszystko, co jest „maszynowe”: etykiety sekcji, cyfry kalkulatora, kroki procesu. Polskie znaki sprawdzamy zawsze pangramem, bo to pierwszy test, który odsiewa źle wczytany font.</p>
+
+<div class="wiersz"><div class="meta">H1 mobile<br>clamp(34–40px)<br>700 · 1.02 · −0.02em<br>max 3 linie</div><div class="h1">Automatyzujemy to, co ktoś u&nbsp;Was dziś przepisuje ręcznie.</div></div>
+<div class="wiersz"><div class="meta">H1 desktop<br>64–72px</div><div class="h1d">Zażółć gęślą jaźń</div></div>
+<div class="wiersz"><div class="meta">H2<br>30px · 700 · 1.08</div><div class="h2">Ile kosztuje Was ręczna robota?</div></div>
+<div class="wiersz"><div class="meta">Tekst<br>17px · 400 · 1.5<br>max 56ch</div><div class="tekst">Łączymy magazyn, księgowość, Excel i&nbsp;dokumenty, żeby dane płynęły same. Zażółć gęślą jaźń — pangram sprawdzamy w&nbsp;każdej używanej grubości.</div></div>
+<div class="wiersz"><div class="meta">Eyebrow<br>mono 12px<br>0.14em · wersaliki</div><div class="eyebrow">Automatyzacje · Integracje · AI</div></div>
+<div class="wiersz"><div class="meta">Etykieta sekcji<br>mono 12px<br>0.08em · wersaliki</div><div class="etykieta">01 · Co automatyzujemy</div></div>
+<div class="wiersz"><div class="meta">Cyfry wyniku<br>mono · tabular-nums</div><div class="cyfry">≈ 16 600 zł rocznie</div></div>
+<div class="wiersz"><div class="meta">Tekst drugorzędny<br>--papier-2<br>nigdy na grafice</div><div class="znak-wodny">Nic nie wysyłamy — liczy się w&nbsp;Waszej przeglądarce.</div></div>
+
+<div class="wiersz"><div class="meta">Zasady</div><div class="tekst">
+Twarda spacja po jednoliterowych słowach: w, i, z, o, a, u.<br>
+Liczby grupowane spacją, także czterocyfrowe: 8&nbsp;300, 16&nbsp;600.<br>
+Twarda spacja przed „zł”. Znak „≈” przy każdej liczbie z kalkulatora.
+</div></div>
+</body></html>

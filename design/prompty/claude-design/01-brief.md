@@ -10,7 +10,7 @@ Zanim wkleisz, podmień `[DO POTWIERDZENIA: …]` tam, gdzie znasz już treść.
 BRIEF: klarow.com — strona-wizytówka firmy automatyzacji. Runda 1.
 
 0. ROLA I ZAKRES
-Prowadzisz projekt wizualny jednej strony (plus jednej podstrony) dla klarow.com. Klarow to dwie osoby (Karol i Paweł), które automatyzują pracę firm. Firma jest dopiero zakładana, działa w Polsce i nie ma jeszcze realizacji — strona pokazuje MOŻLIWOŚCI, nie portfolio.
+Prowadzisz projekt wizualny jednej strony (plus jednej podstrony) dla klarow.com. Klarow to jedna osoba: Karol Balucki, który projektuje, pisze i wdraża automatyzacje. Firma jest dopiero zakładana, działa w Polsce i nie ma jeszcze publicznych realizacji — strona firmowa pokazuje MOŻLIWOŚCI, a dowody (zrobione narzędzia) mają osobną podstronę /cv.
 - Rysujesz: układ, odstępy, typografię, wygląd komponentów i ich stany (spoczynek, hover, focus).
 - Nie piszesz mechaniki: obliczenia kalkulatora i drobne skrypty dopisze Claude Code na podstawie hand-offu.
 - Copy poniżej jest ostateczne. Nie zmieniaj słów, nie dopisuj zdań. Jeśli coś się nie mieści, zmień układ i zapisz to w notatce końcowej.
@@ -24,7 +24,7 @@ Ton: poważny i techniczny. Zero kreskówkowości, zero zabawowych kształtów, 
 2. ODBIORCA I URZĄDZENIA
 - Główne wejście: kod QR z neutralnej, czarno-białej wizytówki → telefon 360–430 px, często w kolejce na targach, słaby zasięg, pełne słońce. Projektuj mobile-first na 390×844, sprawdzaj 360×640.
 - Desktop 1440 jest drugi: ktoś przesłał link osobie, która decyduje.
-- Test 3 sekund: odwiedzający wie, że to firma od automatyzacji, że to osoby z niedawnej rozmowy, i jak zadzwonić.
+- Test 3 sekund: odwiedzający wie, że to firma od automatyzacji, że to osoba z niedawnej rozmowy, i jak zadzwonić.
 - Test 30 sekund: zna zakres usług (6 działów) i widzi kwotę policzoną na własnych liczbach.
 - Długość strony głównej: ok. 7 ekranów 390×844. Kalkulator zaczyna się ok. 2,3 ekranu od góry.
 - Zwracamy się do firmy: „Wy”, „Wasze”. Żadnych form zależnych od płci.
@@ -110,9 +110,9 @@ To jest kluczowa sekcja nawigacyjna. Sześć działów, każdy z IKONĄ, która 
     zamiast ręcznego przypisywania faktur do zleceń · teraz faktury kosztowe trafiają do właściwego zlecenia i czekają na akceptację
   3 | Integracje i API (dwa złącza połączone linią) → /przyklady#integracje
     zamiast pięciu programów, które się nie znają · teraz sklep, ERP, CRM i Excel wymieniają dane same
-  4 | Czat AI (dymek z trzema kropkami) → /przyklady#czat-ai
+  4 | Czat AI (dymek z trzema kropkami) → /przyklady#ai
     zamiast odpowiadania 40 razy na to samo pytanie · teraz asystent odpowiada na podstawie Waszych dokumentów, a w razie wątpliwości przekazuje sprawę człowiekowi
-  5 | Generatory dokumentów (kartka z liniami i pieczęcią) → /przyklady#generatory
+  5 | Generatory dokumentów (kartka z liniami i pieczęcią) → /przyklady#dokumenty
     zamiast składania oferty przez godzinę · teraz oferta, umowa czy protokół z danych jednym kliknięciem
   6 | Raporty (trzy słupki) → /przyklady#raporty
     zamiast sklejania raportu w piątek wieczorem · teraz raport, który sam się odświeża w poniedziałek o 7:00
@@ -164,11 +164,10 @@ Obawy — 4 × <details>:
 
 8.4 #kim-jestesmy — 04 · KIM JESTEŚMY
 Etykieta „04 · KIM JESTEŚMY”, H2: „Z kim rozmawiacie”
-Copy: „Klarow to dwie osoby, które same piszą kod i same go wdrażają. Bez działu sprzedaży pomiędzy.”
-Dwie karty osób obok siebie (bez zdjęć): imię i rola w 3–4 słowach.
-  Karol — [DO POTWIERDZENIA: rola, 3–4 słowa]
-  Paweł — [DO POTWIERDZENIA: rola, 3–4 słowa]
-Karta wariantu (nie w widoku głównym): te same karty z kadrem zdjęcia 4:5 — pusty kadr --powierzchnia-2 z opisem mono „ZDJĘCIE 4:5”. Bez sylwetek, monogramów i twarzy z generatora.
+Copy: „Klarow to jedna osoba: Karol Balucki. Piszę kod, wdrażam go u Was i odbieram telefon. Bez działu sprzedaży pomiędzy.”
+Jedna karta osoby (bez zdjęcia), wyśrodkowana na telefonie, po lewej na desktopie:
+  Karol Balucki — automatyzacje, integracje, raporty
+Karta wariantu (nie w widoku głównym): ta sama karta z kadrem zdjęcia 4:5 — pusty kadr --powierzchnia-2 z opisem mono „ZDJĘCIE 4:5”. Bez sylwetek, monogramów i twarzy z generatora.
 Pod kartami link tekstowy: „Zobaczcie, co już powstało →” → /cv (osobna podstrona, powstanie później — w tej rundzie narysuj sam link).
 Na końcu hasło marki: „Skomplikowane bierzemy na siebie. Wam zostaje klarownie.”
 
@@ -185,21 +184,41 @@ Przycisk: „Prześlij dalej”.
 Nie podawaj czasu odpowiedzi.
 
 8.6 STOPKA
-„Klarow · [DO POTWIERDZENIA: imię i nazwisko administratora] · kontakt@klarow.com · 786 296 426 · Polityka prywatności · Ta strona nie używa ciasteczek.”
+„Klarow · Karol Balucki · kontakt@klarow.com · 786 296 426 · Polityka prywatności · Ta strona nie używa ciasteczek.”
 Hasło marki: „Skomplikowane bierzemy na siebie. Wam zostaje klarownie.”
 Bez NIP, bez „spółka”.
 
 8.7 PODSTRONA /przyklady
-Ten sam nagłówek, to samo tło (ale od razu mocniej wygaszone — to strona do czytania), ten sam dolny pasek.
-H1: „Przykłady narzędzi”
-Wstęp (2 zdania) — [DO POTWIERDZENIA: wstęp]
-Sześć bloków z kotwicami #magazyn, #ksiegowosc, #integracje, #czat-ai, #generatory, #raporty. Każdy blok:
-  - ikona tego działu (ta sama co na stronie głównej) i nazwa narzędzia — [DO POTWIERDZENIA: nazwa]
-  - widoczna etykieta „PRZYKŁAD MOŻLIWOŚCI, NIE WDROŻENIE U KLIENTA” (mono, --papier-2, obramowanie)
-  - pięć krótkich akapitów z nagłówkami: „Do czego jest”, „Zamiast”, „Jak działa” (3–4 kroki mono, jeden pod drugim), „Co dostajecie”, „Czego nie robi” — [DO POTWIERDZENIA: treści]
-  - na końcu bloku link „Porozmawiajmy o tym →” → tel: albo mailto:
-Na dole strony powrót: „← Wróć na stronę główną”.
-Narysuj ten układ z tekstem zastępczym o właściwej długości (ok. 45 słów na blok) i oznacz wszystkie miejsca [DO POTWIERDZENIA].
+Ten sam nagłówek, to samo tło (mocniej wygaszone — to strona do czytania), ten sam dolny pasek. Kadr tła przesunięty (background-position), żeby nie wyglądała jak kopia strony głównej.
+H1: „Przykłady tego, co budujemy”
+Wstęp: „Nie mamy zamkniętej listy produktów. Poniżej przekrój sześciu obszarów, w których pracujemy najczęściej — żeby było widać skalę: od jednego arkusza, który sam się wypełnia, po połączenie kilku systemów.”
+Etykieta pod wstępem (raz, mono, --papier-2, obramowanie): „Przykłady możliwości. Każde narzędzie powstaje pod konkretny proces, więc Wasze będzie wyglądać inaczej.”
+Sześć grup, każda z kotwicą, ikoną tego działu (ta sama co na stronie głównej) i nagłówkiem H2. W każdej grupie trzy pozycje: pogrubiona nazwa, myślnik, jedno zdanie. Bez cen, bez dłuższych opisów, bez zrzutów ekranu.
+  #raporty | Raporty i kontroling
+    Raport zarządczy — jedno zestawienie składane automatycznie z kilku źródeł, gotowe na stałą godzinę.
+    Kontroling kosztów projektu — koszty schodzące do poziomu zlecenia albo budowy, porównane z budżetem.
+    Dashboard produkcji — bieżący obraz tego, co jest w toku, co stoi i co jest zagrożone terminem.
+  #dokumenty | Dokumenty i rejestry
+    Generatory dokumentów — oferta, umowa, protokół czy zlecenie transportu powstają z danych, w Waszym wzorze i z ciągłą numeracją.
+    Rejestr umów — jedno miejsce z terminami, aneksami i przypomnieniami, zamiast katalogu z plikami.
+    Protokoły robocizny — godziny z budowy albo z hali trafiają do rozliczenia bez przepisywania.
+  #magazyn | Magazyn i produkcja
+    Stany, WZ i PZ — dokumenty magazynowe powstają same, a stan aktualizuje się bez ręcznych korekt.
+    Kontrola braków materiałowych — sygnał o brakującym materiale zanim praca stanie, a nie w dniu montażu.
+    Oś czasu zadań — harmonogram, który przelicza się sam, gdy zmieni się termin albo zakres.
+  #ksiegowosc | Księgowość i płatności
+    Integracje z księgowością i płatnościami — dokumenty i transakcje (również z Revolut) trafiają tam, gdzie powinny, z automatycznie nadanym kontem księgowym i centrum kosztowym.
+    Obieg akceptacji przelewów — kto zatwierdził, kiedy i na jakiej podstawie: widoczne w jednym miejscu.
+    Kontroling na danych z KSeF — koszty czytane wprost z faktur, bez ręcznego zestawiania.
+  #integracje | Integracje między systemami
+    ERP, CRM i sklep — ten sam dokument nie jest wpisywany dwa razy, a zmiana po jednej stronie wraca na drugą.
+    Importy ERP do Excela z rekoncyliacją — dane wychodzą z ERP już uzgodnione, a różnice są pokazane, nie ukryte.
+    Audyt jakości danych — lista miejsc, w których dane się rozjeżdżają, zanim zbudujemy na nich cokolwiek dalej.
+  #ai | AI i asystenci
+    Czat po dokumentacji — odpowiada na podstawie Waszych dokumentów i pokazuje, z którego miejsca wziął odpowiedź.
+    Odczyt dokumentów — dane z faktur, zamówień i zdjęć z budowy trafiają do systemu bez przepisywania.
+    Wstępna klasyfikacja zgłoszeń — maile i zgłoszenia trafiają do właściwej osoby albo do właściwego zlecenia.
+Na końcu strony: zdanie „To nie jest pełna lista, tylko przekrój. Jeśli proces da się opisać krok po kroku, prawie zawsze da się go zautomatyzować — opowiedzcie nam o swoim.”, dwa CTA („Opowiedzcie o swoim procesie — zadzwońcie” do tel:, „Przyślijcie plik, który Was męczy” do mailto:) oraz link „← Wróć na stronę główną”.
 
 8.8 /404 — tylko typografia: „Ten adres prowadzi donikąd” i link na stronę główną.
 
@@ -252,10 +271,10 @@ K6 Kafel działu: spoczynek / hover / focus.
 K7 Etykieta sekcji.
 K8 Kalkulator: presety, pola (krokomierz, suwak, pole zł z „i”, udział), karta wyniku.
 K9 Kroki 03 i karty „Mały start” / „Duży system”; obawy zwinięte i rozwinięte.
-K10 Osoby 04: bez zdjęć / wariant z kadrem 4:5.
+K10 Osoba 04: karta bez zdjęcia / wariant z kadrem 4:5.
 K11 Kontakt: trzy przyciski, stany focus.
 K12 Dolny pasek: widoczny / schowany; nagłówek desktop z numerem telefonu.
-K13 Blok na /przyklady: pełny, z etykietą „przykład możliwości”.
+K13 Grupa na /przyklady: ikona, H2 i trzy pozycje, plus etykieta „przykłady możliwości”.
 K14 Stopka.
 Notatka końcowa: odchylenia od briefu, teksty, które się nie zmieściły, wyniki pomiaru kontrastu na tle, pytania.
 ````

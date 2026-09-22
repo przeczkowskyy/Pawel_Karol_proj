@@ -1,7 +1,7 @@
 # Klarow — repo strony klarow.com (v2, od 2026-09-22)
 
-Strona-wizytówka dwuosobowej firmy automatyzacji (Karol i Paweł). Wejście: QR z czarno-białej wizytówki →
-telefon → 30–90 s uwagi. Pokazuje **możliwości**, nie realizacje. Pełna koncepcja: `design/koncepcja.md`.
+Strona-wizytówka firmy automatyzacji Karola Baluckiego. Wejście: QR z czarno-białej wizytówki → telefon →
+30–90 s uwagi. `klarow.com` pokazuje **możliwości**, `klarow.com/cv` **dowody**. Koncepcja: `design/koncepcja.md`.
 
 ## Kontrakt z hostingiem (nie zmieniać bez powodu)
 - Cloudflare Pages, integracja Git: **push na `main` = produkcja od razu**. Brak GitHub Actions.
@@ -14,7 +14,7 @@ telefon → 30–90 s uwagi. Pokazuje **możliwości**, nie realizacje. Pełna k
 1. Tylko PL. Zwrot do firmy („Wy”, „Wasze”). **Zero form zależnych od płci** (nie: „dwaj”, „szefowi”, „handlowiec”).
 2. **Zero zmyśleń**: każda liczba pochodzi od odwiedzającego (kalkulator) albo ma etykietę „przykład”.
    Bez logo klientów, opinii, liczników, „oszczędziliśmy X zł”, tytułów typu „inżynier”.
-3. Obietnice tylko potwierdzone przez obie osoby; niepotwierdzone jako `[do potwierdzenia]` — strażnik blokuje build.
+3. Obietnice tylko potwierdzone przez Karola; niepotwierdzone jako `[do potwierdzenia]` — strażnik blokuje build.
 4. Żadnych marek, danych ani projektów stron trzecich jako „naszego dorobku”.
 5. **Repo jest publiczne**: żadnych sekretów, danych osobowych, cen ofertowych ani notatek wewnętrznych w commitach.
 6. Ruch: strona **nie animuje się sama**. Tło jest nieruchome (żadnej paralaksy, żadnego wideo w v1), a przejścia
@@ -28,7 +28,7 @@ telefon → 30–90 s uwagi. Pokazuje **możliwości**, nie realizacje. Pełna k
 - Prompty (Higgsfield, Claude Design) są wersjonowane w `design/prompty/`. Hand-offy z Claude Design: `design/handoff-NN/`
   — bierzemy układ i wygląd, nie bierzemy JS, fontów z CDN, stylów inline ani base64.
 - Oryginały z Higgsfield: `_mastery/` (poza gitem). Eksport tła: `design/prompty/higgsfield/03-pipeline-ffmpeg.md`, sekcja H.
-- Treści czekające na akceptację: `design/tresc/`. Nic stamtąd nie trafia na produkcję bez zgody obu osób.
+- Treści czekające na akceptację: `design/tresc/`. Nic stamtąd nie trafia na produkcję bez akceptacji Karola.
 - Etap jest zamknięty dopiero razem z akcją „do ludzi” (plan: `design/koncepcja.md` §10).
 
 ## Środowisko

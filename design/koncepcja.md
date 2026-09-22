@@ -5,8 +5,8 @@
 Starą stronę Klarow (repo w `Desktop\Karol & Paweł app`) uznaliśmy za spaloną. Nowa powstaje od zera w
 `Dokumenty\Klarow v2`, na tym samym repo i tym samym hostingu (klarow.com).
 
-**Czym jest strona.** CV, wizytówka i reklama w jednym, plus portfolio *możliwości* dwuosobowej firmy
-automatyzacji: magazyn, księgowość, API, chatboty AI, generatory dokumentów, integracje.
+**Czym jest strona.** Wizytówka i reklama firmy automatyzacji Karola Baluckiego: magazyn, księgowość, API,
+chatboty AI, generatory dokumentów, integracje. Dowody (zrobione narzędzia) mają osobną podstronę `/cv`.
 
 **Kto na nią wchodzi.** Ktoś skanuje QR z neutralnej, czarno-białej wizytówki i czyta na telefonie przez 30–90 s.
 
@@ -120,7 +120,7 @@ Przekaz: skomplikowane bierzemy na siebie, a Wam zostaje prosty przepływ danych
 | **`#co-robimy` 01** | H2 „Co automatyzujemy”. 6 wierszy z **klikalnymi ikonami** (ikona → `/przyklady#<dział>`), każdy w `<details>`: ikona, nazwa, koralowe „zamiast…” i papierowe „teraz…”. Wiersze w tabeli pod mapą. Pod listą: „Mały problem czy duży system — zaczynamy od kawałka, który boli najbardziej.” Blok **PRZYKŁAD** (etykieta „ilustracja, nie wdrożenie u klienta”) opisany pod mapą |
 | **`#oszczednosci` 02** | H2 „Ile kosztuje Was ręczna robota? Policzcie.” Kalkulator opisany w §7 |
 | **`#jak-pracujemy` 03** | H2 „Od rozmowy do działającego procesu”. 4 kroki współpracy i 4 obawy, opisane pod mapą |
-| **`#kim-jestesmy` 04** | H2 „Z kim rozmawiacie”. Copy: „Klarow to dwie osoby, które same piszą kod i same go wdrażają. Bez działu sprzedaży pomiędzy.” v1: imiona i role (bez placeholderów i monogramów). v1.1: prawdziwe zdjęcia z jednej sesji, bez efektów i bez AI |
+| **`#kim-jestesmy` 04** | H2 „Z kim rozmawiacie”. Copy: „Klarow to jedna osoba: Karol Balucki. Piszę kod, wdrażam go u Was i odbieram telefon. Bez działu sprzedaży pomiędzy.” v1: imię, nazwisko i rola (automatyzacje, integracje, raporty). v1.1: prawdziwe zdjęcie, bez efektów i bez AI |
 | **`#kontakt` 05** | H2 „Połączmy się.” Duże przyciski: Zadzwoń 786 296 426, Napisz, Zapisz w kontaktach. Link „Przyślijcie nam swój najgorszy Excel” (mailto z dopiskiem opisanym pod mapą). „Prześlij dalej” (Web Share, a bez niego kopiowanie linku). Bez obietnicy czasu odpowiedzi |
 | **stopka** | Klarow · {administrator: imię i nazwisko} · kontakt@klarow.com · 786 296 426 · Polityka prywatności · „Ta strona nie używa ciasteczek.” |
 | **podstrony** | `/przyklady` (przekrój możliwości), `/cv` (dowody: zrobione narzędzia Karola, §6b), `/start` (prawdziwa strona dla QR, §8), `/polityka-prywatnosci`, typograficzna `/404` |
@@ -262,7 +262,7 @@ Decyzje z 22.09: **podstrona w tym samym projekcie** (jeden deploy, wspólne tok
 | Co pokazuje | możliwości: co potrafimy zbudować | dowody: narzędzia, które powstały |
 | Ton | „robimy to i to, opowiedzcie o swoim procesie” | „oto co zrobiłem, tak to działa” |
 | Materiał | przekrój obszarów, jedno zdanie na pozycję | konkretne narzędzia, zrzuty ekranu, kontekst |
-| Kto | dwie osoby, firma | Karol |
+| Kto | firma (marka Klarow) | Karol jako osoba |
 | Link | „Zobaczcie, co już powstało →” do `/cv` | „← Wróć do strony firmowej” |
 
 **Zasady dla `/cv`**
@@ -477,15 +477,15 @@ Etap jest zamknięty dopiero razem ze swoją akcją „do ludzi”. Postęp licz
 
 Strażnik nie wypuści na produkcję niczego z `[do potwierdzenia]`.
 
-1. **Administrator danych i stopka.** Czyje imię i nazwisko: osoby, do której należą `kontakt@` i numer 786 296 426. Czy podajemy adres do korespondencji? Wymaga go art. 5 ustawy o świadczeniu usług drogą elektroniczną; bez niego zostaje ryzyko.
-   - **Rekomendacja:** imię, nazwisko i e-mail teraz, pełne dane po wpisie do CEIDG.
-   - Słów „spółka” i „sp. z o.o.” oraz NIP nie używamy do rejestracji.
-2. **Nazwiska obu osób na stronie.** Do czasu decyzji same imiona i role. Nie pokazujemy cudzych projektów jako własnego dorobku.
+1. ~~Administrator danych~~ — **rozstrzygnięte 22.09: Karol Balucki**, `kontakt@klarow.com`, 786 296 426.
+   - Otwarte zostaje tylko: **czy podajemy adres do korespondencji** (wymaga go art. 5 ustawy o świadczeniu usług drogą elektroniczną).
+   - **Rekomendacja:** imię, nazwisko i e-mail teraz, pełne dane po wpisie do CEIDG. Słów „spółka” i „sp. z o.o.” oraz NIP nie używamy do rejestracji.
+2. ~~Nazwiska na stronie~~ — **rozstrzygnięte 22.09:** strona mówi jednym głosem, Karol Balucki. Paweł nie pojawia się na stronie firmowej. Nie pokazujemy cudzych projektów jako własnego dorobku.
 3. **Które obietnice podpisujecie dziś:** KSeF w wierszu 2, rozmowa 30 min, pilot, przeniesienie praw w umowie.
    - Przed pierwszą rozmową o pilocie potrzebny jest wzór umowy (przeniesienie praw i umowa powierzenia).
    - Rejestracja działalności najpóźniej w dniu pierwszego zlecenia.
 4. **Kierunek hero** (GŁÓWNY, ALT-1 albo ALT-2) po rundzie 1 w Higgsfield.
-5. **Role w sekcji 04:** 3–4 słowa na osobę.
+5. ~~Role w sekcji 04~~ — **rozstrzygnięte:** „automatyzacje, integracje, raporty”. Zmień, jeśli wolisz inaczej.
 
 ## 12. Weryfikacja
 
