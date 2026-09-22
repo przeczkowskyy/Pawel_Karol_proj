@@ -23,6 +23,13 @@ automatyzacji: magazyn, księgowość, API, chatboty AI, generatory dokumentów,
 - **portfolio pokazuje tylko możliwości: zero case'ów i zero zmyślonych liczb**,
 - **push na `main` idzie od razu na produkcję**, więc każdy commit musi się dać pokazać osobie z QR.
 
+**Dwie strony pod jedną domeną (decyzja 22.09):**
+- **`klarow.com` — strona firmowa.** Pokazuje, co potrafimy zbudować. Nie jest CV ani broszurą.
+- **`klarow.com/cv` — strona-CV Karola.** Ten sam styl, ale tu stoją **prawdziwe, zrobione narzędzia**: to jest dowód.
+
+**Zatwierdzone 22.09 po podglądzie na żywo (`/podglad-tla`):** tło w wariancie **B** (przewija się razem z treścią,
+powtarzane przez odbicie w pionie), krój **Bricolage Grotesque**, storytelling i przekrój przykładów narzędzi.
+
 Ze starego projektu wzięte zostały **wyłącznie** infrastruktura i dostępy. Treści ani UI nie czytano.
 
 Plan powstał w 2 rundach wielu agentów:
@@ -116,7 +123,7 @@ Przekaz: skomplikowane bierzemy na siebie, a Wam zostaje prosty przepływ danych
 | **`#kim-jestesmy` 04** | H2 „Z kim rozmawiacie”. Copy: „Klarow to dwie osoby, które same piszą kod i same go wdrażają. Bez działu sprzedaży pomiędzy.” v1: imiona i role (bez placeholderów i monogramów). v1.1: prawdziwe zdjęcia z jednej sesji, bez efektów i bez AI |
 | **`#kontakt` 05** | H2 „Połączmy się.” Duże przyciski: Zadzwoń 786 296 426, Napisz, Zapisz w kontaktach. Link „Przyślijcie nam swój najgorszy Excel” (mailto z dopiskiem opisanym pod mapą). „Prześlij dalej” (Web Share, a bez niego kopiowanie linku). Bez obietnicy czasu odpowiedzi |
 | **stopka** | Klarow · {administrator: imię i nazwisko} · kontakt@klarow.com · 786 296 426 · Polityka prywatności · „Ta strona nie używa ciasteczek.” |
-| **podstrony** | `/przyklady` (6 przykładowych narzędzi, po jednym na dział, z etykietą „przykład, nie wdrożenie”), `/start` (prawdziwa strona dla QR, §8), `/polityka-prywatnosci`, typograficzna `/404` |
+| **podstrony** | `/przyklady` (przekrój możliwości), `/cv` (dowody: zrobione narzędzia Karola, §6b), `/start` (prawdziwa strona dla QR, §8), `/polityka-prywatnosci`, typograficzna `/404` |
 
 **01: sześć wierszy oferty**
 
@@ -210,7 +217,11 @@ efekt był niepewny, styk grafiki z kodem kruchy, a koszt budowy wysoki. Zamiast
 - U góry strony widać go najmocniej, niżej jest **wygaszany do czerni**. Wygaszanie robi CSS
   (`linear-gradient` do `--tlo`), nie generator, więc regulujemy je bez nowej generacji.
 - Pod każdym blokiem tekstu leży dodatkowe płaskie przyciemnienie, żeby kontrast trzymał się powyżej 7:1.
-- W v1 tło jest **nieruchome**. Ruch świateł jest opcją po starcie (`design/prompty/higgsfield/02-ruch-opcjonalny.md`),
+- **Tło przewija się razem z treścią** (wariant B, zatwierdzony po podglądzie), a nie jest przypięte. Powtarzamy je
+  przez **odbicie w pionie**: szew jest niewidoczny, bo ścieżki przechodzą przez linię odbicia. Zero dodatkowych generacji.
+  Dzięki temu puste pole kadru przepływa raz i nie zostaje w jednym miejscu ekranu.
+- **Podstrony dostają inny fragment kadru** (`background-position`), żeby nie wyglądały jak kopia strony głównej.
+- W v1 nic się nie animuje. Ruch świateł jest opcją po starcie (`design/prompty/higgsfield/02-ruch-opcjonalny.md`),
   a tańszą wersją tej opcji są kropki na ścieżkach SVG animowane w kodzie.
 - `prefers-reduced-motion` i brak JS niczego nie psują: tło to obraz.
 
@@ -236,6 +247,36 @@ Miejsce, które wcześniej zajmował impuls, przejmuje **sześć ikon działów*
 - **Uczciwość.** Każdy blok na `/przyklady` ma widoczną etykietę: to **przykład możliwości**, nie wdrożenie u klienta.
   Treść sześciu opisów powstaje osobno i wymaga akceptacji przed publikacją.
 - Sekcja `#co-robimy` na stronie głównej zostaje krótka: ikona, nazwa działu, „zamiast…” i „teraz…”. Szczegóły są na podstronie.
+
+---
+
+## 6b. Strona-CV: `klarow.com/cv`
+
+Decyzje z 22.09: **podstrona w tym samym projekcie** (jeden deploy, wspólne tokeny i tło), **CV Karola**,
+**bez nazw klientów i pracodawców** (opisowo: „firma produkcyjno-budowlana, 50–150 osób”).
+
+**Podział ról między stronami**
+
+| | `klarow.com` (firmowa) | `klarow.com/cv` |
+|---|---|---|
+| Co pokazuje | możliwości: co potrafimy zbudować | dowody: narzędzia, które powstały |
+| Ton | „robimy to i to, opowiedzcie o swoim procesie” | „oto co zrobiłem, tak to działa” |
+| Materiał | przekrój obszarów, jedno zdanie na pozycję | konkretne narzędzia, zrzuty ekranu, kontekst |
+| Kto | dwie osoby, firma | Karol |
+| Link | „Zobaczcie, co już powstało →” do `/cv` | „← Wróć do strony firmowej” |
+
+**Zasady dla `/cv`**
+- **Zrzuty ekranu wyłącznie na danych zmyślonych albo zanonimizowanych.** Żadnych nazw kontrahentów, kwot
+  z prawdziwych dokumentów, nazwisk, numerów zleceń.
+- **Prawa do narzędzia.** Narzędzie zrobione w ramach zatrudnienia należy do pracodawcy (art. 12 prawa autorskiego),
+  więc na `/cv` trafia tylko to, co powstało poza nim, albo to, na co jest pisemna zgoda. Bezpieczna kolejność:
+  najpierw własne zlecenia i własne projekty, dopiero potem cokolwiek innego.
+- **Format pozycji:** nazwa narzędzia · do czego służyło · co w nim zrobiłem · czym zbudowane · jeden zrzut.
+  Bez opowiadania historii wdrożenia i bez liczb opisujących efekt u klienta.
+- Ta strona **nie jest ofertą** i nie ma na niej cen ani kalkulatora.
+
+**Kolejność prac:** `/cv` powstaje po stronie firmowej, jako commit C3, na tych samych komponentach.
+Potrzebny materiał od Karola: lista narzędzi (nazwa + jedno zdanie) oraz zrzuty na bezpiecznych danych.
 
 ---
 
@@ -310,7 +351,7 @@ site/  package.json  .node-version  astro.config.mjs
   src/lib/kalkulator.ts (+ .test)
   src/components/  Tlo, Hero, Sekcja, IkonaDzialu, Kalkulator, PasekKontaktu …
   src/scripts/     kalkulator.ts · udostepnij.ts        (łącznie ok. 4 KB)
-  src/pages/       index.astro  przyklady.astro  start.astro  polityka-prywatnosci.astro  404.astro
+  src/pages/       index.astro  przyklady.astro  cv.astro  start.astro  polityka-prywatnosci.astro  404.astro
   scripts/straznik.mjs
 design/  koncepcja.md  prompty/{higgsfield,claude-design}/  handoff-NN/  _lokalne/ (poza gitem)
 ```
@@ -397,6 +438,7 @@ Prompty #1–#4 i prompt awaryjny „R” są w `design/prompty/claude-design/`,
 - sekcja 01 jako siatka sześciu **klikalnych ikon** prowadzących do `/przyklady#<slug>`;
 - podstrona `/przyklady` z sześcioma blokami (treść: `design/tresc/przyklady-narzedzi.md`, czeka na akceptację);
 - zero kabla, portów, wtyczki, wideo i ruchu bez interakcji;
+- `/cv` **nie wchodzi do rundy 1** — powstanie na tych samych komponentach w handoff-02, po starcie strony firmowej;
 - H1 w wersji B, eyebrow zawsze widoczny, bez chipa QR, formy neutralne, presety kalkulatora z §7.
 
 Zasada ogólna: Claude Design rysuje układ i stany interakcji, a mechanikę (kalkulator) trzyma kod. Pula użycia Claude Design jest wspólna, więc rundy #2–#4 są celowo wąskie.
@@ -415,6 +457,7 @@ Etap jest zamknięty dopiero razem ze swoją akcją „do ludzi”. Postęp licz
 | **E2** | Wy + Claude Code | Claude Design, rundy #1–#4 (timebox ok. 4 h), `design/handoff-01/` | hand-off w repo |
 | **C1** „Nowa wizytówka” | Claude Code | `git rm` starego `site/`; Astro; layout z hand-offu; całe copy; tło z wygaszaniem; 6 ikon działów; kalkulator z testem; pasek, vCard, `/start`, polityka, 404, `_redirects`, `_headers`, OG, strażnik. **Stara strona znika**, stare adresy nie dają 404 | link wysłany 5 osobom z ICP (nie rodzinie) |
 | **C2** „Przykłady narzędzi” | Claude Code | podstrona `/przyklady` z sześcioma opisami i kotwicami, linkowanie z ikon, obraz OG, szlif kontrastu i wydajności. Test na tanim Androidzie przez LTE i na iPhonie | 5 osób zeskanowało QR na żywo, 10 kolejnych wiadomości z linkiem, ≥ 1 umówiona rozmowa |
+| **C3** „Strona-CV” | Karol + Claude Code | `/cv` na komponentach ze strony firmowej: lista zrobionych narzędzi, zrzuty na bezpiecznych danych, linki w obie strony. Materiał i zgody po stronie Karola | link do `/cv` wysłany z 5 wiadomościami |
 | **v1.1** | razem | kolejność wg tego, o co pytali rozmówcy. Kandydaci: motion grafiki sekcji A2 i A3, A1d, ikony A4, zdjęcia, detale kabla z §6, AV1, fallback JS kabla, odliczanie | każda pozycja po rozmowie |
 
 **Orientacyjne terminy:** C0 dziś (pn 21.09), E1–E2 do czw 24.09, C1 do pt 25.09, C2 do wt 29.09.

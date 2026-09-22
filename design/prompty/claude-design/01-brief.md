@@ -169,6 +169,7 @@ Dwie karty osób obok siebie (bez zdjęć): imię i rola w 3–4 słowach.
   Karol — [DO POTWIERDZENIA: rola, 3–4 słowa]
   Paweł — [DO POTWIERDZENIA: rola, 3–4 słowa]
 Karta wariantu (nie w widoku głównym): te same karty z kadrem zdjęcia 4:5 — pusty kadr --powierzchnia-2 z opisem mono „ZDJĘCIE 4:5”. Bez sylwetek, monogramów i twarzy z generatora.
+Pod kartami link tekstowy: „Zobaczcie, co już powstało →” → /cv (osobna podstrona, powstanie później — w tej rundzie narysuj sam link).
 Na końcu hasło marki: „Skomplikowane bierzemy na siebie. Wam zostaje klarownie.”
 
 8.5 #kontakt — 05 · KONTAKT
