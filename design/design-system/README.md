@@ -21,13 +21,17 @@ Stąd bierze je **Claude Design** (jako design system projektu) i stąd trafiaj�
 4. **Strona nie animuje się sama.** Przejścia tylko na interakcję, wyłącznie `transform` i `opacity`.
 5. **Jedna obudowa dla wszystkich ikon.** Symetria i jednakowa grubość linii są wymogiem.
 
-## Jak to podłączyć do Claude Design
-1. W **interaktywnej** sesji Claude Code (zwykły terminal, nie ta): `/design-login` — jednorazowa autoryzacja.
-2. Potem w tej sesji mogę wysłać ten katalog jako projekt design systemu (`DesignSync`).
-3. W Claude Design, przy polu promptu, zamiast **Design system: None** wybierasz **Klarow**.
+## Połączenie z Claude Design — DZIAŁA (22.09)
+- Projekt: **Klarow**, `projectId: 744d1b81-74b1-4452-9215-26cc98773a18`
+- Autoryzacja: `/design-login` wykonane raz przez Karola; kolejne sesje ją dziedziczą.
+- Wysłane pliki: `tokens.css`, `README.md` i pięć kart podglądu.
+- W Claude Design, przy polu promptu, zamiast **Design system: None** wybierasz **Klarow**.
 
-Dopóki tego nie ma, brief w `design/prompty/claude-design/01-brief.md` zawiera te same tokeny w treści —
-działa bez design systemu, tylko wymaga wklejania za każdym razem.
+**Aktualizacja po zmianie:** `DesignSync` → `finalize_plan` (ten sam `projectId`, `localDir` = ten katalog) → `write_files`.
+Wysyłamy **pojedyncze zmienione pliki**, nigdy całego katalogu na raz.
+
+Brief w `design/prompty/claude-design/01-brief.md` i tak zawiera te same tokeny w treści, więc działa również bez
+design systemu — ale wtedy trzeba je wklejać przy każdej stronie.
 
 ## Zasada aktualizacji
 Zmiana koloru albo kroju zaczyna się **tutaj**, w `tokens.css`, a potem idzie do kodu i do Claude Design.
