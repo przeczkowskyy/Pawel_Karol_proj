@@ -1,9 +1,9 @@
 # Hurtownia promptów: Claude Design
 
 ## Kolejność
-1. **PROMPT #1** (`01-brief.md`): brief razem z załącznikami. Dostajesz ekrany A–E i karty K1–K17.
+1. **PROMPT #1** (`01-brief.md`): brief razem z załącznikami. Dostajesz ekrany A–F i karty K1–K14.
 2. **PROMPT #2** (`02-hero.md`): hero na 360×640.
-3. **PROMPT #3** (`03-stany.md`): stany zasilenia.
+3. **PROMPT #3** (`03-tlo-ikony-stany.md`): czytelność na tle, sześć ikon, stany interakcji.
 4. **PROMPT #4** (`04-handoff.md`): uporządkowana paczka do hand-offu.
 5. **PROMPT R** (`R-powrot-do-kontraktu.md`): tylko gdy projekt odjedzie od tokenów albo od copy.
 
@@ -18,11 +18,11 @@ Timebox całości to ok. 4 h. Claude Design korzysta z tej samej puli użycia co
 
 | Plik | Skąd | Status |
 |---|---|---|
-| `A1m-hero-m.png` | pierwsza klatka zakodowanej pętli albo zatwierdzony still `hero-m-start-1080x1920.png` | wymagany |
-| `A1m-hero-m.webp` | placeholder animowany (`../higgsfield/03-pipeline-ffmpeg.md`, krok G) | jeśli pętla już jest |
-| `A0-karta-stylu.png` | karta stylu zmniejszona do szerokości 2560 px | opcjonalny, tylko referencja |
+| `tlo-m.png` | zatwierdzone tło pionowe (9:16), zmniejszone do szerokości 1440 px | wymagany |
+| `tlo-d.png` | tło poziome (16:9), zmniejszone do szerokości 2560 px | jeśli już jest |
+| `przyklady-narzedzi.md` | szkic treści podstrony `/przyklady` (`design/tresc/`) | po akceptacji treści |
 
-Pliki robocze leżą w `_mastery/placeholdery/`. Do Claude Design nigdy nie wysyłamy MP4 ani masterów 4K.
+Pliki robocze leżą w `_mastery/`. Do Claude Design nie wysyłamy masterów 4K ani żadnego wideo.
 
 ## Hand-off do Claude Code
 1. Po rundzie #4 wybierz **Export → Send to Claude Code**. Plan B: **Export → ZIP** i rozpakowanie do `design/handoff-01/`.

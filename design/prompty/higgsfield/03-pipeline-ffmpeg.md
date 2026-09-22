@@ -1,5 +1,8 @@
 # Pipeline ffmpeg: od generacji do pliku na stronę
 
+> **W v1 potrzebna jest tylko sekcja „H. Tło statyczne”.** Reszta pliku (blokada statyki, pętla, kodowanie
+> wideo) dotyczy ruchu, który od 22.09 jest opcją na później — patrz `02-ruch-opcjonalny.md`.
+
 Komendy są przetestowane 2026-09-22 na ffmpeg 9 (build gyan full) na materiale syntetycznym.
 Uruchamiamy je w Git Bash z katalogu repo. Wszystkie pliki robocze leżą w `_mastery/`, poza gitem.
 Pośredniki zapisujemy bezstratnie (`ffv1` w `.mkv`), więc jakość tracimy tylko raz, przy finalnym kodowaniu.
@@ -100,3 +103,36 @@ ffmpeg -i site/public/media/hero-m.v1.h264.mp4 -vf "fps=10,scale=540:-1:flags=la
 ffmpeg -i site/public/media/hero-m.v1.h264.mp4 -frames:v 1 _mastery/placeholdery/A1m-hero-m.png
 ```
 Pętli jeszcze nie ma? Wtedy do Claude Design idzie sam PNG ze stilla: `_mastery/hero-m-start-1080x1920.png`.
+
+---
+
+## H. Tło statyczne na stronę (jedyny krok potrzebny w v1)
+
+Master 4K z Higgsfield zostaje w `_mastery/`. Na stronę idzie plik źródłowy w `site/src/assets/`,
+a warianty AVIF i WebP w kilku szerokościach generuje **Astro w buildzie** (komponent `<Picture>`), więc
+nie robimy tego ręcznie.
+
+```bash
+# 1. przycięcie do dokładnych proporcji i rozsądnego rozmiaru źródła
+ffmpeg -i _mastery/tlo-m-master-4k.png \
+  -vf "crop=w='min(iw,ih*9/16)':h='min(ih,iw*16/9)':x='(iw-ow)/2':y='(ih-oh)/2',scale=1440:2560:flags=lanczos" \
+  -frames:v 1 site/src/assets/tlo-m.v1.png
+
+ffmpeg -i _mastery/tlo-d-master-4k.png \
+  -vf "crop=w='min(iw,ih*16/9)':h='min(ih,iw*9/16)':x='(iw-ow)/2':y='(ih-oh)/2',scale=2560:1440:flags=lanczos" \
+  -frames:v 1 site/src/assets/tlo-d.v1.png
+
+# 2. kontrola: kolor tła w czterech narożnikach (ma być zbliżony do #0D1014)
+for xy in "0:0" "1432:0" "0:2552" "1432:2552"; do
+  ffmpeg -v error -i site/src/assets/tlo-m.v1.png -vf "crop=8:8:${xy},scale=1:1:flags=area,format=rgb24" \
+    -frames:v 1 -f rawvideo - | od -An -tu1
+done
+```
+
+**Wygaszanie do czerni robi CSS, nie obraz.** Nad tłem leży jedna warstwa:
+`linear-gradient(to bottom, transparent 0%, rgba(13,16,20,.6) 35%, #0D1014 75%)`, a przy tekście dodatkowo
+płaskie przyciemnienie. Dzięki temu siłę wygaszenia regulujemy bez nowej generacji, a przy okazji mamy pewność,
+że kontrast tekstu wychodzi ponad 7:1.
+
+**Budżet:** źródło do 2 MB, wariant AVIF serwowany na telefon do 180 KB. Jeśli AVIF wychodzi większy,
+zmniejszamy szerokość źródła, a nie jakość.

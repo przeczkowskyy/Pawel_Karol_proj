@@ -17,9 +17,9 @@ telefon → 30–90 s uwagi. Pokazuje **możliwości**, nie realizacje. Pełna k
 3. Obietnice tylko potwierdzone przez obie osoby; niepotwierdzone jako `[do potwierdzenia]` — strażnik blokuje build.
 4. Żadnych marek, danych ani projektów stron trzecich jako „naszego dorobku”.
 5. **Repo jest publiczne**: żadnych sekretów, danych osobowych, cen ofertowych ani notatek wewnętrznych w commitach.
-6. Ruch: wyłącznie `transform`/`opacity`; bez scroll-jackingu, smooth-scroll, `scroll-snap`, `sticky`, listenerów
-   `wheel`/`touchmove`; bez `overflow: hidden|auto` na przodkach `.kabel` (zamraża oś czasu — używać `overflow-x: clip`);
-   bez `filter`/`blur`/`backdrop-filter` na dużych warstwach. `prefers-reduced-motion` = kabel statycznie zasilony + poster.
+6. Ruch: strona **nie animuje się sama**. Tło jest nieruchome (żadnej paralaksy, żadnego wideo w v1), a przejścia
+   są tylko na interakcję, wyłącznie przez `transform`/`opacity`. Bez scroll-jackingu, smooth-scroll, `scroll-snap`,
+   `sticky` (poza dolnym paskiem), `filter`/`blur`/`backdrop-filter` na dużych warstwach. `prefers-reduced-motion` respektujemy.
 7. Media w `site/public/media/` mają wersję w nazwie (`hero-m.v1.h264.mp4`) i są `immutable` — nigdy nie nadpisujemy.
 8. Tokeny kolorów i fontów tylko z `site/src/styles/tokens.css` (nazwy 1:1 z briefu Claude Design).
 9. Treść PL w jednym miejscu: `site/src/content/strona.ts`.
@@ -27,7 +27,8 @@ telefon → 30–90 s uwagi. Pokazuje **możliwości**, nie realizacje. Pełna k
 ## Proces
 - Prompty (Higgsfield, Claude Design) są wersjonowane w `design/prompty/`. Hand-offy z Claude Design: `design/handoff-NN/`
   — bierzemy układ i wygląd, nie bierzemy JS, fontów z CDN, stylów inline ani base64.
-- Oryginały z Higgsfield: `_mastery/` (poza gitem). Pipeline ffmpeg: `design/prompty/higgsfield/03-pipeline-ffmpeg.md`.
+- Oryginały z Higgsfield: `_mastery/` (poza gitem). Eksport tła: `design/prompty/higgsfield/03-pipeline-ffmpeg.md`, sekcja H.
+- Treści czekające na akceptację: `design/tresc/`. Nic stamtąd nie trafia na produkcję bez zgody obu osób.
 - Etap jest zamknięty dopiero razem z akcją „do ludzi” (plan: `design/koncepcja.md` §10).
 
 ## Środowisko

@@ -1,4 +1,95 @@
-# Hero, runda 1: trzy kierunki (still)
+# Tło strony: runda 2 (aktualna)
+
+> **Zmiana kierunku z 22.09.** Kabel z impulsem przez całą stronę wypadł z projektu: efekt był niepewny,
+> a koszt budowy wysoki. Zamiast niego strona dostaje **jedno duże, wyciszone tło** z okablowania i sieci
+> neuronowej, wygaszane do czerni. **Zero kreskówki** — styl ma być poważny.
+
+## Co generujemy
+| ID | Kadr | Do czego |
+|---|---|---|
+| **TLO-M** | 9:16 | tło całej strony na telefonie (tam trafia ruch z QR) |
+| **TLO-D** | 16:9 | tło na desktopie |
+
+Jeden obraz obsługuje całą stronę: u góry widać go najmocniej (za nagłówkiem), niżej jest wygaszany do czerni.
+**Wygaszanie robi CSS, nie generator.** Dzięki temu możemy je regulować bez nowej generacji, a tło obrazu
+(`#0D1014`) zlewa się z tłem strony.
+
+## Ustawienia
+- **Model:** Nano Banana Pro. **Rozdzielczość:** 2K na rundę wyboru, zwycięzca ponownie w 4K.
+- **Proporcje** ustawiane ręcznie: 9:16 dla TLO-M, 16:9 dla TLO-D. **4 warianty.**
+- Prompt kadru, pusta linia, cały blok **STYLE 2**.
+- TLO-D generujemy dopiero po wyborze TLO-M, z TLO-M jako referencją (zdanie relacji jest w prompcie).
+
+---
+
+## Blok STYLE 2 (poważny — doklejany na końcu każdego promptu)
+```
+STYLE: Serious editorial technical illustration for a corporate website background. Front-on orthographic view, no perspective, no vanishing points.
+Engineering-diagram precision with transit-map clarity: long straight runs, clean 45- and 90-degree bends, even spacing, generous empty space between groups.
+Uniform thin to medium line weights, flat matte fills, no thick outlines, no drop shadows, no bevels, no gloss, no rim light.
+Restrained and professional: no cartoon styling, no comic or sticker look, no toy-like or exaggerated proportions, no oversized connectors, no screws, no cable ties, no mascot shapes, nothing playful.
+Background: solid flat #0D1014, evenly lit, no vignette, no texture, no noise, no banding.
+Muted palette only: graphite lines #2A323B and #3A4450, pale paper #F2EDE3 used very sparingly, restrained amber #FFB938 at low intensity, muted sea-green #39D0C0 as small sparse marks, desaturated lavender #6E63B8 for the neural network.
+The whole image is quiet and dark: lit accents cover less than 8% of the frame and never bloom or glare.
+NEVER include any text, letters, numbers, digits, labels, captions, logos, watermarks, color swatches, hex codes, screens or user interfaces anywhere in the image.
+No people, faces, hands, robots or brains. No photorealism, no 3D render, no clay, no depth of field, no film grain, no neon, no holograms.
+```
+
+## TLO-M — tło pionowe 9:16 (wersja główna)
+```
+Vertical 9:16 abstract background illustration of one large data-routing network that fills the entire frame from edge to edge, built from two quiet layers that read as one calm system.
+Back layer: a desaturated lavender neural web — thin branching fibers meeting at small round nodes, spread evenly across the whole frame, drawn barely lighter than the background.
+Front layer: about fifty graphite signal lines of even weight, routed strictly at 45- and 90-degree angles like a transit map, crossing and bundling into calm parallel runs, with small round junction dots where several lines meet.
+Upper 55% of the frame is the quietest part: lines are dimmer, spaced further apart and never brighter than a dark graphite tone, so headline text can sit on top of it.
+Lower 45% grows gradually denser and slightly brighter, with a few small sea-green marks of light resting inside some lines and two or three restrained amber accents at low intensity.
+The network is symmetric and balanced around the vertical center line: no single dominant object, no focal burst, no cable leaving the frame.
+Toward the bottom edge the composition stays calm and even, ready to be faded out.
+```
+
+## TLO-D — tło poziome 16:9
+Image 1 to zatwierdzone TLO-M.
+```
+Image 1 is the approved vertical background. Use it only for line weights, palette, density and the way the network is drawn; build a new horizontal composition, not a crop or a stretch of Image 1.
+Horizontal 16:9 abstract background illustration of the same quiet data-routing network filling the entire frame, in the same two layers: a desaturated lavender neural web behind and about sixty graphite signal lines routed at 45- and 90-degree angles in front, with small round junction dots.
+The left 45% of the frame is the quietest part: dimmer, more widely spaced lines for headline text.
+The right 55% grows denser and slightly brighter, with a few small sea-green marks of light inside the lines and two or three restrained amber accents at low intensity.
+The network is balanced, with no single dominant object and no focal burst. The composition stays calm along all four edges, ready to be faded out.
+```
+
+## Wariant do porównania (opcjonalny): z modułami
+Dokładamy sześć **jednakowych, symetrycznych** obudów, bez piktogramów i bez napisów. Akapit wstawiamy
+przed zdaniem o symetrii w TLO-M:
+```
+In the lower third, six identical flat rectangular module outlines stand in a strictly symmetric arrangement, three on each side of the vertical center line, evenly spaced and all exactly the same size, each with a calm pale face and one small amber dot; the signal lines enter them from the sides. The modules are quiet parts of the pattern, not the subject.
+```
+Ikony działów na stronie i tak rysujemy w wektorze, więc moduły w tle są wyłącznie dekoracją.
+
+## Twarde odrzuty (runda 2)
+Obraz oglądamy w powiększeniu 200%. Odrzucamy, jeśli:
+1. jest jakakolwiek litera, cyfra, glif, kod hex albo próbka koloru;
+2. cokolwiek wygląda kreskówkowo: grube obrysy, pękate kształty, śrubki, opaski, „zabawkowe” wtyczki;
+3. w górnych 55% kadru (na desktopie w lewych 45%) piksel jest jaśniejszy niż `#2A313A`;
+4. jest wyraźny punkt centralny, rozbłysk albo obiekt dominujący — tło ma być równe, nie ma konkurować z tekstem;
+5. akcenty świetlne zajmują wyraźnie więcej niż 8% kadru albo świecą łuną (bloom);
+6. tło odbiega od `#0D1014` o więcej niż ±2 (sprawdzamy cztery narożniki);
+7. pojawia się perspektywa, render 3D, połysk albo neon;
+8. linie mają nierówną grubość albo krzywe zakręty zamiast 45° i 90°;
+9. widać mózg, twarz, dłoń, robota albo ekran z interfejsem;
+10. kompozycja jest niesymetryczna na tyle, że jedna strona kadru jest zauważalnie cięższa.
+
+## Po wyborze
+1. Zwycięzca ponownie w 4K, plik do `_mastery/`.
+2. Eksport na stronę: patrz `03-pipeline-ffmpeg.md`, sekcja „Tło statyczne”.
+3. Ruch (opcjonalny, dopiero po v1): `02-ruch-opcjonalny.md`.
+
+---
+
+# ARCHIWUM — runda 1 (22.09, odrzucona)
+
+> **Ten rozdział jest historyczny.** Runda 1 dała 12 obrazów, ale styl wyszedł zbyt kreskówkowy,
+> a koncepcja kabla z impulsem została odrzucona przez założyciela. Aktualne prompty są w rozdziale
+> „Runda 2” na końcu tego pliku. Runda 1 zostaje jako zapis tego, co już wygenerowaliśmy.
+
 
 ## Ustawienia rundy kierunków
 - **Model:** Nano Banana Pro.

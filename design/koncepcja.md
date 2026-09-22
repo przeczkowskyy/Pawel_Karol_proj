@@ -10,9 +10,9 @@ automatyzacji: magazyn, księgowość, API, chatboty AI, generatory dokumentów,
 
 **Kto na nią wchodzi.** Ktoś skanuje QR z neutralnej, czarno-białej wizytówki i czyta na telefonie przez 30–90 s.
 
-**Efekt wow.**
-- Zapętlone motion grafiki z Higgsfield. Hero pokazuje gęste, lekko cartoonish okablowanie, sieć neuronową i przepływ danych.
-- Przez całą wysokość strony biegnie kabel. Przy przewijaniu płynie nim impuls.
+**Efekt wow (po korekcie 22.09).**
+- Jedno duże, wyciszone tło z okablowania i sieci neuronowej, wygaszane do czerni. Grafika z Higgsfield, styl poważny, zero kreskówki.
+- Kabel z impulsem przez całą stronę **wypadł z projektu**: efekt niepewny, koszt budowy wysoki.
 
 **Proces.** Prompty z tej rozmowy → Higgsfield (obraz → wideo → pętla) → Claude Design (layout) → hand-off tutaj
 (architektura, copy, szlif, deploy).
@@ -81,8 +81,8 @@ Jedyne jednorazowe kliknięcie to włączenie Web Analytics w projekcie Pages.
 
 ## 3. Koncepcja strony
 
-**Idea.** Hero pokazuje gęstą, działającą maszynownię. Wychodzi z niej jeden kabel, który biegnie przez całą stronę.
-Przewijanie przesuwa po nim impuls, który kolejno zasila sekcje i kończy we wtyczce przy „Zadzwoń”.
+**Idea.** Za treścią stoi jedno duże, ciemne tło: sieć kabli i połączeń neuronowych, wygaszana do czerni w dół strony.
+Na wierzchu jest spokojny, uporządkowany tekst i sześć ikon działów, które prowadzą do przykładów narzędzi.
 Przekaz: skomplikowane bierzemy na siebie, a Wam zostaje prosty przepływ danych.
 
 **Metafora w całej marce:**
@@ -91,9 +91,8 @@ Przekaz: skomplikowane bierzemy na siebie, a Wam zostaje prosty przepływ danych
 |---|---|
 | moduł | usługa |
 | przewód | integracja |
-| impuls | Wasze dane |
-| dioda | proces działa |
-| gniazdo | kontakt |
+| sieć w tle | Wasze systemy, dziś splątane |
+| bursztynowy punkt | miejsce, w którym coś działa samo |
 
 **Hasło marki:** „Skomplikowane bierzemy na siebie. Wam zostaje klarownie.” Pojawia się tylko w stopce, w sekcji 04 i w obrazie OG. Nigdy w H1.
 
@@ -111,13 +110,13 @@ Przekaz: skomplikowane bierzemy na siebie, a Wam zostaje prosty przepływ danych
 |---|---|
 | **pasek (mobile)** | Stały dół, 64 px + safe-area, pełne tło, bez `backdrop-filter`. Przyciski: **Zadzwoń** (bursztyn, `tel:+48786296426`), **Napisz** (mailto, temat „Rozmowa z wizytówki”), **Zapisz kontakt** (`/klarow.vcf`). Chowa się przy `#kontakt`. Na desktopie zamiast paska stały numer telefonu w nagłówku |
 | **`#start` hero** | Eyebrow (zawsze): `AUTOMATYZACJE · INTEGRACJE · AI`. **H1 (domyślny, wersja B):** „Automatyzujemy to, co ktoś u Was dziś przepisuje ręcznie.” (wariant A do testu: „Łączymy Wasze systemy, żeby dane płynęły same.”). Copy: „Łączymy magazyn, księgowość, Excel i dokumenty, żeby dane płynęły same. Od jednego raportu po kilka połączonych systemów.” CTA: „Policzcie, ile kosztuje ręczna robota ↓”. Przycisk pauzy wideo (WCAG 2.2.2). Na desktopie tekst po lewej, a pętla 9:16 w panelu po prawej (ten sam plik co na mobile) |
-| **`#co-robimy` 01** | H2 „Co automatyzujemy”. 6 wierszy w `<details>`: ikona, nazwa, koralowe „zamiast…” i papierowe „teraz…”. Wiersze w tabeli pod mapą. Pod listą: „Mały problem czy duży system — zaczynamy od kawałka, który boli najbardziej.” Blok **PRZYKŁAD** (etykieta „ilustracja, nie wdrożenie u klienta”) opisany pod mapą |
+| **`#co-robimy` 01** | H2 „Co automatyzujemy”. 6 wierszy z **klikalnymi ikonami** (ikona → `/przyklady#<dział>`), każdy w `<details>`: ikona, nazwa, koralowe „zamiast…” i papierowe „teraz…”. Wiersze w tabeli pod mapą. Pod listą: „Mały problem czy duży system — zaczynamy od kawałka, który boli najbardziej.” Blok **PRZYKŁAD** (etykieta „ilustracja, nie wdrożenie u klienta”) opisany pod mapą |
 | **`#oszczednosci` 02** | H2 „Ile kosztuje Was ręczna robota? Policzcie.” Kalkulator opisany w §7 |
-| **`#jak-pracujemy` 03** | H2 „Od rozmowy do działającego procesu”. 4 stacje na kablu i 4 obawy, opisane pod mapą |
+| **`#jak-pracujemy` 03** | H2 „Od rozmowy do działającego procesu”. 4 kroki współpracy i 4 obawy, opisane pod mapą |
 | **`#kim-jestesmy` 04** | H2 „Z kim rozmawiacie”. Copy: „Klarow to dwie osoby, które same piszą kod i same go wdrażają. Bez działu sprzedaży pomiędzy.” v1: imiona i role (bez placeholderów i monogramów). v1.1: prawdziwe zdjęcia z jednej sesji, bez efektów i bez AI |
-| **`#kontakt` 05** | H2 „Połączmy się.” Duże przyciski: Zadzwoń 786 296 426, Napisz, Zapisz w kontaktach. Link „Przyślijcie nam swój najgorszy Excel” (mailto z dopiskiem opisanym pod mapą). „Prześlij dalej” (Web Share, a bez niego kopiowanie linku). Kabel kończy się wtyczką: wpina się, zapala się `POŁĄCZONO`, a „Zadzwoń” dostaje poświatę. Bez obietnicy czasu odpowiedzi |
+| **`#kontakt` 05** | H2 „Połączmy się.” Duże przyciski: Zadzwoń 786 296 426, Napisz, Zapisz w kontaktach. Link „Przyślijcie nam swój najgorszy Excel” (mailto z dopiskiem opisanym pod mapą). „Prześlij dalej” (Web Share, a bez niego kopiowanie linku). Bez obietnicy czasu odpowiedzi |
 | **stopka** | Klarow · {administrator: imię i nazwisko} · kontakt@klarow.com · 786 296 426 · Polityka prywatności · „Ta strona nie używa ciasteczek.” |
-| **podstrony** | `/start` (prawdziwa strona dla QR, §8), `/polityka-prywatnosci`, typograficzna `/404` |
+| **podstrony** | `/przyklady` (6 przykładowych narzędzi, po jednym na dział, z etykietą „przykład, nie wdrożenie”), `/start` (prawdziwa strona dla QR, §8), `/polityka-prywatnosci`, typograficzna `/404` |
 
 **01: sześć wierszy oferty**
 
@@ -140,7 +139,7 @@ Przekaz: skomplikowane bierzemy na siebie, a Wam zostaje prosty przepływ danych
 
 Odgałęzienie: „coś się nie zgadza → do decyzji człowieka”.
 
-**03: stacje na kablu**
+**03: cztery kroki współpracy**
 1. „Rozmowa, 30 minut, bez zobowiązań — pokażcie proces albo najgorszy Excel.”
 2. „Pilot na kopii danych albo w środowisku testowym — gdzie się da, bez dotykania produkcji.”
 3. „Wdrożenie etapami. Najpierw to, co boli najbardziej; termin każdego etapu ustalamy przed startem.”
@@ -168,11 +167,11 @@ z testem w pełnym słońcu przed C1.
 | `--tlo` | `#0D1014` | tło strony i grafik |
 | `--powierzchnia` | `#161B21` | karty, pasek |
 | `--powierzchnia-2` | `#1F262E` | pola, obramowania, obudowa modułu |
-| `--kabel` | `#3A4450` | kabel bez prądu |
+| `--linia` | `#3A4450` | linie w tle, obramowania |
 | `--obrys` | `#05070A` | kreskówkowy obrys |
 | `--papier` | `#F2EDE3` | tekst (≈ 16:1) |
 | `--papier-2` | `#A8A294` | tekst drugorzędny (≈ 7,5:1); nie w hero |
-| `--sygnal` | `#FFB938` | **jedyny kolor akcji**: impuls, CTA, diody, wynik |
+| `--sygnal` | `#FFB938` | **jedyny kolor akcji**: CTA, akcenty ikon, wynik |
 | `--sygnal-zar` | `#FFF4D6` | jądro głowicy |
 | `--dane` | `#39D0C0` | pakiety, stan „działa” |
 | `--recznie` | `#FF6A4D` | tylko „zamiast…” i iskra |
@@ -190,209 +189,53 @@ z testem w pełnym słońcu przed C1.
 - Wersja czarno-biała nadaje się do dodruku wizytówek. Favicon to sam port.
 - Rysujemy go ręcznie w SVG, nie w generatorze.
 
-**Styl ilustracji: płaski kreskówkowy 2.5D**
-- Gruby, zaokrąglony obrys i płaskie wypełnienia. Każdy kabel i każda obudowa ma jasną linię refleksu, bo sam obrys na tle ma kontrast 1,06:1.
-- Przesadzone proporcje: grube kable, duże wtyczki. Czytelność planu metra: zakręty 45° i 90°.
-- Wspólna **obudowa modułu**: grafitowa skrzynka, papierowy panel, 4 śrubki, port z lewej, dioda w prawym górnym rogu.
-- Zakazy: ludzie, roboty, mózgi, tekst, glina/3D, niebieski neon.
-- Zabawa jest w ilustracjach, powaga w tekście.
+**Styl ilustracji: poważny rysunek techniczny**
+- Równe, cienkie linie o jednakowej grubości, płaskie matowe wypełnienia, zero grubych obrysów i cieni.
+- Geometria jak w schemacie inżynierskim i na mapie metra: proste odcinki, zakręty 45° i 90°, dużo pustej przestrzeni.
+- Wspólna **obudowa modułu** dla ikon: prostokąt o zaokrąglonych rogach, spokojna jasna płaszczyzna, jeden bursztynowy punkt.
+- Akcenty świetlne zajmują poniżej 8% kadru i nigdy nie świecą łuną.
+- Zakazy: kreskówkowość (grube obrysy, śrubki, opaski, pękate kształty), ludzie, roboty, mózgi, tekst, render 3D, neon.
 
 ---
 
-## 5. Hero i Higgsfield: hurtownia promptów, runda 1
+## 5. Tło strony (efekt wow po zmianie kierunku 22.09)
 
-**Wnioski weryfikacji, które zmieniły podejście:**
-1. Pętla z tą samą klatką na starcie i końcu tłumi ruch mniej więcej 10 razy. Seedance potrafi też odtworzyć akcję wstecz. Dlatego testujemy 2 strategie wideo.
-2. Seedance nie ma pola negative prompt i czyta każdy token pozytywnie. Prompt ruchu jest więc krótki (50–80 słów), zawiera tylko ruch i kamerę, bez STYLE i bez listy zakazów.
-3. Słowa „headline”, „invoice”, „spreadsheet”, „component sheet” i „data packets” przywołują pseudotekst. Zastępujemy je piktogramami opisanymi pozytywnie.
-4. Wizja „SUPER skomplikowane” zostaje. Zamiast pustego pasa na tekst stosujemy **gradient gęstości**: cały kadr to maszyna, górne 60% leży „w cieniu” (żaden piksel jaśniejszy niż `#2A313A`), a dolne 40% ma pełny kontrast.
-5. Kling 3.0 **przyjmuje** klatkę końcową (poprawka syntezy).
+**Co wypadło i dlaczego.** Kabel z impulsem biegnący przez całą stronę został odrzucony przez założyciela:
+efekt był niepewny, styk grafiki z kodem kruchy, a koszt budowy wysoki. Zamiast niego strona dostaje
+**jedno duże, wyciszone tło** z okablowania i sieci neuronowej.
 
-**Kolejność:**
-1. **Runda kierunków:** Nano Banana Pro, 9:16, **2K**, 4 warianty na kierunek, bez referencji. 3 kierunki: GŁÓWNY, ALT-1, ALT-2.
-2. Wybór kierunku i ta sama generacja w **4K**.
-3. Przycięcie symetryczne, **nigdy od dołu**, i resampling Lanczos do `hero-m-start-1080x1920.png`. Ten plik to jednocześnie klatka startowa wideo, poster i baza pomiaru `data-exit`.
-4. Retusz pseudoznaków: ręcznie (Photopea, wypełnienie kolorem), a przy większych poprawkach edycja w Nano Banana. Seedream tylko w ostateczności.
-5. Wideo (sekcja „Ruch”).
-6. Karta stylu A0 wyprowadzona ze zwycięzcy. Dopiero z nią powstają A1d, A2 i A3 (v1.1).
+**Jak to działa**
+- Jeden obraz na orientację: `TLO-M` (9:16) na telefon, `TLO-D` (16:9) na desktop. Leży w warstwie pod treścią,
+  `position: fixed`, `object-fit: cover`.
+- U góry strony widać go najmocniej, niżej jest **wygaszany do czerni**. Wygaszanie robi CSS
+  (`linear-gradient` do `--tlo`), nie generator, więc regulujemy je bez nowej generacji.
+- Pod każdym blokiem tekstu leży dodatkowe płaskie przyciemnienie, żeby kontrast trzymał się powyżej 7:1.
+- W v1 tło jest **nieruchome**. Ruch świateł jest opcją po starcie (`design/prompty/higgsfield/02-ruch-opcjonalny.md`),
+  a tańszą wersją tej opcji są kropki na ścieżkach SVG animowane w kodzie.
+- `prefers-reduced-motion` i brak JS niczego nie psują: tło to obraz.
 
-Konto Higgsfield podpięte przez MCP ma **0 kredytów**, więc wklejacie ręcznie. Mastery trafiają do `Klarow v2\_mastery\`
-(folder w `.git/info/exclude`).
+**Styl: poważny, zero kreskówki.** Język rysunku technicznego i mapy metra — równe cienkie linie, trasy pod 45°
+i 90°, płaskie matowe wypełnienia, dużo pustej przestrzeni, akcenty świetlne poniżej 8% kadru. Zakazane są grube
+obrysy, śrubki, opaski, pękate kształty i wszystko, co wygląda zabawkowo.
 
-### Blok STYLE (doklejany na końcu KAŻDEGO promptu obrazu)
-```
-STYLE: Flat 2.5D cartoon illustration, front-on orthographic view, no perspective, no vanishing points.
-Chunky rounded shapes with bold near-black outlines (#05070A) of one constant width, flat fills, one soft drop shadow per object.
-Every cable and every housing has one thin pale highlight line (#F2EDE3, low opacity) along its upper edge, so each silhouette separates from the dark background.
-Slightly exaggerated proportions: thick patch cables of constant thickness, oversized plugs and jacks, rounded junction boxes with small LEDs, screws and cable ties.
-No hairline details: even the thinnest fiber is drawn with a clearly visible bold stroke.
-Shared module housing: a rounded dark graphite box (#1F262E) with a warm paper front panel (#F2EDE3), four corner screws, one round port on its left side and one small LED top-right; only the simple pictogram on the front panel differs. Paper anywhere shows thick grey bars instead of writing.
-Background: solid flat deep graphite #0D1014, no vignette, no gradient, no texture.
-Palette only: graphite cables #3A4450, paper #F2EDE3, amber glow #FFB938, sea-green light packets #39D0C0, coral accents #FF6A4D, lavender neural fibers #9B8CFF.
-Light comes only from glowing packets and LEDs, as a soft flat halo.
-Modular-synth patch bay meets metro-map clarity: dense but orderly routing with 45- and 90-degree bends.
-NEVER include any text, letters, numbers, digits, labels, captions, logos, watermarks, color swatches or hex codes anywhere in the image.
-No people, faces, hands, robots or brains. No photorealism, no glossy 3D or clay render, no depth of field, no bokeh, no film grain, no blue neon, no holograms.
-```
+**Prompty:** `design/prompty/higgsfield/01-tlo-i-hero.md`, rozdział „Runda 2”, razem z blokiem STYLE 2
+i listą twardych odrzutów. Eksport na stronę: `03-pipeline-ffmpeg.md`, sekcja H.
 
-### A1m GŁÓWNY: „maszynownia” (Nano Banana Pro, 9:16)
-```
-Vertical 9:16 illustration. One enormous, intricate machine of wiring fills the entire frame from edge to edge, drawn in three depth layers, and it grows brighter, bolder and denser toward the bottom.
-Upper 60% of the frame: the machine continues but sinks into deep shadow: only dim lavender fibers and graphite cables drawn barely lighter than the background, an even, low-contrast tangle with no glowing lights, no paper panels and no large shapes.
-Lower 40%: full-contrast machinery. Back layer: a lavender neural web of branching fibers and round nodes. Middle layer: at least forty thick graphite cables weaving between ten rounded junction boxes, bundled with cable ties. Front layer: six module housings whose paper panels show simple pictograms: a shelf with three plain boxes; a blank sheet with grey bars sliding into a slot; a speech bubble with three dots; a stack of sheets with grey bars; an empty grid of cells; a gear.
-At about 75% height, near the center, the cables fray into a glowing lavender neural knot shaped like dendrites. Small sea-green packets of light sit inside the cables that lead into it.
-From the knot, ONE thick main cable of constant width carries a single amber glow downward, turning with 45-degree bends; its last 15% runs perfectly straight and vertical and leaves the bottom edge at 20% of the frame width from the left. The bottom edge stays clear of other objects for a short distance on both sides of this cable.
-```
-
-### A1m ALT-1: „szafa krosowa w izometrii”
-Pierwsze zdanie STYLE zamieniamy na: *„STYLE: Flat 2.5D cartoon illustration in true isometric projection: parallel edges, no vanishing points, no perspective.”*
-```
-Vertical 9:16 illustration in true isometric projection. A huge open patch-bay cabinet fills the entire frame from edge to edge: stacked rows of identical rounded module housings slotted into racks like drawers, hundreds of thick patch cables looping between their front ports in tidy bundles held by cable ties, and a small LED on every module.
-Upper 60% of the frame: the upper racks sink into deep shadow, drawn barely lighter than the background, an even, low-contrast pattern with no glowing lights and no paper panels.
-Lower 40%: full contrast. In one open bay near the center, at about 75% height, a glowing lavender neural knot of branching dendrite fibers is wired into every row; small sea-green packets of light sit inside the cables that lead into it. Six larger module housings stand in the front row, their paper panels showing simple pictograms: a shelf with three plain boxes; a blank sheet with grey bars sliding into a slot; a speech bubble with three dots; a stack of sheets with grey bars; an empty grid of cells; a gear.
-All routes gather into ONE thick main cable of constant width that carries a single amber glow; it drops out of the cabinet, its last 15% runs perfectly vertical, and it leaves the bottom edge at 20% of the frame width from the left. The bottom edge stays clear of other objects near it.
-```
-Ryzyko ALT-1: odbiór „firma od okablowania/IT”.
-
-### A1m ALT-2: „neurony i organiczne kable”
-W STYLE zdanie o modular-synth zamieniamy na: *„Organic branching network meets patch-bay hardware: dense and flowing, yet every route stays readable.”*
-```
-Vertical 9:16 illustration. A living network fills the entire frame from edge to edge: big cartoon neuron cells with round lavender bodies and long branching dendrites; toward their tips the dendrites turn into thick graphite patch cables that end in oversized plugs seated in the ports of module housings.
-Upper 60% of the frame: fine branches sink into deep shadow, drawn barely lighter than the background, an even, low-contrast tangle with no glowing lights and no modules.
-Lower 40%: full contrast. Three large neuron bodies interlock around one glowing lavender knot at about 75% height; small sea-green packets of light sit along the dendrites that lead into it. Around the knot, six module housings are plugged into dendrite tips; their paper panels show simple pictograms: a shelf with three plain boxes; a blank sheet with grey bars sliding into a slot; a speech bubble with three dots; a stack of sheets with grey bars; an empty grid of cells; a gear.
-Dendrites curve organically; only the cables close to the modules use 45- and 90-degree bends.
-From the knot, ONE thick main cable of constant width carries a single amber glow downward; its last 15% runs perfectly straight and vertical and leaves the bottom edge at 20% of the frame width from the left. The bottom edge stays clear of other objects near it.
-```
-Ryzyko ALT-2: odbiór „biotech”.
-
-**Twarde odrzuty stilla.** Oglądamy w powiększeniu 200%. Odrzucamy, jeśli jest:
-1. litera, cyfra, glif, kod hex albo próbka koloru;
-2. w górnych 60% piksel jaśniejszy niż `#2A313A` albo cokolwiek bursztynowego, morskiego lub papierowego;
-3. pień, który nie jest pojedynczy, zmienia grubość, nie ma pionu na ostatnich 15%, wychodzi poza 17–23% szerokości albo ma obcy obiekt w promieniu ±8% szerokości przy dolnej krawędzi;
-4. linia cieńsza niż ok. 2 px po zmniejszeniu do 720×1280;
-5. mózg, robot, twarz albo dłoń;
-6. zbieżna perspektywa;
-7. tło odbiegające od `#0D1014` o więcej niż ±2;
-8. liczba modułów inna niż 6 albo różne obudowy;
-9. połysk, glina albo neonowy bloom;
-10. bursztyn poza pniem.
-
-### Ruch hero (Seedance 2.0, image-to-video, 9:16 ustawione ręcznie, audio OFF)
-
-**Strategie.** Drafty w 720p (Fast), po 3 generacje na strategię:
-- **V-A:** start = end = `hero-m-start-1080x1920.png`, 8 s.
-- **V-B:** tylko klatka startowa, 10 s.
-
-Wybieramy strategię z równym strumieniem w jedną stronę. Jej finał renderujemy w 1080p (tryb standard).
-Plan B z tym samym promptem: Kling 3.0, MiniMax H3 (1440×2560), FLUX 3 Video.
-```
-Static tripod shot, locked-off camera, one continuous shot. The illustration holds perfectly still exactly as in the first frame: every line, shape and color stays fixed for the whole clip. Only light travels: small sea-green packets glide steadily along the bright lower cables into the glowing knot, and a calm stream of amber light flows down the main cable and out through the bottom edge. Tiny LEDs blink softly every two seconds. The dark upper area stays dark and still. 24 fps.
-```
-- Tylko w V-A dopisujemy na końcu: `The last frame is identical to the first frame.`
-- ALT-1: frazę „along the bright lower cables” zamieniamy na „along the bright cables in the front racks”.
-- ALT-2: tę samą frazę zamieniamy na „along the dendrites”.
-
-**Odrzuty wideo.** Odrzucamy generację, jeśli ma:
-1. ruch kamery, zoom albo dryf skali;
-2. kształty zmieniające się tam, gdzie przechodzi światło;
-3. pakiety, które zawracają albo płyną w górę pnia;
-4. duże obszary zapalające się naraz albo miganie częstsze niż 3 razy na sekundę;
-5. światło w ciemnej strefie;
-6. pulsowanie albo dryf koloru tła;
-7. nowe obiekty albo tekst;
-8. pień, który zmienia geometrię;
-9. „zamrożenie”: mniej niż 3 pakiety w ciągu 2 s;
-10. szarpanie.
-
-**Plan C, bez wideo.** Stosujemy go, gdy nic nie przejdzie odrzutów albo budżetu:
-- poster AVIF,
-- 10–14 ścieżek SVG obrysowanych po głównych kablach,
-- kropki-pakiety na `offset-path` w takcie 2 s.
-
-Plan C działa też w iOS Low Power Mode.
-
-### Pipeline ffmpeg (ffmpeg 9 jest lokalnie; komendy w `design/prompty/higgsfield/pipeline.md`)
-0. **Blokada statyki (obowiązkowa).** `maskedmerge`: piksele różniące się od mastera mniej niż próg (12–24) bierzemy z mastera, a światło z wideo.
-   - Daje to trzy rzeczy: statyka jest bit w bit równa posterowi, szew pętli dotyczy tylko światła, a plik jest mniejszy.
-   - Jeśli maska pokazuje całe kontury, znaczy to, że kamera dryfuje. Taką generację odrzucamy.
-1. **V-A:** odcinamy ostatnią klatkę.
-   **V-B:** zostawiamy okno 9 s i robimy `xfade` 1 s. `offset = D − 2` (D z `ffprobe`), co daje pętlę 8 s.
-   Oba zabiegi to alternatywy, nigdy nie stosujemy ich jeden po drugim.
-   Pośredniki zapisujemy bezstratnie (`ffv1`/`.mkv`).
-2. **H.264:**
-   ```
-   libx264 -preset veryslow -tune animation -crf ~27 -profile:v high -g 180 -pix_fmt yuv420p
-   ```
-   Dodatkowo:
-   - jawne tagi bt709 i `in/out_color_matrix=bt709` w `scale`,
-   - `hqdn3d=0:0:3:3`,
-   - `-movflags +faststart -an`,
-   - 720×1280.
-3. **Poster:** pierwsza klatka **zakodowanego** pliku, potem AVIF.
-4. **Tło:** kolor tła mierzymy próbnikiem na zakodowanym pliku (Safari iOS i Chrome Android) i wpisujemy go jako `--tlo`, zamiast korygować wideo.
-5. **Placeholder do Claude Design:**
-   ```
-   fps=10,scale=540:-1 -c:v libwebp_anim -q:v 50 -loop 0
-   ```
-   Do tego PNG pierwszej klatki. **Nigdy nie trafia na produkcję.**
+**Runda 1 (12 obrazów, 22.09) odrzucona:** za bardzo kreskówkowa i ze zbyt jasną górą kadru. Zapis w archiwum
+tego samego pliku.
 
 ---
 
-## 6. Kabel przez całą stronę (efekt podpisowy, v1)
+## 6. Nawigacja po ofercie: ikony i podstrona `/przyklady`
 
-**Geometria**
-- **Mobile:** prosta szyna z osią na x = 18 px. Treść zaczyna się 40 px od lewej.
-- **Desktop:** szyna 10 px przy lewej krawędzi kolumny (maks. 1120 px).
-- Bez S-krzywych i meandrów.
-- Pas kabla przycinamy przez `overflow: visible clip`, żeby nie obciąć poświaty.
+Miejsce, które wcześniej zajmował impuls, przejmuje **sześć ikon działów** w sekcji `#co-robimy`.
 
-**Warstwy (bez SVG na całą wysokość)**
-- Kabel bez prądu to gradient: obrys, rdzeń i refleks.
-- `.kabel__zasilony` przesuwa się `translateY(-100%→0)`.
-- Głowica to `::after` warstwy zasilonej: rdzeń 6 px i halo 20 px, „oddycha” co 2 s.
-
-**Mechanizm (CSS scroll-driven; potwierdzony przez MDN i caniuse)**
-```css
-:root{--linia:62%;--linia-reszta:38%}
-@media (min-width:900px){:root{--linia:50%;--linia-reszta:50%}}
-.kabel{view-timeline:--kabel block;view-timeline-inset:var(--linia) var(--linia-reszta)}
-@supports (animation-timeline: view()){
- .kabel__zasilony{animation:zasil linear both;animation-duration:1ms;
-   animation-timeline:--kabel;animation-range:cover 0% cover 100%}
-}
-@keyframes zasil{from{transform:translateY(-100%)}to{transform:translateY(0)}}
-```
-
-**Wsparcie przeglądarek**
-
-| Przeglądarka | Co widać |
-|---|---|
-| Chrome, Edge, Android | ruch impulsu |
-| Safari 26+ | ruch impulsu, na osobnym wątku od 26.4 |
-| Firefox stabilny, iOS ≤ 18 | w v1 **statyczny, w pełni zasilony kabel**; fallback JS (ok. 15 linii, gotowy w lokalnym raporcie technicznym) dopiero w v1.1, jeśli WA pokaże potrzebę |
-
-**Stan sekcji**
-- Jeden `IntersectionObserver` z linią czytania (działa wszędzie).
-- Sekcja przecinająca linię oraz wszystkie wcześniejsze dostają klasę `.zasilona`. Klasy nigdy nie zdejmujemy.
-- CSS pod `.zasilona` robi dwie rzeczy: etykieta ○ → ●, a w `#kontakt` wtyczka, napis `POŁĄCZONO` i poświata „Zadzwoń”.
-
-**Poprawka: kabel na dnie strony.** Głowica nie dojdzie do końca szyny, jeśli pod wtyczką jest mniej niż (1 − linia) × wysokość okna.
-- Dodajemy strażnika `#koniec` na końcu stopki. Gdy jest widoczny, dostajemy `html.kabel-pelny`, co zasila całość.
-- Wtyczka stoi przy górze `#kontakt`, obok H2.
-
-**Łącznik hero → szyna**
-- Krótka ścieżka SVG w stylu metra z własnym `view-timeline` o tej samej linii. Głowica jedzie przez `offset-path`.
-- Timebox 2 h. Plan awaryjny: szyna zaczyna się pod hero gniazdem.
-
-**Zakazy**
-- scroll-jacking, smooth-scroll, `scroll-snap`, `sticky`,
-- listenery `wheel` i `touchmove`,
-- `overflow: hidden|auto` na przodkach `.kabel` (to zamraża oś czasu); poziomy scroll gasimy przez `overflow-x: clip`,
-- `filter`, `blur`, `backdrop-filter` na dużych warstwach.
-
-**Ograniczony ruch.** `prefers-reduced-motion` daje kabel statycznie zasilony i poster zamiast wideo. Bez JS strona wygląda tak samo.
-
-**v1.1 (po pierwszej rozmowie):** przerwa w kablu z iskrą w 01, pakiety danych, diody i przekreślenia w wierszach, stacje 03, „o” w stopce.
+- **Rysunek, nie generator.** Sześć ikon w jednej, wspólnej obudowie modułu, ta sama siatka, ta sama grubość
+  linii, symetryczny układ (2×3 na telefonie, 6 w rzędzie na desktopie). Generator nie daje takiej powtarzalności.
+- **Klikalne.** Każda ikona prowadzi do `/przyklady#<dział>`, czyli do opisu przykładowego narzędzia z tego obszaru.
+- **Uczciwość.** Każdy blok na `/przyklady` ma widoczną etykietę: to **przykład możliwości**, nie wdrożenie u klienta.
+  Treść sześciu opisów powstaje osobno i wymaga akceptacji przed publikacją.
+- Sekcja `#co-robimy` na stronie głównej zostaje krótka: ikona, nazwa działu, „zamiast…” i „teraz…”. Szczegóły są na podstronie.
 
 ---
 
@@ -465,9 +308,9 @@ site/  package.json  .node-version  astro.config.mjs
   src/content/strona.ts     ← cała treść PL w jednym pliku
   src/styles/tokens.css     ← nazwy 1:1 z briefu Claude Design
   src/lib/kalkulator.ts (+ .test)
-  src/components/  Hero, Kabel, Sekcja, Kalkulator, PasekKontaktu, Wtyczka, Petla …
-  src/scripts/     petla.ts (~20 linii) · porty.ts (IO) · kalkulator.ts · udostepnij.ts
-  src/pages/       index.astro  start.astro  polityka-prywatnosci.astro  404.astro
+  src/components/  Tlo, Hero, Sekcja, IkonaDzialu, Kalkulator, PasekKontaktu …
+  src/scripts/     kalkulator.ts · udostepnij.ts        (łącznie ok. 4 KB)
+  src/pages/       index.astro  przyklady.astro  start.astro  polityka-prywatnosci.astro  404.astro
   scripts/straznik.mjs
 design/  koncepcja.md  prompty/{higgsfield,claude-design}/  handoff-NN/  _lokalne/ (poza gitem)
 ```
@@ -549,17 +392,14 @@ Bez hooka pre-push: `|| true` nie działa w cmd.exe, a hook to nadmiar dla v1.
 Z hand-offu bierzemy układ, odstępy i wygląd komponentów. Nie bierzemy JS, fontów z CDN ani stylów inline.
 Każda odchyłka od tokenów wraca do `tokens.css`.
 
-Szkic promptów #1–#4 i promptu awaryjnego „R” (powrót do kontraktu) jest gotowy (ok. 330 linii).
-W C0 zapisuję go do `design/prompty/claude-design/01…04.md` **z poprawkami tego planu**:
-- H1 w wersji B jako domyślny, eyebrow zawsze widoczny, bez chipa QR;
-- strefa tekstu w górnych 60% kadru i scrim do 60%;
-- copy z §3 i §7;
-- presety z §7;
-- formy neutralne;
-- wycięte: pigułka na desktopie (zostaje numer w nagłówku), drugi przełącznik ruchu, baner udostępnionego linku, pole kosztu wdrożenia, efekt z czerni i bieli w kolor, grafika A7;
-- stopka z administratorem.
+Prompty #1–#4 i prompt awaryjny „R” są w `design/prompty/claude-design/`, w wersji po zmianie kierunku z 22.09:
+- tło jako główny element wizualny, z warstwą wygaszającą i wymogiem pomiaru kontrastu **na grafice**;
+- sekcja 01 jako siatka sześciu **klikalnych ikon** prowadzących do `/przyklady#<slug>`;
+- podstrona `/przyklady` z sześcioma blokami (treść: `design/tresc/przyklady-narzedzi.md`, czeka na akceptację);
+- zero kabla, portów, wtyczki, wideo i ruchu bez interakcji;
+- H1 w wersji B, eyebrow zawsze widoczny, bez chipa QR, formy neutralne, presety kalkulatora z §7.
 
-Zasada ogólna: Claude Design rysuje stany (przygaszony i zasilony), a mechanikę trzyma kod. Pula użycia Claude Design jest wspólna, więc rundy #2–#4 są celowo wąskie.
+Zasada ogólna: Claude Design rysuje układ i stany interakcji, a mechanikę (kalkulator) trzyma kod. Pula użycia Claude Design jest wspólna, więc rundy #2–#4 są celowo wąskie.
 
 ---
 
@@ -573,8 +413,8 @@ Etap jest zamknięty dopiero razem ze swoją akcją „do ludzi”. Postęp licz
 | **E1** | Wy | Higgsfield runda 1: 3 kierunki × 4 warianty 2K, wybór, 4K, `hero-m-start-1080x1920.png`, drafty ruchu V-A i V-B | still zatwierdzony |
 | **E1b** | Wy | Test 3 s na makiecie telefonu (sam tekst hero, raz bez obrazu i raz ze stillem, H1 w wersji A i B) na 5 osobach spoza branży. Pytanie: „Z jaką sprawą można by zadzwonić do tej firmy?”. Zaliczony, gdy ≥ 4/5 osób nazywa konkretne zadanie i nikt nie mówi „sieci/IT/okablowanie”. Do tego 5 wiadomości do firm z listy leadów (bez linku, prośba o 20 min) | test zrobiony, wiadomości wysłane |
 | **E2** | Wy + Claude Code | Claude Design, rundy #1–#4 (timebox ok. 4 h), `design/handoff-01/` | hand-off w repo |
-| **C1** „Nowa wizytówka” | Claude Code | `git rm` starego `site/`; Astro; layout z hand-offu; całe copy; kalkulator z testem; statyczny zasilony kabel; porty z IO; hero z posterem; pasek, vCard, `/start`, polityka, 404, `_redirects`, `_headers`, OG, strażnik. **Stara strona znika**, stare adresy nie dają 404 | link wysłany 5 osobom z ICP (nie rodzinie) |
-| **C2** „Kabel i hero w ruchu” | Claude Code | impuls ze scrollem, łącznik, wtyczka `POŁĄCZONO`, pętla hero H.264 (albo still, jeśli pętla nie przejdzie odrzutów w terminie), pauza wideo. Test na tanim Androidzie przez LTE i na iPhonie | 5 osób zeskanowało QR na żywo, 10 kolejnych wiadomości z linkiem, ≥ 1 umówiona rozmowa |
+| **C1** „Nowa wizytówka” | Claude Code | `git rm` starego `site/`; Astro; layout z hand-offu; całe copy; tło z wygaszaniem; 6 ikon działów; kalkulator z testem; pasek, vCard, `/start`, polityka, 404, `_redirects`, `_headers`, OG, strażnik. **Stara strona znika**, stare adresy nie dają 404 | link wysłany 5 osobom z ICP (nie rodzinie) |
+| **C2** „Przykłady narzędzi” | Claude Code | podstrona `/przyklady` z sześcioma opisami i kotwicami, linkowanie z ikon, obraz OG, szlif kontrastu i wydajności. Test na tanim Androidzie przez LTE i na iPhonie | 5 osób zeskanowało QR na żywo, 10 kolejnych wiadomości z linkiem, ≥ 1 umówiona rozmowa |
 | **v1.1** | razem | kolejność wg tego, o co pytali rozmówcy. Kandydaci: motion grafiki sekcji A2 i A3, A1d, ikony A4, zdjęcia, detale kabla z §6, AV1, fallback JS kabla, odliczanie | każda pozycja po rozmowie |
 
 **Orientacyjne terminy:** C0 dziś (pn 21.09), E1–E2 do czw 24.09, C1 do pt 25.09, C2 do wt 29.09.
@@ -620,10 +460,9 @@ Strażnik nie wypuści na produkcję niczego z `[do potwierdzenia]`.
   | nieistniejący adres | 404 |
 
 - **Urządzenia:**
-  - Android za ok. 800 zł przez LTE: kabel bez szarpania, LCP ≤ 2,5 s;
-  - iPhone z iOS 26.4+: impuls na linii 62%, wtyczka dochodzi też na desktopie;
-  - iOS 18 albo Firefox: statyczny zasilony kabel;
-  - Low Power Mode: poster, a po tapnięciu wideo;
+  - Android za ok. 800 zł przez LTE: LCP ≤ 2,5 s, płynne przewijanie;
+  - iPhone i Android: tło nie przesuwa się skokowo przy chowaniu paska adresu;
+  - kontrast tekstu na tle ≥ 7:1 w każdej sekcji (pomiar na zrzucie, nie na oko);
   - `prefers-reduced-motion`;
   - 360×640 bez poziomego scrolla;
   - test w pełnym słońcu.

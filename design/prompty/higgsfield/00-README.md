@@ -1,34 +1,31 @@
 # Hurtownia promptów: Higgsfield
 
-Kolejność pracy (koncepcja §5):
+> **Kierunek od 22.09:** strona dostaje **jedno duże, wyciszone tło** z okablowania i sieci neuronowej,
+> wygaszane do czerni. Kabel z impulsem przez całą stronę został odrzucony. Styl ma być **poważny, bez kreskówki**.
 
-1. **Runda kierunków** (`01-hero-runda-1.md`)
-   - Nano Banana Pro, 9:16, 2K, 4 warianty.
-   - 3 kierunki: GŁÓWNY, ALT-1, ALT-2.
-   - Każdy prompt obrazu kończy się blokiem STYLE.
-2. **Wybór kierunku**, potem ta sama generacja w 4K.
-3. **Przygotowanie mastera** (`03-pipeline-ffmpeg.md`, krok A): przycięcie i resampling do `hero-m-start-1080x1920.png`.
-4. **Retusz pseudoznaków**
-   - ręcznie w Photopea (wypełnienie kolorem),
-   - większe poprawki: edycja w Nano Banana,
-   - Seedream tylko w ostateczności.
-5. **Ruch** (`02-ruch-hero.md`)
-   - Seedance 2.0: strategie V-A i V-B, drafty w 720p, finał w 1080p.
-6. **Obróbka** (`03-pipeline-ffmpeg.md`)
-   - blokada statyki, domknięcie pętli, H.264,
-   - poster,
-   - placeholder WebP do Claude Design.
-7. **v1.1** (`04-v1.1-pozostale-assety.md`): A0, A1d, A2, A3, A4.
+## Kolejność pracy
+1. **Runda tła** (`01-tlo-i-hero.md`, rozdział „Runda 2”)
+   - Nano Banana Pro, 9:16, 2K, 4 warianty, blok **STYLE 2** na końcu promptu.
+   - Wybór kadru według listy twardych odrzutów.
+2. **Zwycięzca w 4K** → `_mastery/`.
+3. **Eksport na stronę** (`03-pipeline-ffmpeg.md`, sekcja **H**): przycięcie i skalowanie, resztę robi Astro w buildzie.
+4. **Wersja pozioma (TLO-D)** dla desktopu, z TLO-M jako referencją.
+5. **Ruch** (`02-ruch-opcjonalny.md`) — dopiero po starcie v1, jeśli w ogóle.
+6. **v1.1** (`04-v1.1-pozostale-assety.md`): grafiki sekcji, jeśli okażą się potrzebne.
+
+Ikony sześciu działów oferty **rysujemy w wektorze**, nie w generatorze. Tylko rysunek daje jednakową grubość
+linii, tę samą siatkę i symetrię.
 
 ## Zasady
-- **Oryginały** trafiają do `_mastery/` w katalogu repo: 4K, drafty wideo, `raw.mp4`. Folder jest poza gitem.
-  - Do gita idą tylko finalne pliki strony w `site/public/media/`, z wersją w nazwie (`.vN`).
-- **Strefa ciemna.** W górnych 60% kadru 9:16 żaden piksel nie może być jaśniejszy niż `#2A313A`. Tam leży tekst hero.
-- **Proporcje** ustawiamy zawsze ręcznie, nigdy „Auto”. **Audio** zawsze wyłączone.
-- **Kolejność kosztów.** Na wideo nie wydajemy kredytów, dopóki still nie przejdzie wszystkich twardych odrzutów.
+- **Oryginały** (4K, drafty) trafiają do `_mastery/`, poza gitem. Do repo idzie tylko plik źródłowy strony w `site/src/assets/`.
+- **Ciemna strefa tekstu.** W górnych 55% kadru pionowego (na desktopie w lewych 45%) żaden piksel nie może być
+  jaśniejszy niż `#2A313A`. Wygaszanie do czerni robi CSS, więc obraz ma mieć równe tło `#0D1014`.
+- **Zero kreskówki.** Grube obrysy, śrubki, opaski i pękate kształty są powodem odrzucenia generacji.
+- **Proporcje** ustawiamy ręcznie, nigdy „Auto”.
+- Na wideo nie wydajemy kredytów, dopóki v1 nie jest na produkcji.
 
-## Dziennik generacji (dowód pochodzenia: data, model, prompt, link)
+## Dziennik generacji (data, model, prompt, link, werdykt)
 
-| Data | Asset | Model | Prompt (plik#nagłówek) | Link do generacji | Werdykt |
+| Data | Asset | Model | Prompt (plik#rozdział) | Link do generacji | Werdykt |
 |---|---|---|---|---|---|
-| | | | | | |
+| 2026-09-22 | hero runda 1 (12 szt.) | Nano Banana Pro | `01-tlo-i-hero.md#archiwum-runda-1` | konto webowe Higgsfield | odrzucone: za bardzo kreskówkowe, jasna góra kadru |
