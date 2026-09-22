@@ -1,11 +1,15 @@
 node_modules/
 dist/
 dist-ssr/
+.astro/
 *.local
+
+# Oryginały z Higgsfield (4K, drafty wideo) — tylko lokalnie, nigdy w gicie
+_mastery/
 
 # Lead-Scout — sekrety lokalne (token bota Telegram + wykryty chat_id)
 leadscout/.env
 leadscout/.chat_id
 
-# Artefakty audytu (zrzuty, raporty) — regenerowalne, poza gitem
-.claude/work/audit/
+# Surowe raporty panelu projektowego i notatki wewnętrzne — lokalnie, repo jest publiczne
+design/_lokalne/
