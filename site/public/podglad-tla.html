@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pl" class="w-b">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Klarow — podgląd tła</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+:root{
+  --tlo:#0D1014; --powierzchnia:#161B21; --powierzchnia-2:#1F262E; --linia:#3A4450;
+  --papier:#F2EDE3; --papier-2:#A8A294; --sygnal:#FFB938; --dane:#39D0C0; --recznie:#FF6A4D;
+  --img:url("/podglad/tlo-m.webp"); --kafel:url("/podglad/tlo-m-kafel.webp");
+  --font:"Bricolage Grotesque",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+}
+@media (min-width:900px){ :root{ --img:url("/podglad/tlo-d.webp"); --kafel:url("/podglad/tlo-d-kafel.webp"); } }
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--tlo)}
+body{background:transparent;color:var(--papier);font-family:var(--font);-webkit-text-size-adjust:100%;
+  position:relative;overflow-x:clip;padding-bottom:88px}
+
+/* --- WARSTWY TŁA --- */
+.tlo{position:absolute;inset:0;z-index:-2;pointer-events:none}
+.tlo__obraz{position:absolute;inset:0;background-image:var(--kafel);background-size:100% auto;background-repeat:repeat-y;background-position:top center}
+.w-a .tlo__obraz{position:fixed;background-image:var(--img);background-size:cover;background-repeat:no-repeat;background-position:center}
+.tlo__wygaszenie{position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:linear-gradient(to bottom,rgba(13,16,20,0) 0%,rgba(13,16,20,.45) 30%,rgba(13,16,20,.72) 60%,rgba(13,16,20,.92) 100%)}
+.w-c .tlo__wygaszenie{background:linear-gradient(to bottom,rgba(13,16,20,.15) 0%,rgba(13,16,20,.62) 25%,rgba(13,16,20,.86) 55%,var(--tlo) 90%)}
+
+/* --- PASEK WARIANTÓW --- */
+.sterowanie{position:fixed;left:0;right:0;bottom:0;z-index:10;background:var(--powierzchnia);
+  border-top:1px solid var(--powierzchnia-2);padding:10px 12px calc(10px + env(safe-area-inset-bottom));
+  display:flex;gap:8px;align-items:center;font-family:var(--mono);font-size:12px}
+.sterowanie b{color:var(--papier-2);font-weight:500;letter-spacing:.08em;text-transform:uppercase}
+.sterowanie button{flex:1;min-height:44px;border:1px solid var(--linia);background:transparent;color:var(--papier);
+  font-family:var(--mono);font-size:13px;border-radius:10px;cursor:pointer}
+.sterowanie button[aria-pressed="true"]{border-color:var(--sygnal);color:var(--sygnal)}
+
+/* --- TREŚĆ --- */
+.owijka{max-width:1120px;margin:0 auto;padding:0 16px}
+@media (min-width:900px){.owijka{padding:0 32px}}
+.hero{min-height:calc(100svh - 88px);display:flex;flex-direction:column;justify-content:space-between;padding:24px 0 32px}
+.znak{font-weight:800;font-size:22px;letter-spacing:-.02em}
+.znak i{font-style:normal;color:var(--sygnal)}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--papier-2);margin-bottom:14px}
+h1{font-size:clamp(34px,9.6vw,40px);line-height:1.02;letter-spacing:-.02em;font-weight:700;max-width:16ch}
+@media (min-width:900px){h1{font-size:64px;max-width:18ch}}
+.hero p{margin-top:16px;font-size:17px;line-height:1.5;max-width:44ch}
+.cta{display:inline-block;margin-top:24px;padding:14px 18px;border:1px solid var(--sygnal);color:var(--sygnal);
+  border-radius:12px;text-decoration:none;font-size:15px}
+section.blok{padding:64px 0}
+.etykieta{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--papier-2);
+  display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.etykieta::after{content:"";height:1px;flex:1;background:var(--linia)}
+h2{font-size:30px;line-height:1.1;letter-spacing:-.02em;font-weight:700;margin-bottom:14px}
+.blok p{font-size:17px;line-height:1.55;max-width:56ch;color:var(--papier)}
+.karta{background:rgba(22,27,33,.72);border:1px solid var(--powierzchnia-2);border-radius:16px;padding:20px;margin-top:20px}
+.w-c .karta{background:rgba(22,27,33,.9)}
+.siatka{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}
+@media (min-width:900px){.siatka{grid-template-columns:repeat(3,1fr)}}
+.kafel{background:rgba(31,38,46,.6);border:1px solid var(--powierzchnia-2);border-radius:14px;padding:14px;min-height:92px}
+.kafel span{display:block;font-size:15px;font-weight:600;margin-top:8px}
+.kafel small{display:block;color:var(--papier-2);font-size:13px;margin-top:4px}
+.kropka{width:10px;height:10px;border-radius:50%;background:var(--sygnal);display:inline-block}
+.uwaga{font-family:var(--mono);font-size:12px;color:var(--papier-2);border:1px dashed var(--linia);border-radius:10px;padding:12px;margin-top:28px}
+.przesuniete .tlo__obraz{background-position:bottom center}
+footer{padding:48px 0 24px;color:var(--papier-2);font-size:14px}
+</style>
+</head>
+<body>
+<div class="tlo"><div class="tlo__obraz"></div></div>
+<div class="tlo__wygaszenie"></div>
+
+<div class="owijka">
+  <header class="hero">
+    <div class="znak">klar<i>o</i>w</div>
+    <div>
+      <p class="eyebrow">Automatyzacje · Integracje · AI</p>
+      <h1>Automatyzujemy to, co ktoś u&nbsp;Was dziś przepisuje ręcznie.</h1>
+      <p>Łączymy magazyn, księgowość, Excel i&nbsp;dokumenty, żeby dane płynęły same. Od&nbsp;jednego raportu po&nbsp;kilka połączonych systemów.</p>
+      <a class="cta" href="#oszczednosci">Policzcie, ile kosztuje ręczna robota ↓</a>
+    </div>
+  </header>
+
+  <section class="blok">
+    <p class="etykieta">01 · Co automatyzujemy</p>
+    <h2>Co automatyzujemy</h2>
+    <p>Ten blok sprawdza czytelność tekstu ciągłego na tle. Jeśli którekolwiek zdanie ginie w liniach grafiki, to znaczy, że wygaszenie jest za słabe i trzeba je wzmocnić.</p>
+    <div class="siatka">
+      <div class="kafel"><span class="kropka"></span><span>Magazyn</span><small>stany, WZ i PZ same</small></div>
+      <div class="kafel"><span class="kropka"></span><span>Księgowość</span><small>dokumenty do zleceń</small></div>
+      <div class="kafel"><span class="kropka"></span><span>Integracje</span><small>systemy gadają ze sobą</small></div>
+      <div class="kafel"><span class="kropka"></span><span>Czat AI</span><small>odpowiedzi z Waszych plików</small></div>
+      <div class="kafel"><span class="kropka"></span><span>Dokumenty</span><small>oferta jednym kliknięciem</small></div>
+      <div class="kafel"><span class="kropka"></span><span>Raporty</span><small>gotowe w poniedziałek o 7:00</small></div>
+    </div>
+  </section>
+
+  <section class="blok" id="oszczednosci">
+    <p class="etykieta">02 · Ile kosztuje ręczna robota</p>
+    <h2>Ile kosztuje Was ręczna robota? Policzcie.</h2>
+    <div class="karta">
+      <p style="font-family:var(--mono);font-size:13px;color:var(--papier-2)">3 os. × 3 h × 44 tyg. × 60% × 70 zł</p>
+      <p style="font-size:34px;color:var(--sygnal);font-weight:700;margin-top:10px">≈ 16 600 zł rocznie</p>
+      <p style="font-size:14px;color:var(--papier-2);margin-top:6px">≈ 237 godzin · 29 dni roboczych</p>
+    </div>
+    <p class="uwaga">Karta z liczbami stoi na półprzezroczystym tle — sprawdź, czy cyfry są ostre i czy tło pod nimi nie „szumi”.</p>
+  </section>
+
+  <section class="blok przesuniete">
+    <p class="etykieta">03 · Jak pracujemy</p>
+    <h2>Od rozmowy do działającego procesu</h2>
+    <p>Ta sekcja pokazuje wariant D: to samo tło, ale przesunięte (background-position: bottom). Tak można rozwiązać problem powtarzalnego kadru na podstronach — każda dostaje inny fragment grafiki.</p>
+    <div class="karta">
+      <p>1. Rozmowa, 30 minut, bez zobowiązań.</p>
+      <p style="margin-top:8px">2. Pilot na kopii danych.</p>
+      <p style="margin-top:8px">3. Wdrożenie etapami.</p>
+      <p style="margin-top:8px">4. Zostaje u Was.</p>
+    </div>
+  </section>
+
+  <section class="blok">
+    <p class="etykieta">04 · Kontrast na dole strony</p>
+    <h2>Tu tło jest już prawie czarne</h2>
+    <p>Na dole strony grafika powinna być ledwie wyczuwalna. Jeśli wciąż rozprasza, zwiększamy wygaszenie. Jeśli zniknęła zupełnie, a Tobie jej szkoda — zmniejszamy.</p>
+    <footer>Klarow · podgląd techniczny, nie wersja produkcyjna · <span style="font-family:var(--mono)">noindex</span></footer>
+  </section>
+</div>
+
+<nav class="sterowanie" aria-label="Warianty tła">
+  <b>Tło:</b>
+  <button type="button" data-w="a">A. przypięte</button>
+  <button type="button" data-w="b">B. przewijane</button>
+  <button type="button" data-w="c">C. mocniej wygaszone</button>
+</nav>
+
+<script>
+(function(){
+  var h=document.documentElement, b=document.querySelectorAll('.sterowanie button');
+  function set(w){
+    h.className='w-'+w;
+    b.forEach(function(x){x.setAttribute('aria-pressed', x.dataset.w===w?'true':'false');});
+  }
+  b.forEach(function(x){x.addEventListener('click',function(){set(x.dataset.w);});});
+  set('b');
+})();
+</script>
+</body>
+</html>
