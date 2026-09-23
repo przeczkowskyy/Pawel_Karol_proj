@@ -1,66 +1,47 @@
-# site: landing klarow.com
+# site — klarow.com
 
-Strona firmowa: Vite + React 19 + TypeScript, treść w modułach `src/data/*`, zero backendu.
-Build daje czysty katalog statyczny (`dist/`), który Cloudflare Pages serwuje bez żadnej usługi
-po stronie serwera. Dwujęzyczność PL + EN: każdy widoczny string to para `{ pl, en }`
-konsumowana przez `pick()` z `src/i18n.tsx`; PL jest kanoniczne.
-
-## Uruchomienie
+Astro 7, statycznie. Cloudflare Pages buduje ten katalog po każdym pushu na `main`:
+root `site`, komenda `npm run build`, wynik `dist`.
 
 ```bash
-cd site
 npm install
-npm run dev        # http://localhost:5173, HMR
-npm run build      # klient + SSR-shell + prerender  ->  dist/
-npm run preview    # podgląd zbudowanego dist/
+npm run dev                 # http://localhost:4321
+npm run build               # astro build + strażnik
+npm run preview -- --host   # podgląd zbudowanego dist z telefonu w tej samej sieci
+npm run check               # astro check
+npm test                    # cztery presety kalkulatora
 ```
 
-`npm run build` to trzy kroki w jednym: build klienta, build SSR (`src/prerender/entry.tsx`)
-i `node scripts/prerender.mjs`. Prerender jest częścią builda, nie osobnym krokiem przed
-wdrożeniem: zapisuje statyczne HTML dla każdej trasy (pełna treść tekstowa i meta bez JS),
-a z `src/data/tools.ts` generuje `sitemap.xml` i `llms.txt`. Ręcznie utrzymywanego
-`public/sitemap.xml` nie ma i nie należy go odtwarzać. Szablon `index.html` musi zachować
-PUSTY `<div id="root"></div>`: `prerender.mjs` przerywa build, gdy go nie znajdzie.
+## Strony
 
-## Bramki jakości
+| Ścieżka | Plik | Uwagi |
+|---|---|---|
+| `/` | `src/pages/index.astro` | strona główna |
+| `/przyklady` | `src/pages/przyklady.astro` | sześć obszarów, kotwice zgodne z ikonami na stronie głównej |
+| `/start` | `src/pages/start.astro` | adres z kodu QR; **prawdziwa strona**, nie przekierowanie, bo Web Analytics nie zapisuje query stringów; canonical na `/` |
+| `/polityka-prywatnosci` | `src/pages/polityka-prywatnosci.astro` | |
+| `/404` | `src/pages/404.astro` | bez `404.html` Pages przechodzi w tryb SPA i zwraca `/` z kodem 200 |
 
-```bash
-npm run lint       # ESLint (react-hooks, jsx-a11y)
-npm run test       # node --test, golden-testy silników z src/lib
-npm run check      # lint + test + tsc --noEmit + build + verify-site.mjs
-```
+## Zasady, które łatwo złamać
 
-`npm run check` jest bramką przed pushem na `main`. Osobno, z korzenia repo:
-`node ".claude/skills/klarow-guardian/scripts/audit-static.mjs" <ścieżki>`.
+- **Canonical nigdy z `Astro.url`** — przy `build.format: 'file'` ma końcówkę `.html`. Bierzemy go z propa `sciezka`.
+- **Tło**: jeden kafel (kadr + jego lustrzane odbicie) powtarzany pionowo. Pliki w `public/media/` mają wersję
+  w nazwie i są cache'owane jako `immutable` — **nigdy ich nie nadpisujemy**, każda zmiana to `.v2`.
+- **Kalkulator liczy w buildzie i w przeglądarce tym samym kodem** (`src/lib/kalkulator.ts`), więc wynik jest
+  poprawny także bez JavaScriptu.
+- **Zaokrąglamy w dół.** Test `src/lib/kalkulator.test.mjs` pilnuje czterech presetów — to te same liczby, które widzi odwiedzający.
+- **Strażnik** (`scripts/straznik.mjs`) zatrzymuje build, gdy w `dist` pojawi się placeholder, forma zależna od płci,
+  brak telefonu, brak `/start` z canonical albo brak przekierowania starego adresu.
 
-## Środowisko
+## Budżety (cel, sprawdzany ręcznie)
 
-`npx` w tym repo NIE działa: znak `&` w ścieżce katalogu łamie shimy cmd
-(„'Pawe' is not recognized…"). Binarki wołamy wprost przez node, na przykład
-`node node_modules/typescript/bin/tsc --noEmit` albo `node node_modules/vite/bin/vite.js build`.
-Skrypty npm w `package.json` są napisane w ten sam sposób i działają lokalnie oraz na CI.
-`npm install` i `npm run <skrypt>` działają normalnie.
+| Zasób | Cel | Stan 23.09 |
+|---|---|---|
+| HTML strony głównej (gzip) | ≤ 10 KB | 6,7 KB |
+| CSS (gzip) | ≤ 16 KB | 6,4 KB |
+| JS (inline, gzip) | ≤ 8 KB | ~1,3 KB |
+| Fonty (latin + latin-ext) | ≤ 100 KB | 87 KB |
+| Tło na telefon | ≤ 180 KB | 124 KB |
+| **Pierwszy render razem** | **≤ 250 KB** | **224 KB** |
 
-## Gdzie jest reszta
-
-| Co | Gdzie |
-|---|---|
-| Plan przebudowy v2 (fazy F0–F5, architektura, budżety) | `../docs/plan/strona-v2-plan.md` |
-| Strażnik zasad: marka, design, motion, copy, SEO, sekrety | `../.claude/skills/klarow-guardian/` (`SKILL.md`, `rules/`, `scripts/`) |
-| Decyzje i stan operacyjny projektu | `../CLAUDE.md` |
-| Design system (kit `company-ui`) | `../ui-kit/skills/company-ui/` |
-
-## Struktura
-
-```
-site/
-├─ index.html          # szablon: meta fallback, samonaprawa cache, tryb ?debug=1
-├─ public/             # _headers, _redirects, robots.txt, fonty, favicony, media
-├─ scripts/            # prerender.mjs (statyczne HTML, sitemap, llms.txt)
-└─ src/
-   ├─ data/            # jedyne źródło treści i meta (tools, toolsSeo, pagesSeo, faq)
-   ├─ components/      # sekcje strony, dashboardy dem
-   ├─ lib/             # silniki liczące dem (deterministyczne: bez dat, losowości i sieci)
-   ├─ pages/           # podstrony narzędzi
-   └─ prerender/       # entry.tsx: shelle SSR dla prerenderu
-```
+Regeneracja tła: `design/prompty/higgsfield/03-pipeline-ffmpeg.md`, sekcja H. Oryginały: `_mastery/` (poza gitem).

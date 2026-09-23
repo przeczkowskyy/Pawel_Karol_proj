@@ -1,0 +1,29 @@
+---
+import Baza from "../layouts/Baza.astro";
+import { kontakt } from "../content/strona";
+---
+
+<Baza
+  tytul="Nie ma takiej strony — klarow"
+  opis="Ten adres prowadzi donikąd. Wróćcie na stronę główną albo zadzwońcie."
+  sciezka="/404"
+  krotkaStopka={true}
+  noindex={true}
+>
+  <main class="przyklady">
+    <div class="przyklady__wstep">
+      <h1 class="przyklady__tytul">Ten adres prowadzi donikąd</h1>
+      <p class="karta-tekstu przyklady__lead">
+        Strona, której szukacie, nie istnieje albo zmieniła adres. Najkrótsza droga dalej jest poniżej.
+      </p>
+    </div>
+    <div class="przyklady__koniec">
+      <div class="przyklady__akcje">
+        <a class="przycisk przycisk--glowny" href="/">Strona główna</a>
+        <a class="przycisk przycisk--wysoki" href={kontakt.telefonHref}>
+          <span set:html={`Zadzwoń ${kontakt.telefon}`} />
+        </a>
+      </div>
+    </div>
+  </main>
+</Baza>

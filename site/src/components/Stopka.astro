@@ -1,0 +1,25 @@
+---
+import Znak from "./Znak.astro";
+import { kontakt, haslo } from "../content/strona";
+
+interface Props {
+  /** Podstrony mają stopkę bez znaku i bez hasła. */
+  krotka?: boolean;
+}
+const { krotka = false } = Astro.props;
+---
+
+<footer class:list={["stopka", krotka && "stopka--krotka"]}>
+  <div class="stopka__srodek">
+    {!krotka && <Znak wStopce={true} />}
+    <p class="stopka__dane">
+      <span>Klarow&nbsp;·</span>
+      <span>{kontakt.osoba}&nbsp;·</span>
+      <span><a href={kontakt.mailHref}>{kontakt.mail}</a>&nbsp;·</span>
+      <span><a href={kontakt.telefonHref} set:html={`${kontakt.telefon}&nbsp;·`} /></span>
+      <span><a href="/polityka-prywatnosci">Polityka prywatności</a>&nbsp;·</span>
+      <span>Ta strona nie używa ciasteczek.</span>
+    </p>
+    {!krotka && <p class="stopka__haslo">{haslo}</p>}
+  </div>
+</footer>

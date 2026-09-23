@@ -1,0 +1,126 @@
+---
+import Baza from "../layouts/Baza.astro";
+import { kontakt } from "../content/strona";
+
+const opis =
+  "Kto jest administratorem danych, co zbieramy, komu to przekazujemy i jakie macie prawa. Bez ciasteczek i bez śledzenia.";
+---
+
+<Baza
+  tytul="Polityka prywatności — klarow"
+  opis={opis}
+  sciezka="/polityka-prywatnosci"
+  wariantTla="przyklady"
+  krotkaStopka={true}
+>
+  <main class="przyklady">
+    <div class="przyklady__wstep">
+      <h1 class="przyklady__tytul">Polityka prywatności</h1>
+      <p class="karta-tekstu przyklady__lead">
+        Krótko, bo i&nbsp;zbieramy niewiele. Ta strona nie używa ciasteczek, nie profiluje i&nbsp;nie zapisuje
+        niczego na Waszym urządzeniu.
+      </p>
+    </div>
+
+    <div class="przyklady__siatka">
+      <section class="przyklad" aria-labelledby="h-administrator">
+        <div class="przyklad__naglowek">
+          <h2 id="h-administrator" class="przyklad__tytul">Administrator</h2>
+        </div>
+        <ul class="przyklad__lista">
+          <li class="przyklad__pozycja">
+            Administratorem danych jest <strong>{kontakt.osoba}</strong>, prowadzący działalność pod marką Klarow.
+          </li>
+          <li class="przyklad__pozycja">
+            Kontakt: <a href={kontakt.mailHref}>{kontakt.mail}</a>, tel.
+            <a href={kontakt.telefonHref} set:html={` ${kontakt.telefon}`} />.
+          </li>
+        </ul>
+      </section>
+
+      <section class="przyklad" aria-labelledby="h-co-zbieramy">
+        <div class="przyklad__naglowek">
+          <h2 id="h-co-zbieramy" class="przyklad__tytul">Co zbieramy i&nbsp;po co</h2>
+        </div>
+        <ul class="przyklad__lista">
+          <li class="przyklad__pozycja">
+            <strong>To, co sami nam wyślecie</strong> — adres e-mail, numer telefonu, treść wiadomości
+            i&nbsp;załączone pliki. Używamy tego, żeby odpowiedzieć i&nbsp;przygotować ofertę (art. 6 ust. 1 lit. b
+            i&nbsp;f&nbsp;RODO).
+          </li>
+          <li class="przyklad__pozycja">
+            <strong>Statystyki odwiedzin</strong> — liczba wyświetleń strony i&nbsp;podstawowe dane techniczne,
+            bez ciasteczek i&nbsp;bez zapisywania czegokolwiek na Waszym urządzeniu (art. 6 ust. 1 lit. f&nbsp;RODO).
+          </li>
+          <li class="przyklad__pozycja">
+            <strong>Kalkulator niczego nie wysyła.</strong> Liczby, które w&nbsp;nim wpisujecie, zostają w&nbsp;Waszej
+            przeglądarce. My ich nie widzimy.
+          </li>
+        </ul>
+      </section>
+
+      <section class="przyklad" aria-labelledby="h-odbiorcy">
+        <div class="przyklad__naglowek">
+          <h2 id="h-odbiorcy" class="przyklad__tytul">Komu to przekazujemy</h2>
+        </div>
+        <ul class="przyklad__lista">
+          <li class="przyklad__pozycja">
+            <strong>Cloudflare</strong> — hosting strony, przekierowanie poczty i&nbsp;statystyki odwiedzin.
+          </li>
+          <li class="przyklad__pozycja">
+            <strong>Google</strong> — skrzynka, w&nbsp;której odbieramy pocztę. <strong>Resend</strong> — wysyłka poczty
+            z&nbsp;naszej domeny.
+          </li>
+          <li class="przyklad__pozycja">
+            Te firmy mogą przetwarzać dane w&nbsp;USA, na podstawie Data Privacy Framework i&nbsp;standardowych
+            klauzul umownych.
+          </li>
+        </ul>
+      </section>
+
+      <section class="przyklad" aria-labelledby="h-jak-dlugo">
+        <div class="przyklad__naglowek">
+          <h2 id="h-jak-dlugo" class="przyklad__tytul">Jak długo</h2>
+        </div>
+        <ul class="przyklad__lista">
+          <li class="przyklad__pozycja">
+            Korespondencję trzymamy do zakończenia rozmów, a&nbsp;jeśli nie dojdzie do współpracy — najwyżej
+            12&nbsp;miesięcy.
+          </li>
+          <li class="przyklad__pozycja">
+            <strong>Pliki przysłane mailem usuwamy po rozmowie.</strong> Jeśli plik zawiera dane osobowe, prosimy
+            o&nbsp;wersję bez nich i&nbsp;kasujemy poprzednią.
+          </li>
+        </ul>
+      </section>
+
+      <section class="przyklad" aria-labelledby="h-prawa">
+        <div class="przyklad__naglowek">
+          <h2 id="h-prawa" class="przyklad__tytul">Wasze prawa</h2>
+        </div>
+        <ul class="przyklad__lista">
+          <li class="przyklad__pozycja">
+            Macie prawo dostępu do swoich danych, sprostowania, usunięcia, ograniczenia przetwarzania, przeniesienia
+            oraz sprzeciwu. Wystarczy jeden mail.
+          </li>
+          <li class="przyklad__pozycja">
+            Możecie też złożyć skargę do Prezesa Urzędu Ochrony Danych Osobowych (ul. Stawki 2, 00-193 Warszawa).
+          </li>
+        </ul>
+      </section>
+
+      <section class="przyklad" aria-labelledby="h-grafiki">
+        <div class="przyklad__naglowek">
+          <h2 id="h-grafiki" class="przyklad__tytul">Grafiki</h2>
+        </div>
+        <ul class="przyklad__lista">
+          <li class="przyklad__pozycja">Tło tej strony powstało z&nbsp;pomocą narzędzi AI. Nie przedstawia żadnej firmy ani osoby.</li>
+        </ul>
+      </section>
+    </div>
+
+    <div class="przyklady__koniec">
+      <a class="link przyklady__powrot" href="/">← Wróć na stronę główną</a>
+    </div>
+  </main>
+</Baza>

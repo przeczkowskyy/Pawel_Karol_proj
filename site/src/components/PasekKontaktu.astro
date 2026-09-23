@@ -1,0 +1,10 @@
+---
+import { kontakt } from "../content/strona";
+// Pasek chowa się bez JS: #kontakt i stopka leżą nad nim (z-index 2, tło --tlo).
+---
+
+<nav class="pasek-kontaktu" aria-label="Kontakt">
+  <a class="przycisk przycisk--pasek przycisk--glowny" href={kontakt.telefonHref}>Zadzwoń</a>
+  <a class="przycisk przycisk--pasek" href={kontakt.mailRozmowa}>Napisz</a>
+  <a class="przycisk przycisk--pasek" href={kontakt.vcard}>Zapisz kontakt</a>
+</nav>

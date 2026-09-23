@@ -1,0 +1,520 @@
+---
+import IkonaDzialu from "./IkonaDzialu.astro";
+import { kontakt, haslo, presety } from "../content/strona";
+import { policz, tekstKwoty, tekstCzasu, tekstZakresu, tekstWzoru } from "../lib/kalkulator";
+
+const kafle = [
+  {
+    slug: "magazyn",
+    nazwa: "Magazyn",
+    zamiast: "liczenia stanów na kartce",
+    teraz: "stany, WZ i&nbsp;PZ aktualizują się same, a&nbsp;braki wysyłają alert",
+  },
+  {
+    slug: "ksiegowosc",
+    nazwa: "Księgowość",
+    zamiast: "ręcznego przypisywania faktur do zleceń",
+    teraz: "faktury kosztowe trafiają do właściwego zlecenia i&nbsp;czekają na akceptację",
+  },
+  {
+    slug: "integracje",
+    nazwa: "Integracje i&nbsp;API",
+    zamiast: "pięciu programów, które się nie znają",
+    teraz: "sklep, ERP, CRM i&nbsp;Excel wymieniają dane same",
+  },
+  {
+    slug: "czat-ai",
+    nazwa: "Czat AI",
+    zamiast: "odpowiadania 40&nbsp;razy na to samo pytanie",
+    teraz:
+      "asystent odpowiada na podstawie Waszych dokumentów, a&nbsp;w&nbsp;razie wątpliwości przekazuje sprawę człowiekowi",
+  },
+  {
+    slug: "generatory",
+    nazwa: "Generatory dokumentów",
+    zamiast: "składania oferty przez godzinę",
+    teraz: "oferta, umowa czy protokół z&nbsp;danych jednym kliknięciem",
+  },
+  {
+    slug: "raporty",
+    nazwa: "Raporty",
+    zamiast: "sklejania raportu w&nbsp;piątek wieczorem",
+    teraz: "raport, który sam się odświeża w&nbsp;poniedziałek o&nbsp;7:00",
+  },
+] as const;
+
+const kroki = [
+  { tytul: "Rozmowa, 30&nbsp;minut, bez zobowiązań.", opis: "Pokażcie proces albo swój najgorszy Excel." },
+  {
+    tytul: "Pilot na kopii danych.",
+    opis: "Na kopii albo w&nbsp;środowisku testowym — gdzie się da, bez dotykania produkcji.",
+  },
+  {
+    tytul: "Wdrożenie etapami.",
+    opis: "Najpierw to, co boli najbardziej. Termin każdego etapu ustalamy przed startem.",
+  },
+  {
+    tytul: "Zostaje u&nbsp;Was.",
+    opis: "Po odbiorze dostajecie kod, dostępy i&nbsp;dokumentację. Prawa do kodu przenosimy w&nbsp;umowie.",
+  },
+];
+
+const obawy = [
+  { pytanie: "Czy musimy wymieniać systemy?", odpowiedz: "Nie. Zwykle łączymy to, czego już używacie." },
+  {
+    pytanie: "Co z&nbsp;bezpieczeństwem danych?",
+    odpowiedz:
+      "Zaczynamy na kopii albo w&nbsp;środowisku testowym. Bierzemy dostęp tylko do tego, co potrzebne.",
+  },
+  {
+    pytanie: "Ile to kosztuje?",
+    odpowiedz: "Zależy od zakresu. Wycenę dostajecie po rozmowie, zanim cokolwiek zaczniemy.",
+  },
+  { pytanie: "Czy to tylko dla dużych firm?", odpowiedz: "Nie. Możemy zacząć od jednego raportu." },
+];
+
+// Domyślny preset liczymy w buildzie, więc wynik jest poprawny także bez JavaScriptu.
+const start = presety[0];
+const wynikStartowy = policz(start);
+---
+
+<main>
+  <section id="start" class="hero" aria-labelledby="hero-tytul">
+    <div class="hero__tekst">
+      <p class="hero__eyebrow">AUTOMATYZACJE · INTEGRACJE · AI</p>
+      <h1 id="hero-tytul" class="hero__tytul">
+        Automatyzujemy to, co ktoś u&nbsp;Was dziś przepisuje ręcznie.
+      </h1>
+      <p class="hero__copy">
+        Łączymy magazyn, księgowość, Excel i&nbsp;dokumenty, żeby dane płynęły same. Od jednego raportu
+        po kilka połączonych systemów.
+      </p>
+    </div>
+    <a class="przycisk przycisk--glowny hero__cta" href="#oszczednosci">
+      Policzcie, ile kosztuje ręczna robota ↓
+    </a>
+  </section>
+
+  <section id="co-robimy" class="sekcja" aria-labelledby="h-co-robimy">
+    <div class="sekcja__srodek">
+      <p class="etykieta">01 · CO AUTOMATYZUJEMY</p>
+      <h2 id="h-co-robimy" class="sekcja__tytul">Co automatyzujemy</h2>
+      <nav class="dzialy" aria-label="Działy">
+        {
+          kafle.map((k) => (
+            <a class="kafel" href={`/przyklady#${k.slug}`}>
+              <svg class="kafel__strzalka" viewBox="0 0 18 18" width="18" height="18" aria-hidden="true" focusable="false">
+                <path d="M4 9h10M10 5l4 4-4 4" />
+              </svg>
+              <IkonaDzialu slug={k.slug} klasa="kafel__ikona" />
+              <h3 class="kafel__nazwa" set:html={k.nazwa} />
+              <p class="kafel__wiersz kafel__wiersz--zamiast">
+                <span class="kafel__znacznik">zamiast</span>{" "}
+                <span class="kafel__tresc" set:html={k.zamiast} />
+              </p>
+              <p class="kafel__wiersz kafel__wiersz--teraz">
+                <span class="kafel__znacznik">teraz</span>{" "}
+                <span class="kafel__tresc" set:html={k.teraz} />
+              </p>
+            </a>
+          ))
+        }
+      </nav>
+      <div class="dzialy__dopisek">
+        <p>Mały problem czy duży system — zaczynamy od kawałka, który boli najbardziej.</p>
+        <a class="link" href="/przyklady">Zobaczcie przykłady narzędzi →</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="oszczednosci" class="sekcja" aria-labelledby="h-oszczednosci">
+    <div class="sekcja__srodek">
+      <p class="etykieta">02 · ILE KOSZTUJE RĘCZNA ROBOTA</p>
+      <form class="kalkulator" aria-labelledby="h-oszczednosci" data-kalkulator>
+        <div class="kalkulator__lewa">
+          <h2 id="h-oszczednosci" class="sekcja__tytul">Ile kosztuje Was ręczna robota? Policzcie.</h2>
+          <p class="karta-tekstu">
+            Wybierzcie przykład albo wpiszcie swoje liczby. To Wasz rachunek, nie nasza obietnica — ile da
+            się zautomatyzować naprawdę, sprawdzamy w&nbsp;pilocie.
+          </p>
+          <fieldset class="presety">
+            <legend class="presety__podpis">przykładowe liczby — zmieńcie na swoje</legend>
+            <div class="presety__siatka">
+              {
+                presety.map((p, i) => (
+                  <label class="preset">
+                    <input
+                      class="preset__pole"
+                      type="radio"
+                      name="preset"
+                      value={p.id}
+                      checked={i === 0}
+                      data-osoby={p.osoby}
+                      data-godziny={p.godziny}
+                      data-koszt={p.koszt}
+                      data-udzial={p.udzial}
+                    />
+                    <span class="preset__kropka" aria-hidden="true" />
+                    <span set:html={p.nazwa} />
+                  </label>
+                ))
+              }
+            </div>
+          </fieldset>
+          <div class="pola">
+            <div class="pole pole--krokomierz">
+              <label class="pole__etykieta" for="osoby">Ile osób to robi</label>
+              <div class="krokomierz">
+                <button class="krokomierz__przycisk" type="button" aria-label="Mniej osób" data-krok="-1">−</button>
+                <input
+                  class="krokomierz__pole"
+                  id="osoby"
+                  name="osoby"
+                  type="number"
+                  inputmode="numeric"
+                  min="1"
+                  max="20"
+                  step="1"
+                  value={start.osoby}
+                />
+                <button class="krokomierz__przycisk" type="button" aria-label="Więcej osób" data-krok="1">+</button>
+              </div>
+            </div>
+            <div class="pole">
+              <label class="pole__etykieta" id="l-godziny" for="godziny">Godzin tygodniowo na osobę</label>
+              <div class="pole__wiersz">
+                <input class="suwak" id="godziny" name="godziny" type="range" min="1" max="40" step="1" value={start.godziny} />
+                <input
+                  class="pole-liczba"
+                  id="godziny-liczba"
+                  type="number"
+                  inputmode="numeric"
+                  min="1"
+                  max="40"
+                  step="1"
+                  value={start.godziny}
+                  aria-labelledby="l-godziny"
+                />
+              </div>
+            </div>
+            <div class="pole">
+              <details class="info">
+                <summary class="info__przelacznik" aria-label="Koszt godziny pracy — skąd ta kwota">
+                  <span class="pole__etykieta" id="l-koszt">Koszt godziny pracy</span>
+                  <span class="info__i" aria-hidden="true"><span class="info__znak">i</span></span>
+                </summary>
+                <p class="info__tresc">
+                  ok. 9&nbsp;000&nbsp;zł brutto + ok. 20% kosztów pracodawcy ÷ 168&nbsp;h ≈&nbsp;65&nbsp;zł
+                </p>
+              </details>
+              <div class="pole-jednostka">
+                <input
+                  class="pole-jednostka__pole"
+                  id="koszt"
+                  name="koszt"
+                  type="number"
+                  inputmode="numeric"
+                  min="35"
+                  max="200"
+                  step="1"
+                  value={start.koszt}
+                  aria-labelledby="l-koszt"
+                />
+                <span class="pole-jednostka__jednostka" aria-hidden="true">zł</span>
+              </div>
+            </div>
+            <div class="pole">
+              <label class="pole__etykieta" id="l-udzial" for="udzial">Jaką część da się zautomatyzować</label>
+              <span class="pole__podpis" id="p-udzial">Zwykle nie wszystko</span>
+              <div class="pole__wiersz">
+                <input
+                  class="suwak"
+                  id="udzial"
+                  name="udzial"
+                  type="range"
+                  min="20"
+                  max="90"
+                  step="5"
+                  value={start.udzial}
+                  aria-describedby="p-udzial"
+                />
+                <span class="pole-jednostka pole-jednostka--waska">
+                  <input
+                    class="pole-jednostka__pole"
+                    id="udzial-liczba"
+                    type="number"
+                    inputmode="numeric"
+                    min="20"
+                    max="90"
+                    step="5"
+                    value={start.udzial}
+                    aria-labelledby="l-udzial"
+                  />
+                  <span class="pole-jednostka__jednostka" aria-hidden="true">%</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="kalkulator__prawa">
+          <output class="karta-wyniku" for="osoby godziny koszt udzial" aria-live="polite">
+            <span class="karta-wyniku__kwota" data-wynik-kwota>{tekstKwoty(wynikStartowy)}</span>
+            <span class="karta-wyniku__podpis">
+              tyle kosztuje czas, który da się odzyskać (przed kosztem wdrożenia)
+            </span>
+            <span class="karta-wyniku__linia" aria-hidden="true"></span>
+            <span class="karta-wyniku__czas" data-wynik-czas>{tekstCzasu(wynikStartowy)}</span>
+            <span class="karta-wyniku__zakres" data-wynik-zakres>{tekstZakresu(wynikStartowy)}</span>
+          </output>
+          <div class="wzor">
+            <div>
+              koszt ręcznej roboty do odzyskania ≈&nbsp;osoby × godziny tygodniowo × 44&nbsp;tygodnie<details
+                class="info info--w-linii"
+              >
+                <summary class="info__przelacznik" aria-label="Skąd 44 tygodnie">
+                  <span class="info__znak">i</span>
+                </summary>
+                <span class="info__tresc">52&nbsp;tygodnie minus urlop, święta i&nbsp;choroby.</span>
+              </details> × udział × koszt godziny
+            </div>
+            <p class="wzor__liczby" data-wynik-wzor>{tekstWzoru(start)}</p>
+          </div>
+          <div class="karta-tekstu uwagi">
+            <p>
+              To Wasz rachunek na Waszych liczbach, nie nasz wynik. Koszt wdrożenia podajemy z&nbsp;góry, po
+              rozmowie.
+            </p>
+            <p class="uwagi__drobne">Nic nie wysyłamy — liczy się w&nbsp;Waszej przeglądarce.</p>
+            <p class="uwagi__drobne">
+              Poza rachunkiem: mniej pomyłek i&nbsp;szybsza obsługa — tego nie przeliczamy na&nbsp;złotówki.
+            </p>
+          </div>
+          <div class="kalkulator__akcje">
+            <a class="przycisk przycisk--glowny" href={kontakt.mailRachunek}>Wyślij nam ten rachunek</a>
+            <button class="przycisk" type="button" data-udostepnij="rachunek">Prześlij rachunek dalej</button>
+            <a class="przycisk" href={kontakt.telefonHref}>Omówmy to — zadzwoń</a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section id="jak-pracujemy" class="sekcja" aria-labelledby="h-jak-pracujemy">
+    <div class="sekcja__srodek">
+      <p class="etykieta">03 · JAK PRACUJEMY</p>
+      <h2 id="h-jak-pracujemy" class="sekcja__tytul">Od rozmowy do działającego procesu</h2>
+      <div class="sekcja__uklad">
+        <ol class="kroki">
+          {
+            kroki.map((k, i) => (
+              <li class="krok">
+                <span class="krok__numer" aria-hidden="true">{i + 1}</span>
+                <div class="krok__tresc">
+                  <h3 class="krok__tytul" set:html={k.tytul} />
+                  <p class="krok__opis" set:html={k.opis} />
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+        <div class="sekcja__kolumna">
+          <div class="karty">
+            <p class="karta">
+              <strong>Mały start:</strong> jeden raport, który co rano sam zbiera zamówienia do Excela.
+            </p>
+            <p class="karta">
+              <strong>Duży system:</strong> połączenia magazyn–sprzedaż–księgowość, budowane etapami.
+            </p>
+          </div>
+          <div class="obawy">
+            {
+              obawy.map((o) => (
+                <details class="obawa">
+                  <summary class="obawa__pytanie">
+                    <span set:html={o.pytanie} />
+                    <svg class="obawa__strzalka" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false">
+                      <path d="M3.5 6l4.5 4.5L12.5 6" />
+                    </svg>
+                  </summary>
+                  <p class="obawa__odpowiedz" set:html={o.odpowiedz} />
+                </details>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="kim-jestesmy" class="sekcja" aria-labelledby="h-kim-jestesmy">
+    <div class="sekcja__srodek">
+      <p class="etykieta">04 · KIM JESTEŚMY</p>
+      <h2 id="h-kim-jestesmy" class="sekcja__tytul">Z&nbsp;kim rozmawiacie</h2>
+      <div class="sekcja__uklad">
+        <p class="karta-tekstu">
+          Klarow to jedna osoba: Karol Balucki. Piszę kod, wdrażam go u&nbsp;Was i&nbsp;odbieram telefon. Bez
+          działu sprzedaży pomiędzy.
+        </p>
+        <div class="osoba-kolumna">
+          <div class="osoba">
+            <div class="osoba__dane">
+              <p class="osoba__imie">{kontakt.osoba}</p>
+              <p class="osoba__rola">automatyzacje, integracje, raporty</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="haslo">{haslo}</p>
+    </div>
+  </section>
+
+  <section id="kontakt" class="sekcja kontakt" aria-labelledby="h-kontakt">
+    <div class="sekcja__srodek">
+      <p class="etykieta">05 · KONTAKT</p>
+      <div class="sekcja__uklad">
+        <div class="kontakt__wstep">
+          <h2 id="h-kontakt" class="sekcja__tytul">Połączmy się.</h2>
+          <p>Zadzwońcie albo napiszcie. Najszybszy start: przyślijcie kopię pliku, który Was męczy.</p>
+        </div>
+        <div class="kontakt__akcje">
+          <a class="przycisk przycisk--glowny przycisk--duzy" href={kontakt.telefonHref}>
+            <span set:html={`Zadzwoń ${kontakt.telefon}`} />
+          </a>
+          <a class="przycisk przycisk--wysoki" href={kontakt.mailHref}>Napisz: {kontakt.mail}</a>
+          <a class="przycisk przycisk--wysoki" href={kontakt.vcard}>Zapisz w&nbsp;kontaktach</a>
+          <div class="kontakt__plik">
+            <a class="link link--podkreslony" href={kontakt.mailExcel}>
+              Przyślijcie nam swój najgorszy Excel
+            </a>
+            <p class="kontakt__drobny">
+              Usuńcie nazwiska i&nbsp;dane osobowe — wystarczy układ kolumn i&nbsp;kilka zmyślonych wierszy.
+            </p>
+          </div>
+          <button class="przycisk przycisk--maly" type="button" data-udostepnij="strona">Prześlij dalej</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+  import { policz, tekstKwoty, tekstCzasu, tekstZakresu, tekstWzoru } from "../lib/kalkulator";
+
+  const form = document.querySelector<HTMLFormElement>("[data-kalkulator]");
+
+  if (form) {
+    const pole = (id: string) => form.querySelector<HTMLInputElement>(`#${id}`);
+    const osoby = pole("osoby");
+    const godziny = pole("godziny");
+    const godzinyLiczba = pole("godziny-liczba");
+    const koszt = pole("koszt");
+    const udzial = pole("udzial");
+    const udzialLiczba = pole("udzial-liczba");
+
+    const kwota = form.querySelector<HTMLElement>("[data-wynik-kwota]");
+    const czas = form.querySelector<HTMLElement>("[data-wynik-czas]");
+    const zakres = form.querySelector<HTMLElement>("[data-wynik-zakres]");
+    const wzor = form.querySelector<HTMLElement>("[data-wynik-wzor]");
+
+    const wZakresie = (input: HTMLInputElement | null, fallback: number) => {
+      if (!input) return fallback;
+      const min = Number(input.min);
+      const max = Number(input.max);
+      const x = Math.round(Number(input.value));
+      if (!Number.isFinite(x)) return fallback;
+      return Math.min(max, Math.max(min, x));
+    };
+
+    const przelicz = () => {
+      const dane = {
+        osoby: wZakresie(osoby, 3),
+        godziny: wZakresie(godziny, 3),
+        koszt: wZakresie(koszt, 70),
+        udzial: wZakresie(udzial, 60),
+      };
+      const w = policz(dane);
+      if (kwota) kwota.textContent = tekstKwoty(w);
+      if (czas) czas.textContent = tekstCzasu(w);
+      if (zakres) zakres.textContent = tekstZakresu(w);
+      if (wzor) wzor.textContent = tekstWzoru(dane);
+      form.dataset.stan = JSON.stringify(dane);
+    };
+
+    // Suwak i pole liczbowe pokazują tę samą wartość.
+    const zepnij = (a: HTMLInputElement | null, b: HTMLInputElement | null) => {
+      if (!a || !b) return;
+      a.addEventListener("input", () => {
+        b.value = a.value;
+      });
+      b.addEventListener("input", () => {
+        a.value = String(wZakresie(b, Number(a.value)));
+      });
+    };
+    zepnij(godziny, godzinyLiczba);
+    zepnij(udzial, udzialLiczba);
+
+    form.querySelectorAll<HTMLButtonElement>("[data-krok]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        if (!osoby) return;
+        const krok = Number(btn.dataset.krok);
+        const min = Number(osoby.min);
+        const max = Number(osoby.max);
+        const teraz = Math.round(Number(osoby.value)) || min;
+        osoby.value = String(Math.min(max, Math.max(min, teraz + krok)));
+        osoby.dispatchEvent(new Event("input", { bubbles: true }));
+      });
+    });
+
+    form.querySelectorAll<HTMLInputElement>('input[name="preset"]').forEach((radio) => {
+      radio.addEventListener("change", () => {
+        if (osoby) osoby.value = radio.dataset.osoby ?? osoby.value;
+        if (godziny) godziny.value = radio.dataset.godziny ?? godziny.value;
+        if (godzinyLiczba) godzinyLiczba.value = radio.dataset.godziny ?? godzinyLiczba.value;
+        if (koszt) koszt.value = radio.dataset.koszt ?? koszt.value;
+        if (udzial) udzial.value = radio.dataset.udzial ?? udzial.value;
+        if (udzialLiczba) udzialLiczba.value = radio.dataset.udzial ?? udzialLiczba.value;
+        przelicz();
+      });
+    });
+
+    // Ręczna zmiana liczb odznacza preset — inaczej strona twierdziłaby, że to nadal nasz przykład.
+    form.querySelectorAll<HTMLInputElement>('input:not([name="preset"])').forEach((input) => {
+      input.addEventListener("input", () => {
+        form.querySelectorAll<HTMLInputElement>('input[name="preset"]:checked').forEach((r) => {
+          r.checked = false;
+        });
+        przelicz();
+      });
+    });
+
+    przelicz();
+  }
+
+  // „Prześlij dalej” — Web Share, a gdy go nie ma, kopiowanie do schowka.
+  document.querySelectorAll<HTMLButtonElement>("[data-udostepnij]").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const adres = "https://klarow.com/";
+      let tekst = "Klarow — automatyzacje, integracje, AI.";
+      if (btn.dataset.udostepnij === "rachunek") {
+        const kwota = document.querySelector<HTMLElement>("[data-wynik-kwota]")?.textContent?.trim();
+        const wzor = document.querySelector<HTMLElement>("[data-wynik-wzor]")?.textContent?.trim();
+        if (kwota && wzor) tekst = `Koszt ręcznej roboty: ${kwota} (${wzor}).`;
+      }
+      const dane = { title: "Klarow", text: tekst, url: adres };
+      try {
+        if (navigator.share) {
+          await navigator.share(dane);
+          return;
+        }
+        await navigator.clipboard.writeText(`${tekst} ${adres}`);
+        const stary = btn.textContent;
+        btn.textContent = "Skopiowano link";
+        window.setTimeout(() => {
+          btn.textContent = stary;
+        }, 2000);
+      } catch {
+        /* użytkownik anulował — nic nie robimy */
+      }
+    });
+  });
+</script>

@@ -1,0 +1,24 @@
+---
+// Jedno tło pod całą stroną. Przewija się razem z treścią i powtarza przez odbicie
+// w pionie — kafel to kadr plus jego lustrzane odbicie, więc szew jest niewidoczny.
+interface Props {
+  wariant?: "przyklady";
+}
+const { wariant } = Astro.props;
+---
+
+<div class:list={["tlo", wariant === "przyklady" && "tlo--przyklady"]} aria-hidden="true">
+  <picture>
+    <source media="(min-width: 64em)" srcset="/media/tlo-d-kafel.v1.webp" width="2560" height="2858" />
+    <img
+      class="tlo__obraz"
+      src="/media/tlo-m-kafel.v1.webp"
+      width="1440"
+      height="5160"
+      alt=""
+      decoding="async"
+      fetchpriority="high"
+    />
+  </picture>
+  <div class="tlo__wygaszenie"></div>
+</div>

@@ -1,0 +1,24 @@
+---
+// Wordmark: litera „o” jest portem — pierścieniem z bursztynową kropką.
+// Ten sam element wraca jako favicon i jako punkt w ikonach działów.
+interface Props {
+  href?: string;
+  wStopce?: boolean;
+}
+const { href, wStopce = false } = Astro.props;
+const Tag = href ? "a" : "span";
+---
+
+<Tag
+  class:list={["znak", wStopce && "znak--stopka"]}
+  href={href}
+  aria-label={href ? "klarow — strona główna" : undefined}
+  aria-hidden={href ? undefined : "true"}
+>
+  <span aria-hidden="true">klar</span>
+  <svg class="znak__port" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <circle class="znak__pierscien" cx="12" cy="12" r="8.4"></circle>
+    <circle class="znak__kropka" cx="12" cy="12" r="3.2"></circle>
+  </svg>
+  <span aria-hidden="true">w</span>
+</Tag>

@@ -1,0 +1,65 @@
+---
+import "@fontsource-variable/bricolage-grotesque";
+import "@fontsource/jetbrains-mono/latin-500.css";
+import "@fontsource/jetbrains-mono/latin-ext-500.css";
+import "../styles/tokens.css";
+import "../styles/strona.css";
+import Tlo from "../components/Tlo.astro";
+import Naglowek from "../components/Naglowek.astro";
+import Stopka from "../components/Stopka.astro";
+import PasekKontaktu from "../components/PasekKontaktu.astro";
+
+interface Props {
+  tytul: string;
+  opis: string;
+  sciezka: string;
+  kanoniczna?: string;
+  wariantTla?: "przyklady";
+  krotkaStopka?: boolean;
+  doGory?: boolean;
+  noindex?: boolean;
+}
+
+const {
+  tytul,
+  opis,
+  sciezka,
+  kanoniczna,
+  wariantTla,
+  krotkaStopka = false,
+  doGory = false,
+  noindex = false,
+} = Astro.props;
+
+// Canonical budujemy z jawnej ścieżki, nigdy z Astro.url — przy build.format 'file' ma ona końcówkę .html.
+const canonical = kanoniczna ?? `https://klarow.com${sciezka}`;
+---
+
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{tytul}</title>
+    <meta name="description" content={opis} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pl_PL" />
+    <meta property="og:site_name" content="Klarow" />
+    <meta property="og:title" content={tytul} />
+    <meta property="og:description" content={opis} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content="https://klarow.com/og.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#0D1014" />
+  </head>
+  <body class="strona">
+    <Tlo wariant={wariantTla} />
+    <Naglowek doGory={doGory} />
+    <slot />
+    <Stopka krotka={krotkaStopka} />
+    <PasekKontaktu />
+  </body>
+</html>

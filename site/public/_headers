@@ -1,23 +1,13 @@
-# Cloudflare Pages, polityka cache:
-# - dokument HTML NIGDY nie może być trzymany w cache przeglądarki
-#   (stary index.html woła już nieistniejące zahashowane assety, a SPA-fallback
-#   oddaje wtedy HTML zamiast JS/CSS, czyli "strona tylko z tłem" na telefonach),
-# - zahashowane assety (/assets/*) są immutable, mogą żyć w cache rok,
-# - pliki z public/ nie dostają hasha Vite, więc wersja siedzi w nazwie
-#   (hero-v1.webm, raport-zarzadczy-v1-640.webp); zmiana treści = nowa wersja,
-#   nigdy nadpisanie, dlatego /media/* i /thumbs/* też są immutable.
-
-/*
-  Cache-Control: no-cache
-
-/assets/*
-  Cache-Control: public, max-age=31536000, immutable
-
-/fonts/*
-  Cache-Control: public, max-age=31536000, immutable
-
 /media/*
   Cache-Control: public, max-age=31536000, immutable
 
-/thumbs/*
+/_astro/*
   Cache-Control: public, max-age=31536000, immutable
+
+/klarow.vcf
+  Content-Type: text/vcard; charset=utf-8
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()

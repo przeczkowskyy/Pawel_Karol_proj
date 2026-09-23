@@ -1,0 +1,120 @@
+---
+import Baza from "../layouts/Baza.astro";
+import IkonaDzialu from "../components/IkonaDzialu.astro";
+import { kontakt } from "../content/strona";
+
+// Kolejność grup jest ta sama co kolejność ikon na stronie głównej.
+const grupy = [
+  {
+    slug: "raporty",
+    tytul: "Raporty i&nbsp;kontroling",
+    pozycje: [
+      ["Raport zarządczy", "jedno zestawienie składane automatycznie z&nbsp;kilku źródeł, gotowe na stałą godzinę."],
+      ["Kontroling kosztów projektu", "koszty schodzące do poziomu zlecenia albo budowy, porównane z&nbsp;budżetem."],
+      ["Dashboard produkcji", "bieżący obraz tego, co jest w&nbsp;toku, co stoi i&nbsp;co jest zagrożone terminem."],
+    ],
+  },
+  {
+    slug: "generatory",
+    tytul: "Dokumenty i&nbsp;rejestry",
+    pozycje: [
+      ["Generatory dokumentów", "oferta, umowa, protokół czy zlecenie transportu powstają z&nbsp;danych, w&nbsp;Waszym wzorze i&nbsp;z&nbsp;ciągłą numeracją."],
+      ["Rejestr umów", "jedno miejsce z&nbsp;terminami, aneksami i&nbsp;przypomnieniami, zamiast katalogu z&nbsp;plikami."],
+      ["Protokoły robocizny", "godziny z&nbsp;budowy albo z&nbsp;hali trafiają do rozliczenia bez przepisywania."],
+    ],
+  },
+  {
+    slug: "magazyn",
+    tytul: "Magazyn i&nbsp;produkcja",
+    pozycje: [
+      ["Stany, WZ i&nbsp;PZ", "dokumenty magazynowe powstają same, a&nbsp;stan aktualizuje się bez ręcznych korekt."],
+      ["Kontrola braków materiałowych", "sygnał o&nbsp;brakującym materiale zanim praca stanie, a&nbsp;nie w&nbsp;dniu montażu."],
+      ["Oś czasu zadań", "harmonogram, który przelicza się sam, gdy zmieni się termin albo zakres."],
+    ],
+  },
+  {
+    slug: "ksiegowosc",
+    tytul: "Księgowość i&nbsp;płatności",
+    pozycje: [
+      ["Integracje z&nbsp;księgowością i&nbsp;płatnościami", "dokumenty i&nbsp;transakcje (również z&nbsp;Revolut) trafiają tam, gdzie powinny, z&nbsp;automatycznie nadanym kontem księgowym i&nbsp;centrum kosztowym."],
+      ["Obieg akceptacji przelewów", "kto zatwierdził, kiedy i&nbsp;na jakiej podstawie: widoczne w&nbsp;jednym miejscu."],
+      ["Kontroling na danych z&nbsp;KSeF", "koszty czytane wprost z&nbsp;faktur, bez ręcznego zestawiania."],
+    ],
+  },
+  {
+    slug: "integracje",
+    tytul: "Integracje między systemami",
+    pozycje: [
+      ["ERP, CRM i&nbsp;sklep", "ten sam dokument nie jest wpisywany dwa razy, a&nbsp;zmiana po jednej stronie wraca na drugą."],
+      ["Importy ERP do Excela z&nbsp;rekoncyliacją", "dane wychodzą z&nbsp;ERP już uzgodnione, a&nbsp;różnice są pokazane, nie ukryte."],
+      ["Audyt jakości danych", "lista miejsc, w&nbsp;których dane się rozjeżdżają, zanim zbudujemy na nich cokolwiek dalej."],
+    ],
+  },
+  {
+    slug: "czat-ai",
+    tytul: "AI i&nbsp;asystenci",
+    pozycje: [
+      ["Czat po dokumentacji", "odpowiada na podstawie Waszych dokumentów i&nbsp;pokazuje, z&nbsp;którego miejsca wziął odpowiedź."],
+      ["Odczyt dokumentów", "dane z&nbsp;faktur, zamówień i&nbsp;zdjęć z&nbsp;budowy trafiają do systemu bez przepisywania."],
+      ["Wstępna klasyfikacja zgłoszeń", "maile i&nbsp;zgłoszenia trafiają do właściwej osoby albo do właściwego zlecenia."],
+    ],
+  },
+] as const;
+
+const opis =
+  "Przekrój sześciu obszarów, w których pracujemy najczęściej: raporty, dokumenty, magazyn, księgowość, integracje i AI. Przykłady możliwości, nie katalog produktów.";
+---
+
+<Baza
+  tytul="Przykłady tego, co budujemy — klarow"
+  opis={opis}
+  sciezka="/przyklady"
+  wariantTla="przyklady"
+  krotkaStopka={true}
+>
+  <main class="przyklady">
+    <div class="przyklady__wstep">
+      <h1 class="przyklady__tytul">Przykłady tego, co budujemy</h1>
+      <p class="karta-tekstu przyklady__lead">
+        Nie mamy zamkniętej listy produktów. Poniżej przekrój sześciu obszarów, w&nbsp;których pracujemy
+        najczęściej — żeby było widać skalę: od jednego arkusza, który sam się wypełnia, po połączenie kilku
+        systemów.
+      </p>
+      <p class="przyklad__etykieta">
+        Przykłady możliwości. Każde narzędzie powstaje pod konkretny proces, więc Wasze będzie wyglądać inaczej.
+      </p>
+    </div>
+    <div class="przyklady__siatka">
+      {
+        grupy.map((g) => (
+          <section id={g.slug} class="przyklad" aria-labelledby={`h-${g.slug}`}>
+            <div class="przyklad__naglowek">
+              <IkonaDzialu slug={g.slug} klasa="przyklad__ikona" />
+              <h2 id={`h-${g.slug}`} class="przyklad__tytul" set:html={g.tytul} />
+            </div>
+            <ul class="przyklad__lista">
+              {g.pozycje.map(([nazwa, opis]) => (
+                <li class="przyklad__pozycja">
+                  <strong set:html={nazwa} /> — <span set:html={opis} />
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))
+      }
+    </div>
+    <div class="przyklady__koniec">
+      <p class="karta-tekstu przyklady__lead">
+        To nie jest pełna lista, tylko przekrój. Jeśli proces da się opisać krok po kroku, prawie zawsze da się
+        go zautomatyzować — opowiedzcie nam o&nbsp;swoim.
+      </p>
+      <div class="przyklady__akcje">
+        <a class="przycisk przycisk--glowny" href={kontakt.telefonHref}>
+          Opowiedzcie o&nbsp;swoim procesie — zadzwońcie
+        </a>
+        <a class="przycisk przycisk--wysoki" href={kontakt.mailHref}>Przyślijcie plik, który Was męczy</a>
+      </div>
+      <a class="link przyklady__powrot" href="/">← Wróć na stronę główną</a>
+    </div>
+  </main>
+</Baza>

@@ -1,0 +1,19 @@
+---
+import Znak from "./Znak.astro";
+import { kontakt } from "../content/strona";
+
+interface Props {
+  /** Na stronie głównej znak prowadzi do kotwicy hero, na podstronach na stronę główną. */
+  doGory?: boolean;
+}
+const { doGory = false } = Astro.props;
+---
+
+<header class="naglowek">
+  <Znak href={doGory ? "#start" : "/"} />
+  <a class="naglowek__telefon" href={kontakt.telefonHref}>
+    <span class="naglowek__numer" set:html={kontakt.telefon} />
+    <span class="naglowek__kropka" aria-hidden="true">·</span>
+    <span class="naglowek__zadzwon">Zadzwoń</span>
+  </a>
+</header>
