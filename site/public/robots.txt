@@ -1,0 +1,6 @@
+# Wpuszczamy wszystkich, łącznie z botami asystentów AI (OAI-SearchBot, PerplexityBot,
+# ClaudeBot, Google-Extended). Strona ma być cytowana, a nie ukrywana.
+User-agent: *
+Allow: /
+
+Sitemap: https://klarow.com/sitemap.xml

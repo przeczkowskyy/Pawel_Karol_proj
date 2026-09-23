@@ -31,3 +31,49 @@ export const dzialy = [
   { slug: "generatory", nazwa: "Generatory dokumentów" },
   { slug: "raporty", nazwa: "Raporty" },
 ] as const;
+
+/** Mapa stron. Źródło prawdy dla sitemapy i dla strażnika. */
+export const strony = [
+  { url: "/", wSitemapie: true },
+  { url: "/przyklady", wSitemapie: true },
+  { url: "/polityka-prywatnosci", wSitemapie: true },
+  { url: "/start", wSitemapie: false }, // noindex: adres z kodu QR
+  { url: "/404", wSitemapie: false },
+] as const;
+
+/** Dane strukturalne strony głównej. Świadomie skromne: bez logo (favicon nim nie jest),
+ *  bez adresu i bez NIP, bez areaServed — firma nie jest jeszcze zarejestrowana,
+ *  a schema nie jest miejscem na deklaracje, których nie da się potwierdzić. */
+export const daneStrukturalne = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://klarow.com/#organizacja",
+      name: "Klarow",
+      url: "https://klarow.com/",
+      description:
+        "Automatyzacje, integracje i asystenci AI dla firm: magazyn, księgowość, dokumenty i raporty.",
+      email: "kontakt@klarow.com",
+      telephone: "+48786296426",
+      founder: { "@id": "https://klarow.com/#karol" },
+    },
+    {
+      "@type": "Person",
+      "@id": "https://klarow.com/#karol",
+      name: "Karol Balucki",
+      jobTitle: "Automatyzacje i integracje",
+      worksFor: { "@id": "https://klarow.com/#organizacja" },
+      email: "kontakt@klarow.com",
+      telephone: "+48786296426",
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://klarow.com/#strona",
+      url: "https://klarow.com/",
+      name: "Klarow",
+      inLanguage: "pl-PL",
+      publisher: { "@id": "https://klarow.com/#organizacja" },
+    },
+  ],
+} as const;

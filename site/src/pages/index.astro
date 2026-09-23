@@ -1,11 +1,12 @@
 ---
 import Baza from "../layouts/Baza.astro";
 import StronaGlowna from "../components/StronaGlowna.astro";
+import { daneStrukturalne } from "../content/strona";
 
 const opis =
   "Automatyzujemy to, co ktoś u Was dziś przepisuje ręcznie: magazyn, księgowość, Excel, dokumenty i AI. Policzcie, ile kosztuje ręczna robota.";
 ---
 
-<Baza tytul="klarow — automatyzacje, integracje, AI" opis={opis} sciezka="/" doGory={true}>
+<Baza tytul="Klarow — automatyzacje, integracje i AI" opis={opis} sciezka="/" doGory={true} schema={daneStrukturalne}>
   <StronaGlowna />
 </Baza>

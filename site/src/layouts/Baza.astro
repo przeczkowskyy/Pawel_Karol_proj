@@ -18,6 +18,8 @@ interface Props {
   krotkaStopka?: boolean;
   doGory?: boolean;
   noindex?: boolean;
+  /** Dane strukturalne (JSON-LD). Podajemy tylko tam, gdzie mamy co zadeklarować. */
+  schema?: unknown;
 }
 
 const {
@@ -29,6 +31,7 @@ const {
   krotkaStopka = false,
   doGory = false,
   noindex = false,
+  schema,
 } = Astro.props;
 
 // Canonical budujemy z jawnej ścieżki, nigdy z Astro.url — przy build.format 'file' ma ona końcówkę .html.
@@ -42,8 +45,8 @@ const canonical = kanoniczna ?? `https://klarow.com${sciezka}`;
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{tytul}</title>
     <meta name="description" content={opis} />
-    <link rel="canonical" href={canonical} />
-    {noindex && <meta name="robots" content="noindex, follow" />}
+    {/* Canonical i noindex wykluczają się nawzajem — Google odradza podawanie obu naraz. */}
+    {noindex ? <meta name="robots" content="noindex, follow" /> : <link rel="canonical" href={canonical} />}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="pl_PL" />
@@ -54,6 +57,7 @@ const canonical = kanoniczna ?? `https://klarow.com${sciezka}`;
     <meta property="og:image" content="https://klarow.com/og.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="theme-color" content="#0D1014" />
+    {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
   </head>
   <body class="strona">
     <Tlo wariant={wariantTla} />

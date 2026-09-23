@@ -32,7 +32,7 @@ a:hover { color: var(--sygnal); }
 .tlo {
   position: absolute; inset: 0; z-index: -1; overflow: hidden;
   background-color: var(--tlo);
-  background-image: url("/media/tlo-m-kafel.v1.webp");
+  background-image: url("/media/tlo-m-kafel.v2.webp");
   background-repeat: repeat-y; background-size: 100% auto; background-position: center top;
 }
 .tlo__obraz { position: absolute; top: 0; left: 0; display: block; width: 100%; height: auto; aspect-ratio: 1080 / 3870; }
@@ -373,7 +373,7 @@ a:hover { color: var(--sygnal); }
 
 /* ---------- Desktop ---------- */
 @media (min-width: 64em) {
-  .tlo { background-image: url("/media/tlo-d-kafel.v1.webp"); }
+  .tlo { background-image: url("/media/tlo-d-kafel.v2.webp"); }
   .tlo__obraz { aspect-ratio: 2560 / 2858; }
   .tlo__wygaszenie { background-image: linear-gradient(to bottom, transparent 0, color-mix(in srgb, var(--tlo) 60%, transparent) 2240px, var(--tlo) 4800px); }
   .tlo--przyklady { --kafel: calc(100vw * 2858 / 2560); --przesuniecie: -0.684; }

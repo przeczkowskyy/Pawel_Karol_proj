@@ -4,16 +4,19 @@ import StronaGlowna from "../components/StronaGlowna.astro";
 
 // Adres z kodu QR na wizytówkach. To prawdziwa strona, nie przekierowanie:
 // Cloudflare Web Analytics nie zapisuje query stringów, więc tylko osobna ścieżka
-// pozwala policzyć wejścia z QR. Canonical wskazuje na stronę główną.
+// pozwala policzyć wejścia z QR.
+//
+// UWAGA: tylko `noindex`, BEZ `rel=canonical`. Google odradza łączenie tych dwóch sygnałów
+// (są sprzeczne, a w najgorszym razie noindex przechodzi na cel canonicala, czyli na stronę główną).
+// Tej strony nie ma też w sitemapie.
 const opis =
   "Automatyzujemy to, co ktoś u Was dziś przepisuje ręcznie: magazyn, księgowość, Excel, dokumenty i AI. Policzcie, ile kosztuje ręczna robota.";
 ---
 
 <Baza
-  tytul="klarow — automatyzacje, integracje, AI"
+  tytul="Klarow — automatyzacje, integracje i AI"
   opis={opis}
   sciezka="/start"
-  kanoniczna="https://klarow.com/"
   noindex={true}
   doGory={true}
 >
