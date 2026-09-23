@@ -30,7 +30,7 @@ Przykłady możliwości. Każde narzędzie powstaje pod konkretny proces, więc 
 
 **Dashboard produkcji** — bieżący obraz tego, co jest w toku, co stoi i co jest zagrożone terminem.
 
-## 2. Dokumenty i rejestry `#dokumenty`
+## 2. Dokumenty i rejestry `#generatory`
 
 **Generatory dokumentów** — oferta, umowa, protokół czy zlecenie transportu powstają z danych, w Waszym wzorze i z ciągłą numeracją.
 
@@ -62,7 +62,7 @@ Przykłady możliwości. Każde narzędzie powstaje pod konkretny proces, więc 
 
 **Audyt jakości danych** — lista miejsc, w których dane się rozjeżdżają, zanim zbudujemy na nich cokolwiek dalej.
 
-## 6. AI i asystenci `#ai`
+## 6. AI i asystenci `#czat-ai`
 
 **Czat po dokumentacji** — odpowiada na podstawie Waszych dokumentów i pokazuje, z którego miejsca wziął odpowiedź.
 

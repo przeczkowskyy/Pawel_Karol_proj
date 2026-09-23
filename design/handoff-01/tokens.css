@@ -1,0 +1,25 @@
+/* Klarow — tokeny. Jedyne źródło kolorów, krojów i skal.
+   Kolory i kroje: 1:1 z briefu (runda 1). Skale odstępów, promieni i czasów: z systemu Klarow. */
+:root {
+  --tlo:            #0D1014; /* tło strony — to samo co tło grafiki, więc jej krawędzie znikają */
+  --powierzchnia:   #161B21; /* karty, dolny pasek kontaktu */
+  --powierzchnia-2: #1F262E; /* pola kalkulatora, obramowania, obudowa ikon */
+  --linia:          #3A4450; /* linie, obramowania, siatka */
+  --obrys:          #05070A; /* najciemniejszy kontur */
+  --papier:         #F2EDE3; /* tekst główny (ok. 16:1) */
+  --papier-2:       #A8A294; /* tekst drugorzędny (ok. 7,5:1) — nie na tle grafiki */
+  --sygnal:         #FFB938; /* JEDYNY kolor akcji: CTA, akcenty ikon, wynik; tekst na nim w --tlo */
+  --dane:           #39D0C0; /* stan „działa” */
+  --recznie:        #FF6A4D; /* TYLKO: „zamiast…” w wierszach oferty */
+  --neuron:         #6E63B8; /* TYLKO w grafice tła — nigdy w interfejsie */
+
+  --font-display: "Bricolage Grotesque", system-ui, sans-serif;
+  --font-mono:    "JetBrains Mono", ui-monospace, monospace;
+
+  --odstep-1: 4px;  --odstep-2: 8px;  --odstep-3: 12px; --odstep-4: 16px;
+  --odstep-5: 24px; --odstep-6: 32px; --odstep-7: 48px; --odstep-8: 64px;
+
+  --promien-s: 10px; --promien-m: 14px; --promien-l: 20px;
+
+  --czas-szybki: 150ms; --czas-zwykly: 250ms; --czas-wolny: 300ms;
+}

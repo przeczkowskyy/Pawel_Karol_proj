@@ -110,9 +110,9 @@ To jest kluczowa sekcja nawigacyjna. Sześć działów, każdy z IKONĄ, która 
     zamiast ręcznego przypisywania faktur do zleceń · teraz faktury kosztowe trafiają do właściwego zlecenia i czekają na akceptację
   3 | Integracje i API (dwa złącza połączone linią) → /przyklady#integracje
     zamiast pięciu programów, które się nie znają · teraz sklep, ERP, CRM i Excel wymieniają dane same
-  4 | Czat AI (dymek z trzema kropkami) → /przyklady#ai
+  4 | Czat AI (dymek z trzema kropkami) → /przyklady#czat-ai
     zamiast odpowiadania 40 razy na to samo pytanie · teraz asystent odpowiada na podstawie Waszych dokumentów, a w razie wątpliwości przekazuje sprawę człowiekowi
-  5 | Generatory dokumentów (kartka z liniami i pieczęcią) → /przyklady#dokumenty
+  5 | Generatory dokumentów (kartka z liniami i pieczęcią) → /przyklady#generatory
     zamiast składania oferty przez godzinę · teraz oferta, umowa czy protokół z danych jednym kliknięciem
   6 | Raporty (trzy słupki) → /przyklady#raporty
     zamiast sklejania raportu w piątek wieczorem · teraz raport, który sam się odświeża w poniedziałek o 7:00
@@ -198,7 +198,7 @@ Sześć grup, każda z kotwicą, ikoną tego działu (ta sama co na stronie gł�
     Raport zarządczy — jedno zestawienie składane automatycznie z kilku źródeł, gotowe na stałą godzinę.
     Kontroling kosztów projektu — koszty schodzące do poziomu zlecenia albo budowy, porównane z budżetem.
     Dashboard produkcji — bieżący obraz tego, co jest w toku, co stoi i co jest zagrożone terminem.
-  #dokumenty | Dokumenty i rejestry
+  #generatory | Dokumenty i rejestry
     Generatory dokumentów — oferta, umowa, protokół czy zlecenie transportu powstają z danych, w Waszym wzorze i z ciągłą numeracją.
     Rejestr umów — jedno miejsce z terminami, aneksami i przypomnieniami, zamiast katalogu z plikami.
     Protokoły robocizny — godziny z budowy albo z hali trafiają do rozliczenia bez przepisywania.
@@ -214,7 +214,7 @@ Sześć grup, każda z kotwicą, ikoną tego działu (ta sama co na stronie gł�
     ERP, CRM i sklep — ten sam dokument nie jest wpisywany dwa razy, a zmiana po jednej stronie wraca na drugą.
     Importy ERP do Excela z rekoncyliacją — dane wychodzą z ERP już uzgodnione, a różnice są pokazane, nie ukryte.
     Audyt jakości danych — lista miejsc, w których dane się rozjeżdżają, zanim zbudujemy na nich cokolwiek dalej.
-  #ai | AI i asystenci
+  #czat-ai | AI i asystenci
     Czat po dokumentacji — odpowiada na podstawie Waszych dokumentów i pokazuje, z którego miejsca wziął odpowiedź.
     Odczyt dokumentów — dane z faktur, zamówień i zdjęć z budowy trafiają do systemu bez przepisywania.
     Wstępna klasyfikacja zgłoszeń — maile i zgłoszenia trafiają do właściwej osoby albo do właściwego zlecenia.

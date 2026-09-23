@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>klarow — automatyzacje, integracje, AI</title>
+<link rel="icon" href="ikony/favicon.svg" type="image/svg+xml">
+<!-- TYLKO PODGLĄD: w produkcji fonty self-hosted -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&amp;family=JetBrains+Mono:wght@500&amp;display=swap">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="strona.css">
+</head>
+<body class="strona">
+<div class="tlo" aria-hidden="true">
+  <picture>
+    <source data-slot="TLO-D" media="(min-width: 64em)" srcset="media/tlo-d-kafel.png" width="2560" height="2858">
+    <img class="tlo__obraz" data-slot="TLO-M" src="media/tlo-m-kafel.png" width="1080" height="3870" alt="" decoding="async" fetchpriority="high">
+  </picture>
+  <div class="tlo__wygaszenie"></div>
+</div>
+<header class="naglowek" data-port="Naglowek">
+  <a class="znak" href="#start" aria-label="klarow — strona główna" data-port="Znak"><span aria-hidden="true">klar</span><svg class="znak__port" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle class="znak__pierscien" cx="12" cy="12" r="8.4"></circle><circle class="znak__kropka" cx="12" cy="12" r="3.2"></circle></svg><span aria-hidden="true">w</span></a>
+  <a class="naglowek__telefon" href="tel:+48786296426"><span class="naglowek__numer">786&nbsp;296&nbsp;426</span><span class="naglowek__kropka" aria-hidden="true">·</span><span class="naglowek__zadzwon">Zadzwoń</span></a>
+</header>
+<main>
+  <section id="start" class="hero" aria-labelledby="hero-tytul" data-port="Hero">
+    <div class="hero__tekst">
+      <p class="hero__eyebrow">AUTOMATYZACJE · INTEGRACJE · AI</p>
+      <h1 id="hero-tytul" class="hero__tytul">Automatyzujemy to, co ktoś u&nbsp;Was dziś przepisuje ręcznie.</h1>
+      <p class="hero__copy">Łączymy magazyn, księgowość, Excel i&nbsp;dokumenty, żeby dane płynęły same. Od jednego raportu po kilka połączonych systemów.</p>
+    </div>
+    <a class="przycisk przycisk--glowny hero__cta" href="#oszczednosci">Policzcie, ile kosztuje ręczna robota ↓</a>
+  </section>
+
+  <section id="co-robimy" class="sekcja" aria-labelledby="h-co-robimy">
+    <div class="sekcja__srodek">
+      <p class="etykieta">01 · CO AUTOMATYZUJEMY</p>
+      <h2 id="h-co-robimy" class="sekcja__tytul">Co automatyzujemy</h2>
+      <nav class="dzialy" aria-label="Działy" data-port="Dzialy">
+        <a class="kafel" href="/przyklady#magazyn" data-port="Kafel">
+          <svg class="kafel__strzalka" viewBox="0 0 18 18" width="18" height="18" aria-hidden="true" focusable="false"><path d="M4 9h10M10 5l4 4-4 4"></path></svg>
+          <svg class="ikona kafel__ikona" viewBox="0 0 24 24" width="40" height="40" aria-hidden="true" focusable="false"><rect class="ikona__obudowa" x="1.5" y="1.5" width="21" height="21" rx="5"></rect><circle class="ikona__punkt" cx="19" cy="5" r="1.25"></circle><g class="ikona__rys"><path d="M6.75 15H17.25"></path><rect x="6.75" y="11.25" width="3.75" height="3.75" rx="0.5"></rect><rect x="13.5" y="11.25" width="3.75" height="3.75" rx="0.5"></rect><rect x="10.125" y="7.5" width="3.75" height="3.75" rx="0.5"></rect></g></svg>
+          <h3 class="kafel__nazwa">Magazyn</h3>
+          <p class="kafel__wiersz kafel__wiersz--zamiast"><span class="kafel__znacznik">zamiast</span> <span class="kafel__tresc">liczenia stanów na kartce</span></p>
+          <p class="kafel__wiersz kafel__wiersz--teraz"><span class="kafel__znacznik">teraz</span> <span class="kafel__tresc">stany, WZ i&nbsp;PZ aktualizują się same, a&nbsp;braki wysyłają alert</span></p>
+        </a>
+        <a class="kafel" href="/przyklady#ksiegowosc" data-port="Kafel">
+          <svg class="kafel__strzalka" viewBox="0 0 18 18" width="18" height="18" aria-hidden="true" focusable="false"><path d="M4 9h10M10 5l4 4-4 4"></path></svg>
+          <svg class="ikona kafel__ikona" viewBox="0 0 24 24" width="40" height="40" aria-hidden="true" focusable="false"><rect class="ikona__obudowa" x="1.5" y="1.5" width="21" height="21" rx="5"></rect><circle class="ikona__punkt" cx="19" cy="5" r="1.25"></circle><g class="ikona__rys"><rect x="6.75" y="13.5" width="10.5" height="3" rx="1.5"></rect><path d="M9 13.5V6.75H15V13.5"></path><path d="M10.875 9.75H13.125"></path></g></svg>
+          <h3 class="kafel__nazwa">Księgowość</h3>
+          <p class="kafel__wiersz kafel__wiersz--zamiast"><span class="kafel__znacznik">zamiast</span> <span class="kafel__tresc">ręcznego przypisywania faktur do zleceń</span></p>
+          <p class="kafel__wiersz kafel__wiersz--teraz"><span class="kafel__znacznik">teraz</span> <span class="kafel__tresc">faktury kosztowe trafiają do właściwego zlecenia i&nbsp;czekają na akceptację</span></p>
+        </a>
+        <a class="kafel" href="/przyklady#integracje" data-port="Kafel">
+          <svg class="kafel__strzalka" viewBox="0 0 18 18" width="18" height="18" aria-hidden="true" focusable="false"><path d="M4 9h10M10 5l4 4-4 4"></path></svg>
+          <svg class="ikona kafel__ikona" viewBox="0 0 24 24" width="40" height="40" aria-hidden="true" focusable="false"><rect class="ikona__obudowa" x="1.5" y="1.5" width="21" height="21" rx="5"></rect><circle class="ikona__punkt" cx="19" cy="5" r="1.25"></circle><g class="ikona__rys"><rect x="6.75" y="9" width="3" height="6" rx="1"></rect><rect x="14.25" y="9" width="3" height="6" rx="1"></rect><path d="M9.75 12H14.25"></path><path d="M8.25 9V6.75M15.75 15V17.25"></path></g></svg>
+          <h3 class="kafel__nazwa">Integracje i&nbsp;API</h3>
+          <p class="kafel__wiersz kafel__wiersz--zamiast"><span class="kafel__znacznik">zamiast</span> <span class="kafel__tresc">pięciu programów, które się nie znają</span></p>
+          <p class="kafel__wiersz kafel__wiersz--teraz"><span class="kafel__znacznik">teraz</span> <span class="kafel__tresc">sklep, ERP, CRM i&nbsp;Excel wymieniają dane same</span></p>
+        </a>
+        <a class="kafel" href="/przyklady#czat-ai" data-port="Kafel">
+          <svg class="kafel__strzalka" viewBox="0 0 18 18" width="18" height="18" aria-hidden="true" focusable="false"><path d="M4 9h10M10 5l4 4-4 4"></path></svg>
+          <svg class="ikona kafel__ikona" viewBox="0 0 24 24" width="40" height="40" aria-hidden="true" focusable="false"><rect class="ikona__obudowa" x="1.5" y="1.5" width="21" height="21" rx="5"></rect><circle class="ikona__punkt" cx="19" cy="5" r="1.25"></circle><g class="ikona__rys"><rect x="6.75" y="7.5" width="10.5" height="7.5" rx="2"></rect><path d="M9.75 15V17.25L12.375 15"></path><circle class="ikona__kropka" cx="9.375" cy="11.25" r=".8"></circle><circle class="ikona__kropka" cx="12" cy="11.25" r=".8"></circle><circle class="ikona__kropka" cx="14.625" cy="11.25" r=".8"></circle></g></svg>
+          <h3 class="kafel__nazwa">Czat AI</h3>
+          <p class="kafel__wiersz kafel__wiersz--zamiast"><span class="kafel__znacznik">zamiast</span> <span class="kafel__tresc">odpowiadania 40&nbsp;razy na to samo pytanie</span></p>
+          <p class="kafel__wiersz kafel__wiersz--teraz"><span class="kafel__znacznik">teraz</span> <span class="kafel__tresc">asystent odpowiada na podstawie Waszych dokumentów, a&nbsp;w&nbsp;razie wątpliwości przekazuje sprawę człowiekowi</span></p>
+        </a>
+        <a class="kafel" href="/przyklady#generatory" data-port="Kafel">
+          <svg class="kafel__strzalka" viewBox="0 0 18 18" width="18" height="18" aria-hidden="true" focusable="false"><path d="M4 9h10M10 5l4 4-4 4"></path></svg>
+          <svg class="ikona kafel__ikona" viewBox="0 0 24 24" width="40" height="40" aria-hidden="true" focusable="false"><rect class="ikona__obudowa" x="1.5" y="1.5" width="21" height="21" rx="5"></rect><circle class="ikona__punkt" cx="19" cy="5" r="1.25"></circle><g class="ikona__rys"><path d="M7.5 7.5H13.5L16.5 10.5V16.5H7.5Z"></path><path d="M13.5 7.5V10.5H16.5"></path><path d="M9.75 10.125H12"></path><circle cx="12.75" cy="13.5" r="1"></circle></g></svg>
+          <h3 class="kafel__nazwa">Generatory dokumentów</h3>
+          <p class="kafel__wiersz kafel__wiersz--zamiast"><span class="kafel__znacznik">zamiast</span> <span class="kafel__tresc">składania oferty przez godzinę</span></p>
+          <p class="kafel__wiersz kafel__wiersz--teraz"><span class="kafel__znacznik">teraz</span> <span class="kafel__tresc">oferta, umowa czy protokół z&nbsp;danych jednym kliknięciem</span></p>
+        </a>
+        <a class="kafel" href="/przyklady#raporty" data-port="Kafel">
+          <svg class="kafel__strzalka" viewBox="0 0 18 18" width="18" height="18" aria-hidden="true" focusable="false"><path d="M4 9h10M10 5l4 4-4 4"></path></svg>
+          <svg class="ikona kafel__ikona" viewBox="0 0 24 24" width="40" height="40" aria-hidden="true" focusable="false"><rect class="ikona__obudowa" x="1.5" y="1.5" width="21" height="21" rx="5"></rect><circle class="ikona__punkt" cx="19" cy="5" r="1.25"></circle><g class="ikona__rys"><rect x="6.375" y="12" width="1.5" height="3.75" rx="0.4"></rect><rect x="10.875" y="7.5" width="1.5" height="8.25" rx="0.4"></rect><rect x="15.375" y="9.75" width="1.5" height="6" rx="0.4"></rect></g></svg>
+          <h3 class="kafel__nazwa">Raporty</h3>
+          <p class="kafel__wiersz kafel__wiersz--zamiast"><span class="kafel__znacznik">zamiast</span> <span class="kafel__tresc">sklejania raportu w&nbsp;piątek wieczorem</span></p>
+          <p class="kafel__wiersz kafel__wiersz--teraz"><span class="kafel__znacznik">teraz</span> <span class="kafel__tresc">raport, który sam się odświeża w&nbsp;poniedziałek o&nbsp;7:00</span></p>
+        </a>
+      </nav>
+      <div class="dzialy__dopisek">
+        <p>Mały problem czy duży system — zaczynamy od kawałka, który boli najbardziej.</p>
+        <a class="link" href="/przyklady">Zobaczcie przykłady narzędzi →</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="oszczednosci" class="sekcja" aria-labelledby="h-oszczednosci">
+    <div class="sekcja__srodek">
+      <p class="etykieta">02 · ILE KOSZTUJE RĘCZNA ROBOTA</p>
+      <form class="kalkulator" aria-labelledby="h-oszczednosci" data-port="Kalkulator">
+        <div class="kalkulator__lewa">
+          <h2 id="h-oszczednosci" class="sekcja__tytul">Ile kosztuje Was ręczna robota? Policzcie.</h2>
+          <p class="karta-tekstu">Wybierzcie przykład albo wpiszcie swoje liczby. To Wasz rachunek, nie nasza obietnica — ile da się zautomatyzować naprawdę, sprawdzamy w&nbsp;pilocie.</p>
+          <fieldset class="presety" data-port="Presety">
+            <legend class="presety__podpis">przykładowe liczby — zmieńcie na swoje</legend>
+            <div class="presety__siatka">
+              <label class="preset" data-port="Preset"><input class="preset__pole" type="radio" name="preset" value="raport" checked><span class="preset__kropka" aria-hidden="true"></span><span>Raport tygodniowy w&nbsp;Excelu</span></label>
+              <label class="preset" data-port="Preset"><input class="preset__pole" type="radio" name="preset" value="ksef"><span class="preset__kropka" aria-hidden="true"></span><span>Dokumenty spoza KSeF i&nbsp;dekretacja</span></label>
+              <label class="preset" data-port="Preset"><input class="preset__pole" type="radio" name="preset" value="magazyn"><span class="preset__kropka" aria-hidden="true"></span><span>Stany magazynowe, WZ/PZ</span></label>
+              <label class="preset" data-port="Preset"><input class="preset__pole" type="radio" name="preset" value="oferty"><span class="preset__kropka" aria-hidden="true"></span><span>Oferty i&nbsp;umowy</span></label>
+            </div>
+          </fieldset>
+          <div class="pola">
+            <div class="pole pole--krokomierz" data-port="Krokomierz">
+              <label class="pole__etykieta" for="osoby">Ile osób to robi</label>
+              <div class="krokomierz">
+                <button class="krokomierz__przycisk" type="button" aria-label="Mniej osób">−</button>
+                <input class="krokomierz__pole" id="osoby" name="osoby" type="number" inputmode="numeric" min="1" max="20" step="1" value="3">
+                <button class="krokomierz__przycisk" type="button" aria-label="Więcej osób">+</button>
+              </div>
+            </div>
+            <div class="pole" data-port="Suwak">
+              <label class="pole__etykieta" id="l-godziny" for="godziny">Godzin tygodniowo na osobę</label>
+              <div class="pole__wiersz">
+                <input class="suwak" id="godziny" name="godziny" type="range" min="1" max="40" step="1" value="3">
+                <input class="pole-liczba" id="godziny-liczba" type="number" inputmode="numeric" min="1" max="40" step="1" value="3" aria-labelledby="l-godziny">
+              </div>
+            </div>
+            <div class="pole" data-port="PoleKwoty">
+              <details class="info" data-port="Info">
+                <summary class="info__przelacznik" aria-label="Koszt godziny pracy — skąd ta kwota"><span class="pole__etykieta" id="l-koszt">Koszt godziny pracy</span><span class="info__i" aria-hidden="true"><span class="info__znak">i</span></span></summary>
+                <p class="info__tresc">ok. 9&nbsp;000&nbsp;zł brutto + ok. 20% kosztów pracodawcy ÷ 168&nbsp;h ≈&nbsp;65&nbsp;zł</p>
+              </details>
+              <div class="pole-jednostka">
+                <input class="pole-jednostka__pole" id="koszt" name="koszt" type="number" inputmode="numeric" min="35" max="200" step="1" value="70" aria-labelledby="l-koszt">
+                <span class="pole-jednostka__jednostka" aria-hidden="true">zł</span>
+              </div>
+            </div>
+            <div class="pole" data-port="Suwak">
+              <label class="pole__etykieta" id="l-udzial" for="udzial">Jaką część da się zautomatyzować</label>
+              <span class="pole__podpis" id="p-udzial">Zwykle nie wszystko</span>
+              <div class="pole__wiersz">
+                <input class="suwak" id="udzial" name="udzial" type="range" min="20" max="90" step="5" value="60" aria-describedby="p-udzial">
+                <span class="pole-jednostka pole-jednostka--waska">
+                  <input class="pole-jednostka__pole" id="udzial-liczba" type="number" inputmode="numeric" min="20" max="90" step="5" value="60" aria-labelledby="l-udzial">
+                  <span class="pole-jednostka__jednostka" aria-hidden="true">%</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="kalkulator__prawa">
+          <output class="karta-wyniku" name="wynik" for="osoby godziny koszt udzial" aria-live="polite" data-port="KartaWyniku">
+            <span class="karta-wyniku__kwota">≈&nbsp;16&nbsp;600&nbsp;zł rocznie</span>
+            <span class="karta-wyniku__podpis">tyle kosztuje czas, który da się odzyskać (przed kosztem wdrożenia)</span>
+            <span class="karta-wyniku__linia" aria-hidden="true"></span>
+            <span class="karta-wyniku__czas">≈&nbsp;237&nbsp;godzin · 29&nbsp;dni roboczych</span>
+            <span class="karta-wyniku__zakres">Przy udziale 30–70%: ≈&nbsp;8&nbsp;300 – 19&nbsp;400&nbsp;zł</span>
+          </output>
+          <div class="wzor" data-port="Wzor">
+            <div>koszt ręcznej roboty do odzyskania ≈&nbsp;osoby × godziny tygodniowo × 44&nbsp;tygodnie<details class="info info--w-linii" data-port="Info"><summary class="info__przelacznik" aria-label="Skąd 44 tygodnie"><span class="info__znak">i</span></summary><span class="info__tresc">52&nbsp;tygodnie minus urlop, święta i&nbsp;choroby.</span></details> × udział × koszt godziny</div>
+            <p class="wzor__liczby">3&nbsp;os. × 3&nbsp;h × 44&nbsp;tyg. × 60% × 70&nbsp;zł</p>
+          </div>
+          <div class="karta-tekstu uwagi">
+            <p>To Wasz rachunek na Waszych liczbach, nie nasz wynik. Koszt wdrożenia podajemy z&nbsp;góry, po rozmowie.</p>
+            <p class="uwagi__drobne">Nic nie wysyłamy — liczy się w&nbsp;Waszej przeglądarce.</p>
+            <p class="uwagi__drobne">Poza rachunkiem: mniej pomyłek i&nbsp;szybsza obsługa — tego nie przeliczamy na&nbsp;złotówki.</p>
+          </div>
+          <div class="kalkulator__akcje">
+            <a class="przycisk przycisk--glowny" href="mailto:kontakt@klarow.com?subject=Nasz%20rachunek%20z%20klarow.com">Wyślij nam ten rachunek</a>
+            <button class="przycisk" type="button" data-port="Udostepnij">Prześlij rachunek dalej</button>
+            <a class="przycisk" href="tel:+48786296426">Omówmy to — zadzwoń</a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section id="jak-pracujemy" class="sekcja" aria-labelledby="h-jak-pracujemy">
+    <div class="sekcja__srodek">
+      <p class="etykieta">03 · JAK PRACUJEMY</p>
+      <h2 id="h-jak-pracujemy" class="sekcja__tytul">Od rozmowy do działającego procesu</h2>
+      <div class="sekcja__uklad">
+        <ol class="kroki" data-port="Kroki">
+          <li class="krok"><span class="krok__numer" aria-hidden="true">1</span><div class="krok__tresc"><h3 class="krok__tytul">Rozmowa, 30&nbsp;minut, bez zobowiązań.</h3><p class="krok__opis">Pokażcie proces albo swój najgorszy Excel.</p></div></li>
+          <li class="krok"><span class="krok__numer" aria-hidden="true">2</span><div class="krok__tresc"><h3 class="krok__tytul">Pilot na kopii danych.</h3><p class="krok__opis">Na kopii albo w&nbsp;środowisku testowym — gdzie się da, bez dotykania produkcji.</p></div></li>
+          <li class="krok"><span class="krok__numer" aria-hidden="true">3</span><div class="krok__tresc"><h3 class="krok__tytul">Wdrożenie etapami.</h3><p class="krok__opis">Najpierw to, co boli najbardziej. Termin każdego etapu ustalamy przed startem.</p></div></li>
+          <li class="krok"><span class="krok__numer" aria-hidden="true">4</span><div class="krok__tresc"><h3 class="krok__tytul">Zostaje u&nbsp;Was.</h3><p class="krok__opis">Po odbiorze dostajecie kod, dostępy i&nbsp;dokumentację. Prawa do kodu przenosimy w&nbsp;umowie.</p></div></li>
+        </ol>
+        <div class="sekcja__kolumna">
+          <div class="karty">
+            <p class="karta"><strong>Mały start:</strong> jeden raport, który co rano sam zbiera zamówienia do Excela.</p>
+            <p class="karta"><strong>Duży system:</strong> połączenia magazyn–sprzedaż–księgowość, budowane etapami.</p>
+          </div>
+          <div class="obawy" data-port="Obawy">
+            <details class="obawa" data-port="Obawa">
+                <summary class="obawa__pytanie"><span>Czy musimy wymieniać systemy?</span><svg class="obawa__strzalka" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M3.5 6l4.5 4.5L12.5 6"></path></svg></summary>
+                <p class="obawa__odpowiedz">Nie. Zwykle łączymy to, czego już używacie.</p>
+              </details>
+            <details class="obawa" data-port="Obawa">
+                <summary class="obawa__pytanie"><span>Co z&nbsp;bezpieczeństwem danych?</span><svg class="obawa__strzalka" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M3.5 6l4.5 4.5L12.5 6"></path></svg></summary>
+                <p class="obawa__odpowiedz">Zaczynamy na kopii albo w&nbsp;środowisku testowym. Bierzemy dostęp tylko do tego, co potrzebne.</p>
+              </details>
+            <details class="obawa" data-port="Obawa">
+                <summary class="obawa__pytanie"><span>Ile to kosztuje?</span><svg class="obawa__strzalka" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M3.5 6l4.5 4.5L12.5 6"></path></svg></summary>
+                <p class="obawa__odpowiedz">Zależy od zakresu. Wycenę dostajecie po rozmowie, zanim cokolwiek zaczniemy.</p>
+              </details>
+            <details class="obawa" data-port="Obawa">
+                <summary class="obawa__pytanie"><span>Czy to tylko dla dużych firm?</span><svg class="obawa__strzalka" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M3.5 6l4.5 4.5L12.5 6"></path></svg></summary>
+                <p class="obawa__odpowiedz">Nie. Możemy zacząć od jednego raportu.</p>
+              </details>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="kim-jestesmy" class="sekcja" aria-labelledby="h-kim-jestesmy">
+    <div class="sekcja__srodek">
+      <p class="etykieta">04 · KIM JESTEŚMY</p>
+      <h2 id="h-kim-jestesmy" class="sekcja__tytul">Z&nbsp;kim rozmawiacie</h2>
+      <div class="sekcja__uklad">
+        <p class="karta-tekstu">Klarow to jedna osoba: Karol Balucki. Piszę kod, wdrażam go u&nbsp;Was i&nbsp;odbieram telefon. Bez działu sprzedaży pomiędzy.</p>
+        <div class="osoba-kolumna">
+          <div class="osoba" data-port="Osoba">
+            <div class="osoba__dane">
+              <p class="osoba__imie">Karol Balucki</p>
+              <p class="osoba__rola">automatyzacje, integracje, raporty</p>
+            </div>
+          </div>
+          <a class="link" href="/cv">Zobaczcie, co już powstało →</a>
+        </div>
+      </div>
+      <p class="haslo">Skomplikowane bierzemy na siebie. Wam zostaje klarownie.</p>
+    </div>
+  </section>
+
+  <section id="kontakt" class="sekcja kontakt" aria-labelledby="h-kontakt" data-port="Kontakt">
+    <div class="sekcja__srodek">
+      <p class="etykieta">05 · KONTAKT</p>
+      <div class="sekcja__uklad">
+        <div class="kontakt__wstep">
+          <h2 id="h-kontakt" class="sekcja__tytul">Połączmy się.</h2>
+          <p>Zadzwońcie albo napiszcie. Najszybszy start: przyślijcie kopię pliku, który Was męczy.</p>
+        </div>
+        <div class="kontakt__akcje">
+          <a class="przycisk przycisk--glowny przycisk--duzy" href="tel:+48786296426">Zadzwoń 786&nbsp;296&nbsp;426</a>
+          <a class="przycisk przycisk--wysoki" href="mailto:kontakt@klarow.com">Napisz: kontakt@klarow.com</a>
+          <a class="przycisk przycisk--wysoki" href="/klarow.vcf">Zapisz w&nbsp;kontaktach</a>
+          <div class="kontakt__plik">
+            <a class="link link--podkreslony" href="mailto:kontakt@klarow.com?subject=Nasz%20najgorszy%20Excel">Przyślijcie nam swój najgorszy Excel</a>
+            <p class="kontakt__drobny">Usuńcie nazwiska i&nbsp;dane osobowe — wystarczy układ kolumn i&nbsp;kilka zmyślonych wierszy.</p>
+          </div>
+          <button class="przycisk przycisk--maly" type="button" data-port="Udostepnij">Prześlij dalej</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<footer class="stopka" data-port="Stopka">
+  <div class="stopka__srodek">
+    <span class="znak znak--stopka" aria-hidden="true"><span>klar</span><svg class="znak__port" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle class="znak__pierscien" cx="12" cy="12" r="8.4"></circle><circle class="znak__kropka" cx="12" cy="12" r="3.2"></circle></svg><span>w</span></span>
+    <p class="stopka__dane">
+      <span>Klarow&nbsp;·</span>
+      <span>Karol Balucki&nbsp;·</span>
+      <span><a href="mailto:kontakt@klarow.com">kontakt@klarow.com</a>&nbsp;·</span>
+      <span><a href="tel:+48786296426">786&nbsp;296&nbsp;426</a>&nbsp;·</span>
+      <span><a href="/polityka-prywatnosci">Polityka prywatności</a>&nbsp;·</span>
+      <span>Ta strona nie używa ciasteczek.</span>
+    </p>
+    <p class="stopka__haslo">Skomplikowane bierzemy na siebie. Wam zostaje klarownie.</p>
+  </div>
+</footer>
+<nav class="pasek-kontaktu" aria-label="Kontakt" data-port="PasekKontaktu">
+  <a class="przycisk przycisk--pasek przycisk--glowny" href="tel:+48786296426">Zadzwoń</a>
+  <a class="przycisk przycisk--pasek" href="mailto:kontakt@klarow.com?subject=Rozmowa%20z%20wizyt%C3%B3wki">Napisz</a>
+  <a class="przycisk przycisk--pasek" href="/klarow.vcf">Zapisz kontakt</a>
+</nav>
+</body>
+</html>
