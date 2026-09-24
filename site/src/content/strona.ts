@@ -22,12 +22,11 @@ export const presety = [
   { id: "oferty", nazwa: "Oferty i umowy", osoby: 2, godziny: 5, koszt: 80, udzial: 60 },
 ] as const;
 
-/** Sześć działów oferty. Kolejność jest ta sama na stronie głównej i na /przyklady. */
+/** Pięć działów oferty. Kolejność jest ta sama na stronie głównej i na /przyklady. */
 export const dzialy = [
   { slug: "magazyn", nazwa: "Magazyn" },
   { slug: "ksiegowosc", nazwa: "Księgowość" },
   { slug: "integracje", nazwa: "Integracje i API" },
-  { slug: "czat-ai", nazwa: "Czat AI" },
   { slug: "generatory", nazwa: "Generatory dokumentów" },
   { slug: "raporty", nazwa: "Raporty" },
 ] as const;
@@ -39,7 +38,6 @@ export const strony = [
   { url: "/dokumenty-magazynowe", wSitemapie: true },
   { url: "/dokumenty-kosztowe", wSitemapie: true },
   { url: "/integracje-erp", wSitemapie: true },
-  { url: "/asystent-ai", wSitemapie: true },
   { url: "/generator-dokumentow", wSitemapie: true },
   { url: "/raporty-automatyczne", wSitemapie: true },
   { url: "/polityka-prywatnosci", wSitemapie: true },
@@ -59,7 +57,7 @@ export const daneStrukturalne = {
       name: "Klarow",
       url: "https://klarow.com/",
       description:
-        "Automatyzacje, integracje i asystenci AI dla firm: magazyn, księgowość, dokumenty i raporty.",
+        "Automatyzacje i integracje dla firm: magazyn, księgowość, dokumenty i raporty.",
       email: "kontakt@klarow.com",
       telephone: "+48786296426",
       founder: { "@id": "https://klarow.com/#karol" },

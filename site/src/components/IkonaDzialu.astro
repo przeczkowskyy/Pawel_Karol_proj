@@ -1,8 +1,8 @@
 ---
-// Sześć ikon na wspólnej siatce 24×24: ta sama obudowa, ten sam bursztynowy punkt
+// Pięć ikon na wspólnej siatce 24×24: ta sama obudowa, ten sam bursztynowy punkt
 // w tym samym miejscu, ta sama grubość linii. Różni się wyłącznie piktogram.
 interface Props {
-  slug: "magazyn" | "ksiegowosc" | "integracje" | "czat-ai" | "generatory" | "raporty";
+  slug: "magazyn" | "ksiegowosc" | "integracje" | "generatory" | "raporty";
   klasa?: string;
   rozmiar?: number;
 }
@@ -41,15 +41,6 @@ const { slug, klasa, rozmiar = 40 } = Astro.props;
         <rect x="14.25" y="9" width="3" height="6" rx="1"></rect>
         <path d="M9.75 12H14.25"></path>
         <path d="M8.25 9V6.75M15.75 15V17.25"></path>
-      </>
-    )}
-    {slug === "czat-ai" && (
-      <>
-        <rect x="6.75" y="7.5" width="10.5" height="7.5" rx="2"></rect>
-        <path d="M9.75 15V17.25L12.375 15"></path>
-        <circle class="ikona__kropka" cx="9.375" cy="11.25" r=".8"></circle>
-        <circle class="ikona__kropka" cx="12" cy="11.25" r=".8"></circle>
-        <circle class="ikona__kropka" cx="14.625" cy="11.25" r=".8"></circle>
       </>
     )}
     {slug === "generatory" && (

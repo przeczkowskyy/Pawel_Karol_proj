@@ -24,13 +24,6 @@ const kafle = [
     teraz: "sklep, ERP, CRM i&nbsp;Excel wymieniają dane same",
   },
   {
-    slug: "czat-ai",
-    nazwa: "Czat AI",
-    zamiast: "odpowiadania 40&nbsp;razy na to samo pytanie",
-    teraz:
-      "asystent odpowiada na podstawie Waszych dokumentów, a&nbsp;w&nbsp;razie wątpliwości przekazuje sprawę człowiekowi",
-  },
-  {
     slug: "generatory",
     nazwa: "Generatory dokumentów",
     zamiast: "składania oferty przez godzinę",
@@ -82,7 +75,7 @@ const wynikStartowy = policz(start);
 <main>
   <section id="start" class="hero" aria-labelledby="hero-tytul">
     <div class="hero__tekst">
-      <p class="hero__eyebrow">AUTOMATYZACJE · INTEGRACJE · AI</p>
+      <p class="hero__eyebrow">AUTOMATYZACJE · INTEGRACJE · RAPORTY</p>
       <h1 id="hero-tytul" class="hero__tytul">
         Automatyzujemy to, co ktoś u&nbsp;Was dziś przepisuje ręcznie.
       </h1>
@@ -226,7 +219,6 @@ const wynikStartowy = policz(start);
             </div>
             <div class="pole">
               <label class="pole__etykieta" id="l-udzial" for="udzial">Jaką część da się zautomatyzować</label>
-              <span class="pole__podpis" id="p-udzial">Zwykle nie wszystko</span>
               <div class="pole__wiersz">
                 <input
                   class="suwak"
@@ -237,7 +229,6 @@ const wynikStartowy = policz(start);
                   max="90"
                   step="5"
                   value={start.udzial}
-                  aria-describedby="p-udzial"
                 />
                 <span class="pole-jednostka pole-jednostka--waska">
                   <input
@@ -347,31 +338,11 @@ const wynikStartowy = policz(start);
     </div>
   </section>
 
-  <section id="kim-jestesmy" class="sekcja" aria-labelledby="h-kim-jestesmy">
-    <div class="sekcja__srodek">
-      <p class="etykieta">04 · KIM JESTEŚMY</p>
-      <h2 id="h-kim-jestesmy" class="sekcja__tytul">Z&nbsp;kim rozmawiacie</h2>
-      <div class="sekcja__uklad">
-        <p class="karta-tekstu">
-          Klarow to jedna osoba: Karol Balucki. Piszę kod, wdrażam go u&nbsp;Was i&nbsp;odbieram telefon. Bez
-          działu sprzedaży pomiędzy.
-        </p>
-        <div class="osoba-kolumna">
-          <div class="osoba">
-            <div class="osoba__dane">
-              <p class="osoba__imie">{kontakt.osoba}</p>
-              <p class="osoba__rola">automatyzacje, integracje, raporty</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <p class="haslo">{haslo}</p>
-    </div>
-  </section>
+  <p class="haslo haslo--samo">{haslo}</p>
 
   <section id="kontakt" class="sekcja kontakt" aria-labelledby="h-kontakt">
     <div class="sekcja__srodek">
-      <p class="etykieta">05 · KONTAKT</p>
+      <p class="etykieta">04 · KONTAKT</p>
       <div class="sekcja__uklad">
         <div class="kontakt__wstep">
           <h2 id="h-kontakt" class="sekcja__tytul">Połączmy się.</h2>
@@ -495,7 +466,7 @@ const wynikStartowy = policz(start);
   document.querySelectorAll<HTMLButtonElement>("[data-udostepnij]").forEach((btn) => {
     btn.addEventListener("click", async () => {
       const adres = "https://klarow.com/";
-      let tekst = "Klarow — automatyzacje, integracje, AI.";
+      let tekst = "Klarow — automatyzacje, integracje, raporty.";
       if (btn.dataset.udostepnij === "rachunek") {
         const kwota = document.querySelector<HTMLElement>("[data-wynik-kwota]")?.textContent?.trim();
         const wzor = document.querySelector<HTMLElement>("[data-wynik-wzor]")?.textContent?.trim();

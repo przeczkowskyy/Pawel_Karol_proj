@@ -328,6 +328,8 @@ a:hover { color: var(--sygnal); }
 .osoba__imie { font-size: 24px; font-weight: 700; line-height: 1.15; letter-spacing: -.01em; }
 .osoba__rola { line-height: 1.4; }
 .haslo { max-width: 18em; margin-top: var(--odstep-5); font-size: 26px; font-weight: 650; line-height: 1.15; letter-spacing: -.015em; text-wrap: balance; }
+/* Hasło stoi samo między „jak pracujemy" a kontaktem — bez sekcji dookoła bierze jej marginesy. */
+.haslo--samo { max-width: min(18em, 1200px); margin: 0 auto; padding: 96px var(--odstep-4) 0; }
 
 /* ---------- 05 · Kontakt ----------
    #kontakt i stopka leżą nad dolnym paskiem (z-index 2, tło --tlo): gdy wjeżdżają na dół ekranu, zakrywają pasek. Bez JS i bez animacji. */
@@ -406,6 +408,7 @@ a:hover { color: var(--sygnal); }
   .karta-wyniku__kwota { font-size: 52px; }
   .osoba-kolumna { align-items: flex-start; }
   .haslo { font-size: 40px; }
+  .haslo--samo { padding: 160px 80px 0; }
 
   .stopka { padding: 128px 80px 48px; }
   .stopka--krotka { padding-top: 96px; }

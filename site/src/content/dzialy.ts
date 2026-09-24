@@ -1,5 +1,5 @@
 /**
- * Podstrony działów. Jeden kształt danych dla wszystkich sześciu, żeby kolejne powstawały
+ * Podstrony działów. Jeden kształt danych dla wszystkich pięciu, żeby kolejne powstawały
  * przez dopisanie treści, a nie przez kopiowanie układu.
  *
  * Zasady treści (z panelu projektowego):
@@ -352,101 +352,6 @@ export const integracje: Dzial = {
   ],
 };
 
-export const czatAi: Dzial = {
-  slug: "czat-ai",
-  url: "/asystent-ai",
-  nazwa: "Asystent AI",
-  h1: "Odpowiedzi z Waszych dokumentów",
-  tytul: "Asystent AI po dokumentach firmowych | Klarow",
-  opis:
-    "Czat, który odpowiada wyłącznie na podstawie Waszych dokumentów i pokazuje źródło odpowiedzi. Schemat prowadzi pytanie krok po kroku, aż do przekazania sprawy człowiekowi.",
-  lead:
-    "Pytanie zadane zwykłym zdaniem dostaje odpowiedź z Waszych dokumentów, ze wskazaniem miejsca, z którego pochodzi.",
-  demo: {
-    tytul: "Od pytania do odpowiedzi",
-    kroki: [
-      {
-        nazwa: "Pytanie",
-        ladunek: "zdanie od osoby",
-        opis: "Pytanie z czatu, komunikatora albo maila.",
-      },
-      {
-        nazwa: "Wyszukanie",
-        ladunek: "fragmenty dokumentów",
-        opis: "Asystent szuka w zbiorach, do których ma dostęp.",
-      },
-      {
-        nazwa: "Odpowiedź",
-        ladunek: "tekst i źródło",
-        opis: "Odpowiedź powstaje z tych fragmentów, z odnośnikiem do pliku.",
-        wyjatek: "brak podstawy w dokumentach → asystent mówi, że nie wie",
-      },
-      {
-        nazwa: "Sprawdzenie",
-        ladunek: "jedno kliknięcie",
-        opis: "Osoba pytająca otwiera źródło i widzi pełny kontekst.",
-      },
-      {
-        nazwa: "Przekazanie",
-        ladunek: "sprawa u człowieka",
-        opis: "Trudne sprawy idą do osoby odpowiedzialnej za obszar.",
-        wyjatek: "pytanie bez pokrycia → trafia na listę braków w dokumentacji",
-      },
-    ],
-    zasada:
-      "Asystent nie odpowiada z pamięci modelu. Odpowiedź bez źródła w Waszych dokumentach po prostu nie powstaje.",
-  },
-  wchodzi: ["instrukcje i procedury", "umowy i cenniki", "dokumentacja techniczna", "uprawnienia: kto co widzi"],
-  wychodzi: [
-    "odpowiedź z odnośnikiem do źródła",
-    "lista pytań bez pokrycia w dokumentach",
-    "sprawy przekazane do właściwych osób",
-  ],
-  zadania: [
-    "Odpowiedzi o procedury i instrukcje stanowiskowe.",
-    "Wyszukanie zapisu w umowie albo cenniku.",
-    "Jedno miejsce zamiast krążenia po katalogach.",
-    "Lista braków w dokumentacji, zebrana z pytań.",
-    "Dostęp ograniczony do wybranych zbiorów.",
-  ],
-  czegoNieRobi: [
-    "Nie odpowiada spoza wskazanych dokumentów.",
-    "Nie podejmuje decyzji za zespół.",
-    "Nie uzupełnia tego, o czym dokument milczy.",
-  ],
-  start: {
-    zdanie: "Najmniejsza wersja to jeden zbiór dokumentów i jeden zespół.",
-    kroki: [
-      "Wskazujecie katalog i uprawnienia do niego.",
-      "Asystent odpowiada wyłącznie z tego zbioru.",
-      "Po tygodniu patrzymy na pytania bez odpowiedzi.",
-    ],
-  },
-  faq: [
-    {
-      pytanie: "Czy nasze dokumenty trafią do modelu językowego?",
-      odpowiedz:
-        "Tylko w zakresie, na który się zgodzicie, i tylko te fragmenty, które są potrzebne do odpowiedzi. Dostawcę, miejsce przetwarzania i zakres ustalamy przed startem i zapisujemy w umowie.",
-    },
-    {
-      pytanie: "Skąd wiadomo, że odpowiedź nie jest zmyślona?",
-      odpowiedz:
-        "Każda odpowiedź ma odnośnik do dokumentu i miejsca w nim. Gdy w dokumentach nie ma podstawy, asystent mówi wprost, że nie wie, i przekazuje sprawę człowiekowi.",
-    },
-    {
-      pytanie: "Czy to zadziała na skanach i plikach PDF?",
-      odpowiedz:
-        "Tak, choć skany wymagają odczytu tekstu, a wynik zależy od jakości skanu. Dokumenty nieczytelne wskazujemy na starcie, zamiast udawać, że asystent je rozumie.",
-    },
-  ],
-  cta: "Powiedzcie, o co Wasz zespół pyta najczęściej.",
-  sasiedzi: [
-    { slug: "generatory", powod: "z odpowiedzi często powstaje dokument" },
-    { slug: "integracje", powod: "asystent sięga do danych z systemów" },
-    { slug: "magazyn", powod: "pytania o stan i dostawy wracają najczęściej" },
-  ],
-};
-
 export const generatory: Dzial = {
   slug: "generatory",
   url: "/generator-dokumentow",
@@ -537,7 +442,7 @@ export const generatory: Dzial = {
   ],
   cta: "Przyślijcie wzór dokumentu, który składacie najczęściej.",
   sasiedzi: [
-    { slug: "czat-ai", powod: "asystent podpowiada, co wpisać w dokument" },
+    { slug: "raporty", powod: "wystawione dokumenty wchodzą do zestawienia" },
     { slug: "ksiegowosc", powod: "wystawiony dokument wraca jako koszt" },
     { slug: "integracje", powod: "dane do dokumentu leżą w systemach" },
   ],
@@ -638,7 +543,7 @@ export const raporty: Dzial = {
     { slug: "magazyn", powod: "stany i braki wchodzą do raportu" },
   ],
 };
-export const dzialyPodstrony: Dzial[] = [magazyn, ksiegowosc, integracje, czatAi, generatory, raporty];
+export const dzialyPodstrony: Dzial[] = [magazyn, ksiegowosc, integracje, generatory, raporty];
 
 /** Adres działu: własna podstrona, jeśli już istnieje, w przeciwnym razie kotwica na rozdrożu. */
 export const adresDzialu = (slug: string): string =>

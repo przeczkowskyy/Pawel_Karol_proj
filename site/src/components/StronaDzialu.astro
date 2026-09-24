@@ -14,7 +14,7 @@ const adresDzialu = (slug: string) =>
   dzialyPodstrony.find((d) => d.slug === slug)?.url ?? `/przyklady#${slug}`;
 const nazwaDzialu = (slug: string) =>
   dzialyPodstrony.find((d) => d.slug === slug)?.nazwa ??
-  ({ magazyn: "Magazyn", ksiegowosc: "Księgowość", integracje: "Integracje", "czat-ai": "Czat AI", generatory: "Generatory dokumentów", raporty: "Raporty" }[slug] ?? slug);
+  ({ magazyn: "Magazyn", ksiegowosc: "Księgowość", integracje: "Integracje", generatory: "Generatory dokumentów", raporty: "Raporty" }[slug] ?? slug);
 ---
 
 <main class="przyklady">
