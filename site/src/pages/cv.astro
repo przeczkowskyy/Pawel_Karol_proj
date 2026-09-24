@@ -1,16 +1,16 @@
 ---
 import Baza from "../layouts/Baza.astro";
 import IkonaDzialu from "../components/IkonaDzialu.astro";
-import { kontakt, haslo } from "../content/strona";
-import { grupyCv, zasadyCv, jakPracuje } from "../content/cv";
+import { kontakt } from "../content/strona";
+import { grupyCv, zasadyCv } from "../content/cv";
 
 const opis =
-  "Karol Balucki: narzędzia, które zbudowałem — kontroling, finanse, importy danych, produkcja i dokumenty. Co robią, co zastępują i co z nich wychodzi.";
+  "Karol Balucki: lista narzędzi, które zbudowałem — kontroling, finanse, importy danych, produkcja i dokumenty.";
 ---
 
 {/* noindex do czasu akceptacji treści przez Karola: strona działa z linku, ale nie wchodzi do wyszukiwarek. */}
 <Baza
-  tytul="Karol Balucki — narzędzia, które zbudowałem | Klarow"
+  tytul="Karol Balucki — co zbudowałem | Klarow"
   opis={opis}
   sciezka="/cv"
   wariantTla="przyklady"
@@ -23,11 +23,7 @@ const opis =
         <a href="/">Strona główna</a> › CV
       </nav>
       <p class="etykieta">CV · KAROL BALUCKI</p>
-      <h1 class="przyklady__tytul">Narzędzia, które zbudowałem</h1>
-      <p class="karta-tekstu przyklady__lead">
-        Klarow to jedna osoba. Piszę kod, wdrażam go u&nbsp;Was i&nbsp;odbieram telefon. Niżej trzynaście
-        narzędzi, które zrobiłem: co robią, co zastępują i&nbsp;co z&nbsp;nich wychodzi.
-      </p>
+      <h1 class="przyklady__tytul">Co zbudowałem</h1>
       <div class="cv__osoba">
         <div class="osoba">
           <div class="osoba__dane">
@@ -37,16 +33,13 @@ const opis =
           <p class="narzedzie__wewy">{kontakt.telefon} · {kontakt.mail}</p>
         </div>
       </div>
-      <p class="przyklad__etykieta">
-        Bez nazw firm i&nbsp;bez liczb z&nbsp;cudzych danych. Opisuję mechanizm, nie czyjeś wyniki. U&nbsp;Was
-        to samo narzędzie wygląda inaczej, bo układa się pod Wasz proces.
-      </p>
       <div class="przyklady__akcje">
         <a class="przycisk przycisk--glowny" href={kontakt.telefonHref}>
           <span set:html={`Zadzwońcie ${kontakt.telefon}`} />
         </a>
         <a class="przycisk przycisk--wysoki" href={kontakt.vcard}>Zapisz w&nbsp;kontaktach</a>
       </div>
+      <p class="przyklad__etykieta">Bez nazw firm i&nbsp;bez liczb z&nbsp;cudzych danych.</p>
     </div>
 
     <div class="przyklady__siatka">
@@ -64,10 +57,6 @@ const opis =
                 <li class="przyklad__pozycja narzedzie">
                   <h3 class="narzedzie__nazwa">{n.nazwa}</h3>
                   <p class="narzedzie__opis">{n.robi}</p>
-                  <p class="narzedzie__zamiast">
-                    <span class="narzedzie__slowo">zamiast</span> {n.zamiast}
-                  </p>
-                  <p class="narzedzie__wewy">{n.weWy}</p>
                 </li>
               ))}
             </ul>
@@ -78,46 +67,14 @@ const opis =
 
     <section class="przyklad cv__szeroki" aria-labelledby="h-zasady">
       <div class="przyklad__naglowek">
-        <h2 id="h-zasady" class="przyklad__tytul">Na czym mi zależy, kiedy to buduję</h2>
+        <h2 id="h-zasady" class="przyklad__tytul">Jak to buduję</h2>
       </div>
-      <div class="cv__zasady">
-        {
-          zasadyCv.map((z) => (
-            <div class="cv__zasada">
-              <h3 class="narzedzie__nazwa">{z.tytul}</h3>
-              <p class="narzedzie__opis">{z.opis}</p>
-            </div>
-          ))
-        }
-      </div>
-    </section>
-
-    <section class="przyklad cv__szeroki" aria-labelledby="h-jak">
-      <div class="przyklad__naglowek">
-        <h2 id="h-jak" class="przyklad__tytul">Jak pracuję</h2>
-      </div>
-      <ol class="kroki">
-        {
-          jakPracuje.map((k, i) => (
-            <li class="krok">
-              <span class="krok__numer" aria-hidden="true">
-                {i + 1}
-              </span>
-              <div class="krok__tresc">
-                <h3 class="krok__tytul">{k.tytul}</h3>
-                <p class="krok__opis">{k.opis}</p>
-              </div>
-            </li>
-          ))
-        }
-      </ol>
+      <ul class="przyklad__lista">
+        {zasadyCv.map((z) => <li class="przyklad__pozycja">{z}</li>)}
+      </ul>
     </section>
 
     <div class="przyklady__koniec">
-      <p class="haslo">{haslo}</p>
-      <p class="karta-tekstu przyklady__lead">
-        Jeśli któreś z&nbsp;tych narzędzi przypomina Wasz problem, to najkrótsza droga jest przez telefon.
-      </p>
       <div class="przyklady__akcje">
         <a class="przycisk przycisk--glowny" href={kontakt.telefonHref}>
           <span set:html={`Zadzwońcie ${kontakt.telefon}`} />

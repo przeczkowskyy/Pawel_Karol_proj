@@ -421,7 +421,6 @@ a:hover { color: var(--sygnal); }
   .przyklady__akcje { flex-direction: row; }
   .przyklad__tytul { font-size: 26px; }
   .cv__szeroki { grid-column: 1 / -1; }
-  .cv__zasady { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--odstep-5) var(--odstep-5); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -600,12 +599,6 @@ a:hover { color: var(--sygnal); }
 .narzedzie { display: flex; flex-direction: column; gap: 8px; }
 .narzedzie__nazwa { font-size: 18px; font-weight: 650; line-height: 1.25; letter-spacing: -.01em; }
 .narzedzie__opis { text-wrap: pretty; }
-.narzedzie__zamiast { color: var(--papier-2); text-wrap: pretty; }
-.narzedzie__slowo { font-family: var(--font-mono); font-weight: 500; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--recznie); }
-.narzedzie__wewy { padding-top: 8px; border-top: 1px solid var(--linia); font-family: var(--font-mono); font-weight: 500; font-size: 13px; line-height: 1.55; color: var(--papier-2); text-wrap: pretty; }
+.narzedzie__wewy { padding-top: 10px; border-top: 1px solid var(--linia); font-family: var(--font-mono); font-weight: 500; font-size: 13px; line-height: 1.55; color: var(--papier-2); text-wrap: pretty; }
 .cv__osoba { display: flex; }
 .cv__osoba .osoba { max-width: 420px; gap: var(--odstep-2); }
-.cv__zasady { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--odstep-4); }
-.cv__zasada { display: flex; flex-direction: column; gap: 6px; padding-top: 14px; border-top: 1px solid var(--linia); }
-.cv .kroki { padding-bottom: 0; background: transparent; }
-.cv .haslo { margin-top: 0; }
