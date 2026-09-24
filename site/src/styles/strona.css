@@ -484,3 +484,103 @@ a:hover { color: var(--sygnal); }
 .obawa[data-podglad="hover"]::after, .obawa[data-podglad="focus"]::after, .obawa[data-podglad="aktywny"]::after { opacity: 1; }
 .obawa[data-podglad="focus"] .obawa__pytanie { outline: 2px solid var(--sygnal); outline-offset: 4px; border-radius: var(--promien-s); }
 .obawa[data-podglad="aktywny"] .obawa__pytanie::after { opacity: .35; }
+
+/* ==========================================================================
+   Przepływ danych — interaktywny schemat bez JavaScriptu
+   Stan trzymają ukryte `input[type=radio]`, rysuje go `:has()`.
+   ========================================================================== */
+
+.tylko-czytnik {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0;
+}
+
+.przeplyw { margin: var(--odstep-5) 0 0; padding: var(--odstep-4) 14px var(--odstep-3);
+  border: 1px solid var(--powierzchnia-2); border-radius: var(--promien-l);
+  background: color-mix(in srgb, var(--powierzchnia) 82%, transparent); }
+.przeplyw__naglowek { display: flex; flex-wrap: wrap; gap: var(--odstep-2); align-items: baseline;
+  justify-content: space-between; margin-bottom: var(--odstep-4); }
+.przeplyw__tytul { font-size: 17px; font-weight: 650; letter-spacing: -.01em; }
+.przeplyw__chip { padding: 4px 8px; border: 1px solid var(--linia); border-radius: 999px;
+  color: var(--papier-2); font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em; }
+
+.przeplyw__tor { margin: 0; padding: 0; border: 0; min-width: 0; }
+.przeplyw__wezly { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
+
+/* Kontener MUSI być pozycjonowany: inaczej ukryte radio ląduje w rogu dokumentu
+   i przejście strzałkami przewija stronę na samą górę. */
+.przeplyw__pozycja { position: relative; }
+
+/* Łącze między węzłami. Domyślnie przerywane i przygaszone — droga jeszcze przed nami. */
+.przeplyw__pozycja + .przeplyw__pozycja::before {
+  content: ""; display: block; width: 2px; height: 26px; margin-left: 19px;
+  background-image: linear-gradient(to bottom, var(--papier-2) 0 6px, transparent 6px 12px);
+  background-size: 2px 12px; opacity: .55;
+}
+/* Łącza za nami: ciągłe, w kolorze danych. */
+.przeplyw__pozycja:has(~ .przeplyw__pozycja .przeplyw__pole:checked) + .przeplyw__pozycja::before,
+.przeplyw__pozycja:has(.przeplyw__pole:checked)::before {
+  background-image: none; background-color: var(--dane); opacity: 1;
+}
+/* Kropka ładunku siada na łączu wchodzącym do bieżącego węzła. */
+.przeplyw__pozycja:has(.przeplyw__pole:checked)::after {
+  content: ""; position: absolute; left: 14px; top: 8px; width: 12px; height: 12px;
+  border-radius: 50%; background: var(--dane);
+}
+
+.przeplyw__pole { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+
+.wezel { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: var(--odstep-3);
+  align-items: start; min-height: 48px; padding: 12px 14px; cursor: pointer;
+  border: 1px solid var(--papier-2); border-radius: var(--promien-m);
+  transition: border-color var(--czas-szybki) ease-out, background-color var(--czas-szybki) ease-out; }
+.wezel__numer { display: flex; align-items: center; justify-content: center; width: 28px; height: 28px;
+  border: 1px solid var(--linia); border-radius: 50%; background: var(--tlo);
+  font-family: var(--font-mono); font-size: 14px; color: var(--papier-2); }
+.wezel__tresc { display: flex; flex-direction: column; gap: 4px; }
+.wezel__nazwa { font-size: 16px; font-weight: 650; letter-spacing: -.01em; }
+.wezel__ladunek { font-family: var(--font-mono); font-size: 12px; color: var(--dane); letter-spacing: .04em; }
+.wezel__opis { font-size: 15px; line-height: 1.45; color: var(--papier); }
+.wezel__wyjatek { margin-top: 2px; padding-left: 10px; border-left: 2px solid var(--recznie);
+  font-size: 14px; line-height: 1.4; color: var(--papier-2); }
+
+/* Krok, na którym stoją dane. */
+.przeplyw__pozycja:has(.przeplyw__pole:checked) .wezel {
+  border-color: var(--sygnal); background: color-mix(in srgb, var(--sygnal) 7%, transparent);
+}
+.przeplyw__pozycja:has(.przeplyw__pole:checked) .wezel__numer {
+  border-color: var(--sygnal); color: var(--sygnal);
+}
+/* Kroki już przebyte. */
+.przeplyw__pozycja:has(~ .przeplyw__pozycja .przeplyw__pole:checked) .wezel { border-color: var(--dane); }
+.przeplyw__pozycja:has(~ .przeplyw__pozycja .przeplyw__pole:checked) .wezel__numer { border-color: var(--dane); color: var(--dane); }
+
+.wezel:hover { border-color: var(--papier); }
+.przeplyw__pole:focus-visible + .wezel { outline: 2px solid var(--sygnal); outline-offset: 3px; }
+
+.przeplyw__podpis { margin-top: var(--odstep-4); color: var(--papier-2); font-size: 13px;
+  font-family: var(--font-mono); line-height: 1.5; }
+
+/* Bez `:has()` pokazujemy całą ścieżkę jako przebytą — treść nie znika, tylko traci interakcję. */
+@supports not (selector(:has(*))) {
+  .przeplyw__pozycja + .przeplyw__pozycja::before { background-image: none; background-color: var(--dane); opacity: 1; }
+  .przeplyw__podpis { display: none; }
+}
+
+/* ---- Podstrona działu ---- */
+.dzial__sciezka { font-family: var(--font-mono); font-size: 12px; color: var(--papier-2); letter-spacing: .04em; }
+.dzial__sciezka a { color: var(--papier-2); }
+.dzial__sciezka a:hover { color: var(--papier); }
+.dwie-kolumny { display: grid; gap: var(--odstep-4); }
+.dwie-kolumny h3 { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--papier-2); margin-bottom: var(--odstep-2); }
+.lista-punktow { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px;
+  font-size: 16px; line-height: 1.5; }
+.sasiedzi { display: flex; flex-direction: column; gap: 10px; margin-top: var(--odstep-4); }
+.sasiedzi__powod { color: var(--papier-2); }
+
+@media (min-width: 64em) {
+  .przeplyw { padding: var(--odstep-5) var(--odstep-5) var(--odstep-4); }
+  .dwie-kolumny { grid-template-columns: 1fr 1fr; gap: var(--odstep-5); }
+}

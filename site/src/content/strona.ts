@@ -36,6 +36,7 @@ export const dzialy = [
 export const strony = [
   { url: "/", wSitemapie: true },
   { url: "/przyklady", wSitemapie: true },
+  { url: "/dokumenty-magazynowe", wSitemapie: true },
   { url: "/polityka-prywatnosci", wSitemapie: true },
   { url: "/start", wSitemapie: false }, // noindex: adres z kodu QR
   { url: "/404", wSitemapie: false },
@@ -77,3 +78,30 @@ export const daneStrukturalne = {
     },
   ],
 } as const;
+
+/** Dane strukturalne podstrony: WebPage + okruszki.
+ *  Bez FAQPage — Google wycofał te wyniki rozszerzone w maju 2026, a widoczne FAQ zostaje w treści. */
+export const schemaPodstrony = (url: string, tytul: string, opis: string, nazwa: string) => ({
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": `https://klarow.com${url}#strona`,
+      url: `https://klarow.com${url}`,
+      name: tytul,
+      description: opis,
+      inLanguage: "pl-PL",
+      isPartOf: { "@id": "https://klarow.com/#strona" },
+      about: { "@id": "https://klarow.com/#organizacja" },
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": `https://klarow.com${url}#okruszki`,
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Strona główna", item: "https://klarow.com/" },
+        { "@type": "ListItem", position: 2, name: "Przykłady", item: "https://klarow.com/przyklady" },
+        { "@type": "ListItem", position: 3, name: nazwa },
+      ],
+    },
+  ],
+});

@@ -1,6 +1,7 @@
 ---
 import IkonaDzialu from "./IkonaDzialu.astro";
 import { kontakt, haslo, presety } from "../content/strona";
+import { adresDzialu } from "../content/dzialy";
 import { policz, tekstKwoty, tekstCzasu, tekstZakresu, tekstWzoru } from "../lib/kalkulator";
 
 const kafle = [
@@ -102,7 +103,7 @@ const wynikStartowy = policz(start);
       <nav class="dzialy" aria-label="Działy">
         {
           kafle.map((k) => (
-            <a class="kafel" href={`/przyklady#${k.slug}`}>
+            <a class="kafel" href={adresDzialu(k.slug)}>
               <svg class="kafel__strzalka" viewBox="0 0 18 18" width="18" height="18" aria-hidden="true" focusable="false">
                 <path d="M4 9h10M10 5l4 4-4 4" />
               </svg>

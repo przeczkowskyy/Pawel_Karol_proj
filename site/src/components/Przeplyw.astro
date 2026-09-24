@@ -1,0 +1,62 @@
+---
+import type { Krok } from "../content/dzialy";
+
+/**
+ * Interaktywny schemat przepływu danych. Zero JavaScriptu: każdy węzeł to etykieta
+ * ukrytego `input[type=radio]`, a stan toru rysuje CSS przez `:has()`.
+ *
+ * Zasady, które trzymają ten komponent przy życiu:
+ * - żadna treść nie jest schowana — opisy wszystkich kroków są widoczne od razu
+ *   (dla czytnika ekranu, dla trybu bez CSS i dla modeli, które czytają stronę);
+ * - kliknięcie nie zmienia wysokości ani położenia niczego, więc nic nie skacze;
+ * - bez interakcji nic się nie rusza; `prefers-reduced-motion` zeruje przejścia globalnie;
+ * - grupa radio daje nawigację strzałkami i komunikat „3 z 5” za darmo.
+ */
+interface Props {
+  id: string;
+  tytul: string;
+  kroki: Krok[];
+}
+const { id, tytul, kroki } = Astro.props;
+---
+
+<figure class="przeplyw">
+  <div class="przeplyw__naglowek">
+    <figcaption class="przeplyw__tytul">{tytul}</figcaption>
+    <span class="przeplyw__chip">PRZYKŁAD · DANE ZMYŚLONE</span>
+  </div>
+
+  <fieldset class="przeplyw__tor">
+    <legend class="tylko-czytnik">
+      Kroki przepływu — wybierz krok, żeby zobaczyć, dokąd doszły dane
+    </legend>
+    <ol class="przeplyw__wezly">
+      {
+        kroki.map((krok, i) => (
+          <li class="przeplyw__pozycja">
+            <input
+              class="przeplyw__pole"
+              type="radio"
+              name={`przeplyw-${id}`}
+              id={`${id}-${i + 1}`}
+              checked={i === 0}
+            />
+            <label class="wezel" for={`${id}-${i + 1}`}>
+              <span class="wezel__numer" aria-hidden="true">{i + 1}</span>
+              <span class="wezel__tresc">
+                <span class="wezel__nazwa">{krok.nazwa}</span>
+                <span class="wezel__ladunek">{krok.ladunek}</span>
+                <span class="wezel__opis">{krok.opis}</span>
+                {krok.wyjatek && <span class="wezel__wyjatek">{krok.wyjatek}</span>}
+              </span>
+            </label>
+          </li>
+        ))
+      }
+    </ol>
+  </fieldset>
+
+  <p class="przeplyw__podpis">
+    Stuknijcie kolejne kroki — podświetlona ścieżka pokazuje, dokąd doszły dane.
+  </p>
+</figure>

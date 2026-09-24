@@ -61,6 +61,14 @@ for (const [plik, s] of Object.entries(tresc)) {
   if (/rel="canonical" href="[^"]*\.html"/.test(s)) bledy.push(`${plik}: canonical z końcówką .html`);
 }
 
+// 6b. Każdy adres w sitemapie ma przekierowanie z ukośnika — Cloudflare go nie normalizuje.
+for (const linia of readFileSync(join(DIST, "sitemap.xml"), "utf8").matchAll(/<loc>https:\/\/klarow\.com(\/[^<]*)<\/loc>/g)) {
+  const sciezka = linia[1];
+  if (sciezka === "/") continue;
+  if (!red.split("\n").some((l) => l.trim().startsWith(`${sciezka}/ `)))
+    bledy.push(`_redirects: brak reguły dla ${sciezka}/ (wariant z ukośnikiem)`);
+}
+
 // 7. Nazwa marki w tytule — sygnał encji dla wyszukiwarek i asystentów.
 for (const [plik, s] of Object.entries(tresc)) {
   const t = s.match(/<title>([^<]*)<\/title>/)?.[1] ?? "";

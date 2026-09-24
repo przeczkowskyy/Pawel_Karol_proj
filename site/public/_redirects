@@ -11,4 +11,8 @@
 /rodo          /polityka-prywatnosci   301
 /rodo/         /polityka-prywatnosci   301
 /polityka-prywatnosci/  /polityka-prywatnosci  301
+/przyklady/             /przyklady             301
 # /start NIE jest przekierowaniem — to prawdziwa strona, żeby dało się policzyć wejścia z QR.
+
+# Podstrony działów — wariant z ukośnikiem (Cloudflare nie normalizuje go sam)
+/dokumenty-magazynowe/   /dokumenty-magazynowe   301

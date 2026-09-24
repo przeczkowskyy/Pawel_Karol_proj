@@ -1,0 +1,130 @@
+---
+import Przeplyw from "./Przeplyw.astro";
+import IkonaDzialu from "./IkonaDzialu.astro";
+import { kontakt } from "../content/strona";
+import { dzialyPodstrony, type Dzial } from "../content/dzialy";
+
+interface Props {
+  dzial: Dzial;
+}
+const { dzial } = Astro.props;
+
+// Sąsiad ma własną podstronę? Prowadzimy do niej. Jeśli jeszcze nie powstała — do kotwicy na rozdrożu.
+const adresDzialu = (slug: string) =>
+  dzialyPodstrony.find((d) => d.slug === slug)?.url ?? `/przyklady#${slug}`;
+const nazwaDzialu = (slug: string) =>
+  dzialyPodstrony.find((d) => d.slug === slug)?.nazwa ??
+  ({ magazyn: "Magazyn", ksiegowosc: "Księgowość", integracje: "Integracje", "czat-ai": "Czat AI", generatory: "Generatory dokumentów", raporty: "Raporty" }[slug] ?? slug);
+---
+
+<main class="przyklady">
+  <div class="przyklady__wstep">
+    <nav class="dzial__sciezka" aria-label="Ścieżka">
+      <a href="/">Strona główna</a> › <a href="/przyklady">Przykłady</a> › {dzial.nazwa}
+    </nav>
+    <h1 class="przyklady__tytul">{dzial.h1}</h1>
+    <p class="karta-tekstu przyklady__lead">{dzial.lead}</p>
+    <p class="przyklad__etykieta">
+      Schemat, nie zrzut z wdrożenia. Nazwy i ilości w przykładzie są zmyślone. Ten sam mechanizm układamy pod
+      Wasz proces, więc u&nbsp;Was będzie wyglądał inaczej.
+    </p>
+  </div>
+
+  <div class="przyklady__siatka">
+    <section class="przyklad" aria-labelledby="h-przeplyw">
+      <div class="przyklad__naglowek">
+        <IkonaDzialu slug={dzial.slug as any} klasa="przyklad__ikona" />
+        <h2 id="h-przeplyw" class="przyklad__tytul">{dzial.demo.tytul}</h2>
+      </div>
+      <Przeplyw id={dzial.slug} tytul={dzial.demo.tytul} kroki={dzial.demo.kroki} />
+    </section>
+
+    <section class="przyklad" aria-labelledby="h-wchodzi">
+      <div class="przyklad__naglowek">
+        <h2 id="h-wchodzi" class="przyklad__tytul">Co wchodzi, co wychodzi</h2>
+      </div>
+      <div class="dwie-kolumny">
+        <div>
+          <h3>Wchodzi</h3>
+          <ul class="lista-punktow">{dzial.wchodzi.map((x) => <li>{x}</li>)}</ul>
+        </div>
+        <div>
+          <h3>Wychodzi</h3>
+          <ul class="lista-punktow">{dzial.wychodzi.map((x) => <li>{x}</li>)}</ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="przyklad" aria-labelledby="h-zadania">
+      <div class="przyklad__naglowek">
+        <h2 id="h-zadania" class="przyklad__tytul">Typowe zadania</h2>
+      </div>
+      <ul class="przyklad__lista">
+        {dzial.zadania.map((z) => <li class="przyklad__pozycja">{z}</li>)}
+      </ul>
+    </section>
+
+    <section class="przyklad" aria-labelledby="h-nie-robi">
+      <div class="przyklad__naglowek">
+        <h2 id="h-nie-robi" class="przyklad__tytul">Czego to nie robi</h2>
+      </div>
+      <ul class="przyklad__lista">
+        {dzial.czegoNieRobi.map((z) => <li class="przyklad__pozycja">{z}</li>)}
+      </ul>
+    </section>
+
+    <section class="przyklad" aria-labelledby="h-start">
+      <div class="przyklad__naglowek">
+        <h2 id="h-start" class="przyklad__tytul">Od czego zacząć</h2>
+      </div>
+      <p class="przyklad__pozycja">{dzial.start.zdanie}</p>
+      <ol class="lista-punktow">{dzial.start.kroki.map((k) => <li>{k}</li>)}</ol>
+    </section>
+
+    <section class="przyklad" aria-labelledby="h-faq">
+      <div class="przyklad__naglowek">
+        <h2 id="h-faq" class="przyklad__tytul">Pytania, które padają najczęściej</h2>
+      </div>
+      <div class="obawy">
+        {
+          dzial.faq.map((f) => (
+            <details class="obawa">
+              <summary class="obawa__pytanie">
+                <span>{f.pytanie}</span>
+                <svg class="obawa__strzalka" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false">
+                  <path d="M3.5 6l4.5 4.5L12.5 6" />
+                </svg>
+              </summary>
+              <p class="obawa__odpowiedz">{f.odpowiedz}</p>
+            </details>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+
+  <div class="przyklady__koniec">
+    <p class="karta-tekstu przyklady__lead">{dzial.cta}</p>
+    <div class="przyklady__akcje">
+      <a class="przycisk przycisk--glowny" href={kontakt.telefonHref}>
+        <span set:html={`Zadzwońcie ${kontakt.telefon}`} />
+      </a>
+      <a class="przycisk przycisk--wysoki" href={kontakt.mailExcel}>Przyślijcie plik, który Was męczy</a>
+    </div>
+    <p class="sasiedzi">
+      <a class="link" href="/#oszczednosci">Policzcie, ile kosztuje ręczna robota →</a>
+    </p>
+
+    <div class="sasiedzi">
+      {
+        dzial.sasiedzi.map((s) => (
+          <span>
+            <a class="link" href={adresDzialu(s.slug)}>{nazwaDzialu(s.slug)} →</a>{" "}
+            <span class="sasiedzi__powod">{s.powod}</span>
+          </span>
+        ))
+      }
+      <a class="link przyklady__powrot" href="/przyklady">← Wszystkie działy</a>
+    </div>
+  </div>
+</main>

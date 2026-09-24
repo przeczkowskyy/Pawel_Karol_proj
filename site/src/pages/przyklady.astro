@@ -2,6 +2,7 @@
 import Baza from "../layouts/Baza.astro";
 import IkonaDzialu from "../components/IkonaDzialu.astro";
 import { kontakt } from "../content/strona";
+import { adresDzialu, maPodstrone } from "../content/dzialy";
 
 // Kolejność grup jest ta sama co kolejność ikon na stronie głównej.
 const grupy = [
@@ -78,7 +79,7 @@ const opis =
       <p class="karta-tekstu przyklady__lead">
         Nie mamy zamkniętej listy produktów. Poniżej przekrój sześciu obszarów, w&nbsp;których pracujemy
         najczęściej — żeby było widać skalę: od jednego arkusza, który sam się wypełnia, po połączenie kilku
-        systemów.
+        systemów. Obszary z&nbsp;własną stroną mają na niej schemat przepływu danych.
       </p>
       <p class="przyklad__etykieta">
         Przykłady możliwości. Każde narzędzie powstaje pod konkretny proces, więc Wasze będzie wyglądać inaczej.
@@ -90,7 +91,9 @@ const opis =
           <section id={g.slug} class="przyklad" aria-labelledby={`h-${g.slug}`}>
             <div class="przyklad__naglowek">
               <IkonaDzialu slug={g.slug} klasa="przyklad__ikona" />
-              <h2 id={`h-${g.slug}`} class="przyklad__tytul" set:html={g.tytul} />
+              <h2 id={`h-${g.slug}`} class="przyklad__tytul">
+                {maPodstrone(g.slug) ? <a href={adresDzialu(g.slug)} set:html={g.tytul} /> : <span set:html={g.tytul} />}
+              </h2>
             </div>
             <ul class="przyklad__lista">
               {g.pozycje.map(([nazwa, opis]) => (
@@ -99,6 +102,9 @@ const opis =
                 </li>
               ))}
             </ul>
+            {maPodstrone(g.slug) && (
+              <a class="link" href={adresDzialu(g.slug)}>Zobaczcie, jak płyną dane →</a>
+            )}
           </section>
         ))
       }
