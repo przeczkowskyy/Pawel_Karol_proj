@@ -36,7 +36,7 @@ const nazwaDzialu = (slug: string) =>
         <IkonaDzialu slug={dzial.slug as any} klasa="przyklad__ikona" />
         <h2 id="h-przeplyw" class="przyklad__tytul">{dzial.demo.tytul}</h2>
       </div>
-      <Przeplyw id={dzial.slug} tytul={dzial.demo.tytul} kroki={dzial.demo.kroki} />
+      <Przeplyw id={dzial.slug} tytul={dzial.demo.tytul} kroki={dzial.demo.kroki} zasada={dzial.demo.zasada} />
     </section>
 
     <section class="przyklad" aria-labelledby="h-wchodzi">

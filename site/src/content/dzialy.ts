@@ -29,7 +29,12 @@ export type Dzial = {
   tytul: string;
   opis: string;
   lead: string;
-  demo: { tytul: string; kroki: Krok[] };
+  demo: {
+    tytul: string;
+    kroki: Krok[];
+    /** Jedno zdanie, które niesie sens całego przepływu. Stoi pod schematem. */
+    zasada?: string;
+  };
   wchodzi: string[];
   wychodzi: string[];
   zadania: string[];
@@ -50,14 +55,15 @@ export const magazyn: Dzial = {
   opis:
     "Dokumenty magazynowe powstają z danych, które już macie. Schemat pokazuje, jak zgłoszenie z budowy zamienia się w rezerwację, WZ i sygnał o braku materiału.",
   lead:
-    "Zgłoszenie z hali albo z budowy wchodzi raz, a stan, dokumenty magazynowe i sygnał o braku powstają same.",
+    "Zapotrzebowanie wchodzi raz — z maila, harmonogramu albo formularza — a stan, dokumenty magazynowe i sygnał o braku powstają same.",
   demo: {
     tytul: "Od zgłoszenia do wydania",
     kroki: [
       {
-        nazwa: "Zgłoszenie",
-        ladunek: "mail albo zdjęcie",
-        opis: "Mail, formularz albo zdjęcie listy z budowy.",
+        nazwa: "Źródło",
+        ladunek: "mail, harmonogram, formularz",
+        opis: "Pozycje wchodzą z maila, harmonogramu robót albo formularza.",
+        wyjatek: "nowe źródło → podłączamy je zamiast przepisywać ręcznie",
       },
       {
         nazwa: "Odczyt pozycji",
@@ -82,10 +88,19 @@ export const magazyn: Dzial = {
         opis: "Budowa wie, co jedzie, a w rejestrze zostaje kto i kiedy.",
       },
     ],
+    zasada:
+      "Zasada jest jedna: żadna pozycja nie przechodzi przez ręczne przepisywanie. Człowiek decyduje i akceptuje, dane przenoszą się same.",
   },
-  wchodzi: ["mail albo formularz z budowy", "plik ze stanami", "dokument dostawcy", "zamówienie z ERP"],
+  wchodzi: [
+    "mail albo formularz z budowy",
+    "harmonogram robót albo plan produkcji",
+    "plik ze stanami",
+    "dokument dostawcy",
+    "zamówienie z ERP",
+  ],
   wychodzi: ["WZ i PZ", "zaktualizowany stan", "zapotrzebowanie do zakupów", "powiadomienie i ślad w rejestrze"],
   zadania: [
+    "Pozycje wchodzą z maila, harmonogramu albo formularza.",
     "Stany schodzą przy wydaniu, wchodzą przy przyjęciu.",
     "WZ i PZ powstają z danych, numeracja ciągła.",
     "Rezerwacja materiału pod zlecenie albo budowę.",
