@@ -16,3 +16,8 @@
 
 # Podstrony działów — wariant z ukośnikiem (Cloudflare nie normalizuje go sam)
 /dokumenty-magazynowe/   /dokumenty-magazynowe   301
+/dokumenty-kosztowe/     /dokumenty-kosztowe     301
+/integracje-erp/         /integracje-erp         301
+/asystent-ai/            /asystent-ai            301
+/generator-dokumentow/   /generator-dokumentow   301
+/raporty-automatyczne/   /raporty-automatyczne   301

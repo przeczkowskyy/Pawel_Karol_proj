@@ -1,0 +1,17 @@
+---
+import Baza from "../layouts/Baza.astro";
+import StronaDzialu from "../components/StronaDzialu.astro";
+import { generatory } from "../content/dzialy";
+import { schemaPodstrony } from "../content/strona";
+---
+
+<Baza
+  tytul={generatory.tytul}
+  opis={generatory.opis}
+  sciezka={generatory.url}
+  wariantTla="przyklady"
+  krotkaStopka={true}
+  schema={schemaPodstrony(generatory.url, generatory.h1, generatory.opis, generatory.nazwa)}
+>
+  <StronaDzialu dzial={generatory} />
+</Baza>

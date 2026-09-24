@@ -1,0 +1,17 @@
+---
+import Baza from "../layouts/Baza.astro";
+import StronaDzialu from "../components/StronaDzialu.astro";
+import { czatAi } from "../content/dzialy";
+import { schemaPodstrony } from "../content/strona";
+---
+
+<Baza
+  tytul={czatAi.tytul}
+  opis={czatAi.opis}
+  sciezka={czatAi.url}
+  wariantTla="przyklady"
+  krotkaStopka={true}
+  schema={schemaPodstrony(czatAi.url, czatAi.h1, czatAi.opis, czatAi.nazwa)}
+>
+  <StronaDzialu dzial={czatAi} />
+</Baza>

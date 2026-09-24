@@ -1,0 +1,17 @@
+---
+import Baza from "../layouts/Baza.astro";
+import StronaDzialu from "../components/StronaDzialu.astro";
+import { ksiegowosc } from "../content/dzialy";
+import { schemaPodstrony } from "../content/strona";
+---
+
+<Baza
+  tytul={ksiegowosc.tytul}
+  opis={ksiegowosc.opis}
+  sciezka={ksiegowosc.url}
+  wariantTla="przyklady"
+  krotkaStopka={true}
+  schema={schemaPodstrony(ksiegowosc.url, ksiegowosc.h1, ksiegowosc.opis, ksiegowosc.nazwa)}
+>
+  <StronaDzialu dzial={ksiegowosc} />
+</Baza>

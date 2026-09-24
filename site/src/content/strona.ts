@@ -37,6 +37,11 @@ export const strony = [
   { url: "/", wSitemapie: true },
   { url: "/przyklady", wSitemapie: true },
   { url: "/dokumenty-magazynowe", wSitemapie: true },
+  { url: "/dokumenty-kosztowe", wSitemapie: true },
+  { url: "/integracje-erp", wSitemapie: true },
+  { url: "/asystent-ai", wSitemapie: true },
+  { url: "/generator-dokumentow", wSitemapie: true },
+  { url: "/raporty-automatyczne", wSitemapie: true },
   { url: "/polityka-prywatnosci", wSitemapie: true },
   { url: "/start", wSitemapie: false }, // noindex: adres z kodu QR
   { url: "/404", wSitemapie: false },
