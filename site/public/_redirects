@@ -24,3 +24,4 @@
 # Czat AI zdjęty z oferty — adres prowadzi na rozdroże zamiast dawać 404.
 /asystent-ai    /przyklady   301
 /asystent-ai/   /przyklady   301
+/cv/   /cv   301

@@ -41,6 +41,7 @@ export const strony = [
   { url: "/generator-dokumentow", wSitemapie: true },
   { url: "/raporty-automatyczne", wSitemapie: true },
   { url: "/polityka-prywatnosci", wSitemapie: true },
+  { url: "/cv", wSitemapie: false }, // noindex do czasu akceptacji treści
   { url: "/start", wSitemapie: false }, // noindex: adres z kodu QR
   { url: "/404", wSitemapie: false },
 ] as const;
