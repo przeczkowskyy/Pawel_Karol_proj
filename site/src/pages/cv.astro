@@ -1,21 +1,20 @@
 ---
 import Baza from "../layouts/Baza.astro";
 import IkonaDzialu from "../components/IkonaDzialu.astro";
-import { kontakt } from "../content/strona";
+import { kontakt, schemaCv } from "../content/strona";
 import { grupyCv, zasadyCv } from "../content/cv";
 
 const opis =
   "Karol Balucki: lista narzędzi, które zbudowałem — kontroling, finanse, importy danych, produkcja i dokumenty.";
 ---
 
-{/* noindex do czasu akceptacji treści przez Karola: strona działa z linku, ale nie wchodzi do wyszukiwarek. */}
 <Baza
   tytul="Karol Balucki — co zbudowałem | Klarow"
   opis={opis}
   sciezka="/cv"
   wariantTla="przyklady"
   krotkaStopka={true}
-  noindex={true}
+  schema={schemaCv}
 >
   <main class="przyklady cv">
     <div class="przyklady__wstep">
