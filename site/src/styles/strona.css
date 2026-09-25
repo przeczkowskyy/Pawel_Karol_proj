@@ -338,6 +338,8 @@ a:hover { color: var(--sygnal); }
 .kontakt__akcje { display: flex; flex-direction: column; gap: 10px; }
 .kontakt__plik { display: flex; flex-direction: column; gap: var(--odstep-1); margin-top: 14px; padding: var(--odstep-1) 0; }
 .kontakt__drobny { font-size: 15px; text-wrap: pretty; }
+.kontakt__formularz { display: flex; flex-direction: column; gap: var(--odstep-4); margin-top: var(--odstep-5); padding-top: var(--odstep-5); border-top: 1px solid var(--linia); }
+.kontakt__podtytul { font-size: 19px; font-weight: 650; line-height: 1.25; }
 
 /* ---------- Stopka ---------- */
 .stopka { position: relative; z-index: 2; padding: 88px var(--odstep-4) 40px; background: var(--tlo); }
@@ -602,3 +604,26 @@ a:hover { color: var(--sygnal); }
 .narzedzie__wewy { padding-top: 10px; border-top: 1px solid var(--linia); font-family: var(--font-mono); font-weight: 500; font-size: 13px; line-height: 1.55; color: var(--papier-2); text-wrap: pretty; }
 .cv__osoba { display: flex; }
 .cv__osoba .osoba { max-width: 420px; gap: var(--odstep-2); }
+
+/* ---------- Formularz kontaktowy ----------
+   Pola dziedziczą wygląd po kalkulatorze: ta sama wysokość, to samo obramowanie, ten sam fokus.
+   Bez własnych kolorów — wszystko z tokenów. */
+.formularz-blok { display: flex; flex-direction: column; gap: var(--odstep-4); max-width: 560px; }
+.formularz { display: flex; flex-direction: column; gap: var(--odstep-4); }
+.formularz[hidden] { display: none; }
+.formularz__pole { display: flex; flex-direction: column; gap: 6px; }
+.formularz__wejscie {
+  width: 100%; min-height: 52px; padding: 13px var(--odstep-4);
+  border: 1px solid var(--linia); border-radius: var(--promien-s); background: var(--powierzchnia-2);
+  color: var(--papier); font: inherit; text-wrap: pretty;
+}
+.formularz__wejscie::placeholder { color: var(--papier-2); opacity: .8; }
+.formularz__wejscie:hover { border-color: var(--papier-2); }
+.formularz__wejscie:focus-visible { outline: 2px solid var(--sygnal); outline-offset: 3px; }
+.formularz__obszar { min-height: 132px; resize: vertical; line-height: 1.5; }
+.formularz__pulapka { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.formularz__drobny { color: var(--papier-2); font-size: 15px; text-wrap: pretty; }
+.formularz__komunikat { padding: var(--odstep-4) 18px; border: 1px solid var(--linia); border-radius: var(--promien-m); background: var(--powierzchnia); text-wrap: pretty; }
+.formularz__komunikat[hidden] { display: none; }
+.formularz__komunikat--ok { border-color: var(--dane); }
+.formularz__komunikat--blad { border-color: var(--recznie); }

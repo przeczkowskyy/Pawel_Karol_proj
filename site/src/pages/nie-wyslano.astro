@@ -1,0 +1,36 @@
+---
+import Baza from "../layouts/Baza.astro";
+import { kontakt } from "../content/strona";
+
+/** Formularz odbił wiadomość, a odwiedzający nie ma JavaScriptu, żeby zobaczyć to na miejscu.
+ *  Strona ma jedno zadanie: dać drugą drogę, zamiast zostawić człowieka z niczym. */
+---
+
+<Baza
+  tytul="Wiadomość nie poszła | Klarow"
+  opis="Formularz nie przyjął wiadomości. Zostaje telefon i zwykły mail."
+  sciezka="/nie-wyslano"
+  krotkaStopka={true}
+  noindex={true}
+>
+  <main class="przyklady">
+    <div class="przyklady__wstep">
+      <h1 class="przyklady__tytul">Wiadomość nie poszła</h1>
+      <p class="karta-tekstu przyklady__lead">
+        Coś po naszej stronie odbiło tę wiadomość. Nie mamy jej, więc nie warto czekać na odpowiedź —
+        najkrótsza droga to telefon albo zwykły mail.
+      </p>
+    </div>
+    <div class="przyklady__koniec">
+      <div class="przyklady__akcje">
+        <a class="przycisk przycisk--glowny" href={kontakt.telefonHref}>
+          <span set:html={`Zadzwońcie ${kontakt.telefon}`} />
+        </a>
+        <a class="przycisk przycisk--wysoki" href={kontakt.mailHref}>Napiszcie: {kontakt.mail}</a>
+      </div>
+      <p class="sasiedzi">
+        <a class="link przyklady__powrot" href="/#kontakt">← Wróćcie do formularza</a>
+      </p>
+    </div>
+  </main>
+</Baza>

@@ -24,10 +24,7 @@ const nazwaDzialu = (slug: string) =>
     </nav>
     <h1 class="przyklady__tytul">{dzial.h1}</h1>
     <p class="karta-tekstu przyklady__lead">{dzial.lead}</p>
-    <p class="przyklad__etykieta">
-      Schemat, nie zrzut z wdrożenia. Nazwy i ilości w przykładzie są zmyślone. Ten sam mechanizm układamy pod
-      Wasz proces, więc u&nbsp;Was będzie wyglądał inaczej.
-    </p>
+    <p class="przyklad__etykieta">{dzial.uczciwosc}</p>
   </div>
 
   <div class="przyklady__siatka">
@@ -36,7 +33,13 @@ const nazwaDzialu = (slug: string) =>
         <IkonaDzialu slug={dzial.slug as any} klasa="przyklad__ikona" />
         <h2 id="h-przeplyw" class="przyklad__tytul">{dzial.demo.tytul}</h2>
       </div>
-      <Przeplyw id={dzial.slug} tytul={dzial.demo.tytul} kroki={dzial.demo.kroki} zasada={dzial.demo.zasada} />
+      <Przeplyw
+        id={dzial.slug}
+        tytul={dzial.demo.tytul}
+        kroki={dzial.demo.kroki}
+        zasada={dzial.demo.zasada}
+        podpis={dzial.demo.podpis}
+      />
     </section>
 
     <section class="przyklad" aria-labelledby="h-wchodzi">

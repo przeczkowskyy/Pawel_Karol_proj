@@ -69,6 +69,27 @@ for (const linia of readFileSync(join(DIST, "sitemap.xml"), "utf8").matchAll(/<l
     bledy.push(`_redirects: brak reguły dla ${sciezka}/ (wariant z ukośnikiem)`);
 }
 
+// 6c. _routes.json ogranicza funkcje do /api/*. Bez tego pliku Cloudflare generuje własny,
+// a funkcje mogą przejąć ruch, dla którego _redirects i _headers już nie obowiązują.
+const sfunkcje = (() => {
+  try {
+    return readdirSync("functions", { recursive: true }).some((n) => String(n).endsWith(".js"));
+  } catch {
+    return false; // brak katalogu functions to normalny stan, nie błąd
+  }
+})();
+if (sfunkcje) {
+  let trasy;
+  try {
+    trasy = JSON.parse(readFileSync(join(DIST, "_routes.json"), "utf8"));
+  } catch {
+    bledy.push("dist/_routes.json: brak pliku, a w functions/ są funkcje — ruch statyczny pójdzie przez Workera");
+  }
+  if (trasy && !(trasy.include ?? []).every((w) => w.startsWith("/api/"))) {
+    bledy.push(`dist/_routes.json: include wychodzi poza /api/* (${JSON.stringify(trasy.include)})`);
+  }
+}
+
 // 7. Nazwa marki w tytule — sygnał encji dla wyszukiwarek i asystentów.
 for (const [plik, s] of Object.entries(tresc)) {
   const t = s.match(/<title>([^<]*)<\/title>/)?.[1] ?? "";

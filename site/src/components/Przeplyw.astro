@@ -17,8 +17,11 @@ interface Props {
   tytul: string;
   kroki: Krok[];
   zasada?: string;
+  /** Podpis pod schematem. Każdy dział ma własny — pięć identycznych zdań na pięciu
+   *  podstronach czyta się jak szablon, a nie jak tekst pisany dla czytelnika. */
+  podpis?: string;
 }
-const { id, tytul, kroki, zasada } = Astro.props;
+const { id, tytul, kroki, zasada, podpis } = Astro.props;
 ---
 
 <figure class="przeplyw">
@@ -29,7 +32,7 @@ const { id, tytul, kroki, zasada } = Astro.props;
 
   <fieldset class="przeplyw__tor">
     <legend class="tylko-czytnik">
-      Kroki przepływu — wybierz krok, żeby zobaczyć, dokąd doszły dane
+      Kroki przepływu. Wybierzcie krok, żeby usłyszeć, dokąd doszły dane.
     </legend>
     <ol class="przeplyw__wezly">
       {
@@ -60,6 +63,6 @@ const { id, tytul, kroki, zasada } = Astro.props;
   {zasada && <p class="przeplyw__zasada">{zasada}</p>}
 
   <p class="przeplyw__podpis">
-    Stuknijcie kolejne kroki — podświetlona ścieżka pokazuje, dokąd doszły dane.
+    {podpis ?? "Stuknijcie kolejne kroki: podświetlona ścieżka pokazuje, dokąd doszły dane."}
   </p>
 </figure>

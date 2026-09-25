@@ -40,7 +40,7 @@ export const grupyCv: GrupaCv[] = [
     tytul: "Dane i importy",
     ikona: "integracje",
     narzedzia: [
-      { nazwa: "Importy z ERP", robi: "Godziny, materiał i koszty z ERP: klasyfikacja słownikiem, tylko nowe wiersze, tryb testowy i kopia." },
+      { nazwa: "Importy z ERP", robi: "Godziny, materiał i koszty z ERP: klasyfikacja słownikiem, dopisywanie tylko nowych wierszy, tryb testowy, kopia." },
       { nazwa: "Import z rekoncyliacją", robi: "Różnica wobec poprzedniej wersji i zgodność sum co do grosza, zanim cokolwiek zatwierdzicie." },
       { nazwa: "Audyt jakości danych", robi: "Bramka przed raportem: sprawdza pliki regułami i buduje macierz pewności. Niczego nie zapisuje." },
     ],
@@ -51,7 +51,7 @@ export const grupyCv: GrupaCv[] = [
     ikona: "magazyn",
     narzedzia: [
       { nazwa: "Dashboard produkcji", robi: "Cały portfel w jednym kadrze: kafel to obiekt, suwak przesuwa tydzień, kliknięcie rozkłada na etapy." },
-      { nazwa: "Oś czasu zadań", robi: "Dwa pasy na zadanie — harmonogram poprzedni i bieżący — z obsuwą podaną w dniach." },
+      { nazwa: "Oś czasu zadań", robi: "Dwa pasy na zadanie: harmonogram poprzedni i bieżący, z obsuwą podaną w dniach." },
     ],
   },
   {
@@ -68,7 +68,7 @@ export const grupyCv: GrupaCv[] = [
 /** Cztery zasady widoczne w samej budowie tych narzędzi. */
 export const zasadyCv = [
   "Dane zostają u Was: liczenie idzie na Waszym sprzęcie albo Waszym serwerze.",
-  "Najpierw czytać, potem zapisywać: tryb testowy, kopia przed zapisem, audyt bez prawa zapisu.",
-  "Każdą liczbę da się przejść ręcznie — wynik pokazuje, skąd się wziął.",
+  "Najpierw czytać, potem zapisywać. Stąd tryb testowy, kopia przed zapisem i audyt, który niczego nie dopisuje.",
+  "Każdą liczbę da się przejść ręcznie, bo wynik pokazuje, skąd się wziął.",
   "Widać, kto zatwierdził. Przy pieniądzach akceptacja idzie na cztery oczy.",
 ];

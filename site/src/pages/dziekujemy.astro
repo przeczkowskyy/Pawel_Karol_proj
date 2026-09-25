@@ -1,0 +1,33 @@
+---
+import Baza from "../layouts/Baza.astro";
+import { kontakt } from "../content/strona";
+
+/** Strona po wysłaniu formularza bez JavaScriptu. Z włączonym JS nikt tu nie trafia —
+ *  potwierdzenie pokazuje się na miejscu. Poza wyszukiwarkami: to nie jest treść. */
+---
+
+<Baza
+  tytul="Wiadomość poszła | Klarow"
+  opis="Wiadomość z formularza dotarła na skrzynkę Klarow."
+  sciezka="/dziekujemy"
+  krotkaStopka={true}
+  noindex={true}
+>
+  <main class="przyklady">
+    <div class="przyklady__wstep">
+      <h1 class="przyklady__tytul">Mamy to</h1>
+      <p class="karta-tekstu przyklady__lead">
+        Wiadomość trafiła na skrzynkę Karola. Odpisze albo oddzwoni pod numer, który podaliście.
+        Jeśli sprawa jest pilna, najkrótsza droga to telefon.
+      </p>
+    </div>
+    <div class="przyklady__koniec">
+      <div class="przyklady__akcje">
+        <a class="przycisk przycisk--glowny" href={kontakt.telefonHref}>
+          <span set:html={`Zadzwońcie ${kontakt.telefon}`} />
+        </a>
+        <a class="przycisk przycisk--wysoki" href="/">Wróćcie na stronę</a>
+      </div>
+    </div>
+  </main>
+</Baza>

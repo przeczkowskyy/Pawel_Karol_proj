@@ -12,6 +12,11 @@ export const kontakt = {
   vcard: "/klarow.vcf",
 } as const;
 
+/** Formularz pokazuje się dopiero wtedy, gdy w Cloudflare Pages jest sekret RESEND_API_KEY.
+ *  Bez niego funkcja /api/kontakt odbija wiadomość, a zepsuty formularz jest gorszy niż jego brak.
+ *  Kolejność: sekret w panelu → ponowne wdrożenie → test POST-em → dopiero tutaj true. */
+export const formularzWlaczony = false;
+
 export const haslo = "Skomplikowane bierzemy na siebie. Wam zostaje klarownie.";
 
 /** Presety kalkulatora. Liczby sprawdza test w src/lib/kalkulator.test.mjs. */
@@ -43,6 +48,8 @@ export const strony = [
   { url: "/polityka-prywatnosci", wSitemapie: true },
   { url: "/cv", wSitemapie: true },
   { url: "/start", wSitemapie: false }, // noindex: adres z kodu QR
+  { url: "/dziekujemy", wSitemapie: false }, // noindex: strona po wysłaniu formularza bez JS
+  { url: "/nie-wyslano", wSitemapie: false }, // noindex: formularz odbił wiadomość, brak JS
   { url: "/404", wSitemapie: false },
 ] as const;
 

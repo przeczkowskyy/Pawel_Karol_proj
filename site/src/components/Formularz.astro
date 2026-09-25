@@ -1,0 +1,132 @@
+---
+/**
+ * Formularz kontaktowy. Trzy pola, bo każde kolejne kosztuje odpowiedzi.
+ *
+ * Działa bez JavaScriptu: zwykły POST na /api/kontakt, funkcja odpowiada przekierowaniem
+ * na /dziekujemy. Z włączonym JS to samo żądanie idzie w tle, a potwierdzenie pojawia się
+ * na miejscu — nikt nie traci wpisanego tekstu ani nie wypada ze strony.
+ *
+ * Bez ciasteczek i bez śledzenia. Pułapka na roboty to pole „adres-www”: ukryte przed ludźmi,
+ * widoczne dla automatu, który wypełnia wszystko jak leci.
+ */
+---
+
+<div class="formularz-blok">
+  <form class="formularz" id="formularz" method="post" action="/api/kontakt">
+    <div class="formularz__pole">
+      <label class="pole__etykieta" for="f-kto">Kto pisze</label>
+      <input
+        class="formularz__wejscie"
+        id="f-kto"
+        name="kto"
+        type="text"
+        required
+        maxlength="120"
+        autocomplete="organization"
+        placeholder="Firma albo imię"
+      />
+    </div>
+
+    <div class="formularz__pole">
+      <label class="pole__etykieta" for="f-kontakt">Jak oddzwonić albo odpisać</label>
+      <input
+        class="formularz__wejscie"
+        id="f-kontakt"
+        name="kontakt"
+        type="text"
+        required
+        maxlength="120"
+        autocomplete="email"
+        placeholder="E-mail albo numer telefonu"
+      />
+    </div>
+
+    <div class="formularz__pole">
+      <label class="pole__etykieta" for="f-tresc">Co u Was idzie ręcznie</label>
+      <textarea
+        class="formularz__wejscie formularz__obszar"
+        id="f-tresc"
+        name="tresc"
+        required
+        rows="4"
+        maxlength="2000"
+        placeholder="Wystarczy jedno zdanie. Na przykład: co tydzień ktoś przepisuje zamówienia z maila do Excela."
+      ></textarea>
+    </div>
+
+    {/* Znacznik czasu wstawia skrypt przy pierwszym dotknięciu pola. Bez JS pola nie ma i funkcja
+        tej reguły nie stosuje — lepiej wpuścić automat, niż zablokować człowieka bez JavaScriptu. */}
+    <input type="hidden" name="otwarto" id="f-otwarto" />
+
+    {/* Pułapka: ludzie tego nie widzą i nie wypełnią. Roboty wypełniają wszystko jak leci. */}
+    <div class="formularz__pulapka" aria-hidden="true">
+      <label for="f-adres-www">Nie wypełniajcie tego pola</label>
+      <input id="f-adres-www" name="adres-www" type="text" tabindex="-1" autocomplete="off" />
+    </div>
+
+    <button class="przycisk przycisk--glowny przycisk--duzy" type="submit" data-wyslij>
+      Wyślijcie to do nas
+    </button>
+
+    <p class="formularz__drobny">
+      Wiadomość trafia na skrzynkę Karola i&nbsp;nigdzie indziej. Nie zapisujemy jej w&nbsp;żadnej bazie.
+      Szczegóły: <a class="link" href="/polityka-prywatnosci">polityka prywatności</a>.
+    </p>
+  </form>
+
+  <p class="formularz__komunikat" id="formularz-komunikat" role="status" aria-live="polite" hidden></p>
+</div>
+
+<script>
+  // Bez tego skryptu formularz nadal działa: przeglądarka wyśle zwykły POST, a funkcja przekieruje
+  // na /dziekujemy. Skrypt istnieje po to, żeby nie zabierać człowieka ze strony.
+  const form = document.getElementById("formularz");
+  const komunikat = document.getElementById("formularz-komunikat");
+
+  if (form instanceof HTMLFormElement && komunikat) {
+    const przycisk = form.querySelector("[data-wyslij]");
+    const otwarto = document.getElementById("f-otwarto");
+
+    // Znacznik stawiamy dopiero przy pierwszym dotknięciu formularza, nie przy wczytaniu strony:
+    // strona jest cache'owana na brzegu, więc czas builda nic by nie znaczył.
+    const ostempluj = () => {
+      if (otwarto instanceof HTMLInputElement && !otwarto.value) otwarto.value = String(Date.now());
+    };
+    form.addEventListener("focusin", ostempluj, { once: true });
+    form.addEventListener("input", ostempluj, { once: true });
+    const pierwotny = przycisk?.textContent ?? "";
+
+    form.addEventListener("submit", async (zdarzenie) => {
+      if (!form.checkValidity()) return; // niech przeglądarka pokaże swój komunikat
+      zdarzenie.preventDefault();
+      if (przycisk instanceof HTMLButtonElement) {
+        przycisk.disabled = true;
+        przycisk.textContent = "Wysyłamy…";
+      }
+      komunikat.hidden = true;
+
+      try {
+        const odpowiedz = await fetch("/api/kontakt", {
+          method: "POST",
+          headers: { accept: "application/json" },
+          body: new FormData(form),
+        });
+        if (!odpowiedz.ok) throw new Error(String(odpowiedz.status));
+        form.hidden = true;
+        komunikat.className = "formularz__komunikat formularz__komunikat--ok";
+        komunikat.textContent =
+          "Mamy to. Karol odpisze albo oddzwoni. Jeśli sprawa jest pilna — 786 296 426.";
+        komunikat.hidden = false;
+      } catch {
+        if (przycisk instanceof HTMLButtonElement) {
+          przycisk.disabled = false;
+          przycisk.textContent = pierwotny;
+        }
+        komunikat.className = "formularz__komunikat formularz__komunikat--blad";
+        komunikat.textContent =
+          "Nie udało się wysłać. Zadzwońcie: 786 296 426 albo napiszcie na kontakt@klarow.com.";
+        komunikat.hidden = false;
+      }
+    });
+  }
+</script>

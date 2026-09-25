@@ -1,6 +1,7 @@
 ---
 import IkonaDzialu from "./IkonaDzialu.astro";
-import { kontakt, haslo, presety } from "../content/strona";
+import Formularz from "./Formularz.astro";
+import { kontakt, haslo, presety, formularzWlaczony } from "../content/strona";
 import { adresDzialu } from "../content/dzialy";
 import { policz, tekstKwoty, tekstCzasu, tekstZakresu, tekstWzoru } from "../lib/kalkulator";
 
@@ -9,7 +10,7 @@ const kafle = [
     slug: "magazyn",
     nazwa: "Magazyn",
     zamiast: "liczenia stanów na kartce",
-    teraz: "stany, WZ i&nbsp;PZ aktualizują się same, a&nbsp;braki wysyłają alert",
+    teraz: "stan magazynu aktualizuje się sam razem z&nbsp;WZ i&nbsp;PZ, a&nbsp;o&nbsp;brakach przychodzi alert",
   },
   {
     slug: "ksiegowosc",
@@ -27,7 +28,7 @@ const kafle = [
     slug: "generatory",
     nazwa: "Generatory dokumentów",
     zamiast: "składania oferty przez godzinę",
-    teraz: "oferta, umowa czy protokół z&nbsp;danych jednym kliknięciem",
+    teraz: "jedno kliknięcie i&nbsp;z&nbsp;danych powstaje oferta, umowa albo protokół",
   },
   {
     slug: "raporty",
@@ -38,18 +39,18 @@ const kafle = [
 ] as const;
 
 const kroki = [
-  { tytul: "Rozmowa, 30&nbsp;minut, bez zobowiązań.", opis: "Pokażcie proces albo swój najgorszy Excel." },
+  { tytul: "Rozmowa na 30&nbsp;minut, bez zobowiązań.", opis: "Pokażcie proces albo swój najgorszy Excel." },
   {
     tytul: "Pilot na kopii danych.",
-    opis: "Na kopii albo w&nbsp;środowisku testowym — gdzie się da, bez dotykania produkcji.",
+    opis: "Na kopii albo w&nbsp;środowisku testowym: gdzie się da, bez dotykania produkcji.",
   },
   {
     tytul: "Wdrożenie etapami.",
-    opis: "Najpierw to, co boli najbardziej. Termin każdego etapu ustalamy przed startem.",
+    opis: "Najpierw to, co boli najbardziej, a&nbsp;termin każdego etapu ustalamy przed startem.",
   },
   {
     tytul: "Zostaje u&nbsp;Was.",
-    opis: "Po odbiorze dostajecie kod, dostępy i&nbsp;dokumentację. Prawa do kodu przenosimy w&nbsp;umowie.",
+    opis: "Po odbiorze kod, dostępy i&nbsp;dokumentacja są Wasze, a&nbsp;prawa do kodu przenosimy w&nbsp;umowie.",
   },
 ];
 
@@ -58,11 +59,11 @@ const obawy = [
   {
     pytanie: "Co z&nbsp;bezpieczeństwem danych?",
     odpowiedz:
-      "Zaczynamy na kopii albo w&nbsp;środowisku testowym. Bierzemy dostęp tylko do tego, co potrzebne.",
+      "Zaczynamy na kopii albo w&nbsp;środowisku testowym, a&nbsp;dostęp bierzemy tylko do tego, co potrzebne.",
   },
   {
     pytanie: "Ile to kosztuje?",
-    odpowiedz: "Zależy od zakresu. Wycenę dostajecie po rozmowie, zanim cokolwiek zaczniemy.",
+    odpowiedz: "Zależy od zakresu, a&nbsp;wycenę dostajecie po rozmowie, zanim cokolwiek zaczniemy.",
   },
   { pytanie: "Czy to tylko dla dużych firm?", odpowiedz: "Nie. Możemy zacząć od jednego raportu." },
 ];
@@ -80,7 +81,7 @@ const wynikStartowy = policz(start);
         Automatyzujemy to, co ktoś u&nbsp;Was dziś przepisuje ręcznie.
       </h1>
       <p class="hero__copy">
-        Łączymy magazyn, księgowość, Excel i&nbsp;dokumenty, żeby dane płynęły same. Od jednego raportu
+        Łączymy magazyn, księgowość, Excel i&nbsp;dokumenty, żeby dane płynęły same, od jednego raportu
         po kilka połączonych systemów.
       </p>
     </div>
@@ -115,7 +116,7 @@ const wynikStartowy = policz(start);
         }
       </nav>
       <div class="dzialy__dopisek">
-        <p>Mały problem czy duży system — zaczynamy od kawałka, który boli najbardziej.</p>
+        <p>Mały problem czy duży system: zaczynamy od kawałka, który boli najbardziej.</p>
         <a class="link" href="/przyklady">Zobaczcie przykłady narzędzi →</a>
       </div>
     </div>
@@ -128,7 +129,7 @@ const wynikStartowy = policz(start);
         <div class="kalkulator__lewa">
           <h2 id="h-oszczednosci" class="sekcja__tytul">Ile kosztuje Was ręczna robota? Policzcie.</h2>
           <p class="karta-tekstu">
-            Wybierzcie przykład albo wpiszcie swoje liczby. To Wasz rachunek, nie nasza obietnica — ile da
+            Wybierzcie przykład albo wpiszcie swoje liczby. To Wasz rachunek, a&nbsp;nie nasza obietnica; ile da
             się zautomatyzować naprawdę, sprawdzamy w&nbsp;pilocie.
           </p>
           <fieldset class="presety">
@@ -276,7 +277,7 @@ const wynikStartowy = policz(start);
               To Wasz rachunek na Waszych liczbach, nie nasz wynik. Koszt wdrożenia podajemy z&nbsp;góry, po
               rozmowie.
             </p>
-            <p class="uwagi__drobne">Nic nie wysyłamy — liczy się w&nbsp;Waszej przeglądarce.</p>
+            <p class="uwagi__drobne">Nic nie wysyłamy: wszystko liczy się w&nbsp;Waszej przeglądarce.</p>
             <p class="uwagi__drobne">
               Poza rachunkiem: mniej pomyłek i&nbsp;szybsza obsługa — tego nie przeliczamy na&nbsp;złotówki.
             </p>
@@ -346,7 +347,7 @@ const wynikStartowy = policz(start);
       <div class="sekcja__uklad">
         <div class="kontakt__wstep">
           <h2 id="h-kontakt" class="sekcja__tytul">Połączmy się.</h2>
-          <p>Zadzwońcie albo napiszcie. Najszybszy start: przyślijcie kopię pliku, który Was męczy.</p>
+          <p>Zadzwońcie albo napiszcie, a&nbsp;najszybciej pójdzie, gdy przyślecie kopię pliku, który Was męczy.</p>
         </div>
         <div class="kontakt__akcje">
           <a class="przycisk przycisk--glowny przycisk--duzy" href={kontakt.telefonHref}>
@@ -359,12 +360,20 @@ const wynikStartowy = policz(start);
               Przyślijcie nam swój najgorszy Excel
             </a>
             <p class="kontakt__drobny">
-              Usuńcie nazwiska i&nbsp;dane osobowe — wystarczy układ kolumn i&nbsp;kilka zmyślonych wierszy.
+              Usuńcie nazwiska i&nbsp;dane osobowe. Wystarczy układ kolumn i&nbsp;kilka zmyślonych wierszy.
             </p>
           </div>
           <button class="przycisk przycisk--maly" type="button" data-udostepnij="strona">Prześlij dalej</button>
         </div>
       </div>
+      {
+        formularzWlaczony && (
+          <div class="kontakt__formularz">
+            <h3 class="kontakt__podtytul">Albo napiszcie stąd</h3>
+            <Formularz />
+          </div>
+        )
+      }
     </div>
   </section>
 </main>

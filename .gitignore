@@ -13,3 +13,6 @@ leadscout/.chat_id
 
 # Surowe raporty panelu projektowego i notatki wewnętrzne — lokalnie, repo jest publiczne
 design/_lokalne/
+
+# Sekrety do lokalnego uruchomienia Pages Functions (klucz Resend) — nigdy w gicie
+site/.dev.vars
